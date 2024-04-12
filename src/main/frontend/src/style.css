@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    padding: 8px 6vw;
+    background-color: white;
+    border-bottom: 2px solid #F2884B;
+}
+
+.navLink {
+    height: 80px;
+    padding: 8px 0;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+.navLink:hover {
+    color: #F2884B
+}
+
+.loginBtn {
+    color: black;
+    border-color: #F288CD;
+}
+
+.loginBtn:hover {
+    color: white;
+    border-color: #F288CD;
+    background-color:#F288CD;
+}
+
+.footerIcon {
+   
+}
