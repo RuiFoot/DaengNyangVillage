@@ -14,7 +14,8 @@ function Home() {
 
   return (
     <div>
-      홈화면입니다. 백엔드 데이터 : {hello}
+      홈화면입니다. 백엔드 데이터 :
+      루이보테 {hello}
     </div>
   );
 }
