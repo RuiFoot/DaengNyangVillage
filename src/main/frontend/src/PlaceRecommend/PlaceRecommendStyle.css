@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.card {
+    width: 350px;
+    /* min-width: 350px; */
+}
+
+.cardHeader {
+    display: block;
+}
+
+.inputGroup {
+    height: 100%;
+}
+
+.listGroup {
+    overflow: auto;
+}
