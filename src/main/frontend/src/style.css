@@ -5,6 +5,10 @@
 }
 
 .navbar {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    width: 100%;
     padding: 8px 6vw;
     background-color: white;
     border-bottom: 2px solid #F2884B;
@@ -30,9 +34,14 @@
 .loginBtn:hover {
     color: white;
     border-color: #F288CD;
-    background-color:#F288CD;
+    background-color: #F288CD;
 }
 
 .footerIcon {
-   
+    margin: 0 5px;
+    padding: 2px;
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    border-radius: 5px;
 }
