@@ -128,8 +128,8 @@ function PlaceRecommend() {
                     <TopContants style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
                         <CheckBoxs>
                             <Card className="card">
-                                <Card.Header>
-                                    <InputGroup className="mb-3">
+                                <Card.Header className="cardHeader">
+                                    <InputGroup className="inputGroup mb-3">
                                         <Form.Control
                                             placeholder="🔍지역을 입력해주세요"
                                             aria-label="Recipient's username"
@@ -140,10 +140,13 @@ function PlaceRecommend() {
                                         </Button>
                                     </InputGroup>
                                 </Card.Header>
-                                <ListGroup variant="flush">
-                                    <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                                    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                                    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                                <ListGroup className="listGroup" variant="flush">
+                                    {categoryList.map((e, i) => (
+                                        <ListGroup.Item key={i}>
+                                            <CheckBox id={i} type="checkbox"></CheckBox>
+                                            <CheckBoxLabel>{e}</CheckBoxLabel>
+                                        </ListGroup.Item>
+                                    ))}
                                 </ListGroup>
                             </Card>
                         </CheckBoxs>
