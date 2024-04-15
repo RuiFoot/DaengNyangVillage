@@ -63,7 +63,6 @@ function Home() {
         <HotdealBar />
         <DivideLine />
       </Hotdeal>
-
       <Contants>
         <Place>
           <a href="/PlaceRecommend"><PlaceTitle>인기장소</PlaceTitle></a>
