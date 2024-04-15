@@ -1,28 +1,34 @@
 import styled from "styled-components";
-import { FaSquareXTwitter } from "react-icons/fa6";
-import { FaGithubSquare, FaInstagramSquare, FaFacebookSquare } from "react-icons/fa";
 import "./style.css"
+import { FaXTwitter, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa6";
 
 const FooterContainer = styled.div`
-position: fixed;
-bottom: 0;
+background-color: white;
 display: flex;
+flex-direction: column;
+align-items: center;
 justify-content: center;
 width: 100%;
-height: 80px;
-border-top: 2px solid black;
+height: 86px;
+border-top: 2px solid #F2884B;
+`
+const Icons = styled.div`
+margin: 18px;
+`
+const Copyright = styled.div`
+
 `
 
 function Footer() {
     return (
         <FooterContainer>
-            <div>
-                <FaSquareXTwitter className="footerIcon" />
-                <FaFacebookSquare className="footerIcon" />
-                <FaInstagramSquare className="footerIcon" />
-                <FaGithubSquare className="footerIcon" />
-            </div>
-            <p>© Copyright 2024, All Rights Reserved by 오루보</p>
+            <Icons>
+                <FaXTwitter className="footerIcon" />
+                <FaFacebookF className="footerIcon" />
+                <FaInstagram className="footerIcon" />
+                <FaGithub className="footerIcon" />
+            </Icons>
+            <Copyright>© Copyright 2024, All Rights Reserved by 오루보</Copyright>
         </FooterContainer>
     );
 }

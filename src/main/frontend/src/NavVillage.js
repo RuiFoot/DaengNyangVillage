@@ -9,7 +9,7 @@ import { CiBrightnessDown, CiDark } from "react-icons/ci";
 import "./style.css"
 
 const Logo = styled.img`
-position: absolute;
+position: fixed;
 top: 12px;
 left: 50%;
 width: 90px;
