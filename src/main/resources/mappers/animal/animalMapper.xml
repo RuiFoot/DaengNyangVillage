@@ -2,11 +2,38 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.myspring.daengnyang.animal.mapper.AnimalMapper">
-    <select id="getAllClassification" parameterType="String" resultType="String">
+    <resultMap id="LocationResultmap" type="com.myspring.daengnyang.animal.vo.AnimalLocationVO">
+        <id property="animalNum" column="animalNum"/>
+        <result property="largeClassification" column="largeClassification"/>
+        <result property="facilityName" column="facilityName"/>
+        <result property="subClassification" column="subClassification"/>
+        <result property="sido" column="sido"/>
+        <result property="sigungu" column="sigungu"/>
+        <result property="eupmyeondong" column="eupmyeondong"/>
+        <result property="ri" column="ri"/>
+        <result property="houseNumber" column="houseNumber"/>
+        <result property="streetName" column="streetName"/>
+        <result property="buildingNumber" column="buildingNumber"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="star" column="star"/>
+        <result property="imgPath" column="imgPath"/>
+        <result property="roadAddress" column="roadAddress"/>
+        <result property="numberAddress" column="numberAddress"/>
+    </resultMap>
+    <select id="getClassification" parameterType="String" resultType="String">
         <![CDATA[
             SELECT *
             FROM "animalClassification"
+        ]]>
+    </select>
+    <select id="getLocation" parameterType="String" resultMap="LocationResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "animalLocation"
+            where #{classification} = "subClassification" and ROWNUM <= 30
         ]]>
     </select>
 </mapper>
