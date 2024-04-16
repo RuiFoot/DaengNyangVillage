@@ -3,10 +3,7 @@ package com.myspring.daengnyang.animal.controller;
 
 import com.myspring.daengnyang.animal.service.AnimalServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,4 +22,11 @@ public class AnimalController {
     public List<String> animalClassification(){
         return animalService.classification();
     }
+
+    @GetMapping("location")
+    @ResponseBody
+    public List<String> animalLocation(@RequestParam String classification){
+        return animalService.location(classification);
+    }
+
 }

@@ -4,6 +4,9 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myspring.daengnyang.animal.mapper.AnimalMapper">
     <select id="getAllClassification" parameterType="String" resultType="String">
-        SELECT * FROM ANIMALCLASSIFICATION;
+        <![CDATA[
+            SELECT *
+            FROM "animalClassification"
+        ]]>
     </select>
 </mapper>
