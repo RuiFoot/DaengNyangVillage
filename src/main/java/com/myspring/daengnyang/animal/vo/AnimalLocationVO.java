@@ -17,7 +17,7 @@ public class AnimalLocationVO {
     private String buildingNumber;
     private String latitude;
     private String longitude;
-    private String star;
+    private Integer star;
     private String imgPath;
     private String roadAddress;
     private String numberAddress;

@@ -23,6 +23,34 @@
         <result property="roadAddress" column="roadAddress"/>
         <result property="numberAddress" column="numberAddress"/>
     </resultMap>
+
+    <resultMap id="DetailResultmap" type="com.myspring.daengnyang.animal.vo.AnimalDetailVO">
+        <id property="animalNum" column="animalNum" />
+        <result property="largeClassification" column="largeClassification" />
+        <result property="facilityName" column="facilityName" />
+        <result property="subClassification" column="subClassification" />
+        <result property="infomation" column="infomation" />
+        <result property="postalCode" column="postalCode" />
+        <result property="roadAddress" column="roadAddress" />
+        <result property="numberAddress" column="numberAddress" />
+        <result property="website" column="website" />
+        <result property="holiday" column="holiday" />
+        <result property="operationHours" column="operationHours" />
+        <result property="carInfo" column="carInfo" />
+        <result property="payInfo" column="payInfo" />
+        <result property="animalInfo" column="animalInfo" />
+        <result property="animalSize" column="animalSize" />
+        <result property="precautions" column="precautions" />
+        <result property="infield" column="infield" />
+        <result property="outfield" column="outfield" />
+        <result property="addPay" column="addPay" />
+        <result property="star" column="star" />
+        <result property="tel" column="tel" />
+        <result property="imgPath" column="imgPath" />
+    </resultMap>
+
+
+
     <select id="getClassification" parameterType="String" resultType="String">
         <![CDATA[
             SELECT *
@@ -34,6 +62,13 @@
             SELECT *
             FROM "animalLocation"
             where #{classification} = "subClassification" and ROWNUM <= 30
+        ]]>
+    </select>
+    <select id="getDetail" parameterType="Integer" resultMap="DetailResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "animalInfomation"
+            where #{animalNum} = "animalNum"
         ]]>
     </select>
 </mapper>
