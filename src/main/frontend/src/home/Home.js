@@ -11,7 +11,10 @@ const Container = styled.div`
   gap: 15px;
 `;
 const Carousel = styled.div`
+width: 88vw;
 grid-column: 1 / 5;
+display: flex;
+margin: auto;
 `
 const Hotdeal = styled.div`
 grid-column: 1 / 5;
@@ -63,7 +66,6 @@ function Home() {
         <HotdealBar />
         <DivideLine />
       </Hotdeal>
-
       <Contants>
         <Place>
           <a href="/PlaceRecommend"><PlaceTitle>인기장소</PlaceTitle></a>

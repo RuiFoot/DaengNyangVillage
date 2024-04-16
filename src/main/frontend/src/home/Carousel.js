@@ -7,7 +7,7 @@ let carouselSrcs = ["https://www.vietnamairlines.com/~/media/ContentImage/Buy-ti
 const CarouselImg = styled.div`
 height: 20vw;
 min-height: 300px;
-margin: 13px 6vw 0 6vw;
+width: 88vw;
 background-size: cover;
 background-position: center;
 
@@ -15,18 +15,12 @@ background-position: center;
 
 const CarouselTitle = styled.h2`
 
-font-size: clamp(80%, 5vw, 200%);
-background-color: rgba(0, 0, 0, 0.5);
-border-radius: 5px;
-width: fit-content;
+font-size: clamp(60%, 4vw, 200%);
 color: white;
 padding: 5px;
 `
 const CarouselText = styled.p`
-background-color: rgba(0, 0, 0, 0.5);
-border-radius: 5px;
-width: fit-content;
-font-size: clamp(80%, 1vw, 100%);
+font-size: clamp(70%, 1vw, 100%);
 color: white;
 padding: 5px;
 `
@@ -34,26 +28,41 @@ padding: 5px;
 function DarkCarousel() {
     return (
         <Carousel data-bs-theme="light">
-            <Carousel.Item>
+            <Carousel.Item className='carouselItem'>
                 <CarouselImg
                     style={{ backgroundImage: `url(${carouselSrcs[0]})` }}
-                />
+                >
+                    <Carousel.Caption className='caption'>
+                        <CarouselTitle>반려동물의 다양한 정보</CarouselTitle>
+                        <CarouselText>
+                            반려인이이 쉽고 편리하게 정보를 얻고 소통할 수 있는 공간
+                        </CarouselText>
+                    </Carousel.Caption>
+                </CarouselImg>
             </Carousel.Item>
             <Carousel.Item>
                 <CarouselImg
                     style={{ backgroundImage: `url(${carouselSrcs[1]})` }}
-                />
+                >
+                    <Carousel.Caption className='caption'>
+                        <CarouselTitle>반려동물과 함께 할 수 있는 장소</CarouselTitle>
+                        <CarouselText>
+                            반려인과 반려동물이 즐거운 경험과 추억을 만들 수 있도록
+                        </CarouselText>
+                    </Carousel.Caption>
+                </CarouselImg>
             </Carousel.Item>
             <Carousel.Item>
                 <CarouselImg
                     style={{ backgroundImage: `url(${carouselSrcs[2]})` }}
-                />
-                {/* <Carousel.Caption>
-                    <CarouselTitle>너에게 좋은것만 주고 싶어</CarouselTitle>
-                    <CarouselText>
-                        반려인과 반려동물의 행복한 삶을 위해 가장 인기 있고 좋은 상품 정보
-                    </CarouselText>
-                </Carousel.Caption> */}
+                >
+                    <Carousel.Caption className='caption'>
+                        <CarouselTitle>반려동물에게 좋은 것만</CarouselTitle>
+                        <CarouselText>
+                            반려인과 반려동물의 행복한 삶을 위해 가장 좋은 상품 제공
+                        </CarouselText>
+                    </Carousel.Caption>
+                </CarouselImg>
             </Carousel.Item>
         </Carousel>
     );

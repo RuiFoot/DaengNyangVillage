@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.chatBotMobile {
+    box-shadow: 5px 5px 3px #666;
+    background-color: #F2884B;
+    border-radius: 20px;
+    color: white;
+    border-radius: 20px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 3vw;
+    margin-bottom: 15px;
+    height: 10vw;
+    max-height: 80px;
+    width: 10vw;
+    max-width: 80px;
+}
+
+.chatBotMobile:hover {
+    transform: scale(1.1);
+}
+
+
+.chatBotBody {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.chatBotBtn {
+    color: black;
+    border-color: #F2884B;
+}
+
+.chatBotBtn:hover {
+    border-color: #F2884B;
+    background-color: #F2884B;
+}
