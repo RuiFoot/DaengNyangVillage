@@ -3,6 +3,7 @@ import "./style.css"
 import { FaXTwitter, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa6";
 
 const FooterContainer = styled.div`
+
 background-color: white;
 display: flex;
 flex-direction: column;

@@ -5,6 +5,7 @@ import HotdealBar from "./Hotdeal";
 import HotPlaceList from "./HotPlace";
 import CommunityHome from "./CommunityHome";
 import Bumper from "../Bumper";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   display: grid;
@@ -57,7 +58,7 @@ border: 2px solid #F2884B;
 
 function Home() {
   return (
-    <Container>
+    <Container className="Container">
       <Bumper />
       <Carousel>
         <DarkCarousel />

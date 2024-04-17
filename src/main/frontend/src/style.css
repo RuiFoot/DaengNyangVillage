@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+#App {
+    min-height: calc(100vh - 86px);
+}
+
 .navbar {
     z-index: 100;
     position: fixed;
@@ -14,8 +18,15 @@
     border-bottom: 2px solid #F2884B;
 }
 
-.navLink {
+.navHomeLink {
     height: 80px;
+    padding: 8px 0;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+.navLink {
     padding: 8px 0;
     color: black;
     display: flex;
@@ -26,6 +37,10 @@
     color: #F2884B
 }
 
+.me-auto {
+    min-height: 80px;
+    max-height: 120px;
+}
 
 .loginBtn {
     color: black;
@@ -88,6 +103,10 @@
 
 .socialLogo:hover {
     cursor: pointer;
+}
+
+.warning {
+    color: red;
 }
 
 /* 모달 */
