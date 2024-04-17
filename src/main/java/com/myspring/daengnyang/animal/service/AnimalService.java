@@ -13,4 +13,6 @@ public interface AnimalService {
     AnimalDetailVO getDetail(Integer animalNum);
 
     AnimalReviewVO getReview(Integer animalNum);
+
+    List<AnimalLocationVO> getRecommend(Integer memberNo,String sido,String sigungu);
 }

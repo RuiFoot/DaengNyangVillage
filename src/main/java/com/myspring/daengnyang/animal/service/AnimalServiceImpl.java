@@ -42,4 +42,12 @@ public class AnimalServiceImpl implements AnimalService{
         log.info("시설 댓글 정보 조회 서비스 실행 => animalNum : " + animalNum);
         return animalMapper.getReview(animalNum);
     }
+
+    @Override
+    public List<AnimalLocationVO> getRecommend(Integer memberNo,String sido,String sigungu){
+
+
+
+        return null;
+    }
 }

@@ -50,7 +50,8 @@ public class AnimalController {
     @GetMapping("/recommend")
     @ResponseBody
     public List<AnimalLocationVO> animalrecommend(@RequestParam(required = false) Integer memberNo, @RequestParam(required = false,defaultValue = "서울") String sido, @RequestParam(required = false) String sigungu){
-        return null;
+
+        return animalService.getRecommend(memberNo,sido,sigungu);
     }
 
 
