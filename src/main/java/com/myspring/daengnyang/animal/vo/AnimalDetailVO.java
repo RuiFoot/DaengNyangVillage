@@ -2,8 +2,10 @@ package com.myspring.daengnyang.animal.vo;
 
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class AnimalDetailVO {
     private Integer animalNum;
     private String largeClassification;

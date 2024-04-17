@@ -49,6 +49,14 @@
         <result property="imgPath" column="imgPath" />
     </resultMap>
 
+    <resultMap id="ReviewResultmap" type="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
+        <id property="animalReviewNum" column="animalReviewNum"/>
+        <result property="nickname" column="nickname"/>
+        <result property="memberNo" column="memberNo"/>
+        <result property="review" column="review"/>
+        <result property="star" column="star"/>
+        <result property="createDate" column="createDate"/>
+    </resultMap>
 
 
     <select id="getClassification" parameterType="String" resultType="String">
@@ -68,6 +76,13 @@
         <![CDATA[
             SELECT *
             FROM "animalInfomation"
+            where #{animalNum} = "animalNum"
+        ]]>
+    </select>
+    <select id="getReview" parameterType="Integer" resultMap="ReviewResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "animalReview"
             where #{animalNum} = "animalNum"
         ]]>
     </select>
