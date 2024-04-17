@@ -18,8 +18,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("GoGo API Swagger")
-                .description("Springdoc을 사용한 Swagger UI ")
+                .title("DaengNyangVillage API Swagger")
+                .description("DaengNyangVillage OpenAPI")
                 .version("1.0.0");
     }
 }
