@@ -44,4 +44,10 @@
         SET "reviewCnt" = "reviewCnt" + #{amount}
         WHERE "boardId" = #{boardId}
     </update>
+    
+    <select id="getBoardDetail" parameterType="int" resultType="com.myspring.daengnyang.board.vo.BoardDetailVO" >
+        SELECT *
+        FROM "BoardDetail"
+        WHERE "boardId" = #{boardId}
+    </select>
 </mapper>

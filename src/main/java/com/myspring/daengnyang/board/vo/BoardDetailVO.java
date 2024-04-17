@@ -7,12 +7,14 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class BoardVO {
+public class BoardDetailVO {
     private int boardId;
-    private int memberNo;
     private String nickname;
+    private int memberNo;
     private String category;
     private String boardName;
+    private String field;
+    private String imgPath;
     private Date createDate;
-    private int reviewCnt;
+
 }

@@ -23,10 +23,5 @@ public class AnimalController {
         return animalService.classification();
     }
 
-    @GetMapping("location")
-    @ResponseBody
-    public List<String> animalLocation(@RequestParam String classification){
-        return animalService.location(classification);
-    }
 
 }

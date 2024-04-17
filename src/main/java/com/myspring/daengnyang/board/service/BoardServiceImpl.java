@@ -1,6 +1,7 @@
 package com.myspring.daengnyang.board.service;
 
 import com.myspring.daengnyang.board.mapper.BoardMapper;
+import com.myspring.daengnyang.board.vo.BoardDetailVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.board.vo.ReviewVO;
 import io.swagger.v3.oas.annotations.servers.Server;
@@ -35,6 +36,10 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.updateReviewCnt(boardId, -1);
     }
 
+    @Override
+    public BoardDetailVO getBoardDetail(int boardId) {
+        return boardMapper.getBoardDetail(boardId);
+    }
 
 
 }
