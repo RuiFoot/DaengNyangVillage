@@ -1,0 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.inputGroup {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.warning {
+    color: red;
+}
+
+.pass {
+    color: rgb(38, 89, 255)
+}
+
+
+.joinBtns {
+    color: black;
+    border-color: #F288CD;
+    background-color: white;
+}
+
+.joinBtns:hover {
+    color: white;
+    border-color: #F288CD;
+    background-color: #F288CD;
+}
+
+#joinBtn {
+    width: 300px;
+    margin: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    border-color: #F288CD;
+    background-color: #F288CD;
+}
+
+#joinBtn:hover {
+    width: 300px;
+    margin: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    transition-duration: 0.3s;
+    color: black;
+    border-color: #F288CD;
+    background-color: white;
+}
+
+.postModal {
+    height: 800px;
+}
+
+.popup_post_type2 {}

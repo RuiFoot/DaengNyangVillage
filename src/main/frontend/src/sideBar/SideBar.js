@@ -5,27 +5,51 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import "./sideBarStyle.css"
 import { IoChatbubblesOutline } from "react-icons/io5";
+import styled from "styled-components";
+
+
+const SideContainer = styled.div`
+`
 
 
 function SideBar() {
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const heightBody = document.body.scrollHeight
 
-    const [windowSize, setWindowSiz] = useState(window.innerWidth);
-    const handleResize = () => {
-        setWindowSiz(window.innerWidth)
+    const [position, setPosition] = useState(0);
+    const [on, setOn] = useState(false)
+    function onScroll() {
+        setPosition(window.scrollY);
+        // console.log("로딩" + window.scrollY);
+        // console.log("로딩" + document.body.scrollHeight);
     }
     useEffect(() => {
-        window.addEventListener('resize', handleResize);
+        window.addEventListener("scroll", onScroll);
         return () => {
-            window.addEventListener('resize', handleResize)
-        }
-    }, [])
+            window.removeEventListener("scroll", onScroll);
+            setOn(true)
+        };
+
+    }, []);
+
     return (
-        <>
-            <IoChatbubblesOutline className="chatBotMobile" onClick={handleShow} />
+        <SideContainer>
+            {
+                heightBody - position < 961
+                    ?
+                    <IoChatbubblesOutline style={{
+                        transition: "transform 0.5s linear",
+                        transform: "translateY(-100px)"
+                    }} className="chatBotMobile" onClick={handleShow} />
+                    :
+                    <IoChatbubblesOutline id="chatBotMobile" style={{
+                        transition: "transform 0.5s linear"
+                    }} className="chatBotMobile" onClick={handleShow} />
+            }
+            {/* <IoChatbubblesOutline id="chatBotMobile"
+                className="chatBotMobile" onClick={handleShow} /> */}
             <Offcanvas show={show} onHide={handleClose} placement='end'>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>댕냥 챗봇</Offcanvas.Title>
@@ -42,7 +66,7 @@ function SideBar() {
                     </InputGroup>
                 </Offcanvas.Body>
             </Offcanvas>
-        </>
+        </SideContainer>
     );
 }
 
