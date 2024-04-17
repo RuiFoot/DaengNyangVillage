@@ -6,7 +6,6 @@ import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.board.vo.ReviewVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +23,8 @@ public class BoardController {
     }
 
     // 게시글 목록 조회
-    @GetMapping("")
-    public List<BoardVO> boardList(@RequestParam String category) throws Exception {
+    @GetMapping("{category}")
+    public List<BoardVO> boardList(@PathVariable("category") String category) throws Exception {
         log.info("게시글 목록 조회 컨트롤러 실행 => category: " + category);
         List<BoardVO> list = boardService.selectBoardList(category);
         return list;
@@ -43,7 +42,7 @@ public class BoardController {
 
     @GetMapping(value="/detail/{boardId}")
     @ResponseBody
-    public BoardDetailVO boardDetail(@PathVariable("boardId") int boardId, Model model) {
+    public BoardDetailVO boardDetail(@PathVariable("boardId") int boardId) {
         log.info("게시글 상세 조회 컨트롤러 실행 => boardId : " + boardId);
         return boardService.getBoardDetail(boardId);
     }
