@@ -54,5 +54,4 @@ public class AnimalController {
         return animalService.getRecommend(memberNo,sido,sigungu);
     }
 
-
 }
