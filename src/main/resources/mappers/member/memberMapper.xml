@@ -47,5 +47,13 @@
         ]]>
     </select>
 
+    <select id="duplicationNickname" parameterType="String" resultType="Integer">
+        <![CDATA[
+            SELECT count(*)
+            FROM "memberInfo"
+            WHERE "nickname" = #{nickname}
+        ]]>
+    </select>
+
 
 </mapper>

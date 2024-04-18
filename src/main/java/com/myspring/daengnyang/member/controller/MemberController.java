@@ -77,4 +77,9 @@ public class MemberController {
         return memberService.getDuplicationEmail(email);
     }
 
+    @GetMapping("/duplication/{nickname}")
+    public boolean duplicationNickname(@PathVariable String nickname) {
+        System.out.print(memberService.duplicationNickname(nickname));
+        return memberService.duplicationNickname(nickname);
+    }
 }
