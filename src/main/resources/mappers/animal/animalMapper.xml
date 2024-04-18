@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myspring.daengnyang.animal.mapper.AnimalMapper">
+    <resultMap id="LocationResultmap" type="com.myspring.daengnyang.animal.vo.AnimalLocationVO">
+        <id property="animalNum" column="animalNum"/>
+        <result property="largeClassification" column="largeClassification"/>
+        <result property="facilityName" column="facilityName"/>
+        <result property="subClassification" column="subClassification"/>
+        <result property="sido" column="sido"/>
+        <result property="sigungu" column="sigungu"/>
+        <result property="eupmyeondong" column="eupmyeondong"/>
+        <result property="ri" column="ri"/>
+        <result property="houseNumber" column="houseNumber"/>
+        <result property="streetName" column="streetName"/>
+        <result property="buildingNumber" column="buildingNumber"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="star" column="star"/>
+        <result property="imgPath" column="imgPath"/>
+        <result property="roadAddress" column="roadAddress"/>
+        <result property="numberAddress" column="numberAddress"/>
+    </resultMap>
+
+    <resultMap id="DetailResultmap" type="com.myspring.daengnyang.animal.vo.AnimalDetailVO">
+        <id property="animalNum" column="animalNum" />
+        <result property="largeClassification" column="largeClassification" />
+        <result property="facilityName" column="facilityName" />
+        <result property="subClassification" column="subClassification" />
+        <result property="infomation" column="infomation" />
+        <result property="postalCode" column="postalCode" />
+        <result property="roadAddress" column="roadAddress" />
+        <result property="numberAddress" column="numberAddress" />
+        <result property="website" column="website" />
+        <result property="holiday" column="holiday" />
+        <result property="operationHours" column="operationHours" />
+        <result property="carInfo" column="carInfo" />
+        <result property="payInfo" column="payInfo" />
+        <result property="animalInfo" column="animalInfo" />
+        <result property="animalSize" column="animalSize" />
+        <result property="precautions" column="precautions" />
+        <result property="infield" column="infield" />
+        <result property="outfield" column="outfield" />
+        <result property="addPay" column="addPay" />
+        <result property="star" column="star" />
+        <result property="tel" column="tel" />
+        <result property="imgPath" column="imgPath" />
+    </resultMap>
+
+    <resultMap id="ReviewResultmap" type="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
+        <id property="animalReviewNum" column="animalReviewNum"/>
+        <result property="nickname" column="nickname"/>
+        <result property="memberNo" column="memberNo"/>
+        <result property="review" column="review"/>
+        <result property="star" column="star"/>
+        <result property="createDate" column="createDate"/>
+    </resultMap>
+
+
+    <select id="getClassification" parameterType="String" resultType="String">
+        <![CDATA[
+            SELECT *
+            FROM "animalClassification"
+        ]]>
+    </select>
+    <select id="getLocation" parameterType="String" resultMap="LocationResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "animalLocation"
+            where #{classification} = "subClassification" and ROWNUM <= 30
+        ]]>
+    </select>
+    <select id="getDetail" parameterType="Integer" resultMap="DetailResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "animalInfomation"
+            where #{animalNum} = "animalNum"
+        ]]>
+    </select>
+    <select id="getReview" parameterType="Integer" resultMap="ReviewResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "animalReview"
+            where #{animalNum} = "animalNum"
+        ]]>
+    </select>
+</mapper>

@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+#App {
+    min-height: calc(100vh - 86px);
+}
+
 .navbar {
     z-index: 100;
     position: fixed;
@@ -14,8 +18,15 @@
     border-bottom: 2px solid #F2884B;
 }
 
-.navLink {
+.navHomeLink {
     height: 80px;
+    padding: 8px 0;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+.navLink {
     padding: 8px 0;
     color: black;
     display: flex;
@@ -26,9 +37,15 @@
     color: #F2884B
 }
 
+.me-auto {
+    min-height: 80px;
+    max-height: 120px;
+}
+
 .loginBtn {
     color: black;
     border-color: #F288CD;
+    background-color: white;
 }
 
 .loginBtn:hover {
@@ -37,6 +54,63 @@
     background-color: #F288CD;
 }
 
+/* 모달 */
+
+.modal-dialog {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-content {
+    width: 480px;
+}
+
+.modalFooter {
+    justify-content: space-around;
+}
+
+.modalInput {
+    margin-bottom: 10px;
+}
+
+.joinBtn {
+    width: 45%;
+    color: black;
+    border-color: #F288CD;
+    background-color: white;
+}
+
+.joinBtn:hover {
+    color: white;
+    border-color: #F288CD;
+    background-color: #F288CD;
+    transform: scale(1.1);
+}
+
+.modalLoginBtn {
+    width: 45%;
+    color: white;
+    border-color: #F288CD;
+    background-color: #F288CD;
+}
+
+.modalLoginBtn:hover {
+    transform: scale(1.1);
+    color: white;
+    border-color: #F288CD;
+    background-color: #F288CD;
+}
+
+.socialLogo:hover {
+    cursor: pointer;
+}
+
+.warning {
+    color: red;
+}
+
+/* 모달 */
+
 .footerIcon {
     margin: 0 5px;
     padding: 2px;
@@ -44,4 +118,9 @@
     height: 25px;
     border: 1px solid black;
     border-radius: 5px;
+}
+
+.modalHeader {
+    display: flex;
+    flex-direction: column;
 }

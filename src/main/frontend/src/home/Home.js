@@ -4,14 +4,19 @@ import './homeStyle.css'
 import HotdealBar from "./Hotdeal";
 import HotPlaceList from "./HotPlace";
 import CommunityHome from "./CommunityHome";
-import Bumper from "../Bumper";
+import Test from "../test";
+import Bumper from "../layout/Bumper";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   display: grid;
   gap: 15px;
 `;
 const Carousel = styled.div`
+width: 88vw;
 grid-column: 1 / 5;
+display: flex;
+margin: auto;
 `
 const Hotdeal = styled.div`
 grid-column: 1 / 5;
@@ -54,7 +59,7 @@ border: 2px solid #F2884B;
 
 function Home() {
   return (
-    <Container>
+    <Container className="Container">
       <Bumper />
       <Carousel>
         <DarkCarousel />
@@ -63,8 +68,8 @@ function Home() {
         <HotdealBar />
         <DivideLine />
       </Hotdeal>
-
       <Contants>
+        <Test/>
         <Place>
           <a href="/PlaceRecommend"><PlaceTitle>인기장소</PlaceTitle></a>
           <HotPlaceList />

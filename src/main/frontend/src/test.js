@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function Home() {
+function Test() {
 
   const [hello, setHello] = useState('');
 
   useEffect(() => {
-    axios.get('/api/test')
+    axios.get('/api/animal')
       .then((res) => {
         setHello(res.data);
       })
@@ -21,4 +21,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Test;

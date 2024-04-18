@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myspring.daengnyang.board.mapper.BoardMapper">
+
+    <!--게시글 목록에 필요한 내용인 글 번호, 제목, 조회 수, 작성일을 조회 -->
+    <select id="selectBoardList" parameterType="String" resultType="com.myspring.daengnyang.board.vo.BoardVO">
+        <![CDATA[
+            SELECT
+                "boardId",
+                "memberNo",
+                "nickname",
+                "category",
+                "boardName",
+                "createDate",
+                "reviewCnt"
+            FROM
+                "Board"
+            WHERE
+                "category" = #{category}
+        ]]>
+    </select>
+
+    <select id="selectBoardReviewList" parameterType="int" resultType="com.myspring.daengnyang.board.vo.ReviewVO">
+        <![CDATA[
+            SELECT
+                "boardReviewNum",
+                "boardId",
+                "nickname",
+                "memberNo",
+                "review",
+                "star",
+                "createDate"
+            FROM
+                "Boardreview"
+            WHERE
+                "boardId" = #{boardId}
+        ]]>
+    </select>
+
+    <update id="updateReviewCnt">
+        UPDATE "Board"
+        SET "reviewCnt" = "reviewCnt" + #{amount}
+        WHERE "boardId" = #{boardId}
+    </update>
+    
+    <select id="getBoardDetail" parameterType="int" resultType="com.myspring.daengnyang.board.vo.BoardDetailVO" >
+        SELECT *
+        FROM "BoardDetail"
+        WHERE "boardId" = #{boardId}
+    </select>
+</mapper>
