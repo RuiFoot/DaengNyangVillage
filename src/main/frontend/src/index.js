@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import { BrowserRouter } from "react-router-dom";
-import NavVillage from './NavVillage';
-import Footer from './footer';
-import SideBar from './sideBar/SideBar';
+import NavVillage from './layout/NavVillage';
+import Footer from './layout/footer';
+import SideBar from './layout/SideBar';
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

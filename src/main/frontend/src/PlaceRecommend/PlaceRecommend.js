@@ -1,4 +1,4 @@
-import Bumper from "../Bumper";
+import Bumper from "../layout/Bumper";
 import styled from "styled-components";
 import { GoDotFill } from "react-icons/go";
 import './PlaceRecommendStyle.css'

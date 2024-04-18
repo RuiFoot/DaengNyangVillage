@@ -5,6 +5,7 @@
 }
 
 .chatBotMobile {
+    z-index: 500;
     box-shadow: 5px 5px 3px #666;
     background-color: #F2884B;
     border-radius: 20px;
