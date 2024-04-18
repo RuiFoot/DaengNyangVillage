@@ -94,18 +94,18 @@ function JoinMembership() {
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
         delete memberInfo.passwordCheck;
-        axios.post(`${baseUrl}/member/signup`, {
-            params: {
-                email: memberInfo.email,
-                password: memberInfo.password,
-                nickname: memberInfo.nickName,
-                profileImg: memberInfo.profileImg,
-                address: memberInfo.inputAddress,
-                addressDetail: memberInfo.detailedAddress,
-                favoritePet: memberInfo.mypet,
-                phoneNumber: memberInfo.phoneNumber
-            }
-        }).then((response) => {
+        let body = {
+            email: memberInfo.email,
+            password: memberInfo.password,
+            nickname: memberInfo.nickName,
+            profileImg: memberInfo.profileImg,
+            address: memberInfo.inputAddress,
+            addressDetail: memberInfo.detailedAddress,
+            favoritePet: memberInfo.mypet,
+            phoneNumber: memberInfo.phoneNumber
+        }
+        axios.post(`${baseUrl}/member/signup`, body
+        ).then((response) => {
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {
             console.log(error);				//오류발생시 실행

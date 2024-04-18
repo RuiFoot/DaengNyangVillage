@@ -6,6 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
+/**
+ * 회원 정보 관련 컨트롤러
+ */
 @RestController
 @Slf4j
 @RequestMapping("/member")
@@ -23,8 +27,10 @@ public class MemberController {
         return "member";
     }
     @PostMapping("/signup")
+    @ResponseBody
     public String createMember(@RequestBody SignupForm signupForm){
         log.info("일반 회원가입 실행");
+        log.info(signupForm.toString());
         memberService.createMember(signupForm);
         return "redirect:/";
     }
