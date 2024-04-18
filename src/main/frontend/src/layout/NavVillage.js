@@ -1,9 +1,9 @@
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import logo from './img/logo.png'
-import naver from './img/naver.jpg'
-import kakao from './img/kakao.jpg'
-import google from './img/google.png'
+import logo from '../img/logo.png'
+import naver from '../img/naver.jpg'
+import kakao from '../img/kakao.jpg'
+import google from '../img/google.png'
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Modal from 'react-bootstrap/Modal';
@@ -12,7 +12,7 @@ import styled from "styled-components";
 import { useEffect, useState } from 'react';
 import { CiBrightnessDown, CiDark } from "react-icons/ci";
 import { SHA256 } from 'crypto-js';
-import "./style.css"
+import "../style.css"
 
 const Logo = styled.img`
 position: fixed;

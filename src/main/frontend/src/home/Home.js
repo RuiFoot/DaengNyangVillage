@@ -4,7 +4,7 @@ import './homeStyle.css'
 import HotdealBar from "./Hotdeal";
 import HotPlaceList from "./HotPlace";
 import CommunityHome from "./CommunityHome";
-import Bumper from "../Bumper";
+import Bumper from "../layout/Bumper";
 import { useEffect, useState } from "react";
 
 const Container = styled.div`
