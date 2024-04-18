@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./home/Home"
-import Community from "./Community"
+import Community from "./community/Community"
 import PlaceRecommend from "./placeRecommend/PlaceRecommend"
-import AboutUs from "./AboutUs";
+import AboutUs from "./aboutUs/AboutUs";
 import JoinMembership from "./membership/JoinMembership";
 import Mypage from "./membership/Mypage";
 
