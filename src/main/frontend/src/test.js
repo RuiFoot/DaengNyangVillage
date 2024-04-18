@@ -6,7 +6,7 @@ function Test() {
   const [hello, setHello] = useState('');
 
   useEffect(() => {
-    axios.get('/animal')
+    axios.get('/api/animal')
       .then((res) => {
         setHello(res.data);
       })

@@ -4,6 +4,7 @@ import './homeStyle.css'
 import HotdealBar from "./Hotdeal";
 import HotPlaceList from "./HotPlace";
 import CommunityHome from "./CommunityHome";
+import Test from "../test";
 import Bumper from "../layout/Bumper";
 import { useEffect, useState } from "react";
 
@@ -68,6 +69,7 @@ function Home() {
         <DivideLine />
       </Hotdeal>
       <Contants>
+        <Test/>
         <Place>
           <a href="/PlaceRecommend"><PlaceTitle>인기장소</PlaceTitle></a>
           <HotPlaceList />
