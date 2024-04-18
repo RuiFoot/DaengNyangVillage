@@ -1,4 +1,4 @@
-import Bumper from "./Bumper";
+import Bumper from "../layout/Bumper";
 
 function AboutUs() {
     return (

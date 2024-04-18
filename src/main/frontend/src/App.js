@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./home/Home"
 import Community from "./Community"
-import PlaceRecommend from "./PlaceRecommend/PlaceRecommend";
+import PlaceRecommend from "./placeRecommend/PlaceRecommend"
 import AboutUs from "./AboutUs";
 import JoinMembership from "./membership/JoinMembership";
-import Mypage from "./Mypage";
+import Mypage from "./membership/Mypage";
 
 function App() {
   return (

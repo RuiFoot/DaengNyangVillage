@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Bumper from "./Bumper";
+import Bumper from "../layout/Bumper";
 
 function Mypage() {
     return (

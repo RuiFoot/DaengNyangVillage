@@ -1,4 +1,4 @@
-import Bumper from "../Bumper";
+import Bumper from "../layout/Bumper";
 import styled from "styled-components";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
