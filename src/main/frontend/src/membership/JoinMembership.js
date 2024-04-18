@@ -7,7 +7,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
-import './JoinMembershipStyle.css'
+import './membershipStyle.css'
 import { SHA256 } from 'crypto-js';
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
@@ -61,12 +61,19 @@ function JoinMembership() {
 
 
     //회원가입시 받을 값들
+    // 채크박스 값
+    const [checkArr, setCheckArr] = useState([])
+    const getCheck = (e) => {
+        console.log(e)
+        setCheckArr(prevList => [...prevList, e]); //배열 스테이트 값추가
+        console.log(checkArr.join())
+    }
     const [memberInfo, setMemberInfo] = useState({
         email: "",
         password: "",
         passwordCheck: "",
         profileImg: "",
-        mypet: {},
+        mypet: "",
         nickName: "",
         phoneNumber: "",
         inputAddress: "",
@@ -91,9 +98,11 @@ function JoinMembership() {
         e.preventDefault();
         memberInfo.inputAddress = fullAddress
         memberInfo.inputZonecode = zonecode
+        memberInfo.mypet = checkArr.join()
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
         delete memberInfo.passwordCheck;
+
         let body = {
             email: memberInfo.email,
             password: memberInfo.password,
@@ -106,6 +115,7 @@ function JoinMembership() {
         }
         axios.post(`${baseUrl}/member/signup`, body
         ).then((response) => {
+            alert("댕냥빌리지 가입을 환영합니다.")
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
@@ -125,7 +135,7 @@ function JoinMembership() {
             inputZonecode: "",
             detailedAddress: ""
         })
-        // window.location.href = '/'
+        window.location.href = '/'
     }
 
 
@@ -174,7 +184,7 @@ function JoinMembership() {
                         name="email"
                         onChange={onChange}
                     />
-                    <Button className="joinBtns"
+                    <Button className="btns"
                         variant="outline-secondary" id="memberId"
                         onClick={() => isEmail(email)}>
                         중복확인
@@ -241,9 +251,9 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxDog"
                         type="checkbox"
-                        value={memberInfo.mypet = "dog"}
+                        value="dog"
                         name="mypet"
-                        onChange={onChange}
+                        onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxDog">강아지</CheckBoxLabel>
@@ -253,9 +263,9 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxCat"
                         type="checkbox"
-                        value={memberInfo.mypet += "cat"}
+                        value="cat"
                         name="mypet"
-                        onChange={onChange}
+                        onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxCat">고양이</CheckBoxLabel>
@@ -265,9 +275,9 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxFish"
                         type="checkbox"
-                        value={memberInfo.mypet += "fish"}
+                        value="fish"
                         name="mypet"
-                        onChange={onChange}
+                        onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxFish">관상어</CheckBoxLabel>
@@ -277,9 +287,9 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxEtc"
                         type="checkbox"
-                        value={memberInfo.mypet += "etc"}
+                        value="etc"
                         name="mypet"
-                        onChange={onChange}
+                        onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxEtc">다른 반려동물</CheckBoxLabel>
@@ -294,7 +304,7 @@ function JoinMembership() {
                         name="nickName"
                         onChange={onChange}
                     />
-                    <Button className="joinBtns" variant="outline-secondary" id="nickName"
+                    <Button className="btns" variant="outline-secondary" id="nickName"
                         onClick={() => isNickName()}>
                         중복확인
                     </Button>
@@ -353,7 +363,7 @@ function JoinMembership() {
                         name="inputZonecode"
                         onChange={onChange}
                     />
-                    <Button className="joinBtns" onClick={handleShow}>
+                    <Button className="btns" onClick={handleShow}>
                         주소검색
                     </Button>
                 </InputGroup>

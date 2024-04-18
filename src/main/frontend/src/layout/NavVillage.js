@@ -23,6 +23,7 @@ transform: translate(-50%, -10%);
 `
 
 const LoginLogo = styled.img`
+cursor: pointer;
 width: 100px;
 `
 
@@ -68,6 +69,7 @@ justify-content: center;
 align-items: center;
 `
 const FindIdPassward = styled.a`
+cursor: pointer;
 margin-bottom: 10px;
 `
 const Social = styled.div`
@@ -78,6 +80,7 @@ justify-content: center;
 align-items: center;
 `
 const Logos = styled.div`
+
 `
 const NaverLogo = styled.img`
 margin: 0 5px;
@@ -115,9 +118,9 @@ function LoginModal(props) {
 
     const loginBtn = () => {
         getDataLocalStorage(`member`)
-        if (userId === localData.email && SHA256(userPassword).toString() === localData.password) {
-            delete
-                localStorage.setItem("logined", JSON.stringify(localData))
+        //SHA256(userPassword).toString() 해쉬값 비교
+        if (userId === localData.email && userPassword === localData.password) {
+            sessionStorage.setItem("logined", JSON.stringify(localData))
             setLogin(true)
             console.log("로그인")
             setUserId("")
@@ -160,7 +163,7 @@ function LoginModal(props) {
                     id="inputPassword"
                 />
                 <ModalBodyFooter>
-                    <FindIdPassward href="/">아이디 / 비밀번호가 기억나지 않아요</FindIdPassward>
+                    <FindIdPassward onClick={() => { window.location.href = "/ForgetIdPassWd" }}>아이디 / 비밀번호가 기억나지 않아요</FindIdPassward>
                     <Social>
                         <p>소셜 로그인</p>
                         <Logos>
@@ -188,7 +191,7 @@ function NavVillage() {
     //로그인 상태일때
     const [logined, setLogined] = useState()
     useEffect(() => {
-        if (window.localStorage.key(0) === "logined") {
+        if (window.sessionStorage.key(0) === "logined") {
             setLogined("/logined")
         } else {
             setLogined("/")
@@ -197,7 +200,7 @@ function NavVillage() {
 
     const LogOut = () => {
         setLogined(false)
-        window.localStorage.removeItem("logined")
+        window.sessionStorage.removeItem("logined")
         window.location.href = "/"
     }
 
