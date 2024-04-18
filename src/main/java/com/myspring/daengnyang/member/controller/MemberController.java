@@ -27,8 +27,10 @@ public class MemberController {
         return "member";
     }
     @PostMapping("/signup")
+    @ResponseBody
     public String createMember(@RequestBody SignupForm signupForm){
         log.info("일반 회원가입 실행");
+        log.info(signupForm.toString());
         memberService.createMember(signupForm);
         return "redirect:/";
     }
