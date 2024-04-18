@@ -12,4 +12,6 @@ public interface MemberService {
     void createMember(SignupForm signupForm);
     MemberVO getMember(String email);
 
+    boolean getDuplicationEmail(String email);
+
 }

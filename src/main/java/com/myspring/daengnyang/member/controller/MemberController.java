@@ -72,9 +72,9 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-
     @GetMapping("/duplication/{email}")
     public boolean duplicationEmail(@PathVariable String email){
-        return true;
+        return memberService.getDuplicationEmail(email);
     }
+
 }

@@ -47,5 +47,11 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.getMember(email);
     }
 
+    @Override
+    public boolean getDuplicationEmail(String email) {
+        String data = memberMapper.getDuplicationEmail(email);
+        return data != null;
+    }
+
 
 }
