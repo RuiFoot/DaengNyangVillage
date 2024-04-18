@@ -44,6 +44,8 @@ justify-content: center;
 `
 
 function JoinMembership() {
+
+
     const baseUrl = "http://localhost:8080";
     //다음 주소 api
     const [show, setShow] = useState(false);
@@ -141,10 +143,11 @@ function JoinMembership() {
 
     //유효성 검사
     const [emailCheck, setEmailCheck] = useState()
-    const [nickNameCheck, setNickNameCheck] = useState()
     const [numCheck, setNumCheck] = useState()
+    const [isDuplicationE, setIsDuplicationE] = useState()
+    const [isDuplicationN, setIsDuplicationN] = useState()
     const isSame = password === passwordCheck;
-    const isValid = email !== '' && password !== '' && isSame === true && emailCheck === true && nickNameCheck === true && numCheck === true
+    const isValid = email !== '' && password !== '' && isSame === true && emailCheck === true && isDuplicationN === true && numCheck === true && isDuplicationE === true
 
     const isEmail = (input) => {
         if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(input)) {
@@ -153,12 +156,19 @@ function JoinMembership() {
             setEmailCheck(false)
         }
     };
-    const isNickName = () => {
-        if (true) {
-            setNickNameCheck(true)
-        } else {
-            setNickNameCheck(false)
-        }
+    const emailDuplicationCheck = (input) => {
+        axios.get(`${baseUrl}/member/duplicationE?email=${input}`)
+            .then((res) => {
+                setIsDuplicationE(res.data);
+            })
+        console.log(isDuplicationE)
+    }
+    const isNickName = (input) => {
+        axios.get(`${baseUrl}/member/duplicationN?nickname=${input}`)
+            .then((res) => {
+                setIsDuplicationN(res.data);
+            })
+        console.log(isDuplicationN)
     }
     const isNum = (input) => {
         if (/^[0-9]+$/.test(input) && input.length === 11) {
@@ -183,20 +193,41 @@ function JoinMembership() {
                         value={email}
                         name="email"
                         onChange={onChange}
+                        onKeyUpCapture={() => { isEmail(email) }}
                     />
-                    <Button className="btns"
-                        variant="outline-secondary" id="memberId"
-                        onClick={() => isEmail(email)}>
-                        중복확인
-                    </Button>
+                    {
+                        emailCheck ?
+                            <Button className="btns"
+                                variant="outline-secondary" id="memberId"
+                                onClick={() => { emailDuplicationCheck(email) }}>
+                                중복확인
+                            </Button>
+                            :
+                            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">이메일 입력값을 확인해주세요.</Tooltip>}>
+                                <span className="d-inline-block">
+                                    <Button className="btns" disabled style={{ pointerEvents: 'none' }}
+                                        variant="outline-secondary" id="memberId"
+                                        onClick={() => { emailDuplicationCheck(email) }}
+                                    >
+                                        중복확인
+                                    </Button>
+                                </span>
+                            </OverlayTrigger>
+                    }
+
                 </InputGroup>
                 {
                     emailCheck === undefined ?
                         null
                         : emailCheck ?
-                            <p className="pass" >사용가능한 이메일입니다.</p>
+                            <>
+                                {!isDuplicationE ? <p className="pass" >사용가능한 이메일입니다.</p>
+                                    : <p className="warning">이미 사용중인 이메일입니다.</p>
+                                }
+                            </>
                             :
                             <p className="warning">사용불가능한 이메일입니다.</p>
+
 
                 }
                 <InputTitle>비밀번호</InputTitle>
@@ -305,18 +336,26 @@ function JoinMembership() {
                         onChange={onChange}
                     />
                     <Button className="btns" variant="outline-secondary" id="nickName"
-                        onClick={() => isNickName()}>
+                        onClick={() => isNickName(nickName)}>
                         중복확인
                     </Button>
                 </InputGroup>
                 {
-                    nickNameCheck === undefined ?
+                    isDuplicationN === undefined ?
                         null
                         :
-                        nickNameCheck ?
-                            <p className="pass" >사용가능한 닉네임입니다.</p>
+                        !isDuplicationN ?
+                            <>
+                                {
+                                    nickName.length > 0 ?
+                                        <p className="pass" >사용가능한 닉네임입니다.</p>
+                                        :
+                                        <p className="warning">닉네임은 한 글자 이상이여야 합니다.</p>
+                                }
+                            </>
+
                             :
-                            <p className="warning">사용불가능한 닉네임입니다.</p>
+                            <p className="warning">이미 사용중인 닉네임입니다.</p>
 
                 }
                 <InputTitle>전화번호</InputTitle>
