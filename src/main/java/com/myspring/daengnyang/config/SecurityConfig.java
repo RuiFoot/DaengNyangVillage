@@ -4,6 +4,7 @@ package com.myspring.daengnyang.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,7 +29,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()) // 모든 사람이 접근 권한을 가지게 하기 위해 사용
 
-        ;
+                .logout(Customizer.withDefaults());
+
+
+        http.sessionManagement((sessionManagement) ->
+                sessionManagement.maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                        );
+
         return http.build();
     }
     @Bean

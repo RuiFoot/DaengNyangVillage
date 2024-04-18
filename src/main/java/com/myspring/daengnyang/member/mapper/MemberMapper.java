@@ -1,5 +1,6 @@
 package com.myspring.daengnyang.member.mapper;
 
+import com.myspring.daengnyang.member.vo.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,6 +11,8 @@ public interface MemberMapper {
                            @Param("profileImg") String profileImg, @Param("address") String address,
                            @Param("addressDetail") String addressDetail, @Param("favoritePet") String favoritePet,
                            @Param("phoneNumber") String phoneNumber);
+
+     MemberVO getMember(@Param("email") String email);
 
      int getMemberNo(@Param("email") String email);
 }

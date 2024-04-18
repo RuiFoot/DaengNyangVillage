@@ -31,5 +31,13 @@
     </insert>
 
 
+    <select id="getMember" parameterType="String" resultType="com.myspring.daengnyang.member.vo.MemberVO">
+        <![CDATA[
+            SELECT *
+            from "member"
+            where "email" = #{email}
+        ]]>
+    </select>
+
 
 </mapper>

@@ -40,4 +40,12 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.createMemberInfo(userInfo.getNickname(), memberNo, userInfo.getProfileImg(),
                 userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
     }
+
+    @Override
+    public MemberVO getMember(String email) {
+        log.info("멤버 정보 불러오기 서비스 실행 => email : "+ email);
+        return memberMapper.getMember(email);
+    }
+
+
 }
