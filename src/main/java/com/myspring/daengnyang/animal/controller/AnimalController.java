@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+/**
+ * 반려동물 동반 시설 컨트롤러
+ */
 @RestController
 @Slf4j
 @RequestMapping("/animal")
