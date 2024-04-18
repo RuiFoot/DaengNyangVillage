@@ -1,6 +1,7 @@
 package com.myspring.daengnyang.member.service;
 
 import com.myspring.daengnyang.member.mapper.MemberMapper;
+import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import com.myspring.daengnyang.member.vo.SignupForm;
 import lombok.extern.slf4j.Slf4j;
@@ -27,5 +28,16 @@ public class MemberServiceImpl implements MemberService {
         user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
         log.info("일반 회원가입 서비스 실행");
         memberMapper.createMember(user.getEmail(),user.getPassword());
+
+        int memberNo = memberMapper.getMemberNo(user.getEmail());
+        MemberInfoVO userInfo = new MemberInfoVO();
+        userInfo.setNickname(signupForm.getNickname());
+        userInfo.setProfileImg(signupForm.getProfileImg());
+        userInfo.setAddress(signupForm.getAddress());
+        userInfo.setAddressDetail(signupForm.getAddressDetail());
+        userInfo.setFavoritePet(signupForm.getFavoritePet());
+        userInfo.setPhoneNumber(signupForm.getPhoneNumber());
+        memberMapper.createMemberInfo(userInfo.getNickname(), memberNo, userInfo.getProfileImg(),
+                userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
     }
 }

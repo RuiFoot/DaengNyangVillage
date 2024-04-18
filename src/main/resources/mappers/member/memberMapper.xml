@@ -13,5 +13,23 @@
         ]]>
     </insert>
 
+    <select id="getMemberNo" resultType="int">
+        <![CDATA[
+            SELECT "memberNo"
+            FROM "member"
+            WHERE "email" = #{email}
+        ]]>
+    </select>
+
+    <insert id="createMemberInfo">
+        <![CDATA[
+            INSERT INTO "memberInfo" ("nickname","memberNo","profileImg","address",
+                                       "addressDetail","favoritePet","phoneNumber")
+            VALUES (#{nickname}, #{memberNo}, #{profileImg}, #{address},
+                    #{addressDetail}, #{favoritePet}, #{phoneNumber})
+        ]]>
+    </insert>
+
+
 
 </mapper>
