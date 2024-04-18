@@ -15,4 +15,6 @@ public interface MemberMapper {
      MemberVO getMember(@Param("email") String email);
 
      int getMemberNo(@Param("email") String email);
+
+     int duplicationNickname(@Param("nickname") String nickname);
 }

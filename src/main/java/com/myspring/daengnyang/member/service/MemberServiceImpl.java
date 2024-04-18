@@ -47,5 +47,17 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.getMember(email);
     }
 
+    @Override
+    public Boolean duplicationNickname(String nickname) {
+        log.info("닉네임 중복 여부 조회 서비스 실행 => nickname : " + nickname );
+        int cnt = memberMapper.duplicationNickname(nickname);
+
+        if(cnt == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
 }
