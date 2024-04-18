@@ -28,4 +28,12 @@ public class MemberServiceImpl implements MemberService {
         log.info("일반 회원가입 서비스 실행");
         memberMapper.createMember(user.getEmail(),user.getPassword());
     }
+
+    @Override
+    public MemberVO getMember(String email) {
+        log.info("멤버 정보 불러오기 서비스 실행 => email : "+ email);
+        return memberMapper.getMember(email);
+    }
+
+
 }
