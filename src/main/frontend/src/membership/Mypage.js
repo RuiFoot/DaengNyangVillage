@@ -3,10 +3,10 @@ import Bumper from "../layout/Bumper";
 
 function Mypage() {
     return (
-        <>
+        <div>
             <Bumper />
-            <div>마이페이지에요</div>
-        </>
+            마이페이지에요
+        </div>
 
     );
 }

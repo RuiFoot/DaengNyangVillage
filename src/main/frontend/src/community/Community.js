@@ -6,6 +6,7 @@ function Community() {
         <div>
             <Bumper />
             <Test />
+            커뮤니티입니다.
         </div>
     );
 }

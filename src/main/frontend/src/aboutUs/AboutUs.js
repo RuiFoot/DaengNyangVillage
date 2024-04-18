@@ -5,7 +5,6 @@ function AboutUs() {
         <div>
             <Bumper />
             AboutUs입니다.
-
         </div>
     );
 }

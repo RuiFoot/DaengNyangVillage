@@ -18,13 +18,13 @@
 }
 
 
-.joinBtns {
+.btns {
     color: black;
     border-color: #F288CD;
     background-color: white;
 }
 
-.joinBtns:hover {
+.btns:hover {
     color: white;
     border-color: #F288CD;
     background-color: #F288CD;
