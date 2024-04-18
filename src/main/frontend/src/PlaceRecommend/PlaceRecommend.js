@@ -73,6 +73,8 @@ margin-right: 5px;
 const CheckBoxLabel = styled.label`
 `
 
+const { kakao } = window;
+
 //6개
 let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천시 스포츠타운길 245", "리드줄, 매너벨트 필수 착용", "https://files.ban-life.com/content/2024/04/body_1711961501.jpg"], ["청도 프로방스", "경북 청도군 화양읍 이슬미로 272-23", "리쉬필수! 댕댕이들은 모~두 입장 가능!", "https://files.ban-life.com/content/2024/04/body_1712306959.jpg"], ["양평 레몬과오렌지", "경기도 양평군 단월면 양동로 229", "독채 숙소라 마당에서 프라이빗하게 뛰뛰하고 우리끼리 즐길 수 있어요", "https://files.ban-life.com/content/2024/04/body_1712301999.jpg"], ["캔버스 스테이 외관", "부산광역시 해운대구 해운대해변로197번길 13", " 강아지 수영장+루프탑", "https://files.ban-life.com/content/2024/04/body_1712316724.jpg"], ["태안 코리아 플라워 파크", "충남 태안 안면읍 꽃지해안로 400", "견종 무관하게 모두 동반 가능해요", "https://files.ban-life.com/content/2024/04/body_1712595967.jpg"], ["감성스테이 산아래", "충청남도 당진시 송산면 칠절길 95-17", "견종, 무게 제한 없음", "https://files.ban-life.com/content/2024/04/body_1712079373.jpg"]]
 
@@ -90,6 +92,55 @@ function PlaceRecommend() {
             window.addEventListener('resize', handleResize)
         }
     }, [])
+
+    useEffect(() => {
+        const container = document.getElementById('map');
+        const options = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            lever: 5
+        };
+        const map = new kakao.maps.Map(container, options);
+        
+        var positions = [
+            {
+                title: '카카오', 
+                latlng: new kakao.maps.LatLng(33.450705, 126.570677)
+            },
+            {
+                title: '생태연못', 
+                latlng: new kakao.maps.LatLng(33.450936, 126.569477)
+            },
+            {
+                title: '텃밭', 
+                latlng: new kakao.maps.LatLng(33.450879, 126.569940)
+            },
+            {
+                title: '근린공원',
+                latlng: new kakao.maps.LatLng(33.451393, 126.570738)
+            }
+        ];
+        
+        // 마커 이미지의 이미지 주소입니다
+        var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+            
+        for (var i = 0; i < positions.length; i ++) {
+            
+            // 마커 이미지의 이미지 크기 입니다
+            var imageSize = new kakao.maps.Size(24, 35); 
+            
+            // 마커 이미지를 생성합니다    
+            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+            
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                map: map, // 마커를 표시할 지도
+                position: positions[i].latlng, // 마커를 표시할 위치
+                title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                image : markerImage // 마커 이미지 
+            });
+        }
+    }, [])
+
     return (
         <Container>
             <Bumper />
@@ -122,7 +173,12 @@ function PlaceRecommend() {
                                 </ListGroup>
                             </Card>
                         </CheckBoxs>
-                        <Map></Map>
+                        <Map>
+                            <div id="map" style={{
+                                width: '100%',
+                                height: '500px'
+                            }}></div>
+                        </Map>
                     </TopContants>
                     :
                     <TopContants style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
@@ -150,7 +206,12 @@ function PlaceRecommend() {
                                 </ListGroup>
                             </Card>
                         </CheckBoxs>
-                        <Map></Map>
+                        <Map>
+                            <div id="map" style={{
+                                width: '500px',
+                                height: '500px'
+                            }}></div>
+                        </Map>
                     </TopContants>
             }
             < PlaceItems >
