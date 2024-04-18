@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./home/Home"
 import Community from "./community/Community"
-import PlaceRecommend from "./placeRecommend/PlaceRecommend"
+import PlaceRecommend from "./PlaceRecommend/PlaceRecommend"
 import AboutUs from "./aboutUs/AboutUs";
 import JoinMembership from "./membership/JoinMembership";
 import Mypage from "./membership/Mypage";
