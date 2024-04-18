@@ -72,13 +72,13 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-    @GetMapping("/duplicationE/{email}")
-    public boolean duplicationEmail(@PathVariable String email){
+    @GetMapping("/duplicationE")
+    public boolean duplicationEmail(@RequestParam("email") String email){
         return memberService.getDuplicationEmail(email);
     }
 
-    @GetMapping("/duplicationN/{nickname}")
-    public boolean duplicationNickname(@PathVariable String nickname) {
+    @GetMapping("/duplicationN")
+    public boolean duplicationNickname(@RequestParam("nickname") String nickname) {
         System.out.print(memberService.duplicationNickname(nickname));
         return memberService.duplicationNickname(nickname);
     }
