@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
-
     private final MemberMapper memberMapper;
     @Autowired
     public MemberServiceImpl(PasswordEncoder passwordEncoder, MemberMapper memberMapper) {

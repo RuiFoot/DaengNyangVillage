@@ -5,6 +5,7 @@ import HotdealBar from "./Hotdeal";
 import HotPlaceList from "./HotPlace";
 import CommunityHome from "./CommunityHome";
 import Bumper from "../Bumper";
+import Test from "../test";
 
 const Container = styled.div`
   display: grid;
@@ -57,26 +58,28 @@ border: 2px solid #F2884B;
 
 function Home() {
   return (
-    <Container>
-      <Bumper />
-      <Carousel>
-        <DarkCarousel />
-      </Carousel>
-      <Hotdeal>
-        <HotdealBar />
-        <DivideLine />
-      </Hotdeal>
-      <Contants>
-        <Place>
-          <a href="/PlaceRecommend"><PlaceTitle>인기장소</PlaceTitle></a>
-          <HotPlaceList />
-        </Place>
-        <Community>
-          <a href="/Community"><CommunityTitle>커뮤니티</CommunityTitle></a>
-          <CommunityHome />
-        </Community>
-      </Contants>
-    </Container>
+      <Container>
+          <Bumper/>
+          <Carousel>
+              <DarkCarousel/>
+          </Carousel>
+          <Hotdeal>
+              <HotdealBar/>
+              <DivideLine/>
+          </Hotdeal>
+          <Test/>
+          <Contants>
+              <Place>
+                  <a href="/PlaceRecommend"><PlaceTitle>인기장소</PlaceTitle></a>
+                  <HotPlaceList/>
+
+              </Place>
+              <Community>
+                  <a href="/Community"><CommunityTitle>커뮤니티</CommunityTitle></a>
+                  <CommunityHome/>
+              </Community>
+          </Contants>
+      </Container>
   );
 }
 
