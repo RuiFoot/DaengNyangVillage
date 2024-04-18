@@ -10,6 +10,7 @@ import { useState } from "react";
 import './JoinMembershipStyle.css'
 import { SHA256 } from 'crypto-js';
 import DaumPostcode from "react-daum-postcode";
+import axios from "axios";
 
 const Container = styled.div`
 margin: 0 6vw;
@@ -43,7 +44,7 @@ justify-content: center;
 `
 
 function JoinMembership() {
-
+    const baseUrl = "http://localhost:8080";
     //다음 주소 api
     const [show, setShow] = useState(false);
     const [fullAddress, setFullAddress] = useState("주소검색을 이용해주세요")
@@ -90,8 +91,25 @@ function JoinMembership() {
         e.preventDefault();
         memberInfo.inputAddress = fullAddress
         memberInfo.inputZonecode = zonecode
-        memberInfo.password = SHA256(password).toString(); // 비밀번호 보안 해시
+        // 비밀번호 보안 해시
+        // memberInfo.password = SHA256(password).toString();
         delete memberInfo.passwordCheck;
+        axios.post(`${baseUrl}/member/signup`, {
+            params: {
+                email: memberInfo.email,
+                password: memberInfo.password,
+                nickname: memberInfo.nickName,
+                profileImg: memberInfo.profileImg,
+                address: memberInfo.inputAddress,
+                addressDetail: memberInfo.detailedAddress,
+                favoritePet: memberInfo.mypet,
+                phoneNumber: memberInfo.phoneNumber
+            }
+        }).then((response) => {
+            console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+        }).catch((error) => {
+            console.log(error);				//오류발생시 실행
+        })
         console.log(memberInfo)
         localStorage.setItem("member", JSON.stringify(memberInfo)); // 로컬스토리지 저장
         setChecked(false)
@@ -107,7 +125,7 @@ function JoinMembership() {
             inputZonecode: "",
             detailedAddress: ""
         })
-        window.location.href = '/'
+        // window.location.href = '/'
     }
 
 
