@@ -114,14 +114,22 @@ public class MemberController {
      * https://kauth.kakao.com/oauth/logout?client_id=db0c282555cc32e78ecbce031761fc83&logout_redirect_uri=http://localhost:8080/member/oauth/kakao/logout
      */
     @GetMapping("/oauth/kakao")
-    public void kakaoCallback(@RequestParam String code){
+    public boolean kakaoCallback(@RequestParam String code, HttpServletRequest httpRequest){
         log.info("code : " + code);
         String accessToken = oAuthService.getKakaoAccessToken(code);
         System.out.println(accessToken);
         String loginResult = oAuthService.getUserInfo(accessToken);
         log.info("로그인 정보 : " + loginResult);
-
-        log.info("로그인이 정상 처리 되었습니다.");
+        String memberNo = oAuthService.kakaoLogin(loginResult);
+        if(memberNo != null){
+            HttpSession session = httpRequest.getSession();
+            session.setAttribute("memberNo", memberNo);
+            log.info("로그인이 정상 처리 되었습니다.");
+            return true;
+        }else{
+            log.info("로그인 오류 발생");
+            return false;
+        }
     }
     @GetMapping("/oauth/kakao/logout")
     public void kakaoLogoutCallback(){
@@ -131,6 +139,13 @@ public class MemberController {
         log.info(logoutResult + "로그아웃이 정상 처리 되었습니다.");
     }
 
+    @GetMapping("oauth/kakao/unlink")
+    public void kakaoUnlinkCallback(){ // 회원 탈퇴 시 계정 연결 끊기
+        Long target_id = 3428886536L;
+        log.info("kakaoUnlink");
+        String unLinkResult = oAuthService.kakaoUnlink(target_id);
+        log.info(unLinkResult + "연결 끊기가 정상 처리 되었습니다.");
+    }
     //---------------------------------------------------------------------------------------------------------------------
 
 }

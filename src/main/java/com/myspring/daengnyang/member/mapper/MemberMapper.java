@@ -19,4 +19,6 @@ public interface MemberMapper {
      String getDuplicationEmail(@Param("email") String email);
 
      int duplicationNickname(@Param("nickname") String nickname);
+
+
 }
