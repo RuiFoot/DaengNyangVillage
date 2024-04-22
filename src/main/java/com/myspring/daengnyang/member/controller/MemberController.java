@@ -148,4 +148,11 @@ public class MemberController {
     }
     //---------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * 구글 소셜 로그인
+     */
+    @GetMapping("/oauth/{registrationId}")
+    public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
+        oAuthService.socialLogin(code, registrationId);
+    }
 }

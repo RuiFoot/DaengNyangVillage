@@ -2,13 +2,19 @@ package com.myspring.daengnyang.member.service;
 
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
+import org.springframework.core.env.Environment;
+import org.springframework.http.*;
 import com.myspring.daengnyang.member.mapper.MemberMapper;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -18,10 +24,14 @@ import java.net.URL;
 @Slf4j
 public class OAuthServiceImpl implements OauthService {
 
+    private final Environment env;
+    private final RestTemplate restTemplate = new RestTemplate();
     private final MemberMapper memberMapper;
+  
     @Autowired
     public OAuthServiceImpl(MemberMapper memberMapper) {
         this.memberMapper = memberMapper;
+        this.env = env;
     }
 
     @Override
@@ -249,5 +259,53 @@ public class OAuthServiceImpl implements OauthService {
             e.printStackTrace();
         }
         return result.toString();
+    }
+
+    @Override
+    public void socialLogin(String code, String registrationId) {
+        String accessToken = getAccessToken(code, registrationId);
+        JsonNode userResourceNode = getUserResource(accessToken, registrationId);
+        System.out.println("userResourceNode = " + userResourceNode);
+
+        String id = userResourceNode.get("id").asText();
+        String email = userResourceNode.get("email").asText();
+        String nickname = userResourceNode.get("name").asText();
+        System.out.println("id = " + id);
+        System.out.println("email = " + email);
+        System.out.println("nickname = " + nickname);
+    }
+
+    @Override
+    public String getAccessToken(String authorizationCode, String registrationId) {
+        String clientId = env.getProperty("oauth2." + registrationId + ".client-id");
+        String clientSecret = env.getProperty("oauth2." + registrationId + ".client-secret");
+        String redirectUri = env.getProperty("oauth2." + registrationId + ".redirect-uri");
+        String tokenUri = env.getProperty("oauth2." + registrationId + ".token-uri");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", authorizationCode);
+        params.add("client_id", clientId);
+        params.add("client_secret", clientSecret);
+        params.add("redirect_uri", redirectUri);
+        params.add("grant_type", "authorization_code");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        HttpEntity entity = new HttpEntity(params, headers);
+
+        ResponseEntity<JsonNode> responseNode = restTemplate.exchange(tokenUri, HttpMethod.POST, entity, JsonNode.class);
+        JsonNode accessTokenNode = responseNode.getBody();
+        return accessTokenNode.get("access_token").asText();
+    }
+
+    @Override
+    public JsonNode getUserResource(String accessToken, String registrationId) {
+        String resourceUri = env.getProperty("oauth2."+registrationId+".resource-uri");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        HttpEntity entity = new HttpEntity(headers);
+        return restTemplate.exchange(resourceUri, HttpMethod.GET, entity, JsonNode.class).getBody();
     }
 }
