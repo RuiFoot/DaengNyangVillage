@@ -29,7 +29,7 @@ public class OAuthServiceImpl implements OauthService {
     private final MemberMapper memberMapper;
   
     @Autowired
-    public OAuthServiceImpl(MemberMapper memberMapper) {
+    public OAuthServiceImpl(MemberMapper memberMapper, Environment env) {
         this.memberMapper = memberMapper;
         this.env = env;
     }
