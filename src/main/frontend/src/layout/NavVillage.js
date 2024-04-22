@@ -259,9 +259,9 @@ function NavVillage() {
                                         ? <Nav.Link className='navLink' style={{ color: '#F2884B' }} href={`/Mypage${logined}`}>마이페이지</Nav.Link>
                                         : <Nav.Link className='navLink' href={`/Mypage${logined}`}>마이페이지</Nav.Link>
                                     :
-                                    pathname === "/JoinMembership"
-                                        ? <Nav.Link className='navLink' style={{ color: '#F2884B' }} href="JoinMembership">회원가입</Nav.Link>
-                                        : <Nav.Link className='navLink' href="JoinMembership">회원가입</Nav.Link>
+                                    pathname === `/JoinMembership${logined}`
+                                        ? <Nav.Link className='navLink' style={{ color: '#F2884B' }} href={`/JoinMembership${logined}`}>회원가입</Nav.Link>
+                                        : <Nav.Link className='navLink' href={`/JoinMembership${logined}`}>회원가입</Nav.Link>
 
                             }
                             {
