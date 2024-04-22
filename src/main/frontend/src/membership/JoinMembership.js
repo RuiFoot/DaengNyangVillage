@@ -56,19 +56,14 @@ function JoinMembership() {
     const complete = (data) => {
         setFullAddress(data.address);
         setZonecode(data.zonecode);
-        console.log(data)
         setShow(false)
     }
-
-
 
     //회원가입시 받을 값들
     // 채크박스 값
     const [checkArr, setCheckArr] = useState([])
     const getCheck = (e) => {
-        console.log(e)
         setCheckArr(prevList => [...prevList, e]); //배열 스테이트 값추가
-        console.log(checkArr.join())
     }
     const [memberInfo, setMemberInfo] = useState({
         email: "",
@@ -122,7 +117,6 @@ function JoinMembership() {
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
         })
-        console.log(memberInfo)
         localStorage.setItem("member", JSON.stringify(memberInfo)); // 로컬스토리지 저장
         setChecked(false)
         setMemberInfo({
@@ -147,7 +141,7 @@ function JoinMembership() {
     const [isDuplicationE, setIsDuplicationE] = useState()
     const [isDuplicationN, setIsDuplicationN] = useState()
     const isSame = password === passwordCheck;
-    const isValid = email !== '' && password !== '' && isSame === true && emailCheck === true && isDuplicationN === true && numCheck === true && isDuplicationE === true
+    const isValid = email !== '' && password !== '' && isSame === true && emailCheck === true && isDuplicationN === false && numCheck === true && isDuplicationE === false
 
     const isEmail = (input) => {
         if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(input)) {
@@ -161,14 +155,12 @@ function JoinMembership() {
             .then((res) => {
                 setIsDuplicationE(res.data);
             })
-        console.log(isDuplicationE)
     }
     const isNickName = (input) => {
         axios.get(`${baseUrl}/member/duplicationN?nickname=${input}`)
             .then((res) => {
                 setIsDuplicationN(res.data);
             })
-        console.log(isDuplicationN)
     }
     const isNum = (input) => {
         if (/^[0-9]+$/.test(input) && input.length === 11) {
