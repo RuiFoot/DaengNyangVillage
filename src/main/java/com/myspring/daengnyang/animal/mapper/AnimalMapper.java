@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface AnimalMapper {
     List<String> getClassification();
-    List<AnimalLocationVO> getLocation(@Param("classification") String classification);
+    List<AnimalLocationVO> getLocation(@Param("location") String location,@Param("classification") String classification);
 
     AnimalDetailVO getDetail(@Param("animalNum") Integer animalNum);
 

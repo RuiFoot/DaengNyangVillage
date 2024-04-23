@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AnimalService {
     List<String> getClassification();
-    List<AnimalLocationVO> getLocation(String classification);
+    List<AnimalLocationVO> getLocation(String location,String classification);
 
     AnimalDetailVO getDetail(Integer animalNum);
 

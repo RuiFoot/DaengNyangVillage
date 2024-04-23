@@ -67,10 +67,12 @@
     </select>
     <select id="getLocation" parameterType="String" resultMap="LocationResultmap">
         <![CDATA[
-            SELECT *
-            FROM "animalLocation"
-            where #{classification} = "subClassification" and ROWNUM <= 30
-        ]]>
+        SELECT *
+        FROM "animalLocation"
+        WHERE INSTR("sido", #{location}) > 0
+        AND "subClassification" = #{classification}
+        AND ROWNUM <= 30
+    ]]>
     </select>
     <select id="getDetail" parameterType="Integer" resultMap="DetailResultmap">
         <![CDATA[
