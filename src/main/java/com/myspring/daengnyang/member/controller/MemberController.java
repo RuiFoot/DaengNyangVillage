@@ -1,7 +1,9 @@
 package com.myspring.daengnyang.member.controller;
 
+import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.member.service.MemberServiceImpl;
 import com.myspring.daengnyang.member.service.OAuthServiceImpl;
+import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import com.myspring.daengnyang.member.vo.SignupForm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -102,6 +104,23 @@ public class MemberController {
     public boolean duplicationNickname(@RequestParam("nickname") String nickname) {
         System.out.print(memberService.duplicationNickname(nickname));
         return memberService.duplicationNickname(nickname);
+    }
+    @GetMapping("/mypage")
+    public MemberInfoVO getMemberInfo(@RequestParam("memberNo") Integer memberNo){
+        log.info("멤버 정보 불러 오기 실행 / Param => memberNo : " + memberNo);
+        return memberService.getMemberInfo(memberNo);
+    }
+
+    @GetMapping("/favorite")
+    public String getFavorite(@RequestParam("memberNo") Integer memberNo){
+        log.info("멤버 찜한 장소 정보 불러 오기 실행 / Param => memberNo : " + memberNo);
+        return "0";
+    }
+
+    @GetMapping("/post")
+    public BoardVO getMemberPost(@RequestParam("memberNo") Integer memberNo){
+        log.info("내가 쓴 글 불러 오기 실행 / Param => memberNo : " + memberNo);
+        return memberService.getMemberPost(memberNo);
     }
 
     //-------------------------------------------------------------------------------------------
