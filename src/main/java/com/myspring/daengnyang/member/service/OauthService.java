@@ -12,10 +12,10 @@ public interface OauthService {
 
     /**
      * 구글
-     * @param code
-     * @return
      */
     String googleLogin(String code);
+
     String getGoogleAccessToken(String authorizationCode);
     JsonNode getUserResource(String accessToken);
+
 }

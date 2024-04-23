@@ -20,5 +20,10 @@ public interface MemberMapper {
 
      int duplicationNickname(@Param("nickname") String nickname);
 
+     void updateProfile(@Param("nickname") String nickname, @Param("memberNo") int memberNo,
+                        @Param("profileImg") String profileImg, @Param("address") String address,
+                        @Param("addressDetail") String addressDetail, @Param("favoritePet") String favoritePet,
+                        @Param("phoneNumber") String phoneNumber);
+
 
 }

@@ -352,4 +352,5 @@ public class OAuthServiceImpl implements OauthService {
         HttpEntity entity = new HttpEntity(headers);
         return restTemplate.exchange(resourceUri, HttpMethod.GET, entity, JsonNode.class).getBody();
     }
+
 }

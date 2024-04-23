@@ -65,5 +65,21 @@ public class MemberServiceImpl implements MemberService {
         return data != null;
     }
 
+    @Override
+    public void updateProfile(MemberInfoVO memberInfoVO) {
+        MemberInfoVO vo = new MemberInfoVO();
+
+        vo.setNickname(memberInfoVO.getNickname());
+        vo.setMemberNo(memberInfoVO.getMemberNo());
+        vo.setProfileImg(memberInfoVO.getProfileImg());
+        vo.setAddress(memberInfoVO.getAddress());
+        vo.setAddressDetail(memberInfoVO.getAddressDetail());
+        vo.setFavoritePet(memberInfoVO.getFavoritePet());
+        vo.setPhoneNumber(memberInfoVO.getPhoneNumber());
+
+        memberMapper.updateProfile(vo.getNickname(), vo.getMemberNo(), vo.getProfileImg(), vo.getAddress(),
+                vo.getAddressDetail(), vo.getFavoritePet(), vo.getPhoneNumber());
+    }
+
 
 }

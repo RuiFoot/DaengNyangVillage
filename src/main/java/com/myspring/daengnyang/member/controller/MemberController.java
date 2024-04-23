@@ -2,6 +2,7 @@ package com.myspring.daengnyang.member.controller;
 
 import com.myspring.daengnyang.member.service.MemberServiceImpl;
 import com.myspring.daengnyang.member.service.OAuthServiceImpl;
+import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import com.myspring.daengnyang.member.vo.SignupForm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -173,6 +174,20 @@ public class MemberController {
             log.info("로그인 오류 발생");
             return false;
         }
+    }
+
+    @GetMapping("/logout")
+    public void Logout(HttpSession session) throws Exception{
+        log.info("Logout");
+        session.invalidate();
+        // return "redirect:/member/main"; 얼럿창출력안하고싶을때 사용
+    }
+
+    @PatchMapping("/user")
+    public boolean updateProfile(@RequestBody MemberInfoVO memberInfoVO) {
+        log.info("회원정보 수정 컨트롤러 실행");
+        memberService.updateProfile(memberInfoVO);
+        return true;
     }
 
 }

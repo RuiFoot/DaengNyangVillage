@@ -1,6 +1,7 @@
 package com.myspring.daengnyang.member.service;
 
 
+import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import com.myspring.daengnyang.member.vo.SignupForm;
 import org.springframework.stereotype.Service;
@@ -15,4 +16,6 @@ public interface MemberService {
     boolean getDuplicationEmail(String email);
 
     Boolean duplicationNickname(String nickname);
+
+    void updateProfile(MemberInfoVO memberInfoVO);
 }
