@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+/**g
+ * 커뮤니티 컨트롤러
+ */
 @RestController
 @Slf4j
 @RequestMapping("/board")
 public class BoardController {
 
-    private BoardService boardService;
+    private final BoardService boardService;
 
     @Autowired
     public BoardController(BoardService boardService) {

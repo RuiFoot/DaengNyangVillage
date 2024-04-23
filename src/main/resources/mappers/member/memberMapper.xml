@@ -13,5 +13,45 @@
         ]]>
     </insert>
 
+    <select id="getMemberNo" resultType="int">
+        <![CDATA[
+            SELECT "memberNo"
+            FROM "member"
+            WHERE "email" = #{email}
+        ]]>
+    </select>
+
+    <insert id="createMemberInfo">
+        <![CDATA[
+            INSERT INTO "memberInfo" ("nickname","memberNo","profileImg","address", "addressDetail","favoritePet","phoneNumber")
+            VALUES (#{nickname}, #{memberNo}, #{profileImg}, #{address}, #{addressDetail}, #{favoritePet}, #{phoneNumber})
+        ]]>
+    </insert>
+
+
+    <select id="getMember" parameterType="String" resultType="com.myspring.daengnyang.member.vo.MemberVO">
+        <![CDATA[
+            SELECT *
+            from "member"
+            where "email" = #{email}
+        ]]>
+    </select>
+
+    <select id="getDuplicationEmail" parameterType="String" resultType="String">
+        <![CDATA[
+            SELECT "email"
+            from "member"
+            where "email" = #{email}
+        ]]>
+    </select>
+
+    <select id="duplicationNickname" parameterType="String" resultType="Integer">
+        <![CDATA[
+            SELECT count(*)
+            FROM "memberInfo"
+            WHERE "nickname" = #{nickname}
+        ]]>
+    </select>
+
 
 </mapper>

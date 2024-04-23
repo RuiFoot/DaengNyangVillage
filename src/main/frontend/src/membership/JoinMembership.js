@@ -7,9 +7,10 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
-import './JoinMembershipStyle.css'
+import './membershipStyle.css'
 import { SHA256 } from 'crypto-js';
 import DaumPostcode from "react-daum-postcode";
+import axios from "axios";
 
 const Container = styled.div`
 margin: 0 6vw;
@@ -44,6 +45,8 @@ justify-content: center;
 
 function JoinMembership() {
 
+
+    const baseUrl = "http://localhost:8080";
     //다음 주소 api
     const [show, setShow] = useState(false);
     const [fullAddress, setFullAddress] = useState("주소검색을 이용해주세요")
@@ -53,19 +56,21 @@ function JoinMembership() {
     const complete = (data) => {
         setFullAddress(data.address);
         setZonecode(data.zonecode);
-        console.log(data)
         setShow(false)
     }
 
-
-
     //회원가입시 받을 값들
+    // 채크박스 값
+    const [checkArr, setCheckArr] = useState([])
+    const getCheck = (e) => {
+        setCheckArr(prevList => [...prevList, e]); //배열 스테이트 값추가
+    }
     const [memberInfo, setMemberInfo] = useState({
         email: "",
         password: "",
         passwordCheck: "",
         profileImg: "",
-        mypet: {},
+        mypet: "",
         nickName: "",
         phoneNumber: "",
         inputAddress: "",
@@ -90,9 +95,28 @@ function JoinMembership() {
         e.preventDefault();
         memberInfo.inputAddress = fullAddress
         memberInfo.inputZonecode = zonecode
-        memberInfo.password = SHA256(password).toString(); // 비밀번호 보안 해시
+        memberInfo.mypet = checkArr.join()
+        // 비밀번호 보안 해시
+        // memberInfo.password = SHA256(password).toString();
         delete memberInfo.passwordCheck;
-        console.log(memberInfo)
+
+        let body = {
+            email: memberInfo.email,
+            password: memberInfo.password,
+            nickname: memberInfo.nickName,
+            profileImg: memberInfo.profileImg,
+            address: memberInfo.inputAddress,
+            addressDetail: memberInfo.detailedAddress,
+            favoritePet: memberInfo.mypet,
+            phoneNumber: memberInfo.phoneNumber
+        }
+        axios.post(`${baseUrl}/member/signup`, body
+        ).then((response) => {
+            alert("댕냥빌리지 가입을 환영합니다.")
+            console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+        }).catch((error) => {
+            console.log(error);				//오류발생시 실행
+        })
         localStorage.setItem("member", JSON.stringify(memberInfo)); // 로컬스토리지 저장
         setChecked(false)
         setMemberInfo({
@@ -113,10 +137,11 @@ function JoinMembership() {
 
     //유효성 검사
     const [emailCheck, setEmailCheck] = useState()
-    const [nickNameCheck, setNickNameCheck] = useState()
     const [numCheck, setNumCheck] = useState()
+    const [isDuplicationE, setIsDuplicationE] = useState()
+    const [isDuplicationN, setIsDuplicationN] = useState()
     const isSame = password === passwordCheck;
-    const isValid = email !== '' && password !== '' && isSame === true && emailCheck === true && nickNameCheck === true && numCheck === true
+    const isValid = email !== '' && password !== '' && isSame === true && emailCheck === true && isDuplicationN === false && numCheck === true && isDuplicationE === false
 
     const isEmail = (input) => {
         if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(input)) {
@@ -125,12 +150,17 @@ function JoinMembership() {
             setEmailCheck(false)
         }
     };
-    const isNickName = () => {
-        if (true) {
-            setNickNameCheck(true)
-        } else {
-            setNickNameCheck(false)
-        }
+    const emailDuplicationCheck = (input) => {
+        axios.get(`${baseUrl}/member/duplicationE?email=${input}`)
+            .then((res) => {
+                setIsDuplicationE(res.data);
+            })
+    }
+    const isNickName = (input) => {
+        axios.get(`${baseUrl}/member/duplicationN?nickname=${input}`)
+            .then((res) => {
+                setIsDuplicationN(res.data);
+            })
     }
     const isNum = (input) => {
         if (/^[0-9]+$/.test(input) && input.length === 11) {
@@ -155,20 +185,41 @@ function JoinMembership() {
                         value={email}
                         name="email"
                         onChange={onChange}
+                        onKeyUpCapture={() => { isEmail(email) }}
                     />
-                    <Button className="joinBtns"
-                        variant="outline-secondary" id="memberId"
-                        onClick={() => isEmail(email)}>
-                        중복확인
-                    </Button>
+                    {
+                        emailCheck ?
+                            <Button className="btns"
+                                variant="outline-secondary" id="memberId"
+                                onClick={() => { emailDuplicationCheck(email) }}>
+                                중복확인
+                            </Button>
+                            :
+                            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">이메일 입력값을 확인해주세요.</Tooltip>}>
+                                <span className="d-inline-block">
+                                    <Button className="btns" disabled style={{ pointerEvents: 'none' }}
+                                        variant="outline-secondary" id="memberId"
+                                        onClick={() => { emailDuplicationCheck(email) }}
+                                    >
+                                        중복확인
+                                    </Button>
+                                </span>
+                            </OverlayTrigger>
+                    }
+
                 </InputGroup>
                 {
                     emailCheck === undefined ?
                         null
                         : emailCheck ?
-                            <p className="pass" >사용가능한 이메일입니다.</p>
+                            <>
+                                {!isDuplicationE ? <p className="pass" >사용가능한 이메일입니다.</p>
+                                    : <p className="warning">이미 사용중인 이메일입니다.</p>
+                                }
+                            </>
                             :
                             <p className="warning">사용불가능한 이메일입니다.</p>
+
 
                 }
                 <InputTitle>비밀번호</InputTitle>
@@ -223,9 +274,9 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxDog"
                         type="checkbox"
-                        value={memberInfo.mypet = "dog"}
+                        value="dog"
                         name="mypet"
-                        onChange={onChange}
+                        onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxDog">강아지</CheckBoxLabel>
@@ -235,9 +286,9 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxCat"
                         type="checkbox"
-                        value={memberInfo.mypet += "cat"}
+                        value="cat"
                         name="mypet"
-                        onChange={onChange}
+                        onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxCat">고양이</CheckBoxLabel>
@@ -247,9 +298,9 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxFish"
                         type="checkbox"
-                        value={memberInfo.mypet += "fish"}
+                        value="fish"
                         name="mypet"
-                        onChange={onChange}
+                        onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxFish">관상어</CheckBoxLabel>
@@ -259,9 +310,9 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxEtc"
                         type="checkbox"
-                        value={memberInfo.mypet += "etc"}
+                        value="etc"
                         name="mypet"
-                        onChange={onChange}
+                        onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxEtc">다른 반려동물</CheckBoxLabel>
@@ -276,19 +327,27 @@ function JoinMembership() {
                         name="nickName"
                         onChange={onChange}
                     />
-                    <Button className="joinBtns" variant="outline-secondary" id="nickName"
-                        onClick={() => isNickName()}>
+                    <Button className="btns" variant="outline-secondary" id="nickName"
+                        onClick={() => isNickName(nickName)}>
                         중복확인
                     </Button>
                 </InputGroup>
                 {
-                    nickNameCheck === undefined ?
+                    isDuplicationN === undefined ?
                         null
                         :
-                        nickNameCheck ?
-                            <p className="pass" >사용가능한 닉네임입니다.</p>
+                        !isDuplicationN ?
+                            <>
+                                {
+                                    nickName.length > 0 ?
+                                        <p className="pass" >사용가능한 닉네임입니다.</p>
+                                        :
+                                        <p className="warning">닉네임은 한 글자 이상이여야 합니다.</p>
+                                }
+                            </>
+
                             :
-                            <p className="warning">사용불가능한 닉네임입니다.</p>
+                            <p className="warning">이미 사용중인 닉네임입니다.</p>
 
                 }
                 <InputTitle>전화번호</InputTitle>
@@ -335,7 +394,7 @@ function JoinMembership() {
                         name="inputZonecode"
                         onChange={onChange}
                     />
-                    <Button className="joinBtns" onClick={handleShow}>
+                    <Button className="btns" onClick={handleShow}>
                         주소검색
                     </Button>
                 </InputGroup>
