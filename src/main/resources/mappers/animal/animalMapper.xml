@@ -74,6 +74,20 @@
         AND ROWNUM <= 30
     ]]>
     </select>
+    <select id="getLocation2" parameterType="Integer" resultMap="LocationResultmap">
+        <![CDATA[
+        SELECT *
+        FROM "animalLocation"
+        ]]>
+        <where>
+            <if test="animalNumList != null and animalNumList.size() > 0">
+                <![CDATA["animalNum" IN]]>
+                <foreach item="animalNum" collection="animalNumList" open="(" separator="," close=")">
+                    #{animalNum}
+                </foreach>
+            </if>
+        </where>
+    </select>
     <select id="getDetail" parameterType="Integer" resultMap="DetailResultmap">
         <![CDATA[
             SELECT *
