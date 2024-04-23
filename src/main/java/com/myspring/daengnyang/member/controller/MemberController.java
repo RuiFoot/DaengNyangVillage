@@ -151,8 +151,28 @@ public class MemberController {
     /**
      * 구글 소셜 로그인
      */
-    @GetMapping("/oauth/{registrationId}")
-    public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
-        oAuthService.socialLogin(code, registrationId);
+//    @GetMapping("/oauth/{registrationId}")
+//    public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
+//        oAuthService.socialLogin(code, registrationId);
+//    }
+
+    @GetMapping("/oauth/google")
+    public boolean googleCallback(@RequestParam String code, HttpServletRequest httpRequest) {
+        log.info("code : " + code);
+        String accessToken = oAuthService.getGoogleAccessToken(code);
+        System.out.println(accessToken);
+        String loginResult = String.valueOf(oAuthService.getUserResource(accessToken));
+        log.info("로그인 정보 : " + loginResult);
+        String memberNo = oAuthService.googleLogin(loginResult);
+        if(memberNo != null){
+            HttpSession session = httpRequest.getSession();
+            session.setAttribute("memberNo", memberNo);
+            log.info("로그인이 정상 처리 되었습니다.");
+            return true;
+        }else{
+            log.info("로그인 오류 발생");
+            return false;
+        }
     }
+
 }
