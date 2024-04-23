@@ -11,7 +11,6 @@ import Form from 'react-bootstrap/Form';
 import styled from "styled-components";
 import { useEffect, useState } from 'react';
 import { CiBrightnessDown, CiDark } from "react-icons/ci";
-import { SHA256 } from 'crypto-js';
 import "../style.css"
 
 const Logo = styled.img`
@@ -80,7 +79,6 @@ justify-content: center;
 align-items: center;
 `
 const Logos = styled.div`
-
 `
 const NaverLogo = styled.img`
 margin: 0 5px;
@@ -102,128 +100,133 @@ const getDataLocalStorage = (name) => {
     return JSON.stringify(localData);
 }
 
-
-function LoginModal(props) {
-    const [userId, setUserId] = useState("")
-    const [userPassword, setUserPassword] = useState("")
+// 네비바
+function NavVillage() {
     const [login, setLogin] = useState();
 
-    const saveUserId = (e) => {
-        setUserId(e.target.value)
-    }
+    function LoginModal(props) {
+        const [userId, setUserId] = useState("")
+        const [userPassword, setUserPassword] = useState("")
 
-    const saveUserPw = (e) => {
-        setUserPassword(e.target.value)
-    }
-
-    const loginBtn = () => {
-        getDataLocalStorage(`member`)
-        //SHA256(userPassword).toString() 해쉬값 비교
-        if (userId === localData.email && userPassword === localData.password) {
-            sessionStorage.setItem("logined", JSON.stringify(localData))
-            setLogin(true)
-            console.log("로그인")
-            setUserId("")
-            setUserPassword("")
-            props.onHide();
-            window.location.href = "/logined"
-        } else {
-            setLogin(false)
-            console.log("실패")
+        const saveUserId = (e) => {
+            setUserId(e.target.value)
         }
-    }
-    return (
-        <Modal className='modal'
-            {...props}
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header className='modalHeader'>
-                <LoginLogo src={logo} />
-                <Modal.Title id="contained-modal-title-vcenter">
-                    반려동물의 모든 것 멍냥빌리지
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form.Label htmlFor="inputemail">아이디</Form.Label>
-                <Form.Control
-                    type="email"
-                    id="inputemail"
-                    className='modalInput'
-                    value={userId}
-                    onChange={saveUserId}
-                    placeholder='아이디(이메일)을 입력해주세요.'
-                />
-                <Form.Label htmlFor="inputPassword">비밀번호</Form.Label>
-                <Form.Control
-                    type="password"
-                    className='modalInput'
-                    value={userPassword}
-                    onChange={saveUserPw}
-                    id="inputPassword"
-                />
-                <ModalBodyFooter>
-                    <FindIdPassward onClick={() => { window.location.href = "/ForgetIdPassWd" }}>아이디 / 비밀번호가 기억나지 않아요</FindIdPassward>
-                    <Social>
-                        <p>소셜 로그인</p>
-                        <Logos>
-                            <NaverLogo className='socialLogo' src={naver} onClick={() => { alert("네이버~") }} />
-                            <KakaoLogo className='socialLogo' src={kakao} onClick={() => { alert("카카오~") }} />
-                            <GoogleLogo className='socialLogo' src={google} onClick={() => { alert("구글~") }} />
-                        </Logos>
-                    </Social>
-                </ModalBodyFooter>
-            </Modal.Body>
-            <Modal.Footer className='modalFooter'>
-                {
-                    login === undefined ? null
-                        : !login &&
-                        <p className='warning'>일치하는 아이디 혹은 비밀번호가 없습니다</p>
-                }
-                <Button className='joinBtn' onClick={() => window.location.href = '/JoinMembership'}>회원가입</Button>
-                <Button type='submit' className='modalLoginBtn' onClick={() => loginBtn()}>로그인</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
 
-function NavVillage() {
+        const saveUserPw = (e) => {
+            setUserPassword(e.target.value)
+        }
+
+        const loginBtn = () => {
+            getDataLocalStorage(`member`)
+            //SHA256(userPassword).toString() 해쉬값 비교
+            if (userId === localData.email && userPassword === localData.password) {
+                sessionStorage.setItem("logined", JSON.stringify(localData))
+                const nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
+                setLogin(true)
+                console.log("로그인")
+                setUserId("")
+                setUserPassword("")
+                props.onHide();
+                window.location.href = `/${nickName}`
+            } else {
+                setLogin(false)
+                console.log("실패")
+            }
+        }
+        return (
+            <Modal className='modal'
+                {...props}
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header className='modalHeader'>
+                    <LoginLogo src={logo} />
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        반려동물의 모든 것 멍냥빌리지
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Label htmlFor="inputemail">아이디</Form.Label>
+                    <Form.Control
+                        type="email"
+                        id="inputemail"
+                        className='modalInput'
+                        value={userId}
+                        onChange={saveUserId}
+                        placeholder='아이디(이메일)을 입력해주세요.'
+                    />
+                    <Form.Label htmlFor="inputPassword">비밀번호</Form.Label>
+                    <Form.Control
+                        type="password"
+                        className='modalInput'
+                        value={userPassword}
+                        onChange={saveUserPw}
+                        id="inputPassword"
+                    />
+                    <ModalBodyFooter>
+                        <FindIdPassward onClick={() => { window.location.href = "/ForgetIdPassWd" }}>아이디 / 비밀번호가 기억나지 않아요</FindIdPassward>
+                        <Social>
+                            <p>소셜 로그인</p>
+                            <Logos>
+                                <NaverLogo className='socialLogo' src={naver} onClick={() => { alert("네이버~") }} />
+                                <KakaoLogo className='socialLogo' src={kakao} onClick={() => { alert("카카오~") }} />
+                                <GoogleLogo className='socialLogo' src={google} onClick={() => { alert("구글~") }} />
+                            </Logos>
+                        </Social>
+                    </ModalBodyFooter>
+                </Modal.Body>
+                <Modal.Footer className='modalFooter'>
+                    {
+                        login === undefined ? null
+                            : !login &&
+                            <p className='warning'>일치하는 아이디 혹은 비밀번호가 없습니다</p>
+                    }
+                    <Button className='joinBtn' onClick={() => window.location.href = '/JoinMembership'}>회원가입</Button>
+                    <Button type='submit' className='modalLoginBtn' onClick={() => loginBtn()}>로그인</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+
     //로그인 상태일때
-    const [logined, setLogined] = useState()
     useEffect(() => {
         if (window.sessionStorage.key(0) === "logined") {
-            setLogined("/logined")
-        } else {
-            setLogined("/")
+            setLogin(true)
+            setNickName(JSON.parse(sessionStorage.getItem("logined")).nickName)
+            setUrl(`/${nickName}`)
         }
-    }, [logined]);
-
+    }, [login]);
+    const [url, setUrl] = useState("/")
+    const [modalShow, setModalShow] = useState(false);
+    const [nickName, setNickName] = useState("")
     const LogOut = () => {
-        setLogined(false)
+        setUrl("/")
         window.sessionStorage.removeItem("logined")
         window.location.href = "/"
     }
 
-
+    //현재 주소
     const pathname = window.location.pathname;
-    console.log(pathname);
     const [isOn, setisOn] = useState(false);
     const toggleHandler = () => {
         setisOn(!isOn)
     };
 
-    const [modalShow, setModalShow] = useState(false);
+    // 마이페이지 안의 페이지들 주소
+    let mypages = [`/MyInfo/${nickName}`, `/ChangePasswd/${nickName}`, `/SelectedLocation/${nickName}`, `/WrittenByMe/${nickName}`]
 
     return (
         <div>
             <Navbar expand="lg" className="navbar"  >
-                <a href={logined}><Logo src={logo} /></a>
+                <a href={url}><Logo src={logo} /></a>
                 <Container fluid>
-                    {
-                        pathname === logined
-                            ? <Navbar.Brand className='navHomeLink' style={{ color: '#F2884B' }} href={logined}>Home</Navbar.Brand>
-                            : <Navbar.Brand className='navHomeLink' href={logined}>Home</Navbar.Brand>
-                    }
+                    <Navbar.Brand className='navHomeLink' style={{
+                        color: `${pathname === url
+                            ? "#F2884B" : "blakc"}`
+                    }} href={url}>
+                        Home
+                        {/*모든 네비 카테고리는 현재 주소가 해당 카테고리면 컬러가 다르게 표시됨 */}
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll" >
                         <Nav
@@ -231,22 +234,21 @@ function NavVillage() {
                             style={{ minHeight: '80px', maxHeight: '120px' }}
                             navbarScroll
                         >
-                            {
-                                pathname === `/Community${logined}`
-                                    ? <Nav.Link style={{ color: '#F2884B' }} className='navLink' href={`/Community${logined}`}>커뮤니티</Nav.Link>
-                                    :
-                                    <Nav.Link className='navLink' href={`/Community${logined}`}>커뮤니티</Nav.Link>
-                            }
-                            {
-                                pathname === `/PlaceRecommend${logined}`
-                                    ? <Nav.Link style={{ color: '#F2884B' }} className='navLink' href={`/PlaceRecommend${logined}`}>장소추천</Nav.Link>
-                                    : <Nav.Link className='navLink' href={`/PlaceRecommend${logined}`}>장소추천</Nav.Link>
-                            }
-                            {
-                                pathname === `/AboutUs${logined}`
-                                    ? <Nav.Link style={{ color: '#F2884B' }} className='navLink' href={`/AboutUs${logined}`}>About Us</Nav.Link>
-                                    : <Nav.Link className='navLink' href={`/AboutUs${logined}`}>About Us</Nav.Link>
-                            }
+                            <Nav.Link style={{ color: `${pathname === `/Community${url}` ? '#F2884B' : 'black'}` }} className='navLink' href={`/Community${url}`}>
+                                커뮤니티
+                            </Nav.Link>
+                            <Nav.Link style={{
+                                color: `${pathname === `/PlaceRecommend${url}`
+                                    ? '#F2884B' : 'black'}`
+                            }} className='navLink' href={`/PlaceRecommend${url}`}>
+                                장소추천
+                            </Nav.Link>
+                            <Nav.Link style={{
+                                color: `${pathname === `/AboutUs${url}`
+                                    ? '#F2884B' : 'black'}`
+                            }} className='navLink' href={`/AboutUs${url}`}>
+                                About Us
+                            </Nav.Link>
                         </Nav>
                         <Nav className="d-flex">
                             <ToggleContainer onClick={toggleHandler}>
@@ -254,18 +256,23 @@ function NavVillage() {
                                 <SunMoon className={`toggle-circle ${isOn ? "toggle--checked" : null}`}>{isOn ? <CiDark /> : <CiBrightnessDown />}</SunMoon>
                             </ToggleContainer>
                             {
-                                logined === "/logined" ?
-                                    pathname === `/Mypage${logined}`
-                                        ? <Nav.Link className='navLink' style={{ color: '#F2884B' }} href={`/Mypage${logined}`}>마이페이지</Nav.Link>
-                                        : <Nav.Link className='navLink' href={`/Mypage${logined}`}>마이페이지</Nav.Link>
+                                login ?
+                                    <Nav.Link className='navLink' style={{
+                                        color: `${mypages.includes(pathname)
+                                            ? '#F2884B' : 'black'}`
+                                    }} href={`/MyInfo/${nickName}`}>
+                                        마이페이지
+                                    </Nav.Link>
                                     :
-                                    pathname === `/JoinMembership${logined}`
-                                        ? <Nav.Link className='navLink' style={{ color: '#F2884B' }} href={`/JoinMembership${logined}`}>회원가입</Nav.Link>
-                                        : <Nav.Link className='navLink' href={`/JoinMembership${logined}`}>회원가입</Nav.Link>
-
+                                    <Nav.Link className='navLink' style={{
+                                        color: `${pathname === `/JoinMembership${url}`
+                                            ? '#F2884B' : 'black'}`
+                                    }} href={`/JoinMembership${url}`}>
+                                        회원가입
+                                    </Nav.Link>
                             }
                             {
-                                logined === "/logined" ?
+                                login ?
                                     <Nav.Link className='navLink'>
                                         <Button className='loginBtn' onClick={() => LogOut()}>로그아웃
                                         </Button>
@@ -279,10 +286,7 @@ function NavVillage() {
                                             onHide={() => setModalShow(false)}
                                         />
                                     </Nav.Link>
-
                             }
-
-
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

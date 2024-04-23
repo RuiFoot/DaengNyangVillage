@@ -22,8 +22,6 @@ function SideBar() {
     const [on, setOn] = useState(false)
     function onScroll() {
         setPosition(window.scrollY);
-        // console.log("로딩" + window.scrollY);
-        // console.log("로딩" + document.body.scrollHeight);
     }
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
@@ -37,6 +35,7 @@ function SideBar() {
     return (
         <SideContainer>
             {
+                // 챗봇 아이콘 위치조정을 위한 조건식
                 heightBody - position < 961
                     ?
                     <IoChatbubblesOutline style={{
@@ -48,8 +47,6 @@ function SideBar() {
                         transition: "transform 0.5s linear"
                     }} className="chatBotMobile" onClick={handleShow} />
             }
-            {/* <IoChatbubblesOutline id="chatBotMobile"
-                className="chatBotMobile" onClick={handleShow} /> */}
             <Offcanvas show={show} onHide={handleClose} placement='end'>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>댕냥 챗봇</Offcanvas.Title>
