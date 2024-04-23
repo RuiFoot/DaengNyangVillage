@@ -1,5 +1,6 @@
 package com.myspring.daengnyang.member.service;
 
+import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.member.mapper.MemberMapper;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
@@ -43,9 +44,29 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberVO getMember(String email) {
-        log.info("멤버 정보 불러오기 서비스 실행 => email : "+ email);
+        log.info("계정 정보 불러 오기 서비스 실행 => email : "+ email);
         return memberMapper.getMember(email);
     }
+
+    @Override
+    public MemberInfoVO getMemberInfo(Integer memberNo) {
+        log.info("멤버 정보 불러 오기 서비스 실행 => memberNo : "+ memberNo);
+        MemberInfoVO memberInfoVO = new MemberInfoVO();
+        memberInfoVO = memberMapper.getMemberInfo(memberNo);
+        log.info("멤버 정보 : " + memberInfoVO);
+        return memberInfoVO;
+    }
+
+    @Override
+    public String getFavorite(Integer memberNo) {
+        return null;
+    }
+
+    @Override
+    public BoardVO getMemberPost(Integer memberNo) {
+        return memberMapper.getMemberPost(memberNo);
+    }
+
 
     @Override
     public Boolean duplicationNickname(String nickname) {

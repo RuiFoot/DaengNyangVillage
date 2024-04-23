@@ -26,9 +26,9 @@ public class AnimalServiceImpl implements AnimalService{
     }
 
     @Override
-    public List<AnimalLocationVO> getLocation(String classification) {
-        log.info("시설 위치 정보 조회 서비스 실행 => classification : " + classification);
-        return animalMapper.getLocation(classification);
+    public List<AnimalLocationVO> getLocation(String location,String classification) {
+        log.info("시설 위치 정보 조회 서비스 실행 => classification : " + location + ", classification : " + classification);
+        return animalMapper.getLocation(location,classification);
     }
 
     @Override

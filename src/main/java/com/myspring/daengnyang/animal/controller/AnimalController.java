@@ -33,11 +33,11 @@ public class AnimalController {
         return animalService.getClassification();
     }
 
-    @GetMapping("/location/{classification}")
+    @GetMapping("/location/{searchLocation}")
     @ResponseBody
-    public List<AnimalLocationVO> animalLocation(@PathVariable("classification") String classification){
-        log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + classification);
-        return animalService.getLocation(classification);
+    public List<AnimalLocationVO> animalLocation(@PathVariable("searchLocation") String location ,@RequestParam String classification){
+        log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + location + ", Params : " + classification);
+        return animalService.getLocation(location,classification);
     }
     @GetMapping("/detail/{animalNum}")
     @ResponseBody
