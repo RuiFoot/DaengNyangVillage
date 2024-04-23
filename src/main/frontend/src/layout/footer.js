@@ -17,7 +17,6 @@ const Icons = styled.div`
 margin: 18px;
 `
 const Copyright = styled.div`
-
 `
 
 function Footer() {
@@ -29,7 +28,9 @@ function Footer() {
                 <FaInstagram className="footerIcon" />
                 <FaGithub className="footerIcon" />
             </Icons>
-            <Copyright>© Copyright 2024, All Rights Reserved by 오루보</Copyright>
+            <Copyright>
+                © Copyright 2024, All Rights Reserved by 오루보
+            </Copyright>
         </FooterContainer>
     );
 }

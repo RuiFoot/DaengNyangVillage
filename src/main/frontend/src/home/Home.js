@@ -4,9 +4,7 @@ import './homeStyle.css'
 import HotdealBar from "./Hotdeal";
 import HotPlaceList from "./HotPlace";
 import CommunityHome from "./CommunityHome";
-import Test from "../test";
 import Bumper from "../layout/Bumper";
-import { useEffect, useState } from "react";
 
 const Container = styled.div`
   display: grid;
@@ -35,10 +33,8 @@ display: grid;
   }
 `
 const Place = styled.div`
-
 `
 const Community = styled.div`
-
 `
 const PlaceTitle = styled.div`
 margin-bottom:15px;
