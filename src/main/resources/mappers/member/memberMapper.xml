@@ -21,7 +21,7 @@
         </selectKey>
         <![CDATA[
             INSERT INTO "member" ("memberNo","email","password")
-            VALUES ('2024' || LPAD(#{memberNo}, 5, '0'), #{email}, #{password})
+            VALUES (TO_CHAR(SYSDATE, 'YYYY') || LPAD(#{memberNo}, 5, '0'), #{email}, #{password})
         ]]>
     </insert>
 

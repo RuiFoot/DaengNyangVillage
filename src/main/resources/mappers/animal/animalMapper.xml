@@ -102,4 +102,27 @@
             where #{animalNum} = "animalNum"
         ]]>
     </select>
+
+    <insert id="favoriteCheck" parameterType="Integer">
+        <!-- Oracle에서의 삽입 또는 업데이트 쿼리 예시 -->
+        MERGE INTO "favorite"
+        USING dual ON ("memberNo" = #{memberNo} AND "animalNum" = #{animalNum})
+        WHEN MATCHED THEN
+            UPDATE SET "Field" = CASE "Field"
+                                WHEN 1 THEN 0
+                                ELSE 1
+                                END,
+                        "favDate" = SYSDATE
+        WHEN NOT MATCHED THEN
+            INSERT ("memberNo", "animalNum", "favDate", "Field")
+            VALUES (#{memberNo}, #{animalNum}, SYSDATE, 1)
+    </insert>
+
+    <insert id="animalReviewPost" parameterType="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
+        <selectKey keyProperty="animalReviewNum" resultType="java.lang.Integer" order="BEFORE">
+            SELECT animal_review_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO animal_reviews (animal_review_num, animal_num, nickname, member_no, review, star, create_date)
+        VALUES (#{animalReviewNum}, #{animalNum}, #{nickname}, #{memberNo}, #{review}, #{star}, #{createDate})
+    </insert>
 </mapper>

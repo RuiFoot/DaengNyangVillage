@@ -18,4 +18,8 @@ public interface AnimalMapper {
     AnimalDetailVO getDetail(@Param("animalNum") Integer animalNum);
 
     AnimalReviewVO getReview(@Param("animalNum") Integer animalNum);
+
+    Integer animalReviewPost(@Param("animalPost") AnimalReviewVO animalReviewVO);
+
+    Integer favoriteCheck(Integer memberNo, Integer animalNum);
 }

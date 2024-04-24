@@ -44,10 +44,19 @@ public class AnimalServiceImpl implements AnimalService{
     }
 
     @Override
+    public boolean animalReviewPost(AnimalReviewVO animalReviewVO) {
+        Integer checked = animalMapper.animalReviewPost(animalReviewVO);
+        return checked > 0;
+    }
+
+    @Override
     public List<AnimalLocationVO> getRecommend(Integer memberNo,String sido,String sigungu){
-
-
-
         return null;
+    }
+
+    @Override
+    public boolean favoriteCheck(Integer memberNo, Integer animalNum) {
+        Integer checked = animalMapper.favoriteCheck(memberNo,animalNum);
+        return checked > 0;
     }
 }
