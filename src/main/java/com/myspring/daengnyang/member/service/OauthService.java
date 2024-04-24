@@ -10,7 +10,12 @@ public interface OauthService {
     String kakaoLogout(Long target_id);
     String kakaoUnlink(Long target_id);
 
-    void socialLogin(String code, String registrationId);
-    String getAccessToken(String authorizationCode, String registrationId);
-    JsonNode getUserResource(String accessToken, String registrationId);
+    /**
+     * 구글
+     */
+    String googleLogin(String code);
+
+    String getGoogleAccessToken(String authorizationCode);
+    JsonNode getUserResource(String accessToken);
+
 }

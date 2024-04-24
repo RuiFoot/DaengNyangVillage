@@ -1,6 +1,7 @@
 package com.myspring.daengnyang.board.mapper;
 
 import com.myspring.daengnyang.board.vo.BoardDetailVO;
+import com.myspring.daengnyang.board.vo.BoardPostVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.board.vo.ReviewVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -21,4 +22,8 @@ public interface BoardMapper {
                         @Param("amount") int amount);
 
     BoardDetailVO getBoardDetail(@Param("boardId") int boardId);
+
+    void deleteBoard(@Param("boardId") int boardId);
+    void deleteBoardReview(@Param("boardReviewNum") int boardReviewNum);
+    void postBoard(@Param("boardPostVO") BoardPostVO boardPostVO);
 }

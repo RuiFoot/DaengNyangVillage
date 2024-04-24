@@ -2,6 +2,7 @@ package com.myspring.daengnyang.board.service;
 
 import com.myspring.daengnyang.board.mapper.BoardMapper;
 import com.myspring.daengnyang.board.vo.BoardDetailVO;
+import com.myspring.daengnyang.board.vo.BoardPostVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.board.vo.ReviewVO;
 import io.swagger.v3.oas.annotations.servers.Server;
@@ -41,5 +42,19 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.getBoardDetail(boardId);
     }
 
+    @Override
+    public void deleteBoard(int boardId) {
+        boardMapper.deleteBoard(boardId);
+    }
+
+    @Override
+    public void deleteBoardReview(int boardReviewNum) {
+        boardMapper.deleteBoardReview(boardReviewNum);
+    }
+
+    @Override
+    public void postBoard(BoardPostVO boardPostVO) {
+        boardMapper.postBoard(boardPostVO);
+    }
 
 }

@@ -89,5 +89,18 @@
         ]]>
     </select>
 
+    <update id="updateProfile">
+        <![CDATA[
+            UPDATE "memberInfo"
+            SET "nickname" = #{nickname},
+                "profileImg" = #{profileImg},
+                "address" = #{address},
+                "addressDetail" = #{addressDetail},
+                "favoritePet" = #{favoritePet},
+                "phoneNumber" = #{phoneNumber}
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </update>
+
 
 </mapper>

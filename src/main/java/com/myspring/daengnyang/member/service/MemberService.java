@@ -26,4 +26,6 @@ public interface MemberService {
     boolean getDuplicationEmail(String email);
 
     Boolean duplicationNickname(String nickname);
+
+    void updateProfile(MemberInfoVO memberInfoVO);
 }
