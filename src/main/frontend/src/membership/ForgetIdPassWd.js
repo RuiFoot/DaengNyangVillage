@@ -6,6 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { useState } from "react";
 import emailjs from 'emailjs-com';
 import './membershipStyle.css'
+
 const Container = styled.div`
 display: flex;
 flex-direction: column;
@@ -31,7 +32,6 @@ function ForgetIdPassWd() {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
     const [numCheck, setNumCheck] = useState()
-    const [isSame, setIsSame] = useState()
     const [findUserId, setFindUserId] = useState()
     const [isEmailSent, setIsEmailSent] = useState(false);
 
@@ -51,13 +51,10 @@ function ForgetIdPassWd() {
 
     const findId = () => {
         if (memberInfo.phoneNumber === phoneNumber) {
-            setIsSame(true)
             setFindUserId(memberInfo.email)
         } else {
-            setIsSame(false)
-            alert("일치하는 전화번호가 없습니다.")
+            alert("가입된 번호가 없습니다.")
         }
-        console.log(isSame)
         setPhoneNumber("")
     }
 
@@ -67,34 +64,34 @@ function ForgetIdPassWd() {
         setEmail(e.target.value)
     }
     const findEmail = () => {
-        const getRandom = (min, max) => Math.floor(Math.random() * (max - min) + min);
-        console.log(email)
-        console.log(memberInfo.nickName)
-        // 이메일 보내기
-        // 여기서 정의해야하는 것은 위에서 만든 메일 템플릿에 지정한 변수({{ }})에 대한 값을 담아줘야한다.
-        const templateParams = {
-            toEmail: email,
-            message: getRandom(1, 1000000),
-            toName: memberInfo.nickName
-        };
-        console.log(templateParams)
-        emailjs
-            .send(
-                'DaengNyangVillage', // 서비스 ID
-                'DaengNyangVillage', // 템플릿 ID
-                templateParams,
-                'yHDYpSnWhBXnM4RDs', // public-key
-            )
-            .then((response) => {
-                console.log('이메일이 성공적으로 보내졌습니다:', response);
-                setIsEmailSent(true);
-                // 이메일 전송 성공 처리 로직 추가
-            })
-            .catch((error) => {
-                console.error('이메일 보내기 실패:', error);
-                alert("이메일 전송에 실패했습니다 챗봇을 통해 문의 해주세요.")
-            });
-        setEmail("")
+        if (memberInfo.email === email) {
+            // 이메일 보내기
+            // 여기서 정의해야하는 것은 위에서 만든 메일 템플릿에 지정한 변수({{ }})에 대한 값을 담아줘야한다.
+            const templateParams = {
+                toEmail: email,
+                message: `http://localhost:3000/ChangePasswdLick/${memberInfo.nickName}`,
+                toName: memberInfo.nickName
+            };
+            emailjs
+                .send(
+                    'DaengNyangVillage', // 서비스 ID
+                    'DaengNyangVillage', // 템플릿 ID
+                    templateParams,
+                    'yHDYpSnWhBXnM4RDs', // public-key
+                )
+                .then((response) => {
+                    console.log('이메일이 성공적으로 보내졌습니다:', response);
+                    setIsEmailSent(true);
+                    // 이메일 전송 성공 처리 로직 추가
+                })
+                .catch((error) => {
+                    console.error('이메일 보내기 실패:', error);
+                    alert("이메일 전송에 실패했습니다 챗봇을 통해 문의 해주세요.")
+                });
+            setEmail("")
+        } else {
+            alert("가입된 이메일이 없습니다.")
+        }
     };
 
 
@@ -124,6 +121,7 @@ function ForgetIdPassWd() {
                             null
                             :
                             numCheck ?
+
                                 <p className="pass" >사용가능한 번호입니다.</p>
                                 :
                                 <p className="warning">숫자로 11자리를 입력해주세요.</p>

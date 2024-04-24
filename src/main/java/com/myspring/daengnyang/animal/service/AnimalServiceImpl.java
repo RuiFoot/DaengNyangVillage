@@ -26,9 +26,9 @@ public class AnimalServiceImpl implements AnimalService{
     }
 
     @Override
-    public List<AnimalLocationVO> getLocation(String classification) {
-        log.info("시설 위치 정보 조회 서비스 실행 => classification : " + classification);
-        return animalMapper.getLocation(classification);
+    public List<AnimalLocationVO> getLocation(String location,String classification) {
+        log.info("시설 위치 정보 조회 서비스 실행 => classification : " + location + ", classification : " + classification);
+        return animalMapper.getLocation(location,classification);
     }
 
     @Override
@@ -44,10 +44,19 @@ public class AnimalServiceImpl implements AnimalService{
     }
 
     @Override
+    public boolean animalReviewPost(AnimalReviewVO animalReviewVO) {
+        Integer checked = animalMapper.animalReviewPost(animalReviewVO);
+        return checked > 0;
+    }
+
+    @Override
     public List<AnimalLocationVO> getRecommend(Integer memberNo,String sido,String sigungu){
-
-
-
         return null;
+    }
+
+    @Override
+    public boolean favoriteCheck(Integer memberNo, Integer animalNum) {
+        Integer checked = animalMapper.favoriteCheck(memberNo,animalNum);
+        return checked > 0;
     }
 }

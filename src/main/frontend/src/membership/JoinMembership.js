@@ -8,7 +8,6 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
 import './membershipStyle.css'
-import { SHA256 } from 'crypto-js';
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 
@@ -44,8 +43,6 @@ justify-content: center;
 `
 
 function JoinMembership() {
-
-
     const baseUrl = "http://localhost:8080";
     //다음 주소 api
     const [show, setShow] = useState(false);
@@ -91,13 +88,13 @@ function JoinMembership() {
 
     //채크 박스 해제
     const [checked, setChecked] = useState()
+
+    //입력받은 값 전송
     async function handleSubmit(e) {
         e.preventDefault();
         memberInfo.inputAddress = fullAddress
         memberInfo.inputZonecode = zonecode
         memberInfo.mypet = checkArr.join()
-        // 비밀번호 보안 해시
-        // memberInfo.password = SHA256(password).toString();
         delete memberInfo.passwordCheck;
 
         let body = {
@@ -170,7 +167,6 @@ function JoinMembership() {
         }
     };
 
-
     return (
         <Container>
             <Bumper />
@@ -206,7 +202,6 @@ function JoinMembership() {
                                 </span>
                             </OverlayTrigger>
                     }
-
                 </InputGroup>
                 {
                     emailCheck === undefined ?
@@ -219,11 +214,8 @@ function JoinMembership() {
                             </>
                             :
                             <p className="warning">사용불가능한 이메일입니다.</p>
-
-
                 }
                 <InputTitle>비밀번호</InputTitle>
-
                 <InputGroup className="inputGroup">
                     <Form.Control
                         placeholder="********"
@@ -267,10 +259,8 @@ function JoinMembership() {
                         name="profileImg"
                         onChange={onChange} type="file" accept="image/*" />
                 </InputGroup>
-
                 <InputTitle>어떤 반려동물과 함께 하십니까?</InputTitle>
                 <InputGroup className="inputGroup">
-
                     <CheckBox
                         id="checkboxDog"
                         type="checkbox"
@@ -282,7 +272,6 @@ function JoinMembership() {
                     <CheckBoxLabel htmlFor="checkboxDog">강아지</CheckBoxLabel>
                 </InputGroup>
                 <InputGroup className="inputGroup">
-
                     <CheckBox
                         id="checkboxCat"
                         type="checkbox"
@@ -294,7 +283,6 @@ function JoinMembership() {
                     <CheckBoxLabel htmlFor="checkboxCat">고양이</CheckBoxLabel>
                 </InputGroup>
                 <InputGroup className="inputGroup">
-
                     <CheckBox
                         id="checkboxFish"
                         type="checkbox"
@@ -306,7 +294,6 @@ function JoinMembership() {
                     <CheckBoxLabel htmlFor="checkboxFish">관상어</CheckBoxLabel>
                 </InputGroup>
                 <InputGroup className="inputGroup">
-
                     <CheckBox
                         id="checkboxEtc"
                         type="checkbox"
@@ -345,10 +332,8 @@ function JoinMembership() {
                                         <p className="warning">닉네임은 한 글자 이상이여야 합니다.</p>
                                 }
                             </>
-
                             :
                             <p className="warning">이미 사용중인 닉네임입니다.</p>
-
                 }
                 <InputTitle>전화번호</InputTitle>
                 <InputGroup className="inputGroup">
@@ -370,10 +355,7 @@ function JoinMembership() {
                             <p className="pass" >사용가능한 번호입니다.</p>
                             :
                             <p className="warning">숫자로 11자리를 입력해주세요.</p>
-
                 }
-
-
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Body >
                         <DaumPostcode
@@ -382,7 +364,6 @@ function JoinMembership() {
                             onComplete={complete} />
                     </Modal.Body>
                 </Modal>
-
                 <InputTitle>우편번호</InputTitle>
                 <InputGroup className="inputGroup">
                     <Form.Control
@@ -437,7 +418,6 @@ function JoinMembership() {
                     }
                 </InputFooter>
             </InputForm>
-
         </Container>
     );
 }

@@ -53,7 +53,6 @@ function CommunityHome() {
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
-        console.log(window.innerWidth)
     }
     useEffect(() => {
         window.addEventListener('resize', handleResize);
@@ -64,120 +63,60 @@ function CommunityHome() {
     return (
         // 화면 크기에 따라 계시판의 width가 달라짐
         <>
-            {
-                windowSize > 943 ?
-                    <Communitylists>
-                        <Communitylist>
-                            <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 자유게시판</CommunityTitle>
-                            {
-                                freeArr.map((e, i) => (
-                                    <Content key={i}>
-                                        <ArticleTitle>{e[0]}</ArticleTitle>
-                                        <Writer>{e[1]}</Writer>
-                                        <Date>{e[2]}</Date>
-                                    </Content>
+            <Communitylists style={{ gridTemplateColumns: `${windowSize > 943 ? 'repeat(auto-fit, minmax(300px, 1fr))' : 'repeat(auto-fit, minmax(195px, 1fr))'}` }}>
+                <Communitylist>
+                    <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 자유게시판</CommunityTitle>
+                    {
+                        freeArr.map((e, i) => (
+                            <Content key={i}>
+                                <ArticleTitle>{e[0]}</ArticleTitle>
+                                <Writer>{e[1]}</Writer>
+                                <Date>{e[2]}</Date>
+                            </Content>
 
-                                ))
-                            }
-                        </Communitylist>
-                        <Communitylist>
-                            <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 훈련 방법 공유</CommunityTitle>
-                            {
-                                trainingArr.map((e, i) => (
-                                    <Content key={i}>
-                                        <ArticleTitle>{e[0]}</ArticleTitle>
-                                        <Writer>{e[1]}</Writer>
-                                        <Date>{e[2]}</Date>
-                                    </Content>
-                                ))
-                            }
-                        </Communitylist>
-                        <Communitylist>
-                            <CommunityTitle><IoRestaurantOutline style={{ marginRight: '5px' }} /> 식당, 카페 추천</CommunityTitle>
-                            {
-                                shopArr.map((e, i) => (
-                                    <Content key={i}>
-                                        <ArticleTitle>{e[0]}</ArticleTitle>
-                                        <Area>{e[1]}</Area>
-                                        <Writer>{e[2]}</Writer>
-                                        <Date>{e[3]}</Date>
-                                    </Content>
-                                ))
-                            }
-                        </Communitylist>
-
-                        <Communitylist>
-                            <CommunityTitle><MdOutlineShoppingCart style={{ marginRight: '5px' }} /> 댕냥 마켓</CommunityTitle>
-                            {
-                                marketArr.map((e, i) => (
-                                    <Content key={i}>
-                                        <ArticleTitle>{e[0]}</ArticleTitle>
-                                        <Area>{e[1]}</Area>
-                                        <Writer>{e[2]}</Writer>
-                                        <Date>{e[3]}</Date>
-                                    </Content>
-                                ))
-                            }
-                        </Communitylist>
-                    </Communitylists>
-                    :
-                    <Communitylists style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(195px, 1fr))' }} >
-                        <Communitylist>
-                            <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 자유게시판</CommunityTitle>
-                            {
-                                freeArr.map((e, i) => (
-                                    <Content key={i}>
-                                        <ArticleTitle>{e[0]}</ArticleTitle>
-                                        <Writer>{e[1]}</Writer>
-                                        <Date>{e[2]}</Date>
-                                    </Content>
-
-                                ))
-                            }
-                        </Communitylist>
-                        <Communitylist>
-                            <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 훈련 방법 공유</CommunityTitle>
-                            {
-                                trainingArr.map((e, i) => (
-                                    <Content key={i}>
-                                        <ArticleTitle>{e[0]}</ArticleTitle>
-                                        <Writer>{e[1]}</Writer>
-                                        <Date>{e[2]}</Date>
-                                    </Content>
-                                ))
-                            }
-                        </Communitylist>
-                        <Communitylist>
-                            <CommunityTitle><IoRestaurantOutline style={{ marginRight: '5px' }} /> 식당, 카페 추천</CommunityTitle>
-                            {
-                                shopArr.map((e, i) => (
-                                    <Content key={i}>
-                                        <ArticleTitle>{e[0]}</ArticleTitle>
-                                        <Area>{e[1]}</Area>
-                                        <Writer>{e[2]}</Writer>
-                                        <Date>{e[3]}</Date>
-                                    </Content>
-                                ))
-                            }
-                        </Communitylist>
-
-                        <Communitylist>
-                            <CommunityTitle><MdOutlineShoppingCart style={{ marginRight: '5px' }} /> 댕냥 마켓</CommunityTitle>
-                            {
-                                marketArr.map((e, i) => (
-                                    <Content key={i}>
-                                        <ArticleTitle>{e[0]}</ArticleTitle>
-                                        <Area>{e[1]}</Area>
-                                        <Writer>{e[2]}</Writer>
-                                        <Date>{e[3]}</Date>
-                                    </Content>
-                                ))
-                            }
-                        </Communitylist>
-                    </Communitylists>
-            }
+                        ))
+                    }
+                </Communitylist>
+                <Communitylist>
+                    <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 훈련 방법 공유</CommunityTitle>
+                    {
+                        trainingArr.map((e, i) => (
+                            <Content key={i}>
+                                <ArticleTitle>{e[0]}</ArticleTitle>
+                                <Writer>{e[1]}</Writer>
+                                <Date>{e[2]}</Date>
+                            </Content>
+                        ))
+                    }
+                </Communitylist>
+                <Communitylist>
+                    <CommunityTitle><IoRestaurantOutline style={{ marginRight: '5px' }} /> 식당, 카페 추천</CommunityTitle>
+                    {
+                        shopArr.map((e, i) => (
+                            <Content key={i}>
+                                <ArticleTitle>{e[0]}</ArticleTitle>
+                                <Area>{e[1]}</Area>
+                                <Writer>{e[2]}</Writer>
+                                <Date>{e[3]}</Date>
+                            </Content>
+                        ))
+                    }
+                </Communitylist>
+                <Communitylist>
+                    <CommunityTitle><MdOutlineShoppingCart style={{ marginRight: '5px' }} /> 댕냥 마켓</CommunityTitle>
+                    {
+                        marketArr.map((e, i) => (
+                            <Content key={i}>
+                                <ArticleTitle>{e[0]}</ArticleTitle>
+                                <Area>{e[1]}</Area>
+                                <Writer>{e[2]}</Writer>
+                                <Date>{e[3]}</Date>
+                            </Content>
+                        ))
+                    }
+                </Communitylist>
+            </Communitylists>
         </>
-
     );
 }
 

@@ -1,8 +1,13 @@
 package com.myspring.daengnyang.member.mapper;
 
+import com.myspring.daengnyang.animal.vo.AnimalLocationVO;
+import com.myspring.daengnyang.board.vo.BoardVO;
+import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface MemberMapper {
@@ -16,6 +21,10 @@ public interface MemberMapper {
 
      int getMemberNo(@Param("email") String email);
 
+     MemberInfoVO getMemberInfo(@Param("memberNo") Integer memberNo);
+
+     List<Integer> getFavorite(@Param("memberNo") Integer memberNo);
+     BoardVO getMemberPost(@Param("memberNo") Integer memberNo);
      String getDuplicationEmail(@Param("email") String email);
 
      int duplicationNickname(@Param("nickname") String nickname);

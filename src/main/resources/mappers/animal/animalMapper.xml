@@ -67,10 +67,26 @@
     </select>
     <select id="getLocation" parameterType="String" resultMap="LocationResultmap">
         <![CDATA[
-            SELECT *
-            FROM "animalLocation"
-            where #{classification} = "subClassification" and ROWNUM <= 30
+        SELECT *
+        FROM "animalLocation"
+        WHERE INSTR("sido", #{location}) > 0
+        AND "subClassification" = #{classification}
+        AND ROWNUM <= 30
+    ]]>
+    </select>
+    <select id="getLocation2" parameterType="Integer" resultMap="LocationResultmap">
+        <![CDATA[
+        SELECT *
+        FROM "animalLocation"
         ]]>
+        <where>
+            <if test="animalNumList != null and animalNumList.size() > 0">
+                <![CDATA["animalNum" IN]]>
+                <foreach item="animalNum" collection="animalNumList" open="(" separator="," close=")">
+                    #{animalNum}
+                </foreach>
+            </if>
+        </where>
     </select>
     <select id="getDetail" parameterType="Integer" resultMap="DetailResultmap">
         <![CDATA[
@@ -86,4 +102,27 @@
             where #{animalNum} = "animalNum"
         ]]>
     </select>
+
+    <insert id="favoriteCheck" parameterType="Integer">
+        <!-- Oracle에서의 삽입 또는 업데이트 쿼리 예시 -->
+        MERGE INTO "favorite"
+        USING dual ON ("memberNo" = #{memberNo} AND "animalNum" = #{animalNum})
+        WHEN MATCHED THEN
+            UPDATE SET "Field" = CASE "Field"
+                                WHEN 1 THEN 0
+                                ELSE 1
+                                END,
+                        "favDate" = SYSDATE
+        WHEN NOT MATCHED THEN
+            INSERT ("memberNo", "animalNum", "favDate", "Field")
+            VALUES (#{memberNo}, #{animalNum}, SYSDATE, 1)
+    </insert>
+
+    <insert id="animalReviewPost" parameterType="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
+        <selectKey keyProperty="animalReviewNum" resultType="java.lang.Integer" order="BEFORE">
+            SELECT animal_review_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO animal_reviews (animal_review_num, animal_num, nickname, member_no, review, star, create_date)
+        VALUES (#{animalReviewNum}, #{animalNum}, #{nickname}, #{memberNo}, #{review}, #{star}, #{createDate})
+    </insert>
 </mapper>

@@ -1,5 +1,8 @@
 package com.myspring.daengnyang.member.service;
 
+import com.myspring.daengnyang.animal.mapper.AnimalMapper;
+import com.myspring.daengnyang.animal.vo.AnimalLocationVO;
+import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.member.mapper.MemberMapper;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
@@ -9,16 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberMapper memberMapper;
+    private final AnimalMapper animalMapper;
     @Autowired
-    public MemberServiceImpl(PasswordEncoder passwordEncoder, MemberMapper memberMapper) {
+    public MemberServiceImpl(PasswordEncoder passwordEncoder, MemberMapper memberMapper, AnimalMapper animalMapper) {
         this.passwordEncoder = passwordEncoder;
         this.memberMapper = memberMapper;
+        this.animalMapper = animalMapper;
     }
 
     @Override
@@ -43,9 +50,30 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberVO getMember(String email) {
-        log.info("멤버 정보 불러오기 서비스 실행 => email : "+ email);
+        log.info("계정 정보 불러 오기 서비스 실행 => email : "+ email);
         return memberMapper.getMember(email);
     }
+
+    @Override
+    public MemberInfoVO getMemberInfo(Integer memberNo) {
+        log.info("멤버 정보 불러 오기 서비스 실행 => memberNo : "+ memberNo);
+        MemberInfoVO memberInfoVO = new MemberInfoVO();
+        memberInfoVO = memberMapper.getMemberInfo(memberNo);
+        log.info("멤버 정보 : " + memberInfoVO);
+        return memberInfoVO;
+    }
+
+    @Override
+    public List<AnimalLocationVO> getFavorite(Integer memberNo) {
+        List<Integer> favoriteAnimalNum = memberMapper.getFavorite(memberNo);
+        return animalMapper.getLocation2(favoriteAnimalNum);
+    }
+
+    @Override
+    public BoardVO getMemberPost(Integer memberNo) {
+        return memberMapper.getMemberPost(memberNo);
+    }
+
 
     @Override
     public Boolean duplicationNickname(String nickname) {
