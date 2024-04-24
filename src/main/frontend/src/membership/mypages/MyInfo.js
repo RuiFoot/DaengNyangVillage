@@ -19,7 +19,7 @@ align-items: center;
 `
 const InputForm = styled.form`
 margin: 15px;
-width: 432px;
+width: 350px;
 `
 const EditTitle = styled.div`
 margin: 20px 0 0 0;
