@@ -5,6 +5,7 @@ import HotdealBar from "./Hotdeal";
 import HotPlaceList from "./HotPlace";
 import CommunityHome from "./CommunityHome";
 import Bumper from "../layout/Bumper";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   display: grid;
@@ -52,8 +53,14 @@ const DivideLine = styled.div`
 margin: 20px 6vw 0 6vw;
 border: 2px solid #F2884B;
 `
+let url = ""
 
 function Home() {
+
+  if (window.sessionStorage.key(0) === "logined") {
+    url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+  }
+
   return (
     <Container className="Container">
       <Bumper />
@@ -67,11 +74,11 @@ function Home() {
       <Contants>
         {/* <Test/> */}
         <Place>
-          <a href="/PlaceRecommend"><PlaceTitle>인기장소</PlaceTitle></a>
+          <a href={`/PlaceRecommend${url}`}><PlaceTitle>인기장소</PlaceTitle></a>
           <HotPlaceList />
         </Place>
         <Community>
-          <a href="/Community"><CommunityTitle>커뮤니티</CommunityTitle></a>
+          <a href={`/Community${url}`}><CommunityTitle>커뮤니티</CommunityTitle></a>
           <CommunityHome />
         </Community>
       </Contants>

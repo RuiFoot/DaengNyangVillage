@@ -104,6 +104,7 @@ const getDataLocalStorage = (name) => {
 function NavVillage() {
     const [login, setLogin] = useState();
 
+    //로그인 모달
     function LoginModal(props) {
         const [userId, setUserId] = useState("")
         const [userPassword, setUserPassword] = useState("")

@@ -23,7 +23,7 @@ font-size: clamp(80%, 5vw, 120%);
 
 const InputForm = styled.form`
 margin: 15px;
-width: 432px;
+width: 350px;
 `
 
 const InputTitle = styled.div`
