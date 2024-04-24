@@ -2,6 +2,7 @@ package com.myspring.daengnyang.board.controller;
 
 import com.myspring.daengnyang.board.service.BoardService;
 import com.myspring.daengnyang.board.vo.BoardDetailVO;
+import com.myspring.daengnyang.board.vo.BoardPostVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.board.vo.ReviewVO;
 import lombok.extern.slf4j.Slf4j;
@@ -65,8 +66,8 @@ public class BoardController {
 
     @PostMapping("")
     @ResponseBody
-    public void postBoard(@RequestBody BoardDetailVO boardDetailVO) {
+    public void postBoard(@RequestBody BoardPostVO boardPostVO) {
         log.info("글 쓰기 컨트롤러 실행");
-
+        boardService.postBoard(boardPostVO);
     }
 }

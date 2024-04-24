@@ -1,6 +1,7 @@
 package com.myspring.daengnyang.board.service;
 
 import com.myspring.daengnyang.board.vo.BoardDetailVO;
+import com.myspring.daengnyang.board.vo.BoardPostVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.board.vo.ReviewVO;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,6 @@ public interface BoardService {
     public BoardDetailVO getBoardDetail(int boardId);
     void deleteBoard(int boardId);
     void deleteBoardReview(int boardReviewNum);
+    void postBoard(BoardPostVO boardPostVO);
 
 }
