@@ -10,9 +10,14 @@ public interface AnimalService {
     List<String> getClassification();
     List<AnimalLocationVO> getLocation(String location,String classification);
 
+
     AnimalDetailVO getDetail(Integer animalNum);
 
     AnimalReviewVO getReview(Integer animalNum);
 
+    boolean animalReviewPost(AnimalReviewVO animalReviewVO);
+
     List<AnimalLocationVO> getRecommend(Integer memberNo,String sido,String sigungu);
+
+    boolean favoriteCheck(Integer memberNo, Integer animalNum);
 }

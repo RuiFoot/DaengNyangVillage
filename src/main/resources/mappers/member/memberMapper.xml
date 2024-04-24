@@ -15,17 +15,13 @@
 
     </resultMap>
 
-
-
-
-
     <insert id="createMember" useGeneratedKeys="true" keyProperty="memberNo">
         <selectKey keyProperty="memberNo" resultType="int" order="BEFORE">
             SELECT member_seq.NEXTVAL FROM dual
         </selectKey>
         <![CDATA[
             INSERT INTO "member" ("memberNo","email","password")
-            VALUES ('2024' || LPAD(#{memberNo}, 5, '0'), #{email}, #{password})
+            VALUES (TO_CHAR(SYSDATE, 'YYYY') || LPAD(#{memberNo}, 5, '0'), #{email}, #{password})
         ]]>
     </insert>
 
@@ -41,6 +37,14 @@
         <![CDATA[
             SELECT *
             FROM "memberInfo"
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </select>
+
+    <select id="getFavorite" resultType="Integer">
+        <![CDATA[
+            SELECT "animalNum"
+            FROM "favorite"
             WHERE "memberNo" = #{memberNo}
         ]]>
     </select>

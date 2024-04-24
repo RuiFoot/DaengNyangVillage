@@ -1,5 +1,7 @@
 package com.myspring.daengnyang.member.service;
 
+import com.myspring.daengnyang.animal.mapper.AnimalMapper;
+import com.myspring.daengnyang.animal.vo.AnimalLocationVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.member.mapper.MemberMapper;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
@@ -10,16 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberMapper memberMapper;
+    private final AnimalMapper animalMapper;
     @Autowired
-    public MemberServiceImpl(PasswordEncoder passwordEncoder, MemberMapper memberMapper) {
+    public MemberServiceImpl(PasswordEncoder passwordEncoder, MemberMapper memberMapper, AnimalMapper animalMapper) {
         this.passwordEncoder = passwordEncoder;
         this.memberMapper = memberMapper;
+        this.animalMapper = animalMapper;
     }
 
     @Override
@@ -58,8 +64,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String getFavorite(Integer memberNo) {
-        return null;
+    public List<AnimalLocationVO> getFavorite(Integer memberNo) {
+        List<Integer> favoriteAnimalNum = memberMapper.getFavorite(memberNo);
+        return animalMapper.getLocation2(favoriteAnimalNum);
     }
 
     @Override

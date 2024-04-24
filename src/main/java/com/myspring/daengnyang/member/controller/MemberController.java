@@ -1,5 +1,6 @@
 package com.myspring.daengnyang.member.controller;
 
+import com.myspring.daengnyang.animal.vo.AnimalLocationVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.member.service.MemberServiceImpl;
 import com.myspring.daengnyang.member.service.OAuthServiceImpl;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -112,9 +114,9 @@ public class MemberController {
     }
 
     @GetMapping("/favorite")
-    public String getFavorite(@RequestParam("memberNo") Integer memberNo){
+    public List<AnimalLocationVO> getFavorite(@RequestParam("memberNo") Integer memberNo){
         log.info("멤버 찜한 장소 정보 불러 오기 실행 / Param => memberNo : " + memberNo);
-        return "0";
+        return memberService.getFavorite(memberNo);
     }
 
     @GetMapping("/post")
