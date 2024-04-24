@@ -50,4 +50,17 @@
         FROM "BoardDetail"
         WHERE "boardId" = #{boardId}
     </select>
+
+    <delete id="deleteBoard">
+        DELETE
+        FROM "Board"
+        WHERE "boardId" = #{boardId}
+    </delete>
+
+    <delete id="deleteBoardReview">
+        DELETE
+        FROM "Boardreview"
+        WHERE "boardReviewNum" = #{boardReviewNum}
+    </delete>
+
 </mapper>

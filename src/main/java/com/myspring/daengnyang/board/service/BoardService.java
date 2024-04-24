@@ -14,5 +14,7 @@ public interface BoardService {
     public void registerReview(int boardId);
     public void removeReview(int boardId);
     public BoardDetailVO getBoardDetail(int boardId);
+    void deleteBoard(int boardId);
+    void deleteBoardReview(int boardReviewNum);
 
 }

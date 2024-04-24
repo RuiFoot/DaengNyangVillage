@@ -152,10 +152,6 @@ public class MemberController {
     /**
      * 구글 소셜 로그인
      */
-//    @GetMapping("/oauth/{registrationId}")
-//    public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
-//        oAuthService.socialLogin(code, registrationId);
-//    }
 
     @GetMapping("/oauth/google")
     public boolean googleCallback(@RequestParam String code, HttpServletRequest httpRequest) {
@@ -183,7 +179,7 @@ public class MemberController {
         // return "redirect:/member/main"; 얼럿창출력안하고싶을때 사용
     }
 
-    @PatchMapping("/user")
+    @PatchMapping("/update")
     public boolean updateProfile(@RequestBody MemberInfoVO memberInfoVO) {
         log.info("회원정보 수정 컨트롤러 실행");
         memberService.updateProfile(memberInfoVO);

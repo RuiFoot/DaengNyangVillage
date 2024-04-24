@@ -21,4 +21,7 @@ public interface BoardMapper {
                         @Param("amount") int amount);
 
     BoardDetailVO getBoardDetail(@Param("boardId") int boardId);
+
+    void deleteBoard(@Param("boardId") int boardId);
+    void deleteBoardReview(@Param("boardReviewNum") int boardReviewNum);
 }

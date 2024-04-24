@@ -41,5 +41,14 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.getBoardDetail(boardId);
     }
 
+    @Override
+    public void deleteBoard(int boardId) {
+        boardMapper.deleteBoard(boardId);
+    }
+
+    @Override
+    public void deleteBoardReview(int boardReviewNum) {
+        boardMapper.deleteBoardReview(boardReviewNum);
+    }
 
 }
