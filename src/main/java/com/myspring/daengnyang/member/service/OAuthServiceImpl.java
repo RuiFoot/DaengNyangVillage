@@ -1,7 +1,6 @@
 package com.myspring.daengnyang.member.service;
 
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -16,7 +15,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -28,7 +26,7 @@ public class OAuthServiceImpl implements OauthService {
     private final Environment env;
     private final RestTemplate restTemplate = new RestTemplate();
     private final MemberMapper memberMapper;
-  
+
     @Autowired
     public OAuthServiceImpl(MemberMapper memberMapper, Environment env) {
         this.memberMapper = memberMapper;
@@ -36,7 +34,7 @@ public class OAuthServiceImpl implements OauthService {
     }
 
     @Override
-    public String getKakaoAccessToken (String code) {
+    public String getKakaoAccessToken(String code) {
         String access_Token = "";
         String refresh_Token;
         String reqURL = "https://kauth.kakao.com/oauth/token";
@@ -141,22 +139,22 @@ public class OAuthServiceImpl implements OauthService {
         long id = element.getAsJsonObject().get("id").getAsLong();
         String imgPath = element.getAsJsonObject().get("properties").getAsJsonObject().get("profile_image").getAsString();
         String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
-        log.info("id : " + id +"/ nickname : "+ nickname+"/ imgPath : "+ imgPath);
+        log.info("id : " + id + "/ nickname : " + nickname + "/ imgPath : " + imgPath);
 
-        if (memberMapper.getDuplicationEmail(Long.toString(id)) != null){ // 중복 된 값이 있을 경우
+        if (memberMapper.getDuplicationEmail(Long.toString(id)) != null) { // 중복 된 값이 있을 경우
             log.info("이미 있는 계정 => 바로 로그인 진행");
             return Long.toString(id);
-        }else{ // 없을 경우 회원가입 필요
+        } else { // 없을 경우 회원가입 필요
             log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
             String password = "kakao";
-            memberMapper.createMember(Long.toString(id),password);
+            memberMapper.createMember(Long.toString(id), password);
             int memberNo = memberMapper.getMemberNo(Long.toString(id));
             int cnt = memberMapper.duplicationNickname(nickname);
             MemberInfoVO userInfo = new MemberInfoVO();
             userInfo.setMemberNo(memberNo);
-            if (cnt == 0){
+            if (cnt == 0) {
                 userInfo.setNickname(nickname);
-            }else {
+            } else {
                 userInfo.setNickname(nickname + "Kakao");
             }
             userInfo.setProfileImg(imgPath);
@@ -210,7 +208,7 @@ public class OAuthServiceImpl implements OauthService {
 
             br.close();
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return result.toString();
@@ -256,7 +254,7 @@ public class OAuthServiceImpl implements OauthService {
 
             br.close();
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return result.toString();
@@ -286,12 +284,12 @@ public class OAuthServiceImpl implements OauthService {
 
         String imgPath = element.getAsJsonObject().get("picture").toString();
         String nickname = element.getAsJsonObject().get("name").toString();
-        log.info("id : " + id +"/ nickname : "+ nickname+"/ imgPath : "+ imgPath);
+        log.info("id : " + id + "/ nickname : " + nickname + "/ imgPath : " + imgPath);
         String DuplicationE = memberMapper.getDuplicationEmail(id);
-        if (DuplicationE != null){ // 중복 된 값이 있을 경우
+        if (DuplicationE != null) { // 중복 된 값이 있을 경우
             log.info("이미 있는 계정 => 바로 로그인 진행");
             return id;
-        }else { // 없을 경우 회원가입 필요
+        } else { // 없을 경우 회원가입 필요
             log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
             String password = "google";
             memberMapper.createMember(id, password);
@@ -316,7 +314,6 @@ public class OAuthServiceImpl implements OauthService {
             return id;
         }
     }
-
 
 
     @Override
