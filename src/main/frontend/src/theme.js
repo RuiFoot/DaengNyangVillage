@@ -1,14 +1,16 @@
+import logo from './img/logo.png'
+import darklogo from './img/darklogo.png'
+
 const darkTheme = {
+    logo: darklogo,
     color: 'white',
-    bgColor: 'rgb(50,50,50)',
-    containerColor: 'rgb(30,30,30)',
-    textAlign: 'flex-end',
+    navFooterBgColor: "rgb(40 40 40)",
+    bgColor: '#1f1f1f'
 };
 
 const lightTheme = {
+    logo: logo,
     color: 'black',
-    containerColor: 'rgb(220,220,220)',
-    textAlign: 'flex-start',
     bgColor: 'white',
 };
 

@@ -4,19 +4,7 @@ import SideBar from "./layout/SideBar";
 import Footer from "./layout/footer";
 import Router from "./Router";
 import "./style.css"
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
-import { isDarkAtom } from './atoms';
-import styled from "styled-components";
-import themes from "./theme";
-
-
-
+import { RecoilRoot } from 'recoil';
 
 function App() {
   return (

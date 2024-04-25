@@ -5,14 +5,17 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useState } from "react";
 import emailjs from 'emailjs-com';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
 import './membershipStyle.css'
 
 const Container = styled.div`
+min-height: calc(100vh - 86px);
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-margin: 0 6vw;
 `
 const Content = styled.div`
 margin-top: 20px;
@@ -29,6 +32,7 @@ const UserId = styled.div`
 `
 
 function ForgetIdPassWd() {
+    const isDark = useRecoilValue(isDarkAtom);
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
     const [numCheck, setNumCheck] = useState()
@@ -97,8 +101,11 @@ function ForgetIdPassWd() {
 
     return (
         <>
-            <Bumper />
-            <Container>
+            <Container
+                style={{
+                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                }}>
                 <Content>
                     <Title>내 계정 ID 찾기</Title>
                     <Text>내 계정 ID를 찾으려면 전화번호를 입력하세요.</Text>

@@ -5,26 +5,35 @@ import HotdealBar from "./Hotdeal";
 import HotPlaceList from "./HotPlace";
 import CommunityHome from "./CommunityHome";
 import Bumper from "../layout/Bumper";
-import { useEffect, useState } from "react";
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
 
-const Container = styled.div`
+let url = ""
+
+function Home() {
+  const isDark = useRecoilValue(isDarkAtom);
+
+  const Container = styled.div`
+  color: ${isDark ? themes.dark.color : themes.light.color};
+  background-color: ${isDark ? themes.dark.bgColor : themes.light.bgColor};
   display: grid;
   gap: 15px;
 `;
-const Carousel = styled.div`
-width: 88vw;
-grid-column: 1 / 5;
-display: flex;
-margin: auto;
-`
-const Hotdeal = styled.div`
-grid-column: 1 / 5;
-`
-const Contants = styled.div`
-margin-left: 6vw;
-margin-right: 6vw;
-grid-column: 1 / 5;
-display: grid;
+  const Carousel = styled.div`
+  width: 88vw;
+  grid-column: 1 / 5;
+  display: flex;
+  margin: auto;
+  `
+  const Hotdeal = styled.div`
+  grid-column: 1 / 5;
+  `
+  const Contants = styled.div`
+  margin-left: 6vw;
+  margin-right: 6vw;
+  grid-column: 1 / 5;
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-auto-rows: minmax(100px, auto);
   gap: 15px;
@@ -32,30 +41,29 @@ display: grid;
     text-decoration: none;
     color: black;
   }
-`
-const Place = styled.div`
-`
-const Community = styled.div`
-`
-const PlaceTitle = styled.div`
-margin-bottom:15px;
-font-size: 30px;
-font-weight: bold;
-text-align: center;
-`
-const CommunityTitle = styled.div`
-margin-bottom:15px;
-font-size: 30px;
-font-weight: bold;
-text-align: center;
-`
-const DivideLine = styled.div`
-margin: 20px 6vw 0 6vw;
-border: 2px solid #F2884B;
-`
-let url = ""
-
-function Home() {
+  `
+  const Place = styled.div`
+  `
+  const Community = styled.div`
+  `
+  const PlaceTitle = styled.div`
+  color: ${isDark ? themes.dark.color : themes.light.color};
+  margin-bottom:15px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  `
+  const CommunityTitle = styled.div`
+  color: ${isDark ? themes.dark.color : themes.light.color};
+  margin-bottom:15px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  `
+  const DivideLine = styled.div`
+  margin: 20px 6vw 0 6vw;
+  border: 2px solid #F2884B;
+  `
 
   if (window.sessionStorage.key(0) === "logined") {
     url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`

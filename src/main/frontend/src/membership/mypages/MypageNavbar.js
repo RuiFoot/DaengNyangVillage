@@ -3,6 +3,9 @@ import Bumper from "../../layout/Bumper";
 import { useEffect, useState } from "react";
 import '../membershipStyle.css'
 import axios from "axios";
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../../atoms';
+import themes from "../../theme";
 
 const MypageNav = styled.div`
 border-bottom: 1px solid rgba(0, 0, 0, 0.5);
@@ -21,6 +24,7 @@ color: black;
 `
 
 function Mypage() {
+    const isDark = useRecoilValue(isDarkAtom);
     const pathname = window.location.pathname; //현재 화면 주소
     const [loginedNickName, setLoginedNickName] = useState("")
 
@@ -31,17 +35,21 @@ function Mypage() {
     return (
         <>
             <Bumper />
-            <MypageNav>
-                <NavItems style={{ color: `${pathname === `/MyInfo/${loginedNickName}` ? "#F2884B" : "black"}` }} href={`/MyInfo/${loginedNickName}`}>
+            <MypageNav style={{
+                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`,
+                borderBottom: `1px solid ${themes.dark.color}`
+            }}>
+                <NavItems style={{ color: `${pathname === `/MyInfo/${loginedNickName}` ? "#F2884B" : `${isDark ? themes.dark.color : themes.light.color}`}` }} href={`/MyInfo/${loginedNickName}`}>
                     내 정보
                 </NavItems>
-                <NavItems style={{ color: `${pathname === `/ChangePasswd/${loginedNickName}` ? "#F2884B" : "black"}` }} href={`/ChangePasswd/${loginedNickName}`} >
+                <NavItems style={{ color: `${pathname === `/ChangePasswd/${loginedNickName}` ? "#F2884B" : `${isDark ? themes.dark.color : themes.light.color}`}` }} href={`/ChangePasswd/${loginedNickName}`} >
                     비밀번호 변경
                 </NavItems>
-                <NavItems style={{ color: `${pathname === `/SelectedLocation/${loginedNickName}` ? "#F2884B" : "black"}` }} href={`/SelectedLocation/${loginedNickName}`}>
+                <NavItems style={{ color: `${pathname === `/SelectedLocation/${loginedNickName}` ? "#F2884B" : `${isDark ? themes.dark.color : themes.light.color}`}` }} href={`/SelectedLocation/${loginedNickName}`}>
                     찜한 장소
                 </NavItems>
-                <NavItems style={{ color: `${pathname === `/WrittenByMe/${loginedNickName}` ? "#F2884B" : "black"}` }} href={`/WrittenByMe/${loginedNickName}`}>
+                <NavItems style={{ color: `${pathname === `/WrittenByMe/${loginedNickName}` ? "#F2884B" : `${isDark ? themes.dark.color : themes.light.color}`}` }} href={`/WrittenByMe/${loginedNickName}`}>
                     내가 쓴 글
                 </NavItems>
             </MypageNav>
