@@ -27,6 +27,7 @@ function Pagination(props) {
     const endPage = startPage + props.btnRange - 1; // 현재 보여질 끝 버튼의 수
     const totalSet = Math.ceil(Math.ceil(props.totalPost / props.pageRange) / props.btnRange); // 전체 버튼 세트 수
     console.log(startPage)
+    console.log(endPage)
     console.log(props.totalPageNum)
     return (
         < Container >
@@ -44,6 +45,7 @@ function Pagination(props) {
                                 key={i}
                                 onClick={() => setPage(startPage + i)}
                                 $active={page === startPage + i}
+                                style={{ display: startPage + i > props.totalPageNum ? "none" : null }}
                             >
                                 {startPage + i}
                             </Button>
