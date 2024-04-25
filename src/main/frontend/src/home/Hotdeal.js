@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Spinner } from "react-bootstrap";
 
 const Container = styled.div`
   margin: 0 6vw;
@@ -16,21 +17,21 @@ const HotdealItems = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center; /* 상품 아이템 가운데 정렬 */
+  justify-content: center;
 `;
 
 const HotdealItem = styled.div`
-  width: 300px; /* 아이템 너비 고정 */
+  width: 300px;
+  cursor: pointer; /* 클릭 가능하도록 커서 설정 */
 `;
 
 const HotdealItemImg = styled.div`
-  height: 300px; /* 이미지 높이를 300px로 설정 */
-  width: 100%; /* 이미지 너비를 100%로 설정하여 부모 너비에 맞게 */
-  background-image: url(${props => props.image}); /* 이미지를 배경으로 설정 */
-  background-size: cover; /* 이미지를 컨테이너에 맞게 조정 */
-  background-position: center; /* 이미지를 가운데 정렬 */
+  height: 300px;
+  width: 100%;
+  background-image: url(${props => props.image});
+  background-size: cover;
+  background-position: center;
 `;
-
 
 const HotdealItemName = styled.span`
   font-weight: bold;
@@ -42,6 +43,13 @@ const HotdealItemPrice = styled.span`
   justify-content: center;
   align-items: center;
 `;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 async function fetchRandomProducts(count) {
   try {
     const apiUrl = "http://localhost:22000/";
@@ -53,10 +61,11 @@ async function fetchRandomProducts(count) {
       for (let i = 0; i < count; i++) {
         const randomIndex = Math.floor(Math.random() * data.length);
         const selectedProduct = data[randomIndex];
-        randomProducts.push({
+        randomProducts.push({ //localhost:22000에서 불러온 데이터
           name: selectedProduct.ProductName[0],
           price: `${selectedProduct.ProductPrice[0]}원`,
           image: selectedProduct.ProductImage300[0],
+          link: selectedProduct.DetailPageUrl[0], // DetailPageUrl 사용
         });
       }
       return randomProducts;
@@ -69,36 +78,56 @@ async function fetchRandomProducts(count) {
       name: "상품 정보를 가져오지 못했습니다.",
       price: "가격 정보 없음",
       image: "기본 이미지 URL",
+      link: "기본 링크 URL", // 에러 시 기본 링크 추가
     }));
   }
 }
 
-
-
 function HotdealBar() {
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const intervalId = setInterval(async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
       const randomProducts = await fetchRandomProducts(4);
       setProducts(randomProducts);
-    }, 10000);
+      setIsLoading(false);
+    };
 
+    const intervalId = setInterval(fetchData, 10000);
+
+    // 컴포넌트가 언마운트될 때 인터벌을 클리어해야 합니다.
     return () => clearInterval(intervalId);
   }, []);
 
+  const handleProductClick = (link) => {
+    window.open(link, "_blank"); // 새 창에서 링크 열기
+  };
+
   return (
     <Container>
-      <HotdealTitle>오늘의 인기 반려동물 제품</HotdealTitle>
-      <HotdealItems>
-        {products.map((product, index) => (
-          <HotdealItem key={index}>
-            <HotdealItemImg style={{ backgroundImage: `url(${product.image})` }} />
-            <HotdealItemName>{product.name}</HotdealItemName>
-            <HotdealItemPrice>{product.price}</HotdealItemPrice>
-          </HotdealItem>
-        ))}
-      </HotdealItems>
+      {isLoading ? (
+        <LoadingContainer>
+          <HotdealTitle>상품 정보 로딩중...</HotdealTitle>
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </LoadingContainer>
+      ) : (
+        <>
+          <HotdealTitle>오늘의 인기 반려동물 제품</HotdealTitle>
+          <HotdealItems>
+            {products.map((product, index) => (
+              <HotdealItem key={index} onClick={() => handleProductClick(product.link)}>
+                <HotdealItemImg style={{ backgroundImage: `url(${product.image})` }} />
+                <HotdealItemName>{product.name}</HotdealItemName>
+                <HotdealItemPrice>{product.price}</HotdealItemPrice>
+              </HotdealItem>
+            ))}
+          </HotdealItems>
+        </>
+      )}
     </Container>
   );
 }
