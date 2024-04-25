@@ -12,88 +12,11 @@ import styled from "styled-components";
 import { useEffect, useState } from 'react';
 import { CiBrightnessDown, CiDark } from "react-icons/ci";
 import "../style.css"
+import { useRecoilState } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
 
-const Logo = styled.img`
-position: fixed;
-top: 12px;
-left: 50%;
-width: 90px;
-transform: translate(-50%, -10%);
-`
-
-const LoginLogo = styled.img`
-cursor: pointer;
-width: 100px;
-`
-
-const ToggleContainer = styled.div`
-display: flex;
-align-items: center;
-position: relative;
-cursor: pointer;
-
-  > .toggle-container {
-    width: 50px;
-    height: 24px;
-    border-radius: 30px;
-    background-color: rgb(233,233,234);}
-  > .toggle--checked {
-    background-color: #161F30;
-    transition : 0.5s
-  }
-
-  > .toggle-circle {
-    position: absolute;
-    left: 1px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background-color: rgb(255,254,255);
-    transition : 0.5s
-  } >.toggle--checked {
-    left: 27px;
-    transition : 0.5s
-  }
-`;
-
-const SunMoon = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-`
-const ModalBodyFooter = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-`
-const FindIdPassward = styled.a`
-cursor: pointer;
-margin-bottom: 10px;
-`
-const Social = styled.div`
-margin-bottom: 10px;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-`
-const Logos = styled.div`
-`
-const NaverLogo = styled.img`
-margin: 0 5px;
-width: 50px;
-`
-const KakaoLogo = styled.img`
-margin: 0 5px;
-width: 50px;
-`
-const GoogleLogo = styled.img`
-margin: 0 5px;
-width: 50px;
-`
-
-//로그인 모달
+//회원 데이터
 let localData
 const getDataLocalStorage = (name) => {
     localData = JSON.parse(localStorage.getItem(name))
@@ -102,6 +25,84 @@ const getDataLocalStorage = (name) => {
 
 // 네비바
 function NavVillage() {
+    //css
+    const Logo = styled.img`
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    width: 90px;
+    transform: translate(-50%, -10%);
+    `
+    const LoginLogo = styled.img`
+    cursor: pointer;
+    width: 100px;
+    `
+    const ToggleContainer = styled.div`
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+      > .toggle-container {
+        width: 50px;
+        height: 24px;
+        border-radius: 30px;
+        background-color: #161F30;}
+      > .toggle--checked {
+        background-color: rgb(233,233,234);
+        transition : 0.5s
+      }
+      > .toggle-circle {
+        position: absolute;
+        left: 1px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background-color: rgb(255,254,255);
+        transition : 0.5s
+      } >.toggle--checked {
+        left: 27px;
+        transition : 0.5s
+      }
+    `;
+
+    const ModalBodyFooter = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    `
+    const SunMoon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    `
+
+    const FindIdPassward = styled.a`
+    cursor: pointer;
+    margin-bottom: 10px;
+    `
+    const Social = styled.div`
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    `
+    const Logos = styled.div`
+    `
+    const NaverLogo = styled.img`
+    margin: 0 5px;
+    width: 50px;
+    `
+    const KakaoLogo = styled.img`
+    margin: 0 5px;
+    width: 50px;
+    `
+    const GoogleLogo = styled.img`
+    margin: 0 5px;
+    width: 50px;
+    `
+
     const [login, setLogin] = useState();
 
     //로그인 모달
@@ -208,7 +209,12 @@ function NavVillage() {
 
     //현재 주소
     const pathname = window.location.pathname;
-    const [isOn, setisOn] = useState(false);
+
+    //다크모드
+    const [isOn, setisOn] = useRecoilState(isDarkAtom)
+    useEffect(() => {
+        localStorage.setItem('isDark', isOn)
+    }, [isOn]);
     const toggleHandler = () => {
         setisOn(!isOn)
     };
@@ -218,12 +224,14 @@ function NavVillage() {
 
     return (
         <div>
-            <Navbar expand="lg" className="navbar"  >
+            <Navbar expand="lg" className="navbar"
+                style={{ backgroundColor: `${isOn ? themes.dark.bgColor : themes.light.bgColor}` }}
+            >
                 <a href={url}><Logo src={logo} /></a>
                 <Container fluid>
                     <Navbar.Brand className='navHomeLink' style={{
                         color: `${pathname === url
-                            ? "#F2884B" : "blakc"}`
+                            ? "#F2884B" : `${isOn ? themes.dark.color : themes.light.color}`}`
                     }} href={url}>
                         Home
                         {/*모든 네비 카테고리는 현재 주소가 해당 카테고리면 컬러가 다르게 표시됨 */}
@@ -235,18 +243,18 @@ function NavVillage() {
                             style={{ minHeight: '80px', maxHeight: '120px' }}
                             navbarScroll
                         >
-                            <Nav.Link style={{ color: `${pathname === `/Community${url}` ? '#F2884B' : 'black'}` }} className='navLink' href={`/Community${url}`}>
+                            <Nav.Link style={{ color: `${pathname === `/Community${url}` ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/Community${url}`}>
                                 커뮤니티
                             </Nav.Link>
                             <Nav.Link style={{
                                 color: `${pathname === `/PlaceRecommend${url}`
-                                    ? '#F2884B' : 'black'}`
+                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
                             }} className='navLink' href={`/PlaceRecommend${url}`}>
                                 장소추천
                             </Nav.Link>
                             <Nav.Link style={{
                                 color: `${pathname === `/AboutUs${url}`
-                                    ? '#F2884B' : 'black'}`
+                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
                             }} className='navLink' href={`/AboutUs${url}`}>
                                 About Us
                             </Nav.Link>
@@ -260,14 +268,14 @@ function NavVillage() {
                                 login ?
                                     <Nav.Link className='navLink' style={{
                                         color: `${mypages.includes(pathname)
-                                            ? '#F2884B' : 'black'}`
+                                            ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
                                     }} href={`/MyInfo/${nickName}`}>
                                         마이페이지
                                     </Nav.Link>
                                     :
                                     <Nav.Link className='navLink' style={{
                                         color: `${pathname === `/JoinMembership${url}`
-                                            ? '#F2884B' : 'black'}`
+                                            ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
                                     }} href={`/JoinMembership${url}`}>
                                         회원가입
                                     </Nav.Link>
@@ -275,12 +283,12 @@ function NavVillage() {
                             {
                                 login ?
                                     <Nav.Link className='navLink'>
-                                        <Button className='loginBtn' onClick={() => LogOut()}>로그아웃
+                                        <Button style={{ backgroundColor: `${isOn ? themes.dark.bgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => LogOut()}>로그아웃
                                         </Button>
                                     </Nav.Link>
                                     :
                                     <Nav.Link className='navLink'>
-                                        <Button className='loginBtn' onClick={() => setModalShow(true)}>로그인
+                                        <Button style={{ backgroundColor: `${isOn ? themes.dark.bgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => setModalShow(true)}>로그인
                                         </Button>
                                         <LoginModal
                                             show={modalShow}
