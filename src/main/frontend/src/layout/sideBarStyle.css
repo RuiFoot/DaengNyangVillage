@@ -27,19 +27,32 @@
     transform: scale(1.1);
 }
 
-
 .chatBotBody {
     display: flex;
-    justify-content: center;
+    justify-content: end;
     align-items: end;
+    flex-direction: column;
+}
+
+.questionBtn {
+    margin: 5px;
+    color: black;
+    border-color: #F2884B;
+    background-color: white;
+}
+
+.questionBtn:hover {
+    border-color: #F2884B;
+    background-color: #F2884B;
 }
 
 .chatBotBtn {
     color: black;
-    border-color: #F2884B;
+    border-color: #F288CD;
+    background-color: white;
 }
 
 .chatBotBtn:hover {
-    border-color: #F2884B;
-    background-color: #F2884B;
+    border-color: #F288CD;
+    background-color: #F288CD;
 }

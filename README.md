@@ -1,14 +1,3 @@
-브랜치
-
-Branch 네이밍 규칙
-커밋 타입/기능요약 형식을 추천
-아래 커밋 타입을 참고 하여 작성
-ex) Feat/login
-
-참고 블로그
-https://junjunrecord.tistory.com/131
-
-
 커밋
 
 커밋 메세지의 7가지 규칙
@@ -38,50 +27,3 @@ test : 테스트 코드 수정에 대한 커밋
 
 참고 블로그
 https://xtring-dev.tistory.com/entry/Git-%EA%B7%9C%EC%B9%99%EC%A0%81%EC%9D%B8-Commit-%EB%A9%94%EC%84%B8%EC%A7%80%EB%A1%9C-%EA%B0%9C%EB%B0%9C%ED%8C%80-%ED%98%91%EC%97%85%ED%95%98%EA%B8%B0-%F0%9F%91%BE
-
-npm 실행하기전에 추가해야하는 npm 리스트
-
-npm 스타트
-npm install 
-
-사용된 이모티콘
-npm install react-icons --save
-
-div에 이름 부여 css 작업 용이
-이거 안쓰면 div,div,div,div,div,div,div
-npm install styled-components
-
-url이용해서 페이지 이동
-npm install react-router-dom
-
-부스트랩에서 만들어진 폼 사용
-npm install react-bootstrap bootstrap
-
-비밀번호 해시 암호화(백엔드에서 처리 사용x)
-npm install crypto-js
-
-회원가입 다음 주소 api
-npm install react-daum-postcode
-
-4월 22일 추가
-8080 연결 3000
-npm i http-proxy-middleware
-
-4월 22일 추가
-비밀번호 이메일 전송 api
-npm install emailjs-com
-
-4월 22추가 크롤링
-npm i express
-npm i xml2js
-npm install cors
-
-4월25일 로고 설정
-npm install react-bootstrap@next bootstrap@5.3.0
-
-4월 24일 추가
-다크모드를 위한 state 전달
-npm install recoil
-
-4월25일 로고 설정
-npm install react-bootstrap@next bootstrap@5.3.0

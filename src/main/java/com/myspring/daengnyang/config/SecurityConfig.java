@@ -21,7 +21,7 @@ public class SecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/**"))) // 403 error를 막기 위해서 사용
@@ -35,10 +35,11 @@ public class SecurityConfig {
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.maximumSessions(1)
                         .maxSessionsPreventsLogin(false)
-                        );
+        );
 
         return http.build();
     }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

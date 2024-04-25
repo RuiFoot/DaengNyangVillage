@@ -1,7 +1,6 @@
 package com.myspring.daengnyang.member.service;
 
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -27,7 +26,7 @@ public class OAuthServiceImpl implements OauthService {
     private final Environment env;
     private final RestTemplate restTemplate = new RestTemplate();
     private final MemberMapper memberMapper;
-  
+
     @Autowired
     public OAuthServiceImpl(MemberMapper memberMapper, Environment env) {
         this.memberMapper = memberMapper;
@@ -35,7 +34,7 @@ public class OAuthServiceImpl implements OauthService {
     }
 
     @Override
-    public String getKakaoAccessToken (String code) {
+    public String getKakaoAccessToken(String code) {
         String access_Token = "";
         String refresh_Token;
         String reqURL = "https://kauth.kakao.com/oauth/token";
@@ -140,22 +139,22 @@ public class OAuthServiceImpl implements OauthService {
         long id = element.getAsJsonObject().get("id").getAsLong();
         String imgPath = element.getAsJsonObject().get("properties").getAsJsonObject().get("profile_image").getAsString();
         String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
-        log.info("id : " + id +"/ nickname : "+ nickname+"/ imgPath : "+ imgPath);
+        log.info("id : " + id + "/ nickname : " + nickname + "/ imgPath : " + imgPath);
 
-        if (memberMapper.getDuplicationEmail(Long.toString(id)) != null){ // 중복 된 값이 있을 경우
+        if (memberMapper.getDuplicationEmail(Long.toString(id)) != null) { // 중복 된 값이 있을 경우
             log.info("이미 있는 계정 => 바로 로그인 진행");
             return Long.toString(id);
-        }else{ // 없을 경우 회원가입 필요
+        } else { // 없을 경우 회원가입 필요
             log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
             String password = "kakao";
-            memberMapper.createMember(Long.toString(id),password);
+            memberMapper.createMember(Long.toString(id), password);
             int memberNo = memberMapper.getMemberNo(Long.toString(id));
             int cnt = memberMapper.duplicationNickname(nickname);
             MemberInfoVO userInfo = new MemberInfoVO();
             userInfo.setMemberNo(memberNo);
-            if (cnt == 0){
+            if (cnt == 0) {
                 userInfo.setNickname(nickname);
-            }else {
+            } else {
                 userInfo.setNickname(nickname + "Kakao");
             }
             userInfo.setProfileImg(imgPath);
@@ -209,7 +208,7 @@ public class OAuthServiceImpl implements OauthService {
 
             br.close();
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return result.toString();
@@ -255,32 +254,74 @@ public class OAuthServiceImpl implements OauthService {
 
             br.close();
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return result.toString();
     }
 
     @Override
-    public void socialLogin(String code, String registrationId) {
-        String accessToken = getAccessToken(code, registrationId);
-        JsonNode userResourceNode = getUserResource(accessToken, registrationId);
-        System.out.println("userResourceNode = " + userResourceNode);
+    public String googleLogin(String loginResult) {
+//        String accessToken = getGoogleAccessToken(code);
+//        JsonNode userResourceNode = getUserResource(accessToken);
+//        System.out.println("userResourceNode = " + userResourceNode);
+//
+//        String id = userResourceNode.get("id").asText();
+//        String email = userResourceNode.get("email").asText();
+//        String nickname = userResourceNode.get("name").asText();
+//        System.out.println("id = " + id);
+//        System.out.println("email = " + email);
+//        System.out.println("nickname = " + nickname);
+//
+//        return id;
 
-        String id = userResourceNode.get("id").asText();
-        String email = userResourceNode.get("email").asText();
-        String nickname = userResourceNode.get("name").asText();
-        System.out.println("id = " + id);
-        System.out.println("email = " + email);
-        System.out.println("nickname = " + nickname);
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(loginResult);
+
+        log.info(element.toString());
+
+        String id = element.getAsJsonObject().get("id").toString();
+
+        String imgPath = element.getAsJsonObject().get("picture").toString();
+        String nickname = element.getAsJsonObject().get("name").toString();
+        log.info("id : " + id + "/ nickname : " + nickname + "/ imgPath : " + imgPath);
+        String DuplicationE = memberMapper.getDuplicationEmail(id);
+        if (DuplicationE != null) { // 중복 된 값이 있을 경우
+            log.info("이미 있는 계정 => 바로 로그인 진행");
+            return id;
+        } else { // 없을 경우 회원가입 필요
+            log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
+            String password = "google";
+            memberMapper.createMember(id, password);
+            int memberNo = memberMapper.getMemberNo(id);
+            int cnt = memberMapper.duplicationNickname(nickname);
+            MemberInfoVO userInfo = new MemberInfoVO();
+            userInfo.setMemberNo(memberNo);
+            if (cnt == 0) {
+                userInfo.setNickname(nickname);
+            } else {
+                userInfo.setNickname(nickname + "google");
+            }
+            userInfo.setProfileImg(imgPath);
+            userInfo.setAddress("");
+            userInfo.setAddressDetail("");
+            userInfo.setFavoritePet("");
+            userInfo.setPhoneNumber("");
+            log.info(userInfo.toString());
+            memberMapper.createMemberInfo(userInfo.getNickname(), userInfo.getMemberNo(), userInfo.getProfileImg(),
+                    userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+            log.info("구글 계정으로 회원가입 완료");
+            return id;
+        }
     }
 
+
     @Override
-    public String getAccessToken(String authorizationCode, String registrationId) {
-        String clientId = env.getProperty("oauth2." + registrationId + ".client-id");
-        String clientSecret = env.getProperty("oauth2." + registrationId + ".client-secret");
-        String redirectUri = env.getProperty("oauth2." + registrationId + ".redirect-uri");
-        String tokenUri = env.getProperty("oauth2." + registrationId + ".token-uri");
+    public String getGoogleAccessToken(String authorizationCode) {
+        String clientId = env.getProperty("oauth2.google.client-id");
+        String clientSecret = env.getProperty("oauth2.google.client-secret");
+        String redirectUri = env.getProperty("oauth2.google.redirect-uri");
+        String tokenUri = env.getProperty("oauth2.google.token-uri");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("code", authorizationCode);
@@ -300,12 +341,13 @@ public class OAuthServiceImpl implements OauthService {
     }
 
     @Override
-    public JsonNode getUserResource(String accessToken, String registrationId) {
-        String resourceUri = env.getProperty("oauth2."+registrationId+".resource-uri");
+    public JsonNode getUserResource(String accessToken) {
+        String resourceUri = env.getProperty("oauth2.google.resource-uri");
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity entity = new HttpEntity(headers);
         return restTemplate.exchange(resourceUri, HttpMethod.GET, entity, JsonNode.class).getBody();
     }
+
 }

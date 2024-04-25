@@ -50,4 +50,30 @@
         FROM "BoardDetail"
         WHERE "boardId" = #{boardId}
     </select>
+
+    <delete id="deleteBoard">
+        DELETE
+        FROM "Board"
+        WHERE "boardId" = #{boardId}
+    </delete>
+
+    <delete id="deleteBoardReview">
+        DELETE
+        FROM "Boardreview"
+        WHERE "boardReviewNum" = #{boardReviewNum}
+    </delete>
+
+    <insert id="postBoard" useGeneratedKeys="true" keyProperty="boardId">
+        <selectKey keyProperty="boardId" resultType="int" order="BEFORE">
+            SELECT board_seq.NEXTVAL FROM dual
+        </selectKey>
+        <![CDATA[
+            INSERT INTO "Board"
+                ("boardId", "memberNo", "nickname",
+                "category", "boardName", "createDate")
+            VALUES #{boardId}, #{memberNo}, #{nickname}, #{category}, #{boardName}, SYSDATE)
+        ]]>
+    </insert>
+
+
 </mapper>
