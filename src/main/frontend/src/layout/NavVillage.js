@@ -1,7 +1,5 @@
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import logo from '../img/logo.png'
-import darklogo from '../img/darklogo.png'
 import naver from '../img/naver.jpg'
 import kakao from '../img/kakao.png'
 import google from '../img/google.png'
