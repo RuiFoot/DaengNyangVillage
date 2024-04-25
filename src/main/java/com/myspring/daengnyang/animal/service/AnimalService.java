@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface AnimalService {
     List<String> getClassification();
-    List<AnimalLocationVO> getLocation(String location,String classification);
+
+    List<AnimalLocationVO> getLocation(String location, String classification);
 
 
     AnimalDetailVO getDetail(Integer animalNum);
@@ -17,7 +18,11 @@ public interface AnimalService {
 
     boolean animalReviewPost(AnimalReviewVO animalReviewVO);
 
-    List<AnimalLocationVO> getRecommend(Integer memberNo,String sido,String sigungu);
+    boolean updateAnimalReview(AnimalReviewVO animalReview);
+
+    boolean deleteAnimalReview(Integer animalReviewNum);
+
+    List<AnimalLocationVO> getRecommend(Integer memberNo, String sido, String sigungu);
 
     boolean favoriteCheck(Integer memberNo, Integer animalNum);
 }
