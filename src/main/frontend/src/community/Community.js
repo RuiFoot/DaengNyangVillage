@@ -1,13 +1,24 @@
 import Bumper from "../layout/Bumper";
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import styled from "styled-components";
+import themes from "../theme";
 import Test from "../test";
 
+const Container = styled.div`
+min-height: calc(100vh - 86px);
+`
 function Community() {
+    const isDark = useRecoilValue(isDarkAtom);
     return (
-        <div>
+        <Container style={{
+            color: `${isDark ? themes.dark.color : themes.light.color}`,
+            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+        }}>
             <Bumper />
-            <Test />
             커뮤니티입니다.
-        </div>
+            <Test />
+        </Container>
     );
 }
 

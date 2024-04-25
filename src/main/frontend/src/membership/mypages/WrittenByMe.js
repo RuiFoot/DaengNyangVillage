@@ -1,43 +1,10 @@
 import styled from "styled-components";
 import ListGroup from 'react-bootstrap/ListGroup';
 import MypageNavbar from './MypageNavbar';
-import { useEffect, useState } from "react";
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../../atoms';
+import themes from "../../theme";
 
-const Container = styled.div`
-  margin: 20px 6vw;
-`;
-
-const ListItem = styled.div`
-    display: flex;
-    justify-content: center;
-    height: 80px;
-    margin: 5px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.234);
-    flex-direction: column;
-`
-const ListHeader = styled.div`
-display: flex;
-align-items: center;
-margin: 5px 0 5px 5px;
-`
-const ListFooter = styled.div`
-display: flex;
-align-items: center;
-margin: 5px;
-justify-content: end;
-`
-const ListTitle = styled.div`
-margin: 0 5px 0 0;
-font-size: clamp(100%, 5vw, 120%);
-`
-const CommentsCount = styled.div`
-border: 1px solid ;
-border-radius: 5px;
-background-color: #F288CD;
-color: white;
-font-size: 14px;
-padding: 0 5px;
-`
 let free1 = {
     title: "옆집 개가 너무 짖어요",
     writer: "olzl",
@@ -150,6 +117,44 @@ let mypet3 = {
     text: "",
     img: ""
 }
+
+
+const Container = styled.div`
+min-height: calc(100vh - 229px);
+`
+
+const ListItem = styled.div`
+display: flex;
+justify-content: center;
+height: 80px;
+margin: 5px 0;
+border-bottom: 1px solid rgba(0, 0, 0, 0.234);
+flex-direction: column;
+`
+const ListHeader = styled.div`
+display: flex;
+align-items: center;
+margin: 5px 0 5px 5px;
+`
+const ListFooter = styled.div`
+display: flex;
+align-items: center;
+margin: 5px;
+justify-content: end;
+`
+const ListTitle = styled.div`
+margin: 0 5px 0 0;
+font-size: clamp(100%, 5vw, 120%);
+`
+const CommentsCount = styled.div`
+border: 1px solid ;
+border-radius: 5px;
+background-color: #F288CD;
+color: white;
+font-size: 14px;
+padding: 0 5px;
+`
+
 let freeArr = [free1, free2, free3]
 
 let marketArr = [market1, market2, market3]
@@ -165,16 +170,23 @@ if (window.sessionStorage.key(0) === "logined") {
 
 
 function WrittenByMe() {
+    const isDark = useRecoilValue(isDarkAtom);
+
     return (
         <div>
             <MypageNavbar />
-            <Container>
-                <ListGroup as="ol">
+            <Container style={{
+                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            }}>
+                <ListGroup style={{ margin: `0 6vw` }} as="ol">
+                    <div style={{ margin: `20px 0` }}></div>
                     {
                         myArr.map((e, i) => (
                             <ListItem
                                 as="il"
                                 key={i}
+                                style={{ borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
                             >
                                 <ListHeader>
                                     <ListTitle className="fw-bold">{e.title}

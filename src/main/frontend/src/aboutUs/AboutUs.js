@@ -1,15 +1,8 @@
 import Bumper from "../layout/Bumper";
-import {
-    RecoilRoot,
-    atom,
-    selector,
-    useRecoilState,
-    useRecoilValue,
-} from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import styled from "styled-components";
 import themes from "../theme";
-
 
 function AboutUs() {
     const isDark = useRecoilValue(isDarkAtom);
