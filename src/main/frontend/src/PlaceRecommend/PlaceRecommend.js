@@ -86,6 +86,7 @@ let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천�
 
 function PlaceRecommend() {
     const [categoryList,setCategoryList] = useState([]);
+    const [address,setAddress] = useState([]);
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -110,59 +111,44 @@ function PlaceRecommend() {
     }, []);
 
     useEffect(() => {
+        axios.get(`${baseUrl}/animal/location/%EB%8F%99%EB%AC%BC%EC%95%BD%EA%B5%AD`)
+            .then((res) => {
+                setAddress(res.data)
+                console.log(res.data)
+            }).catch(error => {
+                console.error('Request failed : ', error);
+        })
+
+
         const container = document.getElementById('map');
         const options = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
-            lever: 3
+            center: new kakao.maps.LatLng(37.335889, 126.584063),
+            level: 10
         };
         const map = new kakao.maps.Map(container, options);
-        
-        var positions = [
-            {
-                content: '<div>카카오</div>',  
-                latlng: new kakao.maps.LatLng(33.450705, 126.570677)
-            },
-            {
-                content: '<div>생태연못</div>', 
-                latlng: new kakao.maps.LatLng(33.450936, 126.569477)
-            },
-            {
-                content: '<div>텃밭</div>',  
-                latlng: new kakao.maps.LatLng(33.450879, 126.569940)
-            },
-            {
-                content: '<div>근린공원</div>',
-                latlng: new kakao.maps.LatLng(33.451393, 126.570738)
+
+        var positions = [];
+        for(var j=0; j<Object.keys(address).length; j++){
+            var content = {
+                title: address[j].facilityName,
+                LatLng: new kakao.maps.LatLng(address[j].latitude, address[j].longitude),
+                roadAddress: address[j].roadAddress,
             }
-        ];
+            positions.push(content);
+        };
+        console.log(positions);
+
+
         
-        for (var i = 0; i < positions.length; i ++) {
+        for (var i = 0; i < positions.length; i++) {
             var marker = new kakao.maps.Marker({
                 map: map, // 마커를 표시할 지도
-                position: positions[i].latlng, // 마커를 표시할 위치
-                title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                position: positions[i].LatLng, // 마커를 표시할 위치
+                title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                
             });
-            // 마커에 표시할 인포윈도우를 생성합니다 
-            var infowindow = new kakao.maps.InfoWindow({
-                content: positions[i].content // 인포윈도우에 표시할 내용
-            });
-            kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-            kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-        }
-        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
-        function makeOverListener(map, marker, infowindow) {
-            return function() {
-                infowindow.open(map, marker);
-            };
         }
 
-        // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
-        function makeOutListener(infowindow) {
-            return function() {
-                infowindow.close();
-            };
-        }
-        
 
 
     }, [])
