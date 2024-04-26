@@ -46,7 +46,7 @@ const HotdealItemPrice = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #D91A2A;
+  color: #f65151;
   font-weight: 800;
   font-size: 25px;
 `;

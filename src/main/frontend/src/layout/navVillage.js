@@ -134,7 +134,7 @@ function NavVillage() {
                 setUserId("")
                 setUserPassword("")
                 props.onHide();
-                window.location.href = `${pathname}/${nickName}`
+                window.location.href = `${pathname}${nickName}`
             } else {
                 setLogin(false)
             }
@@ -293,7 +293,7 @@ function NavVillage() {
                                         color: `${mypages.includes(pathname)
                                             ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
                                     }} href={`/my-info/${nickName}`}>
-                                        마이페이지
+                                        {nickName}님의 마이페이지
                                     </Nav.Link>
                                     :
                                     <Nav.Link className='navLink' style={{
