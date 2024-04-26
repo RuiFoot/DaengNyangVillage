@@ -1,0 +1,7 @@
+.headerBtn {
+    margin-left: 15px;
+}
+
+.headerBtn:hover {
+    transform: scale(1.1);
+}
