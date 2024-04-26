@@ -201,9 +201,10 @@ public class MemberController {
     }
 
     @GetMapping("/logout")
-    public void Logout(HttpSession session) throws Exception {
+    public boolean Logout(HttpSession session) throws Exception {
         log.info("Logout");
         session.invalidate();
+        return true;
         // return "redirect:/member/main"; 얼럿창출력안하고싶을때 사용
     }
 
