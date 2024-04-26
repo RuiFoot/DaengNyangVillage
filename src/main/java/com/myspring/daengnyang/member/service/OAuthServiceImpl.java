@@ -350,4 +350,140 @@ public class OAuthServiceImpl implements OauthService {
         return restTemplate.exchange(resourceUri, HttpMethod.GET, entity, JsonNode.class).getBody();
     }
 
+    String naverAPIURL = "https://openapi.naver.com";
+
+    @Override
+    public String getNaverAccessToken(String code, String state) {
+        String reqURL = "https://nid.naver.com/oauth2.0/token";
+        String access_Token = "";
+        String refresh_Token;
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            StringBuilder sb = new StringBuilder();
+            sb.append("grant_type=authorization_code");
+            sb.append("&client_id=fSYWQz2civYrneAweMd2"); // TODO REST_API_KEY 입력
+            sb.append("&client_secret=bf3fQnENgq");
+            sb.append("&code=").append(code);
+            sb.append("&state=").append(state);
+            System.out.println(sb);
+            bw.write(sb.toString());
+            bw.flush();
+
+            //결과 코드가 200이라면 성공
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            StringBuilder result = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                result.append(line);
+            }
+            System.out.println("response body : " + result);
+
+            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result.toString());
+
+            access_Token = element.getAsJsonObject().get("access_token").getAsString();
+            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
+
+            System.out.println("access_token : " + access_Token);
+            System.out.println("refresh_token : " + refresh_Token);
+
+            br.close();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return access_Token;
+    }
+
+
+    @Override
+    public String getNaverUserInfo(String accessToken) {
+        String reqURL = "/v1/nid/me";
+        StringBuilder result = new StringBuilder();
+        //access_token을 이용하여 사용자 정보 조회
+        try {
+            URL url = new URL(naverAPIURL + reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken); //전송할 header 작성, access_token전송
+
+            //결과 코드가 200이라면 성공
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                result.append(line);
+            }
+            System.out.println("response body : " + result);
+
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result.toString();
+    }
+
+    @Override
+    public String NaverLogin(String loginResult) {
+
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(loginResult);
+
+        String id = element.getAsJsonObject().get("response").getAsJsonObject().get("id").toString();
+        String imgPath = element.getAsJsonObject().get("response").getAsJsonObject().get("profile_image").getAsString();
+        String nickname = element.getAsJsonObject().get("response").getAsJsonObject().get("nickname").getAsString();
+        String mobile = element.getAsJsonObject().get("response").getAsJsonObject().get("mobile").toString();
+
+        if (memberMapper.getDuplicationEmail(id) != null) { // 중복 된 값이 있을 경우
+            log.info("이미 있는 계정 => 바로 로그인 진행");
+            return id;
+        } else { // 없을 경우 회원가입 필요
+            log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
+            String password = "naver";
+            memberMapper.createMember(id, password);
+            int memberNo = memberMapper.getMemberNo(id);
+            int cnt = memberMapper.duplicationNickname(nickname);
+            MemberInfoVO userInfo = new MemberInfoVO();
+            userInfo.setMemberNo(memberNo);
+            if (cnt == 0) {
+                userInfo.setNickname(nickname);
+            } else {
+                userInfo.setNickname(nickname + "Naver");
+            }
+            userInfo.setProfileImg(imgPath);
+            userInfo.setAddress("");
+            userInfo.setAddressDetail("");
+            userInfo.setFavoritePet("");
+            userInfo.setPhoneNumber(mobile);
+            log.info(userInfo.toString());
+            memberMapper.createMemberInfo(userInfo.getNickname(), userInfo.getMemberNo(), userInfo.getProfileImg(),
+                    userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+            log.info("네이버 계정으로 회원가입 완료");
+            return id;
+        }
+    }
+
+
 }

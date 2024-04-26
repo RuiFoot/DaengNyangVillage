@@ -200,6 +200,38 @@ public class MemberController {
         }
     }
 
+    //---------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * 네이버 로그인
+     * @return
+     */
+
+
+
+    @GetMapping("/oauth/naver")
+    public boolean naverCallback(@RequestParam String code, @RequestParam String state, HttpServletRequest httpRequest){
+        log.info("code : " + code + "state : " + state);
+        String accessToken = oAuthService.getNaverAccessToken(code, state);
+        String loginResult = oAuthService.getNaverUserInfo(accessToken);
+        String memberNo = oAuthService.NaverLogin(loginResult);
+        if (memberNo != null) {
+            HttpSession session = httpRequest.getSession();
+            session.setAttribute("memberNo", memberNo);
+            log.info("로그인이 정상 처리 되었습니다.");
+            return true;
+        } else {
+            log.info("로그인 오류 발생");
+            return false;
+        }
+     }
+
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------
+
+
     @GetMapping("/logout")
     public boolean Logout(HttpSession session) throws Exception {
         log.info("Logout");
