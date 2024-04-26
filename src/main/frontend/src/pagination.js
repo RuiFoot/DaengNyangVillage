@@ -1,6 +1,7 @@
 import { useRecoilState } from 'recoil';
 import { styled } from 'styled-components';
 import { presentPage } from './atoms';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const Container = styled.div`
 display: flex;
@@ -34,7 +35,7 @@ function Pagination(props) {
             <Nav>
                 {currentSet > 1 && (
                     <Button onClick={() => setPage(startPage - 1)} $active={false}>
-                        &lt;
+                        <IoIosArrowBack style={{ marginBottom: "4px" }} />
                     </Button>
                 )}
                 {Array(props.btnRange)
@@ -45,7 +46,7 @@ function Pagination(props) {
                                 key={i}
                                 onClick={() => setPage(startPage + i)}
                                 $active={page === startPage + i}
-                                style={{ display: startPage + i > props.totalPageNum ? "none" : null }}
+                                style={{ display: startPage + i > props.totalPageNum ? "none" : null, color: startPage + i === page ? "#F2884B" : null }}
                             >
                                 {startPage + i}
                             </Button>
@@ -53,7 +54,7 @@ function Pagination(props) {
                     })}
                 {totalSet > currentSet && (
                     <Button onClick={() => setPage(endPage + 1)} $active={false}>
-                        &gt;
+                        <IoIosArrowForward style={{ marginBottom: "4px" }} />
                     </Button>
                 )}
             </Nav>

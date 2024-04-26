@@ -12,43 +12,46 @@ let trainingArr = [["고양이한태 손 받는 방법", "정승호", "2024-04-1
 
 let shopArr = [["금남멧돼지", "경기도", "백진욱", "2024-04-12"], ["알베로", "경기도", "이상빈", "2024-04-12"], ["배롱정원", "제주도", "송민영", "2024-04-12"]]
 
+
+const Communitylists = styled.div`
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+grid-auto-rows: minmax(100px, auto);
+gap: 15px;
+`
+const Communitylist = styled.div`
+
+`
+const CommunityTitle = styled.div`
+display: flex;
+align-items: center;
+font-size: clamp(100%, 1.2vw, 120%);
+font-weight: bold;
+margin-bottom: 5px;
+`
+const ArticleTitle = styled.div`
+font-weight: bold;
+margin-bottom: 10px;
+`
+const Content = styled.div`
+border-top : 1px solid #B2BEBF;
+border-bottom : 1px solid #B2BEBF;
+margin-bottom: 5px;
+padding: 5px;
+`
+const Writer = styled.div`
+text-align: end;
+`
+const Area = styled.div`
+text-align: end;
+
+`
+const Date = styled.div`
+text-align: end;
+`
+
 function CommunityHome() {
-    const Communitylists = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-auto-rows: minmax(100px, auto);
-    gap: 15px;
-    `
-    const Communitylist = styled.div`
-    
-    `
-    const CommunityTitle = styled.div`
-    display: flex;
-    align-items: center;
-    font-size: clamp(100%, 1.2vw, 120%);
-    font-weight: bold;
-    margin-bottom: 5px;
-    `
-    const ArticleTitle = styled.div`
-    font-weight: bold;
-    margin-bottom: 10px;
-    `
-    const Content = styled.div`
-    border-top : 1px solid #B2BEBF;
-    border-bottom : 1px solid #B2BEBF;
-    margin-bottom: 5px;
-    padding: 5px;
-    `
-    const Writer = styled.div`
-    text-align: end;
-    `
-    const Area = styled.div`
-    text-align: end;
-    
-    `
-    const Date = styled.div`
-    text-align: end;
-    `
+
 
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
