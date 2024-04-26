@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Bumper from "../layout/Bumper";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -31,7 +30,7 @@ margin-bottom: 10px;
 const UserId = styled.div`
 `
 
-function ForgetIdPassWd() {
+function FindIdPasswd() {
     const isDark = useRecoilValue(isDarkAtom);
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
@@ -73,7 +72,7 @@ function ForgetIdPassWd() {
             // 여기서 정의해야하는 것은 위에서 만든 메일 템플릿에 지정한 변수({{ }})에 대한 값을 담아줘야한다.
             const templateParams = {
                 toEmail: email,
-                message: `http://localhost:3000/ChangePasswdLick/${memberInfo.nickName}`,
+                message: `http://localhost:3000/change-passwd-lick/${memberInfo.nickName}`,
                 toName: memberInfo.nickName
             };
             emailjs
@@ -166,4 +165,4 @@ function ForgetIdPassWd() {
     );
 }
 
-export default ForgetIdPassWd;
+export default FindIdPasswd;

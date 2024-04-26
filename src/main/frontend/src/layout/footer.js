@@ -23,12 +23,10 @@ const Copyright = styled.div`
 function Footer() {
     const isDark = useRecoilValue(isDarkAtom);
 
-
-
     return (
         <FooterContainer style={{
             color: `${isDark ? themes.dark.color : themes.light.color}`,
-            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            backgroundColor: `${isDark ? themes.dark.navFooterBgColor : themes.light.bgColor}`
         }}>
             <Icons>
                 <FaXTwitter className="footerIcon" />

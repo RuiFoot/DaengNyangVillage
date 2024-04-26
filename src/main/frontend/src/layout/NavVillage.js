@@ -10,7 +10,7 @@ import Form from 'react-bootstrap/Form';
 import styled from "styled-components";
 import { useEffect, useState } from 'react';
 import { CiBrightnessDown, CiDark } from "react-icons/ci";
-import "../style.css"
+import "./layout.css"
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import themes from "../theme";
@@ -28,13 +28,14 @@ cursor: pointer;
 width: 100px;
 `
 const ToggleContainer = styled.div`
+margin-right: 10px;
 display: flex;
 align-items: center;
 position: relative;
 cursor: pointer;
   > .toggle-container {
-    width: 50px;
-    height: 24px;
+    width: 60px;
+    height: 30px;
     border-radius: 30px;
     background-color: #161F30;}
   > .toggle--checked {
@@ -44,13 +45,13 @@ cursor: pointer;
   > .toggle-circle {
     position: absolute;
     left: 1px;
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background-color: rgb(255,254,255);
     transition : 0.5s
   } >.toggle--checked {
-    left: 27px;
+    left: 31px;
     transition : 0.5s
   }
 `;
@@ -62,6 +63,7 @@ justify-content: center;
 align-items: center;
 `
 const SunMoon = styled.div`
+font-size: 40px;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -176,7 +178,7 @@ function NavVillage() {
                         placeholder='********'
                     />
                     <ModalBodyFooter >
-                        <FindIdPassward onClick={() => { window.location.href = "/ForgetIdPassWd" }}>아이디 / 비밀번호가 기억나지 않아요</FindIdPassward>
+                        <FindIdPassward onClick={() => { window.location.href = "/find-id-passwd" }}>아이디 / 비밀번호가 기억나지 않아요</FindIdPassward>
                         <Social>
                             <p>소셜 로그인</p>
                             <Logos>
@@ -196,7 +198,7 @@ function NavVillage() {
                             : !login &&
                             <p className='warning'>일치하는 아이디 혹은 비밀번호가 없습니다</p>
                     }
-                    <Button className='joinBtn' onClick={() => window.location.href = '/JoinMembership'}>회원가입</Button>
+                    <Button className='joinBtn' onClick={() => window.location.href = '/join-membership'}>회원가입</Button>
                     <Button type='submit' className='modalLoginBtn' onClick={() => loginBtn()}>로그인</Button>
                 </Modal.Footer>
             </Modal>
@@ -233,7 +235,7 @@ function NavVillage() {
     };
 
     // 마이페이지 안의 페이지들 주소
-    let mypages = [`/MyInfo/${nickName}`, `/ChangePasswd/${nickName}`, `/SelectedLocation/${nickName}`, `/WrittenByMe/${nickName}`]
+    let mypages = [`/my-info/${nickName}`, `/change-passwd/${nickName}`, `/selected-location/${nickName}`, `/written-by-me/${nickName}`]
 
     return (
         <div>
@@ -261,40 +263,44 @@ function NavVillage() {
                             style={{ minHeight: '80px', maxHeight: '120px' }}
                             navbarScroll
                         >
-                            <Nav.Link style={{ color: `${pathname === `/Community${url}` ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/Community${url}`}>
+                            <Nav.Link style={{ color: `${pathname === `/community${url}` ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/community${url}`}>
                                 커뮤니티
                             </Nav.Link>
                             <Nav.Link style={{
-                                color: `${pathname === `/PlaceRecommend${url}`
+                                color: `${pathname === `/place-recommend${url}`
                                     ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                            }} className='navLink' href={`/PlaceRecommend${url}`}>
+                            }} className='navLink' href={`/place-recommend${url}`}>
                                 장소추천
                             </Nav.Link>
                             <Nav.Link style={{
-                                color: `${pathname === `/AboutUs${url}`
+                                color: `${pathname === `/about-us${url}`
                                     ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                            }} className='navLink' href={`/AboutUs${url}`}>
+                            }} className='navLink' href={`/about-us${url}`}>
                                 About Us
                             </Nav.Link>
                         </Nav>
                         <Nav className="d-flex">
                             <ToggleContainer onClick={toggleHandler}>
                                 <div className={`toggle-container ${isOn ? "toggle--checked" : null}`}></div>
-                                <SunMoon className={`toggle-circle ${isOn ? "toggle--checked" : null}`}>{isOn ? <CiDark /> : <CiBrightnessDown />}</SunMoon>
+                                <SunMoon style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                    className={`toggle-circle ${isOn ? "toggle--checked" : null}`}>{isOn ? <CiDark /> : <CiBrightnessDown />}</SunMoon>
                             </ToggleContainer>
                             {
                                 login ?
                                     <Nav.Link className='navLink' style={{
                                         color: `${mypages.includes(pathname)
                                             ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                                    }} href={`/MyInfo/${nickName}`}>
+                                    }} href={`/my-info/${nickName}`}>
                                         마이페이지
                                     </Nav.Link>
                                     :
                                     <Nav.Link className='navLink' style={{
-                                        color: `${pathname === `/JoinMembership${url}`
+                                        color: `${pathname === `/join-membership${url}`
                                             ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                                    }} href={`/JoinMembership${url}`}>
+                                    }} href={`/join-membership${url}`}>
                                         회원가입
                                     </Nav.Link>
                             }

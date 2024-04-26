@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { GoDotFill } from "react-icons/go";
 import { useState } from "react";
-import MypageNavbar from './MypageNavbar';
+import MypageNavbar from './mypageNavbar';
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom, presentPage } from '../../atoms';
 import themes from "../../theme";
@@ -42,14 +42,6 @@ font-size: clamp(90%, 1vw, 100%);
 const PlaceItemInfo = styled.div`
 font-size: clamp(90%, 1vw, 100%);
 `
-const Nav = styled.nav`
-  display: flex;
-  justify-content: center;
-`;
-
-const Button = styled.button`
-  
-`;
 
 function SelectedLocation() {
     const isDark = useRecoilValue(isDarkAtom);

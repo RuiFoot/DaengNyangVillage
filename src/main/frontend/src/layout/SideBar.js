@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import "./sideBarStyle.css"
+import "./layout.css"
 import { IoChatbubblesOutline } from "react-icons/io5";
 import styled from "styled-components";
 import { useRecoilValue } from 'recoil';

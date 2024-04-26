@@ -1,4 +1,4 @@
-import Bumper from "../layout/Bumper";
+import Bumper from "../layout/bumper";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import styled from "styled-components";

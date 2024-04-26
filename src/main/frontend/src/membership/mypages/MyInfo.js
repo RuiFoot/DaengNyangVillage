@@ -9,7 +9,7 @@ import { useState } from "react";
 import '../membershipStyle.css'
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
-import MypageNavbar from './MypageNavbar';
+import MypageNavbar from './mypageNavbar';
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../../atoms';
 import themes from "../../theme";

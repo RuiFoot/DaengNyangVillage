@@ -1,37 +1,29 @@
 import styled from "styled-components";
-import DarkCarousel from "./Carousel";
+import DarkCarousel from "./carousel";
 import './homeStyle.css'
-import HotdealBar from "./Hotdeal";
-import HotPlaceList from "./HotPlace";
-import CommunityHome from "./CommunityHome";
-import Bumper from "../layout/Bumper";
+import HotdealBar from "./hotdeal";
+import HotPlaceList from "./hotPlace";
+import CommunityHome from "./communityHome";
+import Bumper from "../layout/bumper";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import themes from "../theme";
 
-let url = ""
-
-function Home() {
-  const isDark = useRecoilValue(isDarkAtom);
-
-  const Container = styled.div`
-  color: ${isDark ? themes.dark.color : themes.light.color};
-  background-color: ${isDark ? themes.dark.bgColor : themes.light.bgColor};
+const Container = styled.div`
   display: grid;
   gap: 15px;
 `;
-  const Carousel = styled.div`
+const Carousel = styled.div`
   width: 88vw;
   grid-column: 1 / 5;
   display: flex;
   margin: auto;
   `
-  const Hotdeal = styled.div`
+const Hotdeal = styled.div`
   grid-column: 1 / 5;
   `
-  const Contants = styled.div`
-  margin-left: 6vw;
-  margin-right: 6vw;
+const Contants = styled.div`
+  margin: 0 6vw 20px 6vw;
   grid-column: 1 / 5;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -42,35 +34,43 @@ function Home() {
     color: black;
   }
   `
-  const Place = styled.div`
+const Place = styled.div`
   `
-  const Community = styled.div`
+const Community = styled.div`
   `
-  const PlaceTitle = styled.div`
-  color: ${isDark ? themes.dark.color : themes.light.color};
+const PlaceTitle = styled.div`
   margin-bottom:15px;
   font-size: 30px;
   font-weight: bold;
   text-align: center;
   `
-  const CommunityTitle = styled.div`
-  color: ${isDark ? themes.dark.color : themes.light.color};
+const CommunityTitle = styled.div`
   margin-bottom:15px;
   font-size: 30px;
   font-weight: bold;
   text-align: center;
   `
-  const DivideLine = styled.div`
+const DivideLine = styled.div`
   margin: 20px 6vw 0 6vw;
   border: 2px solid #F2884B;
   `
+
+
+let url = ""
+
+function Home() {
+  const isDark = useRecoilValue(isDarkAtom);
 
   if (window.sessionStorage.key(0) === "logined") {
     url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
   }
 
   return (
-    <Container className="Container">
+    <Container className="Container"
+      style={{
+        color: `${isDark ? themes.dark.color : themes.light.color}`,
+        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+      }}>
       <Bumper />
       <Carousel>
         <DarkCarousel />
@@ -82,11 +82,17 @@ function Home() {
       <Contants>
         {/* <Test/> */}
         <Place>
-          <a href={`/PlaceRecommend${url}`}><PlaceTitle>인기장소</PlaceTitle></a>
+          <a href={`/place-recommend${url}`}>
+            <PlaceTitle style={{
+              color: `${isDark ? themes.dark.color : themes.light.color}`
+            }}>인기장소</PlaceTitle></a>
           <HotPlaceList />
         </Place>
         <Community>
-          <a href={`/Community${url}`}><CommunityTitle>커뮤니티</CommunityTitle></a>
+          <a href={`/community${url}`}>
+            <CommunityTitle style={{
+              color: `${isDark ? themes.dark.color : themes.light.color}`
+            }}>커뮤니티</CommunityTitle></a>
           <CommunityHome />
         </Community>
       </Contants>

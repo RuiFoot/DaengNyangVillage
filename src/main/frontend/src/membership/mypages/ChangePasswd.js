@@ -5,7 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
-import MypageNavbar from './MypageNavbar';
+import MypageNavbar from './mypageNavbar';
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../../atoms';
 import themes from "../../theme";
