@@ -14,6 +14,7 @@ import "./layout.css"
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import themes from "../theme";
+import { useNavigate } from 'react-router-dom';
 
 //css
 const Logo = styled.img`
@@ -105,6 +106,8 @@ const getDataLocalStorage = (name) => {
 // 네비바
 function NavVillage() {
 
+    //현재 주소
+    const pathname = window.location.pathname;
     const isDark = useRecoilValue(isDarkAtom); //다크모드
     const [login, setLogin] = useState();
 
@@ -128,14 +131,12 @@ function NavVillage() {
                 sessionStorage.setItem("logined", JSON.stringify(localData))
                 const nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
                 setLogin(true)
-                console.log("로그인")
                 setUserId("")
                 setUserPassword("")
                 props.onHide();
-                window.location.href = `/${nickName}`
+                window.location.href = `${pathname}/${nickName}`
             } else {
                 setLogin(false)
-                console.log("실패")
             }
         }
         return (
@@ -207,6 +208,7 @@ function NavVillage() {
 
     //로그인 상태일때
     const [url, setUrl] = useState("")
+    const [nickName, setNickName] = useState("")
     useEffect(() => {
         if (window.sessionStorage.key(0) === "logined") {
             setLogin(true)
@@ -215,15 +217,11 @@ function NavVillage() {
         }
     }, [login]);
     const [modalShow, setModalShow] = useState(false);
-    const [nickName, setNickName] = useState("")
     const LogOut = () => {
         setUrl("/")
         window.sessionStorage.removeItem("logined")
         window.location.href = "/"
     }
-
-    //현재 주소
-    const pathname = window.location.pathname;
 
     //다크모드
     const [isOn, setisOn] = useRecoilState(isDarkAtom)
@@ -236,7 +234,8 @@ function NavVillage() {
 
     // 마이페이지 안의 페이지들 주소
     let mypages = [`/my-info/${nickName}`, `/change-passwd/${nickName}`, `/selected-location/${nickName}`, `/written-by-me/${nickName}`]
-
+    // 커뮤니티안의 페이지들 주소
+    let community = [`/free-board${"/" + nickName}`, `/pet-boast${"/" + nickName}`, `/training-method${"/" + nickName}`, `/used-market${"/" + nickName}`, `/text-write${"/" + nickName}`]
     return (
         <div>
             <Navbar expand="lg" className="navbar"
@@ -247,7 +246,7 @@ function NavVillage() {
                 <a href={login ? `${url}` : `/${url}`}><Logo src={isOn ? themes.dark.logo : themes.light.logo} /></a>
                 <Container fluid>
                     <Navbar.Brand className='navHomeLink' style={{
-                        color: `${pathname === url
+                        color: `${pathname === `${login ? url : "/" + url}`
                             ? "#F2884B" : `${isOn ? themes.dark.color : themes.light.color}`}`
                     }} href={login ? `${url}` : `/${url}`}>
                         Home
@@ -263,7 +262,7 @@ function NavVillage() {
                             style={{ minHeight: '80px', maxHeight: '120px' }}
                             navbarScroll
                         >
-                            <Nav.Link style={{ color: `${pathname === `/community${url}` ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/community${url}`}>
+                            <Nav.Link style={{ color: `${community.includes(pathname) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/free-board${url}`}>
                                 커뮤니티
                             </Nav.Link>
                             <Nav.Link style={{

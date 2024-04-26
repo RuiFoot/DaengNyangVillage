@@ -79,3 +79,7 @@ npm install cors
 4월 24일 추가
 다크모드를 위한 state 전달
 npm install recoil
+
+4월 26일
+글쓰기 에디터
+npm install react-quill --save

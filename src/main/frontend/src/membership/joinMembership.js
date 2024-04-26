@@ -48,8 +48,6 @@ function JoinMembership() {
 
     const isDark = useRecoilValue(isDarkAtom);
 
-
-
     const baseUrl = "http://localhost:8080";
     //다음 주소 api
     const [show, setShow] = useState(false);

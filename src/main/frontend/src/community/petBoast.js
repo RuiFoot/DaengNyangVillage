@@ -1,26 +1,24 @@
-import Bumper from "../layout/bumper";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import styled from "styled-components";
 import themes from "../theme";
-import Test from "../test";
+import CommunityNav from "./communityNav";
 
 const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
-function Community() {
+function PetBoast() {
     const isDark = useRecoilValue(isDarkAtom);
     return (
         <Container style={{
             color: `${isDark ? themes.dark.color : themes.light.color}`,
             backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
         }}>
-            <Bumper />
-            커뮤니티입니다.
-            <Test />
+            <CommunityNav />
+            반려동물 자랑
         </Container>
     );
 }
 
 
-export default Community;
+export default PetBoast;

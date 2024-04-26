@@ -27,9 +27,6 @@ function Pagination(props) {
     const startPage = (currentSet - 1) * props.btnRange + 1; // 현재 보여질 버튼의 첫번째 수
     const endPage = startPage + props.btnRange - 1; // 현재 보여질 끝 버튼의 수
     const totalSet = Math.ceil(Math.ceil(props.totalPost / props.pageRange) / props.btnRange); // 전체 버튼 세트 수
-    console.log(startPage)
-    console.log(endPage)
-    console.log(props.totalPageNum)
     return (
         < Container >
             <Nav>

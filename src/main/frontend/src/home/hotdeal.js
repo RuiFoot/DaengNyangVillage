@@ -93,20 +93,6 @@ async function fetchRandomProducts(count) {
 }
 
 function HotdealBar() {
-
-  const [windowSize, setWindowSiz] = useState(window.innerWidth);
-  const handleResize = () => {
-    setWindowSiz(window.innerWidth)
-    console.log(window.innerWidth)
-  }
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.addEventListener('resize', handleResize)
-    }
-  }, [])
-
-
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 

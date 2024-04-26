@@ -19,7 +19,7 @@ padding: 10px;
 text-decoration: none;
 color: black;
 &:hover {
-    color: #F2884B;
+    transform: scale(1.1);
 }
 `
 
