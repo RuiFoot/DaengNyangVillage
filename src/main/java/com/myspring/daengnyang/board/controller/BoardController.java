@@ -70,4 +70,11 @@ public class BoardController {
         log.info("글 쓰기 컨트롤러 실행");
         boardService.postBoard(boardPostVO);
     }
+
+    @PostMapping("/review")
+    @ResponseBody
+    public void postReview(@RequestBody ReviewVO reviewVO) {
+        log.info("댓글 쓰기 컨트롤러 실행");
+        boardService.postReview(reviewVO);
+    }
 }
