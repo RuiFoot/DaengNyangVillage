@@ -71,17 +71,18 @@ public class BoardController {
         boardService.postBoard(boardPostVO);
     }
 
+    @PatchMapping("")
+    @ResponseBody
+    public void modifyPost(@RequestBody BoardPostVO boardPostVO) {
+        log.info("글 수정 컨트롤러 실행");
+        boardService.modifyPost(boardPostVO);
+    }
+
     @PostMapping("/review")
     @ResponseBody
     public void postReview(@RequestBody ReviewVO reviewVO) {
         log.info("댓글 쓰기 컨트롤러 실행");
         boardService.postReview(reviewVO);
-    }
-
-    @PatchMapping("")
-    @ResponseBody
-    public void modifyPost(@RequestBody BoardDetailVO boardDetailVO) {
-        log.info("글 수정 컨트롤러 실행");
     }
 
 

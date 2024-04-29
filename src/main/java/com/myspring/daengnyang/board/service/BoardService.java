@@ -18,6 +18,7 @@ public interface BoardService {
     void deleteBoard(int boardId);
     void deleteBoardReview(int boardReviewNum);
     void postBoard(BoardPostVO boardPostVO);
+    void modifyPost(BoardPostVO boardPostVO);
     void postReview(ReviewVO reviewVO);
 
 }

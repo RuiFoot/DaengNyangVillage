@@ -26,9 +26,13 @@ public interface BoardMapper {
 
     void deleteBoard(@Param("boardId") int boardId);
     void deleteBoardReview(@Param("boardReviewNum") int boardReviewNum);
+
+    void modifyPost(@Param("boardPostVO") BoardPostVO boardPostVO);
+
     int postBoard(@Param("boardPostVO") BoardPostVO boardPostVO);
     void postBoardDetail(@Param("boardPostVO") BoardPostVO boardPostVO);
     int getBoardId();
     void postReview(@Param("reviewVO") ReviewVO reviewVO);
     int getMemberNo(@Param("nickname") String nickname);
+
 }

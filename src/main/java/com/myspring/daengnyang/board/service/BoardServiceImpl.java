@@ -75,4 +75,9 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.postReview(reviewVO);
     }
 
+    @Override
+    public void modifyPost(BoardPostVO boardPostVO) {
+        boardMapper.modifyPost(boardPostVO);
+    }
+
 }
