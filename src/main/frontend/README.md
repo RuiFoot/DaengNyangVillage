@@ -83,5 +83,3 @@ npm install react-bootstrap@next bootstrap@5.3.0
 다크모드를 위한 state 전달
 npm install recoil
 
-4월25일 로고 설정
-npm install react-bootstrap@next bootstrap@5.3.0
