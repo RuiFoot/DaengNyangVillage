@@ -24,6 +24,9 @@ const HotdealItems = styled.div`
 `;
 
 const HotdealItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 200px;
   height: 350px;
   cursor: pointer; /* 클릭 가능하도록 커서 설정 */
@@ -131,8 +134,10 @@ function HotdealBar() {
           <HotdealItems>
             {products.map((product, index) => (
               <HotdealItem key={index} onClick={() => handleProductClick(product.link)}>
-                <HotdealItemImg style={{ backgroundImage: `url(${product.image})` }} />
-                <HotdealItemName>{product.name}</HotdealItemName>
+                <div>
+                  <HotdealItemImg style={{ backgroundImage: `url(${product.image})` }} />
+                  <HotdealItemName>{product.name}</HotdealItemName>
+                </div>
                 <HotdealItemPrice>{product.price}</HotdealItemPrice>
               </HotdealItem>
             ))}
