@@ -15,6 +15,7 @@ import java.util.List;
 public interface MemberService {
 
     void createMember(SignupForm signupForm);
+
     MemberVO getMember(String email);
 
     MemberInfoVO getMemberInfo(Integer memberNo);

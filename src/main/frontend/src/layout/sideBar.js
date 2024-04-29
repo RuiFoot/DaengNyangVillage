@@ -3,10 +3,12 @@ import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import "./sideBarStyle.css"
+import "./layout.css"
 import { IoChatbubblesOutline } from "react-icons/io5";
 import styled from "styled-components";
-
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
 
 const SideContainer = styled.div`
 `
@@ -69,6 +71,7 @@ const ManagerName = styled.div`
 font-size: 14px;
 `
 function SideBar() {
+    const isDark = useRecoilValue(isDarkAtom);
     // 챗봇 온오프 버튼 위치
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -100,6 +103,7 @@ function SideBar() {
     const [userChatArr, setUserChatArr] = useState([])
     const [managerChatArr, setManagerChatArr] = useState([])
     const [botAnswer, setBotAnswer] = useState()
+    const [isChatOn, setIsChatOn] = useState(false)
     const userChatInput = (e) => {
         setUserChat(e.target.value)
     }
@@ -118,6 +122,9 @@ function SideBar() {
     }
     const changeInfo = () => {
         setBotAnswer(answerList.회원정보변경)
+    }
+    const chatOn = () => {
+        setIsChatOn(true)
     }
 
     const sendMessage = () => {
@@ -146,7 +153,10 @@ function SideBar() {
                         transition: "transform 0.5s linear"
                     }} className="chatBotMobile" onClick={handleShow} />
             }
-            <Offcanvas show={show} onHide={handleClose} placement='end'>
+            <Offcanvas style={{
+                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                backgroundColor: `${isDark ? themes.dark.navFooterBgColor : themes.light.bgColor}`
+            }} show={show} onHide={handleClose} placement='end'>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>댕냥 챗봇</Offcanvas.Title>
                 </Offcanvas.Header>
@@ -160,56 +170,78 @@ function SideBar() {
                             <Button className="questionBtn" onClick={social}>소셜로그인</Button>
                             <Button className="questionBtn" onClick={placeAdd}>추천장소 추가</Button>
                             <Button className="questionBtn" onClick={changeInfo}>회원 정보 변경</Button>
+                            <Button className="questionBtn" onClick={chatOn}>1:1 상담</Button>
                         </FrequentBtns>
                         <FrequentFooter>
                             {botAnswer}
                         </FrequentFooter>
                     </FrequentQ>
-                    <ChatBox>
-                        {
-                            userChatArr.map((e, i) => (
-                                e[0] === "user" ?
-                                    <UserChat key={i}>
-                                        <p>{e[1]}</p>
-                                    </UserChat>
-                                    :
-                                    <ManagerChat key={i}>
-                                        <ManagerName>댕냥빌리지</ManagerName>
-                                        <p>{e[1]}</p>
-                                    </ManagerChat>
-                            ))
-                        }
-                    </ChatBox>
-                    <InputGroup className="mb-3">
-                        <Form.Control
-                            type="text"
-                            placeholder="질문을 입력해주세요"
-                            aria-describedby="basic-addon2"
-                            value={userChat}
-                            name="userChat"
-                            onChange={userChatInput}
-                        />
-                        <Button className="chatBotBtn" variant="outline-secondary" id="button-addon2"
-                            onClick={sendMessage}
-                        >
-                            전송
-                        </Button>
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                        <Form.Control
-                            type="text"
-                            placeholder="답변을 입력해주세요"
-                            aria-describedby="basic-addon2"
-                            value={managerChat}
-                            name="managerChat"
-                            onChange={managerChatInput}
-                        />
-                        <Button className="chatBotBtn" variant="outline-secondary" id="button-addon2"
-                            onClick={sendAnswer}
-                        >
-                            매니저
-                        </Button>
-                    </InputGroup>
+                    {
+                        isChatOn ?
+                            <>
+                                <ChatBox>
+                                    {
+                                        userChatArr.map((e, i) => (
+                                            e[0] === "user" ?
+                                                <UserChat key={i}>
+                                                    <p>{e[1]}</p>
+                                                </UserChat>
+                                                :
+                                                <ManagerChat key={i}>
+                                                    <ManagerName>댕냥빌리지</ManagerName>
+                                                    <p>{e[1]}</p>
+                                                </ManagerChat>
+                                        ))
+                                    }
+                                </ChatBox>
+                                <InputGroup className="mb-3">
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="질문을 입력해주세요"
+                                        aria-describedby="basic-addon2"
+                                        value={userChat}
+                                        name="userChat"
+                                        onChange={userChatInput}
+                                    />
+                                    <Button className="chatBotBtn" variant="outline-secondary" id="button-addon2"
+                                        onClick={sendMessage}
+                                    >
+                                        전송
+                                    </Button>
+                                </InputGroup>
+                                <InputGroup className="mb-3">
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="답변을 입력해주세요"
+                                        aria-describedby="basic-addon2"
+                                        value={managerChat}
+                                        name="managerChat"
+                                        onChange={managerChatInput}
+                                    />
+                                    <Button className="chatBotBtn" variant="outline-secondary" id="button-addon2"
+                                        onClick={sendAnswer}
+                                    >
+                                        매니저
+                                    </Button>
+                                </InputGroup>
+                            </>
+                            :
+                            <InputGroup className="mb-3">
+                                <Form.Control
+                                    disabled
+                                    type="text"
+                                    placeholder="1:1 상담 버튼을 클릭해주세요"
+                                    aria-describedby="basic-addon2"
+                                    value={userChat}
+                                    name="userChat"
+                                    onChange={userChatInput}
+                                />
+                                <Button className="chatBotBtn" variant="outline-secondary" id="button-addon2"
+                                >
+                                    전송
+                                </Button>
+                            </InputGroup>
+                    }
                 </Offcanvas.Body>
             </Offcanvas>
         </SideContainer >

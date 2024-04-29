@@ -4,11 +4,20 @@ import { BsCardText } from "react-icons/bs";
 import { IoRestaurantOutline } from "react-icons/io5";
 import { MdOutlineShoppingCart } from "react-icons/md";
 
+let freeArr = [["옆집 개가 너무 짖어요", "박현수", "2024-04-12"], ["우리집 고양이는 멍멍하고 울어요", "박현수", "2024-04-12"], ["우리집 멍멍이 보고가요", "송민영", "2024-04-12"]]
+
+let marketArr = [["배변패드 팝니다", "경상북도", "정승호", "2024-04-12"], ["캣타워 중고 삽니다", "경기도", "이상빈", "2024-04-12"], ["멍멍이 모자 삽니다", "경기도", "송민영", "2024-04-12"]]
+
+let trainingArr = [["고양이한태 손 받는 방법", "정승호", "2024-04-12"], ["배변 훈련", "이상빈", "2024-04-12"], ["햄스터 산책 방법", "송민영", "2024-04-12"]]
+
+let shopArr = [["금남멧돼지", "경기도", "백진욱", "2024-04-12"], ["알베로", "경기도", "이상빈", "2024-04-12"], ["배롱정원", "제주도", "송민영", "2024-04-12"]]
+
+
 const Communitylists = styled.div`
 display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-auto-rows: minmax(100px, auto);
-  gap: 15px;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+grid-auto-rows: minmax(100px, auto);
+gap: 15px;
 `
 const Communitylist = styled.div`
 
@@ -41,15 +50,9 @@ const Date = styled.div`
 text-align: end;
 `
 
-let freeArr = [["옆집 개가 너무 짖어요", "박현수", "2024-04-12"], ["우리집 고양이는 멍멍하고 울어요", "박현수", "2024-04-12"], ["우리집 멍멍이 보고가요", "송민영", "2024-04-12"]]
-
-let marketArr = [["배변패드 팝니다", "경상북도", "정승호", "2024-04-12"], ["캣타워 중고 삽니다", "경기도", "이상빈", "2024-04-12"], ["멍멍이 모자 삽니다", "경기도", "송민영", "2024-04-12"]]
-
-let trainingArr = [["고양이한태 손 받는 방법", "정승호", "2024-04-12"], ["배변 훈련", "이상빈", "2024-04-12"], ["햄스터 산책 방법", "송민영", "2024-04-12"]]
-
-let shopArr = [["금남멧돼지", "경기도", "백진욱", "2024-04-12"], ["알베로", "경기도", "이상빈", "2024-04-12"], ["배롱정원", "제주도", "송민영", "2024-04-12"]]
-
 function CommunityHome() {
+
+
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)

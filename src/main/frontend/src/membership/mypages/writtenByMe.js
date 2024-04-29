@@ -1,43 +1,11 @@
 import styled from "styled-components";
 import ListGroup from 'react-bootstrap/ListGroup';
-import MypageNavbar from './MypageNavbar';
-import { useEffect, useState } from "react";
+import MypageNavbar from './mypageNavbar';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom, presentPage } from '../../atoms';
+import themes from "../../theme";
+import Pagination from "../../pagination";
 
-const Container = styled.div`
-  margin: 20px 6vw;
-`;
-
-const ListItem = styled.div`
-    display: flex;
-    justify-content: center;
-    height: 80px;
-    margin: 5px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.234);
-    flex-direction: column;
-`
-const ListHeader = styled.div`
-display: flex;
-align-items: center;
-margin: 5px 0 5px 5px;
-`
-const ListFooter = styled.div`
-display: flex;
-align-items: center;
-margin: 5px;
-justify-content: end;
-`
-const ListTitle = styled.div`
-margin: 0 5px 0 0;
-font-size: clamp(100%, 5vw, 120%);
-`
-const CommentsCount = styled.div`
-border: 1px solid ;
-border-radius: 5px;
-background-color: #F288CD;
-color: white;
-font-size: 14px;
-padding: 0 5px;
-`
 let free1 = {
     title: "옆집 개가 너무 짖어요",
     writer: "olzl",
@@ -47,6 +15,7 @@ let free1 = {
     text: "",
     img: ""
 }
+
 let free2 = {
     title: "우리집 고양이는 멍멍하고 울어요",
     writer: "olzl",
@@ -62,6 +31,33 @@ let free3 = {
     date: "2024-04-12",
     category: "자유게시판",
     commentsCount: 3,
+    text: "",
+    img: ""
+}
+let free4 = {
+    title: "옆집 개가 너무 짖어요",
+    writer: "olzl",
+    date: "2024-04-12",
+    category: "자유게시판",
+    commentsCount: 210,
+    text: "",
+    img: ""
+}
+let free5 = {
+    title: "옆집 개가 너무 짖어요",
+    writer: "olzl",
+    date: "2024-04-12",
+    category: "자유게시판",
+    commentsCount: 210,
+    text: "",
+    img: ""
+}
+let free6 = {
+    title: "옆집 개가 너무 짖어요",
+    writer: "olzl",
+    date: "2024-04-12",
+    category: "자유게시판",
+    commentsCount: 210,
     text: "",
     img: ""
 }
@@ -150,7 +146,48 @@ let mypet3 = {
     text: "",
     img: ""
 }
-let freeArr = [free1, free2, free3]
+
+
+const Container = styled.div`
+min-height: calc(100vh - 229px);
+display: flex;
+flex-direction: column;
+justify-content: center;
+`
+
+const ListItem = styled.div`
+display: flex;
+justify-content: center;
+height: 80px;
+margin: 5px 0;
+border-bottom: 1px solid rgba(0, 0, 0, 0.234);
+flex-direction: column;
+`
+const ListHeader = styled.div`
+display: flex;
+align-items: center;
+margin: 5px 0 5px 5px;
+`
+const ListFooter = styled.div`
+display: flex;
+align-items: center;
+margin: 5px;
+justify-content: end;
+`
+const ListTitle = styled.div`
+margin: 0 5px 0 0;
+font-size: clamp(100%, 5vw, 120%);
+`
+const CommentsCount = styled.div`
+border: 1px solid ;
+border-radius: 5px;
+background-color: #F288CD;
+color: white;
+font-size: 14px;
+padding: 0 5px;
+`
+
+let freeArr = [free1, free2, free3, free4, free5, free6]
 
 let marketArr = [market1, market2, market3]
 
@@ -165,16 +202,28 @@ if (window.sessionStorage.key(0) === "logined") {
 
 
 function WrittenByMe() {
+    const isDark = useRecoilValue(isDarkAtom);
+    const nowPage = useRecoilValue(presentPage);
+    const totalPost = myArr.length; // 총 게시물 수
+    const pageRange = 6; // 페이지당 보여줄 게시물 수
+    const totalPageNum = Math.ceil(myArr.length / pageRange)
+    const btnRange = 5; // 보여질 페이지 버튼의 개수
+    const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
+    const endPost = startPost + pageRange - 1; // 끝 게시물 번호
     return (
         <div>
             <MypageNavbar />
-            <Container>
-                <ListGroup as="ol">
+            <Container style={{
+                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            }}>
+                <ListGroup style={{ margin: `10px 6vw` }}>
+                    <div style={{ margin: `20px 0` }}></div>
                     {
-                        myArr.map((e, i) => (
+                        myArr.slice(startPost - 1, endPost).map((e, i) => (
                             <ListItem
-                                as="il"
                                 key={i}
+                                style={{ borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
                             >
                                 <ListHeader>
                                     <ListTitle className="fw-bold">{e.title}
@@ -190,6 +239,7 @@ function WrittenByMe() {
                         ))
                     }
                 </ListGroup>
+                <Pagination totalPost={totalPost} pageRange={pageRange} btnRange={btnRange} totalPageNum={totalPageNum} />
             </Container>
         </div>
     );
