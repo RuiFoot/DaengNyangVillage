@@ -78,6 +78,13 @@ public class BoardController {
         boardService.modifyPost(boardPostVO);
     }
 
+    @PatchMapping("/review")
+    @ResponseBody
+    public void modifyReview(@RequestBody ReviewVO reviewVO) {
+        log.info("댓글 수정 컨트롤러 실행");
+        boardService.modifyReview(reviewVO);
+    }
+
     @PostMapping("/review")
     @ResponseBody
     public void postReview(@RequestBody ReviewVO reviewVO) {
