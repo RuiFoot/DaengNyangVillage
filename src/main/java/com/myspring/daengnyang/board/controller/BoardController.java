@@ -70,4 +70,12 @@ public class BoardController {
         log.info("글 쓰기 컨트롤러 실행");
         boardService.postBoard(boardPostVO);
     }
+
+    @PatchMapping("")
+    @ResponseBody
+    public void modifyPost(@RequestBody BoardPostVO boardPostVO) {
+        log.info("글 수정 컨트롤러 실행");
+        boardService.modifyPost(boardPostVO);
+    }
+
 }

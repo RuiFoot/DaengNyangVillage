@@ -26,4 +26,5 @@ public interface BoardMapper {
     void deleteBoard(@Param("boardId") int boardId);
     void deleteBoardReview(@Param("boardReviewNum") int boardReviewNum);
     void postBoard(@Param("boardPostVO") BoardPostVO boardPostVO);
+    void modifyPost(@Param("boardPostVO") BoardPostVO boardPostVO);
 }
