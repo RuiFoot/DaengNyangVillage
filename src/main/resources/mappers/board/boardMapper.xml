@@ -117,5 +117,30 @@
         WHERE "nickname" = #{nickname}
     </select>
 
+    <update id="modifyPost" parameterType="com.myspring.daengnyang.board.vo.BoardPostVO">
+        <![CDATA[
+            UPDATE "Board"
+            SET "category" = #{boardPostVO.category}, "boardName" = #{boardPostVO.boardName}
+            WHERE "boardId" = #{boardPostVO.boardId}
+        ]]>
+    </update>
+
+    <update id="modifyPostDetail" parameterType="com.myspring.daengnyang.board.vo.BoardPostVO">
+        <![CDATA[
+            UPDATE "BoardDetail"
+            SET "category" = #{boardPostVO.category}, "BoardName" = #{boardPostVO.boardName},
+                "Field" = #{boardPostVO.field}, "imgPath" = #{boardPostVO.imgPath}
+            WHERE "boardId" = #{boardPostVO.boardId}
+        ]]>
+    </update>
+
+    <update id="modifyReview" parameterType="com.myspring.daengnyang.board.vo.ReviewVO">
+        <![CDATA[
+            UPDATE "Boardreview"
+            SET "review" = #{reviewVO.review}
+            WHERE "boardReviewNum" = #{reviewVO.boardReviewNum}
+        ]]>
+    </update>
+
 
 </mapper>
