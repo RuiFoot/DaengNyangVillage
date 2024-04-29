@@ -8,38 +8,55 @@
     border-bottom: 2px solid #F2884B;
 }
 
-.navHomeLink {
+.container-fluid {
+    padding: 0
+}
+
+.navHomeBox {
     height: 80px;
-    padding: 8px 0;
-    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navHomeLink {
+    height: 30px;
+    padding: 10px 0;
     display: flex;
     align-items: center;
 }
 
 .navHomeLink:hover {
-    transform: scale(1.1);
+    border-bottom: 1px solid #F2884B;
 }
 
 .navLink {
-    padding: 8px 0;
-    color: black;
+    height: 30px;
+    width: fit-content;
+    padding: 10px 0;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
+
 
 .navLink:hover {
-    transform: scale(1.1);
+    border-bottom: 1px solid #F2884B;
 }
 
-.me-auto {
+.navbar-nav {
     min-height: 80px;
     max-height: 120px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .loginBtn {
     color: black;
-    border-color: #F288CD;
     background-color: white;
+    border: 1px solid;
 }
 
 .loginBtn:hover {

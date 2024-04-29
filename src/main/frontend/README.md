@@ -83,3 +83,11 @@ npm install recoil
 4월 26일
 글쓰기 에디터
 npm install react-quill --save
+
+4월 29일 추가
+글쓰기 에디터에서 작성된 글 보여주기
+npm i dompurify
+
+4월 29일 추가
+글쓰기 이미지 파이어베이스 이용해서 저장하고 불러오기
+npm install firebase

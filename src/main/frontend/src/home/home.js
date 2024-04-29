@@ -89,7 +89,7 @@ function Home() {
           <HotPlaceList />
         </Place>
         <Community>
-          <a href={`/community${url}`}>
+          <a href={`/free-board${url}`}>
             <CommunityTitle style={{
               color: `${isDark ? themes.dark.color : themes.light.color}`
             }}>커뮤니티</CommunityTitle></a>

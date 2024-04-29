@@ -14,7 +14,7 @@ import FreeBoard from "./community/freeBoard";
 import PetBoast from "./community/petBoast";
 import TrainingMethod from "./community/trainingMethod";
 import UsedMarket from "./community/usedMarket";
-import TextWrite from "./community/textWrite";
+import Write from "./community/write";
 
 function Router() {
     if (window.sessionStorage.key(0) !== "logined") {
@@ -55,7 +55,7 @@ function Router() {
                 />
                 <Route path="/used-market/:nickName" element={<UsedMarket />}
                 />
-                <Route path="/text-write/:nickName" element={<TextWrite />}
+                <Route path="/write/:nickName" element={<Write />}
                 />
             </Routes>
         )

@@ -33,6 +33,11 @@ margin-right: 10px;
 display: flex;
 align-items: center;
 position: relative;
+border: 1px solid;
+border-radius: 30px;
+&:hover {
+    border: 2px solid #F2884B;
+}
 cursor: pointer;
   > .toggle-container {
     width: 60px;
@@ -134,7 +139,11 @@ function NavVillage() {
                 setUserId("")
                 setUserPassword("")
                 props.onHide();
-                window.location.href = `${pathname}${nickName}`
+                if (pathname === "/") {
+                    window.location.href = `${pathname}${nickName}`
+                } else {
+                    window.location.href = `${pathname}/${nickName}`
+                }
             } else {
                 setLogin(false)
             }
@@ -235,7 +244,15 @@ function NavVillage() {
     // 마이페이지 안의 페이지들 주소
     let mypages = [`/my-info/${nickName}`, `/change-passwd/${nickName}`, `/selected-location/${nickName}`, `/written-by-me/${nickName}`]
     // 커뮤니티안의 페이지들 주소
-    let community = [`/free-board${"/" + nickName}`, `/pet-boast${"/" + nickName}`, `/training-method${"/" + nickName}`, `/used-market${"/" + nickName}`, `/text-write${"/" + nickName}`]
+    //두가지 로그인시 로그인 아닐시 나눠야함
+    let community
+    if (login) {
+        community = [`/free-board${"/" + nickName}`, `/pet-boast${"/" + nickName}`, `/training-method${"/" + nickName}`, `/used-market${"/" + nickName}`, `/text-write${"/" + nickName}`, `/write${"/" + nickName}`]
+    } else {
+        community = [`/free-board${nickName}`, `/pet-boast${nickName}`, `/training-method${nickName}`, `/used-market${nickName}`, `/text-write${nickName}`]
+    }
+    // console.log(pathname)
+    // console.log(`/write${"/" + nickName}`)
     return (
         <div>
             <Navbar expand="lg" className="navbar"
@@ -245,13 +262,15 @@ function NavVillage() {
             >
                 <a href={login ? `${url}` : `/${url}`}><Logo src={isOn ? themes.dark.logo : themes.light.logo} /></a>
                 <Container fluid>
-                    <Navbar.Brand className='navHomeLink' style={{
-                        color: `${pathname === `${login ? url : "/" + url}`
-                            ? "#F2884B" : `${isOn ? themes.dark.color : themes.light.color}`}`
-                    }} href={login ? `${url}` : `/${url}`}>
-                        Home
-                        {/*모든 네비 카테고리는 현재 주소가 해당 카테고리면 컬러가 다르게 표시됨 */}
-                    </Navbar.Brand>
+                    <div className='navHomeBox'>
+                        <Navbar.Brand className='navHomeLink' style={{
+                            color: `${pathname === `${login ? url : "/" + url}`
+                                ? "#F2884B" : `${isOn ? themes.dark.color : themes.light.color}`}`
+                        }} href={login ? `${url}` : `/${url}`}>
+                            Home
+                            {/*모든 네비 카테고리는 현재 주소가 해당 카테고리면 컬러가 다르게 표시됨 */}
+                        </Navbar.Brand>
+                    </div>
                     <Navbar.Toggle style={{
                         backgroundColor: themes.light.bgColor
                     }} aria-controls="navbarScroll" />
@@ -259,10 +278,10 @@ function NavVillage() {
                     >
                         <Nav
                             className="me-auto my-2 my-lg-0"
-                            style={{ minHeight: '80px', maxHeight: '120px' }}
                             navbarScroll
                         >
-                            <Nav.Link style={{ color: `${community.includes(pathname) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/free-board${url}`}>
+                            <Nav.Link style={{ color: `${community.includes(pathname) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/free-board${url}`}
+                            >
                                 커뮤니티
                             </Nav.Link>
                             <Nav.Link style={{
@@ -305,12 +324,12 @@ function NavVillage() {
                             }
                             {
                                 login ?
-                                    <Nav.Link className='navLink'>
+                                    <Nav.Link >
                                         <Button style={{ backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => LogOut()}>로그아웃
                                         </Button>
                                     </Nav.Link>
                                     :
-                                    <Nav.Link className='navLink'>
+                                    <Nav.Link >
                                         <Button style={{ backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => setModalShow(true)}>로그인
                                         </Button>
                                         <LoginModal

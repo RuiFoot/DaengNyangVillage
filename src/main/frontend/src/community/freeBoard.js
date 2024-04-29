@@ -7,9 +7,8 @@ import { useRecoilValue } from 'recoil';
 import { isDarkAtom, presentPage } from '../atoms';
 import themes from "../theme";
 import Pagination from "../pagination";
-import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
 import "./communityStyle.css"
+import CommunityHeader from "./communityHeader";
 
 let free1 = {
     boardId: 0,
@@ -191,11 +190,7 @@ color: white;
 font-size: 14px;
 padding: 0 5px;
 `
-const BoardHeader = styled.div`
-margin: 10px 6vw 0 6vw;
-display: flex;
-justify-content: flex-end;
-`
+
 
 let freeArr = [free1, free2, free3, free4, free5, free6, free7, free8, free9, free10, free11, free12, free13]
 
@@ -232,42 +227,13 @@ function FreeBoard() {
     const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
     const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
-    const goWrite = () => {
-        window.location.href = `/text-write/${nickName}`
-    }
     return (
         <Container style={{
             color: `${isDark ? themes.dark.color : themes.light.color}`,
             backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
         }}>
             <CommunityNav />
-            <BoardHeader>
-                <Dropdown >
-                    <Dropdown.Toggle className="headerBtn" id="dropdown-basic" style={{
-                        borderColor: "#F288CD",
-                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                    }}>
-                        정렬
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu >
-                        <Dropdown.Item href="#/action-1">날짜 오름차순</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">날짜 내림차순</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-                {
-                    window.sessionStorage.key(0) === "logined" ?
-                        <Button className="headerBtn" style={{
-                            borderColor: "#F288CD",
-                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                        }}
-                            onClick={goWrite}
-                        >글쓰기</Button>
-                        :
-                        null
-                }
-            </BoardHeader>
+            <CommunityHeader />
             <ListGroup style={{ margin: `10px 6vw` }}>
                 {
                     freeArr.slice(startPost - 1, endPost).map((e, i) => (

@@ -1,7 +1,20 @@
 .headerBtn {
     margin-left: 15px;
+    border: 1px solid;
 }
 
 .headerBtn:hover {
-    transform: scale(1.1);
+    border: 1px solid #F288CD;
+}
+
+.registerBtns {
+    border: 1px solid;
+}
+
+.registerBtns:hover {
+    border: 1px solid #F288CD;
+}
+
+.btn.show {
+    border: 1px solid #F288CD;
 }

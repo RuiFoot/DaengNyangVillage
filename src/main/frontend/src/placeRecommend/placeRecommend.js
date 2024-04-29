@@ -8,6 +8,10 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
+
 
 const Container = styled.div`
   display: grid;
@@ -81,6 +85,7 @@ let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천�
 let categoryList = ["동물병원", "동물약국", "반려동물용품", "미용", "위탁관리", "식당", "카페", "호텔", "팬션", "여행지", "박물관", "문예회관"]
 
 function PlaceRecommend() {
+    const isDark = useRecoilValue(isDarkAtom); //다크모드
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -142,7 +147,10 @@ function PlaceRecommend() {
     }, [])
 
     return (
-        <Container>
+        <Container style={{
+            color: `${isDark ? themes.dark.color : themes.light.color}`,
+            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+        }}>
             <Bumper />
             <ContantTitle>장소 추천</ContantTitle>
             {
