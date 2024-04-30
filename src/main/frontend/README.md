@@ -91,3 +91,7 @@ npm i dompurify
 4월 29일 추가
 글쓰기 이미지 파이어베이스 이용해서 저장하고 불러오기
 npm install firebase
+
+4월 30일 추가
+프로필 사진 추가를위한 고유한 아이디 값을 생성
+npm install react-uuid

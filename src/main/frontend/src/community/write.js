@@ -37,7 +37,7 @@ margin: 80px 0 0 0;
 `
 
 function Write() {
-    const [imageUrl, setImageUrl] = useState(""); // 새로운 상태 추가
+    const [imageUrl, setImageUrl] = useState([]); // 새로운 상태 추가
 
     // 배포용 URL
     const quillRef = useRef(null); // useRef로 ref 생성
@@ -66,7 +66,7 @@ function Write() {
                         // URL 삽입 후 커서를 이미지 뒷 칸으로 이동
                         editor.setSelection(range.index + 1);
                         console.log('url 확인', url);
-                        setImageUrl(url);
+                        imageUrl.push(url);
                     });
                 });
 
@@ -119,22 +119,25 @@ function Write() {
         "color",
         "background",
     ];
-
+    const userNickName = JSON.parse(window.sessionStorage.getItem("logined"))
+    console.log(userNickName.nickName)
     let referrer = document.referrer; //이전 페이지 url
     const [board, setBoard] = useState()
     const [area, setArea] = useState("지역을 입력해주세요")
     const [values, setValues] = useState({
-        board: board,
+        nickname: userNickName.nickName,
+        memberNo: 10,
+        category: board,
         area: area,
-        title: "",
+        boardName: "",
         detailLocation: "",
         tradeTime: "",
         price: "",
-        img: "",
-        text: quillValue
+        imgPath: "",
+        field: quillValue
     })
 
-    const { title, detailLocation, tradeTime, price, img, text } = values; // 비구조화 할당
+    const { nickname, memberNo, boardName, detailLocation, tradeTime, price, imgPath, field } = values; // 비구조화 할당
 
     function onChange(e) {
         const { value, name } = e.target;
@@ -146,21 +149,23 @@ function Write() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        values.board = board
+        values.category = board
         values.area = area
-        values.text = quillValue
-
+        values.field = quillValue
+        values.imgPath = imageUrl
         localStorage.setItem("write", JSON.stringify(values)); // 로컬스토리지 저장
         setQuillValue("")
         setValues({
-            board: board,
+            nickname: userNickName.nickName,
+            memberNo: "",
+            category: board,
             area: "",
-            title: "",
+            boardName: "",
             detailLocation: "",
             tradeTime: "",
             price: "",
-            img: "",
-            text: quillValue
+            imgPath: "",
+            field: quillValue
         })
     }
 
@@ -242,8 +247,8 @@ function Write() {
                         <Form.Control
                             onChange={onChange}
                             placeholder='글 제목을 입력해주세요'
-                            name='title'
-                            value={title}
+                            name='boardName'
+                            value={boardName}
                         />
                     </InputGroup>
                     {
@@ -297,27 +302,35 @@ function Write() {
                     >등록</Button>
                 </InputFooter>
             </InputForm>
-            <div>{test.board}</div>
             {
-                test.area === "지역을 입력해주세요" ? null
-                    :
-                    <div>{test.area}</div>
+                test !== null ?
+                    <>
+                        <div>{test.board}</div>
+                        <>
+                            {
+                                test.area === "지역을 입력해주세요" ? null
+                                    :
+                                    <div>{test.area}</div>
+                            }
+                        </>
+                        <div>{test.boardName}</div>
+                        <div>{test.detailLocation}</div>
+                        <div>{test.imgPath.join(", ")}</div>
+                        <div>{test.price}</div>
+                        <div>{test.tradeTime}</div>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(test.field),
+                            }}
+                            style={{
+                                marginTop: '5px',
+                                overflow: 'hidden',
+                                whiteSpace: 'pre-wrap',
+                            }}
+                        />
+                    </>
+                    : null
             }
-            <div>{test.title}</div>
-            <div>{test.detailLocation}</div>
-            <div>{test.img}</div>
-            <div>{test.price}</div>
-            <div>{test.tradeTime}</div>
-            <div
-                dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(test.text),
-                }}
-                style={{
-                    marginTop: '5px',
-                    overflow: 'hidden',
-                    whiteSpace: 'pre-wrap',
-                }}
-            />
         </Container >
     );
 }

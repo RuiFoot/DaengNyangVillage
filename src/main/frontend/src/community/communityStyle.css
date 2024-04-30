@@ -18,3 +18,7 @@
 .btn.show {
     border: 1px solid #F288CD;
 }
+
+.btn:disabled {
+    border: 1px solid;
+}
