@@ -2,7 +2,7 @@ import Bumper from "../layout/bumper";
 import styled from "styled-components";
 import { GoDotFill } from "react-icons/go";
 import './placeRecommendStyle.css'
-import React ,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
@@ -40,8 +40,6 @@ justify-content: center;
 height: 500px;
 `
 const Map = styled.div`
-height: 500px;
-background-color: red;
 `
 
 const PlaceItems = styled.div`
@@ -90,12 +88,12 @@ let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천�
 //let categoryList = ["동물병원", "동물약국", "반려동물용품", "미용", "위탁관리", "식당", "카페", "호텔", "팬션", "여행지", "박물관", "문예회관"]
 
 function PlaceRecommend() {
-    const [map,setMap] = useState([null])
+    const [map, setMap] = useState([null])
 
-    const [markers,setMarkers] = useState([])
+    const [markers, setMarkers] = useState([])
 
-    const [categoryList,setCategoryList] = useState([]);
-    const [address,setAddress] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [address, setAddress] = useState([]);
     const isDark = useRecoilValue(isDarkAtom); //다크모드
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
@@ -119,7 +117,7 @@ function PlaceRecommend() {
 
             }).catch(error => {
                 console.error('Request failed : ', error);
-        })
+            })
     }, []);
 
     useEffect(() => {
@@ -131,7 +129,7 @@ function PlaceRecommend() {
                 console.log(res.data)
             }).catch(error => {
                 console.error('Request failed : ', error);
-        })
+            })
     }, [])
 
     useEffect(() => {
@@ -154,7 +152,7 @@ function PlaceRecommend() {
             });
             // 새로운 마커들 생성
             var newMarkers = [];
-            for(var j=0; j<Object.keys(address).length; j++){
+            for (var j = 0; j < Object.keys(address).length; j++) {
                 var content = {
                     title: address[j].facilityName,
                     LatLng: new kakao.maps.LatLng(address[j].latitude, address[j].longitude),
@@ -167,8 +165,8 @@ function PlaceRecommend() {
                 });
                 newMarkers.push(newMarker);
                 // 마커 클릭 시 오버레이 표시
-                (function(marker, place) {
-                    kakao.maps.event.addListener(marker, 'click', function() {
+                (function (marker, place) {
+                    kakao.maps.event.addListener(marker, 'click', function () {
                         var overlay = new kakao.maps.CustomOverlay({
                             content: '<div class="wrap">' +
                                 '    <div class="info">' +
@@ -183,7 +181,7 @@ function PlaceRecommend() {
                             map: map,
                             position: marker.getPosition()
                         });
-                        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+                        kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
                             overlay.setMap(null);
                         });
                         overlay.setMap(map);
@@ -206,24 +204,32 @@ function PlaceRecommend() {
             {
                 windowSize > 999
                     ?
-                    <TopContants>
+                    <TopContants >
                         <CheckBoxs>
                             <Card className="card">
-                                <Card.Header className="cardHeader">
-                                    <InputGroup className="inputGroup mb-3">
+                                <Card.Header style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }} className="cardHeader">
+                                    <InputGroup className="inputGroup mb-3" >
                                         <Form.Control
                                             placeholder="🔍지역을 입력해주세요"
                                             aria-label="Recipient's username"
                                             aria-describedby="basic-addon2"
+
                                         />
                                         <Button variant="outline-secondary" id="button-addon2">
                                             검색
                                         </Button>
                                     </InputGroup>
                                 </Card.Header>
-                                <ListGroup className="listGroup" variant="flush">
+                                <ListGroup
+                                    className="listGroup" variant="flush">
                                     {categoryList.map((e, i) => (
-                                        <ListGroup.Item key={i}>
+                                        <ListGroup.Item key={i} style={{
+                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                        }}>
                                             <CheckBox id={i} type="checkbox"></CheckBox>
                                             <CheckBoxLabel>{e}</CheckBoxLabel>
                                         </ListGroup.Item>
@@ -231,18 +237,17 @@ function PlaceRecommend() {
                                 </ListGroup>
                             </Card>
                         </CheckBoxs>
-                        <Map>
-                            <div id="map" style={{
-                                width: '100%',
-                                height: '500px'
-                            }}></div>
+                        <Map id="map">
                         </Map>
                     </TopContants>
                     :
                     <TopContants style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
-                        <CheckBoxs>
-                            <Card className="card">
-                                <Card.Header className="cardHeader">
+                        <CheckBoxs >
+                            <Card className="card" >
+                                <Card.Header style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }} className="cardHeader">
                                     <InputGroup className="inputGroup mb-3">
                                         <Form.Control
                                             placeholder="🔍지역을 입력해주세요"
@@ -256,7 +261,10 @@ function PlaceRecommend() {
                                 </Card.Header>
                                 <ListGroup className="listGroup" variant="flush">
                                     {categoryList.map((e, i) => (
-                                        <ListGroup.Item key={i}>
+                                        <ListGroup.Item key={i} style={{
+                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                        }}>
                                             <CheckBox id={i} type="checkbox"></CheckBox>
                                             <CheckBoxLabel>{e}</CheckBoxLabel>
                                         </ListGroup.Item>
