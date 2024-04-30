@@ -1,8 +1,8 @@
 import Bumper from "../layout/Bumper";
 import styled from "styled-components";
 import { GoDotFill } from "react-icons/go";
-import './placeRecommendStyle.css'
-import { useEffect, useState } from "react";
+import './PlaceRecommendStyle.css'
+import React ,{ useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
