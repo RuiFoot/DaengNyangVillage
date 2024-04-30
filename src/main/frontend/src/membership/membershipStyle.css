@@ -1,9 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 .inputGroup {
     margin-bottom: 0;
     padding-bottom: 0;
@@ -16,7 +10,6 @@
 .pass {
     color: rgb(38, 89, 255)
 }
-
 
 .btns {
     color: black;
@@ -54,5 +47,3 @@
 .postModal {
     height: 800px;
 }
-
-.popup_post_type2 {}

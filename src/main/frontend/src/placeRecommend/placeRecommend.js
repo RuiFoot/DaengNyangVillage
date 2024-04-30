@@ -1,13 +1,17 @@
-import Bumper from "../layout/Bumper";
+import Bumper from "../layout/bumper";
 import styled from "styled-components";
 import { GoDotFill } from "react-icons/go";
-import './PlaceRecommendStyle.css'
-import React ,{ useEffect, useState } from "react";
+import './placeRecommendStyle.css'
+import { useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
+
 import axios from "axios";
 
 
@@ -87,6 +91,7 @@ let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천�
 function PlaceRecommend() {
     const [categoryList,setCategoryList] = useState([]);
     const [address,setAddress] = useState([]);
+    const isDark = useRecoilValue(isDarkAtom); //다크모드
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -139,13 +144,13 @@ function PlaceRecommend() {
         console.log(positions);
 
 
-        
+
         for (var i = 0; i < positions.length; i++) {
             var marker = new kakao.maps.Marker({
                 map: map, // 마커를 표시할 지도
                 position: positions[i].LatLng, // 마커를 표시할 위치
                 title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                
+
             });
         }
 
@@ -154,7 +159,10 @@ function PlaceRecommend() {
     }, [])
 
     return (
-        <Container>
+        <Container style={{
+            color: `${isDark ? themes.dark.color : themes.light.color}`,
+            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+        }}>
             <Bumper />
             <ContantTitle>장소 추천</ContantTitle>
             {
@@ -220,7 +228,7 @@ function PlaceRecommend() {
                         </CheckBoxs>
                         <Map>
                             <div id="map" style={{
-                                width: '100%',
+                                width: '500px',
                                 height: '500px'
                             }}></div>
                         </Map>
