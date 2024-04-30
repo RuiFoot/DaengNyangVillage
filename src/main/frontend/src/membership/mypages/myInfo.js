@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Bumper from "../layout/Bumper";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -7,19 +6,22 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
-import './membershipStyle.css'
+import '../membershipStyle.css'
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
+import MypageNavbar from './mypageNavbar';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../../atoms';
+import themes from "../../theme";
 
 const Container = styled.div`
-margin: 0 6vw;
 display: flex;
 flex-direction: column;
 align-items: center;
 `
 const InputForm = styled.form`
 margin: 15px;
-width: 432px;
+width: 350px;
 `
 const EditTitle = styled.div`
 margin: 20px 0 0 0;
@@ -41,29 +43,15 @@ display: flex;
 align-items: center;
 justify-content: center;
 `
-const MypageNav = styled.div`
-border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-display: flex;
-flex-direction: row;
-justify-content: space-evenly;
-align-items: center;
-`
-const NavItems = styled.a`
-padding: 10px;
-text-decoration: none;
-color: black;
-&:hover {
-    color: #F2884B;
-}
-`
 
-
-function Mypage() {
+function MyInfo() {
+    const isDark = useRecoilValue(isDarkAtom);
+    // baseUrl 스프링 부트 연동, pathname 현재 주소
     const baseUrl = "http://localhost:8080";
     const pathname = window.location.pathname;
     // 이전 회원 정보
     let previousInfo = JSON.parse(localStorage.getItem("member"))
-    console.log(previousInfo.mypet.search("cat"))
+
     //다음 주소 api
     const [fullAddress, setFullAddress] = useState(previousInfo.inputAddress)
     const [zonecode, setZonecode] = useState(previousInfo.inputZonecode)
@@ -104,9 +92,10 @@ function Mypage() {
         });
     }
 
-
     //채크 박스 해제
     const [checked, setChecked] = useState()
+
+    //입력 받은 값 전송
     async function handleSubmit(e) {
         e.preventDefault();
         memberInfo.inputAddress = fullAddress
@@ -151,7 +140,6 @@ function Mypage() {
     const [numCheck, setNumCheck] = useState(true)
     const isValid = nickNameCheck === true && numCheck === true
 
-
     const isNickName = () => {
         if (true) {
             setNickNameCheck(true)
@@ -169,22 +157,11 @@ function Mypage() {
 
     return (
         <>
-            <Bumper />
-            <MypageNav>
-                <NavItems style={{ color: `${pathname === "/Mypage/logined" ? "#F2884B" : "black"}` }} href="/Mypage/logined">
-                    내 정보
-                </NavItems>
-                <NavItems style={{ color: `${pathname === "/ChangePasswd/logined" ? "#F2884B" : "black"}` }} href="/ChangePasswd/logined" >
-                    비밀번호 변경
-                </NavItems>
-                <NavItems style={{ color: `${pathname === "/SelectedLocation/logined" ? "#F2884B" : "black"}` }} href="/SelectedLocation/logined">
-                    찜한 장소
-                </NavItems>
-                <NavItems style={{ color: `${pathname === "/WrittenByMe/logined" ? "#F2884B" : "black"}` }} href="/WrittenByMe/logined">
-                    내가 쓴 글
-                </NavItems>
-            </MypageNav>
-            <Container>
+            <MypageNavbar />
+            <Container style={{
+                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            }}>
                 <EditTitle>댕냥 빌리지 회원정보 수정</EditTitle>
                 <InputForm>
                     <InputTitle>프로필 이미지</InputTitle>
@@ -193,10 +170,8 @@ function Mypage() {
                             name="profileImg"
                             onChange={onChange} type="file" accept="image/*" />
                     </InputGroup>
-
                     <InputTitle>어떤 반려동물과 함께 하십니까?</InputTitle>
                     <InputGroup className="inputGroup">
-
                         <CheckBox
                             id="checkboxDog"
                             type="checkbox"
@@ -204,12 +179,10 @@ function Mypage() {
                             name="mypet"
                             onChange={(e) => { getCheck(e.target.value) }}
                             checked={previousInfo.mypet.search("dog") === -1 ? checked : true}
-
                         />
                         <CheckBoxLabel htmlFor="checkboxDog">강아지</CheckBoxLabel>
                     </InputGroup>
                     <InputGroup className="inputGroup">
-
                         <CheckBox
                             id="checkboxCat"
                             type="checkbox"
@@ -221,7 +194,6 @@ function Mypage() {
                         <CheckBoxLabel htmlFor="checkboxCat">고양이</CheckBoxLabel>
                     </InputGroup>
                     <InputGroup className="inputGroup">
-
                         <CheckBox
                             id="checkboxFish"
                             type="checkbox"
@@ -233,7 +205,6 @@ function Mypage() {
                         <CheckBoxLabel htmlFor="checkboxFish">관상어</CheckBoxLabel>
                     </InputGroup>
                     <InputGroup className="inputGroup">
-
                         <CheckBox
                             id="checkboxEtc"
                             type="checkbox"
@@ -267,7 +238,6 @@ function Mypage() {
                                 <p className="pass" >사용가능한 닉네임입니다.</p>
                                 :
                                 <p className="warning">사용불가능한 닉네임입니다.</p>
-
                     }
                     <InputTitle>전화번호</InputTitle>
                     <InputGroup className="inputGroup">
@@ -289,10 +259,7 @@ function Mypage() {
                                 <p className="pass" >사용가능한 번호입니다.</p>
                                 :
                                 <p className="warning">숫자로 11자리를 입력해주세요.</p>
-
                     }
-
-
                     <Modal show={show} onHide={handleClose}>
                         <Modal.Body >
                             <DaumPostcode
@@ -301,7 +268,6 @@ function Mypage() {
                                 onComplete={complete} />
                         </Modal.Body>
                     </Modal>
-
                     <InputTitle>우편번호</InputTitle>
                     <InputGroup className="inputGroup">
                         <Form.Control
@@ -356,11 +322,9 @@ function Mypage() {
                         }
                     </InputFooter>
                 </InputForm>
-
-
             </Container>
         </>
     );
 }
 
-export default Mypage;
+export default MyInfo;

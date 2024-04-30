@@ -1,0 +1,189 @@
+.navbar {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 8px 6vw;
+    background-color: white;
+    border-bottom: 2px solid #F2884B;
+}
+
+.container-fluid {
+    padding: 0
+}
+
+.navHomeBox {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navHomeLink {
+    height: 30px;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.navHomeLink:hover {
+    border-bottom: 1px solid #F2884B;
+}
+
+.navLink {
+    height: 30px;
+    width: fit-content;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.navLink:hover {
+    border-bottom: 1px solid #F2884B;
+}
+
+.navbar-nav {
+    min-height: 80px;
+    max-height: 120px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.loginBtn {
+    color: black;
+    background-color: white;
+    border: 1px solid;
+}
+
+.loginBtn:hover {
+    border-color: #F288CD;
+}
+
+/* 모달 */
+
+.modal-dialog {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-content {
+    width: 480px;
+}
+
+.modalFooter {
+    justify-content: space-around;
+}
+
+.modalInput {
+    margin-bottom: 10px;
+}
+
+.joinBtn {
+    width: 45%;
+    color: black;
+    border-color: #F288CD;
+    background-color: white;
+}
+
+.joinBtn:hover {
+    color: white;
+    border-color: #F288CD;
+    background-color: #F288CD;
+    transform: scale(1.1);
+}
+
+.modalLoginBtn {
+    width: 45%;
+    color: white;
+    border-color: #F288CD;
+    background-color: #F288CD;
+}
+
+.modalLoginBtn:hover {
+    transform: scale(1.1);
+    color: white;
+    border-color: #F288CD;
+    background-color: #F288CD;
+}
+
+.socialLogo:hover {
+    cursor: pointer;
+}
+
+.warning {
+    color: red;
+}
+
+/* 모달 */
+
+.footerIcon {
+    margin: 0 5px;
+    padding: 2px;
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.modalHeader {
+    display: flex;
+    flex-direction: column;
+}
+
+.chatBotMobile {
+    z-index: 500;
+    cursor: pointer;
+    box-shadow: 5px 5px 3px #666;
+    background-color: #F2884B;
+    border-radius: 20px;
+    color: white;
+    border-radius: 20px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 3vw;
+    margin-bottom: 15px;
+    height: 10vw;
+    max-height: 80px;
+    width: 10vw;
+    max-width: 80px;
+}
+
+.chatBotMobile:hover {
+    transform: scale(1.1);
+}
+
+.chatBotBody {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    flex-direction: column;
+}
+
+.questionBtn {
+    margin: 5px;
+    border-color: #F2884B;
+    background-color: #F2884B;
+
+}
+
+.questionBtn:hover {
+    color: #F2884B;
+    border-color: #F2884B;
+    background-color: white;
+}
+
+.chatBotBtn {
+    color: black;
+    border-color: #F288CD;
+    background-color: white;
+}
+
+.chatBotBtn:hover {
+    border-color: #F288CD;
+    background-color: #F288CD;
+}
