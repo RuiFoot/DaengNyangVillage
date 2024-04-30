@@ -1,13 +1,14 @@
-import Bumper from "../layout/bumper";
+import Bumper from "../layout/Bumper";
 import styled from "styled-components";
 import { GoDotFill } from "react-icons/go";
-import './placeRecommendStyle.css'
-import { useEffect, useState } from "react";
+import './PlaceRecommendStyle.css'
+import React ,{ useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import themes from "../theme";
@@ -113,7 +114,9 @@ function PlaceRecommend() {
         axios.get(`${baseUrl}/animal`)
             .then((res) => {
                 setCategoryList(res.data)
-                console.log(res.data)
+
+                // console.log(res.data)
+
             }).catch(error => {
                 console.error('Request failed : ', error);
         })
@@ -197,6 +200,7 @@ function PlaceRecommend() {
             color: `${isDark ? themes.dark.color : themes.light.color}`,
             backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
         }}>
+
             <Bumper />
             <ContantTitle>장소 추천</ContantTitle>
             {
@@ -262,7 +266,9 @@ function PlaceRecommend() {
                         </CheckBoxs>
                         <Map>
                             <div id="map" style={{
+
                                 width: '500px',
+
                                 height: '500px'
                             }}></div>
                         </Map>
