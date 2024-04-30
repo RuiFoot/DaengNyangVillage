@@ -89,6 +89,10 @@ let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천�
 //let categoryList = ["동물병원", "동물약국", "반려동물용품", "미용", "위탁관리", "식당", "카페", "호텔", "팬션", "여행지", "박물관", "문예회관"]
 
 function PlaceRecommend() {
+    const [map,setMap] = useState([null])
+
+    const [markers,setMarkers] = useState([])
+
     const [categoryList,setCategoryList] = useState([]);
     const [address,setAddress] = useState([]);
     const isDark = useRecoilValue(isDarkAtom); //다크모드
@@ -116,47 +120,77 @@ function PlaceRecommend() {
     }, []);
 
     useEffect(() => {
-        axios.get(`${baseUrl}/animal/location/%EB%8F%99%EB%AC%BC%EC%95%BD%EA%B5%AD`)
+        let searchLocation = "서울특별시";
+        let classification = "동물병원";
+        axios.get(`${baseUrl}/animal/location/${searchLocation}?classification=${classification}`)
             .then((res) => {
                 setAddress(res.data)
                 console.log(res.data)
             }).catch(error => {
                 console.error('Request failed : ', error);
         })
+    }, [])
 
-
+    useEffect(() => {
+        // 카카오맵 초기화
         const container = document.getElementById('map');
         const options = {
-            center: new kakao.maps.LatLng(37.335889, 126.584063),
+            center: new kakao.maps.LatLng(37.5664056, 126.9778222),
             level: 10
         };
-        const map = new kakao.maps.Map(container, options);
+        const newMap = new kakao.maps.Map(container, options);
+        setMap(newMap);
+    }, []);
 
-        var positions = [];
-        for(var j=0; j<Object.keys(address).length; j++){
-            var content = {
-                title: address[j].facilityName,
-                LatLng: new kakao.maps.LatLng(address[j].latitude, address[j].longitude),
-                roadAddress: address[j].roadAddress,
-            }
-            positions.push(content);
-        };
-        console.log(positions);
-
-
-
-        for (var i = 0; i < positions.length; i++) {
-            var marker = new kakao.maps.Marker({
-                map: map, // 마커를 표시할 지도
-                position: positions[i].LatLng, // 마커를 표시할 위치
-                title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-
+    useEffect(() => {
+        // 주소 정보를 이용하여 마커 표시
+        if (address && Object.keys(address).length > 0 && map) {
+            // 이전에 생성된 마커들 제거
+            markers.forEach(marker => {
+                marker.setMap(null);
             });
+            // 새로운 마커들 생성
+            var newMarkers = [];
+            for(var j=0; j<Object.keys(address).length; j++){
+                var content = {
+                    title: address[j].facilityName,
+                    LatLng: new kakao.maps.LatLng(address[j].latitude, address[j].longitude),
+                    roadAddress: address[j].roadAddress,
+                }
+                var newMarker = new kakao.maps.Marker({
+                    map: map,
+                    position: content.LatLng,
+                    title: content.title
+                });
+                newMarkers.push(newMarker);
+                // 마커 클릭 시 오버레이 표시
+                (function(marker, place) {
+                    kakao.maps.event.addListener(marker, 'click', function() {
+                        var overlay = new kakao.maps.CustomOverlay({
+                            content: '<div class="wrap">' +
+                                '    <div class="info">' +
+                                '        <div class="title">' + place.title + '</div>' +
+                                '        <div class="body">' +
+                                '            <div class="desc">' +
+                                '                <div class="ellipsis">' + place.roadAddress + '</div>' +
+                                '            </div>' +
+                                '        </div>' +
+                                '    </div>' +
+                                '</div>',
+                            map: map,
+                            position: marker.getPosition()
+                        });
+                        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+                            overlay.setMap(null);
+                        });
+                        overlay.setMap(map);
+                    });
+                })(newMarker, content);
+            }
+            // 새로운 마커들을 저장하여 나중에 제거할 수 있도록 함
+            setMarkers(newMarkers);
         }
-
-
-
-    }, [])
+    }, [address, map]);
 
     return (
         <Container style={{
