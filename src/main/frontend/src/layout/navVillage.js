@@ -14,7 +14,7 @@ import "./layout.css"
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import themes from "../theme";
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 //css
 const Logo = styled.img`
@@ -113,6 +113,7 @@ function NavVillage() {
 
     //현재 주소
     const pathname = window.location.pathname;
+    const baseUrl = "http://localhost:8080";
     const isDark = useRecoilValue(isDarkAtom); //다크모드
     const [login, setLogin] = useState();
 
@@ -131,6 +132,17 @@ function NavVillage() {
 
         const loginBtn = () => {
             getDataLocalStorage(`member`)
+            // let body = {
+            //     email: userId,
+            //     password: userPassword
+            // }
+            // axios.post(`${baseUrl}/member/login`, body
+            // ).then((response) => {
+            //     console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+            //     sessionStorage.setItem("logined", JSON.stringify(response.data))
+            // }).catch((error) => {
+            //     console.log(error);				//오류발생시 실행
+            // })
             //SHA256(userPassword).toString() 해쉬값 비교
             if (userId === localData.email && userPassword === localData.password) {
                 sessionStorage.setItem("logined", JSON.stringify(localData))
@@ -242,9 +254,9 @@ function NavVillage() {
     };
 
     // 마이페이지 안의 페이지들 주소
-    let mypages = [`/my-info/${nickName}`, `/change-passwd/${nickName}`, `/selected-location/${nickName}`, `/written-by-me/${nickName}`]
+    let mypages = [`/my-info/${nickName}`, `/my-info-change/${nickName}`, `/change-passwd/${nickName}`, `/selected-location/${nickName}`, `/written-by-me/${nickName}`]
     // 커뮤니티안의 페이지들 주소
-    //두가지 로그인시 로그인 아닐시 나눠야함
+    //두가지 로그인시 로그인 아닐시 나눠야함 
     let community
     if (login) {
         community = [`/free-board${"/" + nickName}`, `/pet-boast${"/" + nickName}`, `/training-method${"/" + nickName}`, `/used-market${"/" + nickName}`, `/text-write${"/" + nickName}`, `/write${"/" + nickName}`]

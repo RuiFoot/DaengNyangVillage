@@ -67,9 +67,17 @@ function ChangePasswd() {
     }
 
     // 유효성 검사
+    const [passwdCheck, setPasswdCheck] = useState()
     const isSame = newPasswd === passwordCheck;
     const isValid = isSame === true && newPasswd.length > 7
+    const isPassword = (input) => {
+        if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(input)) {
+            setPasswdCheck(true)
+        } else {
+            setPasswdCheck(false)
+        }
 
+    }
     async function handleSubmit(e) {
         e.preventDefault();
         // 비밀번호 보안 해시
@@ -121,13 +129,14 @@ function ChangePasswd() {
                             value={newPasswd}
                             name="newPasswd"
                             onChange={onNewChange}
+                            onKeyUpCapture={() => { isPassword(newPasswd) }}
                         />
                     </InputGroup>
                     {
                         newPasswd.length === 0 ? null :
-                            newPasswd.length < 8 && newPasswd.length > 0
+                            !passwdCheck
                                 ?
-                                <p className="warning">비밀번호는 8자리 이상이여야합니다.</p>
+                                <p className="warning">영문, 숫자, 특수문자로 이루어진 8자리 이상이여야 합니다.</p>
                                 : <p className="pass">사용가능한 비밀번호입니다.</p>
 
                     }

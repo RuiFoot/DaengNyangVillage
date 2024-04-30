@@ -4,7 +4,8 @@ import styled from "styled-components";
 import themes from "../theme";
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
-
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const BoardHeader = styled.div`
 margin: 10px 6vw 0 6vw;
@@ -46,7 +47,16 @@ function CommunityHeader() {
                         onClick={goWrite}
                     >글쓰기</Button>
                     :
-                    null
+                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">로그인 해주세요</Tooltip>}>
+                        <span className="d-inline-block">
+                            <Button className="headerBtn" disabled style={{
+                                pointerEvents: 'none', color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                            }}>
+                                글쓰기
+                            </Button>
+                        </span>
+                    </OverlayTrigger>
             }
         </BoardHeader>
     );
