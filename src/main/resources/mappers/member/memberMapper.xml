@@ -5,11 +5,11 @@
 <mapper namespace="com.myspring.daengnyang.member.mapper.MemberMapper">
     <resultMap id="memberInfoResultmap" type="com.myspring.daengnyang.member.vo.MemberInfoVO">
         <id property="memberNo" column="memberNo"/>
-        <result property="nickname" column="nickname"/>
+        <result property="nickName" column="nickname"/>
         <result property="profileImg" column="profileImg"/>
-        <result property="address" column="address"/>
-        <result property="addressDetail" column="addressDetail"/>
-        <result property="favoritePet" column="favoritePet"/>
+        <result property="inputAddress" column="address"/>
+        <result property="detailAddress" column="addressDetail"/>
+        <result property="myPet" column="favoritePet"/>
         <result property="phoneNumber" column="phoneNumber"/>
 
 

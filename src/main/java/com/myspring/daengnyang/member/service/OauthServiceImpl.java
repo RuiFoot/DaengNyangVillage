@@ -153,18 +153,18 @@ public class OauthServiceImpl implements OauthService {
             MemberInfoVO userInfo = new MemberInfoVO();
             userInfo.setMemberNo(memberNo);
             if (cnt == 0) {
-                userInfo.setNickname(nickname);
+                userInfo.setNickName(nickname);
             } else {
-                userInfo.setNickname(nickname + "Kakao");
+                userInfo.setNickName(nickname + "Kakao");
             }
             userInfo.setProfileImg(imgPath);
-            userInfo.setAddress("");
-            userInfo.setAddressDetail("");
-            userInfo.setFavoritePet("");
+            userInfo.setInputAddress("");
+            userInfo.setDetailAddress("");
+            userInfo.setMyPet("");
             userInfo.setPhoneNumber("");
             log.info(userInfo.toString());
-            memberMapper.createMemberInfo(userInfo.getNickname(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+            memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
+                    userInfo.getInputAddress(), userInfo.getDetailAddress(), userInfo.getMyPet(), userInfo.getPhoneNumber());
             log.info("카카오 계정으로 회원가입 완료");
             return Long.toString(id);
         }
@@ -298,18 +298,18 @@ public class OauthServiceImpl implements OauthService {
             MemberInfoVO userInfo = new MemberInfoVO();
             userInfo.setMemberNo(memberNo);
             if (cnt == 0) {
-                userInfo.setNickname(nickname);
+                userInfo.setNickName(nickname);
             } else {
-                userInfo.setNickname(nickname + "google");
+                userInfo.setNickName(nickname + "google");
             }
             userInfo.setProfileImg(imgPath);
-            userInfo.setAddress("");
-            userInfo.setAddressDetail("");
-            userInfo.setFavoritePet("");
+            userInfo.setInputAddress("");
+            userInfo.setDetailAddress("");
+            userInfo.setMyPet("");
             userInfo.setPhoneNumber("");
             log.info(userInfo.toString());
-            memberMapper.createMemberInfo(userInfo.getNickname(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+            memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
+                    userInfo.getInputAddress(), userInfo.getDetailAddress(), userInfo.getMyPet(), userInfo.getPhoneNumber());
             log.info("구글 계정으로 회원가입 완료");
             return id;
         }
@@ -468,18 +468,18 @@ public class OauthServiceImpl implements OauthService {
             MemberInfoVO userInfo = new MemberInfoVO();
             userInfo.setMemberNo(memberNo);
             if (cnt == 0) {
-                userInfo.setNickname(nickname);
+                userInfo.setNickName(nickname);
             } else {
-                userInfo.setNickname(nickname + "Naver");
+                userInfo.setNickName(nickname + "Naver");
             }
             userInfo.setProfileImg(imgPath);
-            userInfo.setAddress("");
-            userInfo.setAddressDetail("");
-            userInfo.setFavoritePet("");
+            userInfo.setInputAddress("");
+            userInfo.setDetailAddress("");
+            userInfo.setMyPet("");
             userInfo.setPhoneNumber(mobile);
             log.info(userInfo.toString());
-            memberMapper.createMemberInfo(userInfo.getNickname(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+            memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
+                    userInfo.getInputAddress(), userInfo.getDetailAddress(), userInfo.getMyPet(), userInfo.getPhoneNumber());
             log.info("네이버 계정으로 회원가입 완료");
             return id;
         }

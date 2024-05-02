@@ -7,9 +7,6 @@ import com.myspring.daengnyang.member.service.OauthServiceImpl;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import com.myspring.daengnyang.member.vo.SignupForm;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +79,7 @@ public class MemberController {
         if (passwordMatches) {
             storedMember.setPassword(null);
             session.setAttribute("memberNo", memberNo);
-            session.setAttribute("nickname",memberInfoVO.getNickname());
+            session.setAttribute("nickname",memberInfoVO.getNickName());
             System.out.println(session.getId());
 
 

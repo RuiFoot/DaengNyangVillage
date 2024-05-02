@@ -39,14 +39,14 @@ public class MemberServiceImpl implements MemberService {
 
         int memberNo = memberMapper.getMemberNo(user.getEmail());
         MemberInfoVO userInfo = new MemberInfoVO();
-        userInfo.setNickname(signupForm.getNickname());
+        userInfo.setNickName(signupForm.getNickname());
         userInfo.setProfileImg(signupForm.getProfileImg());
-        userInfo.setAddress(signupForm.getAddress());
-        userInfo.setAddressDetail(signupForm.getAddressDetail());
-        userInfo.setFavoritePet(signupForm.getFavoritePet());
+        userInfo.setInputAddress(signupForm.getAddress());
+        userInfo.setDetailAddress(signupForm.getAddressDetail());
+        userInfo.setMyPet(signupForm.getFavoritePet());
         userInfo.setPhoneNumber(signupForm.getPhoneNumber());
-        memberMapper.createMemberInfo(userInfo.getNickname(), memberNo, userInfo.getProfileImg(),
-                userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+        memberMapper.createMemberInfo(userInfo.getNickName(), memberNo, userInfo.getProfileImg(),
+                userInfo.getInputAddress(), userInfo.getDetailAddress(), userInfo.getMyPet(), userInfo.getPhoneNumber());
     }
 
     @Override
@@ -98,16 +98,16 @@ public class MemberServiceImpl implements MemberService {
     public void updateProfile(MemberInfoVO memberInfoVO) {
         MemberInfoVO vo = new MemberInfoVO();
 
-        vo.setNickname(memberInfoVO.getNickname());
+        vo.setNickName(memberInfoVO.getNickName());
         vo.setMemberNo(memberInfoVO.getMemberNo());
         vo.setProfileImg(memberInfoVO.getProfileImg());
-        vo.setAddress(memberInfoVO.getAddress());
-        vo.setAddressDetail(memberInfoVO.getAddressDetail());
-        vo.setFavoritePet(memberInfoVO.getFavoritePet());
+        vo.setInputAddress(memberInfoVO.getInputAddress());
+        vo.setDetailAddress(memberInfoVO.getDetailAddress());
+        vo.setMyPet(memberInfoVO.getMyPet());
         vo.setPhoneNumber(memberInfoVO.getPhoneNumber());
 
-        memberMapper.updateProfile(vo.getNickname(), vo.getMemberNo(), vo.getProfileImg(), vo.getAddress(),
-                vo.getAddressDetail(), vo.getFavoritePet(), vo.getPhoneNumber());
+        memberMapper.updateProfile(vo.getNickName(), vo.getMemberNo(), vo.getProfileImg(), vo.getInputAddress(),
+                vo.getDetailAddress(), vo.getMyPet(), vo.getPhoneNumber());
     }
 
 

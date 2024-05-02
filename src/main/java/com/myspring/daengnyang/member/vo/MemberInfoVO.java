@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class MemberInfoVO {
-    private String nickname;
+    private String nickName;
     private int memberNo;
     private String profileImg;
-    private String address;
-    private String addressDetail;
-    private String favoritePet;
+    private String inputAddress;
+    private String detailAddress;
+    private String myPet;
     private String phoneNumber;
 }
