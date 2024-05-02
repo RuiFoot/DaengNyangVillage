@@ -43,10 +43,10 @@ public class MemberServiceImpl implements MemberService {
         userInfo.setProfileImg(signupForm.getProfileImg());
         userInfo.setInputAddress(signupForm.getAddress());
         userInfo.setDetailAddress(signupForm.getAddressDetail());
-        userInfo.setMyPet(signupForm.getFavoritePet());
+        userInfo.setMypet(signupForm.getFavoritePet());
         userInfo.setPhoneNumber(signupForm.getPhoneNumber());
         memberMapper.createMemberInfo(userInfo.getNickName(), memberNo, userInfo.getProfileImg(),
-                userInfo.getInputAddress(), userInfo.getDetailAddress(), userInfo.getMyPet(), userInfo.getPhoneNumber());
+                userInfo.getInputAddress(), userInfo.getDetailAddress(), userInfo.getMypet(), userInfo.getPhoneNumber());
     }
 
     @Override
@@ -103,11 +103,11 @@ public class MemberServiceImpl implements MemberService {
         vo.setProfileImg(memberInfoVO.getProfileImg());
         vo.setInputAddress(memberInfoVO.getInputAddress());
         vo.setDetailAddress(memberInfoVO.getDetailAddress());
-        vo.setMyPet(memberInfoVO.getMyPet());
+        vo.setMypet(memberInfoVO.getMypet());
         vo.setPhoneNumber(memberInfoVO.getPhoneNumber());
 
         memberMapper.updateProfile(vo.getNickName(), vo.getMemberNo(), vo.getProfileImg(), vo.getInputAddress(),
-                vo.getDetailAddress(), vo.getMyPet(), vo.getPhoneNumber());
+                vo.getDetailAddress(), vo.getMypet(), vo.getPhoneNumber());
     }
 
 

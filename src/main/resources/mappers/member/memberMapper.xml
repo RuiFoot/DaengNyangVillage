@@ -9,7 +9,7 @@
         <result property="profileImg" column="profileImg"/>
         <result property="inputAddress" column="address"/>
         <result property="detailAddress" column="addressDetail"/>
-        <result property="myPet" column="favoritePet"/>
+        <result property="mypet" column="favoritePet"/>
         <result property="phoneNumber" column="phoneNumber"/>
 
 

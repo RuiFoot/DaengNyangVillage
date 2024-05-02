@@ -11,6 +11,6 @@ public class MemberInfoVO {
     private String profileImg;
     private String inputAddress;
     private String detailAddress;
-    private String myPet;
+    private String mypet;
     private String phoneNumber;
 }
