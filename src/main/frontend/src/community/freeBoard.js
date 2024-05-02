@@ -200,6 +200,7 @@ function FreeBoard() {
         nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
     }
 
+
     const [board, setBoard] = useState({
         boardId: 0,
         memberNo: 0,
@@ -210,6 +211,7 @@ function FreeBoard() {
         reviewCnt: 0
     })
 
+    //스프링 통신
     useEffect(() => {
         axios.get('/api/board/잡담')
             .then((res) => {
