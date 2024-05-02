@@ -7,7 +7,9 @@ import com.myspring.daengnyang.member.service.OAuthServiceImpl;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import com.myspring.daengnyang.member.vo.SignupForm;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/member")
 public class MemberController {
+
+
 
     private final MemberServiceImpl memberService;
     private final PasswordEncoder passwordEncoder;
@@ -60,11 +64,10 @@ public class MemberController {
      * 일반 로그인
      *
      * @param request     : 이메일, password 전송
-     * @param httpRequest : request의 session을 활용하기 위한 파라미터
      * @return Response
      */
     @PostMapping("/login")
-    public ResponseEntity<MemberVO> login(
+    public ResponseEntity<MemberInfoVO> login(
             @RequestBody Map<String, String> request,
             HttpSession session
     ) {
@@ -83,8 +86,10 @@ public class MemberController {
             storedMember.setPassword(null);
             session.setAttribute("memberNo", memberNo);
             session.setAttribute("nickname",memberInfoVO.getNickname());
+            System.out.println(session.getId());
 
-            return ResponseEntity.ok(storedMember);
+
+            return ResponseEntity.ok(memberInfoVO);
 
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
