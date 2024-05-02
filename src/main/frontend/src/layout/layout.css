@@ -145,12 +145,14 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    margin-right: 3vw;
+    margin-right: 1vw;
     margin-bottom: 15px;
-    height: 10vw;
-    max-height: 80px;
-    width: 10vw;
-    max-width: 80px;
+    height: 6vw;
+    min-height: 25px;
+    max-height: 65px;
+    width: 6vw;
+    min-width: 25px;
+    max-width: 65px;
 }
 
 .chatBotMobile:hover {

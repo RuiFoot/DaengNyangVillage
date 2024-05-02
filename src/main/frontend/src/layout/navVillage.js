@@ -132,38 +132,31 @@ function NavVillage() {
         }
 
         const loginBtn = () => {
-            getDataLocalStorage(`member`)
             let body = {
                 email: userId,
                 password: userPassword
             }
             axios.post(`${baseUrl}/member/login`, body
-        ).then((response) => {
+            ).then((response) => {
                 console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+                sessionStorage.setItem("logined", JSON.stringify(response.data))
+                const nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
+                setLogin(true)
+                setUserId("")
+                setUserPassword("")
+                props.onHide();
+                if (pathname === "/") {
+                    window.location.href = `${pathname}${nickName}`
+                } else {
+                    window.location.href = `${pathname}/${nickName}`
+                }
                 // sessionStorage.setItem("logined", JSON.stringify(response.data))
                 const cookies = document.cookie.split(';');
                 console.log(cookies)
-
-
             }).catch((error) => {
                 console.log(error);				//오류발생시 실행
+                setLogin(false)
             })
-            //SHA256(userPassword).toString() 해쉬값 비교
-            // if (userId === localData.email && userPassword === localData.password) {
-            //     sessionStorage.setItem("logined", JSON.stringify(localData))
-            //     const nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
-            //     setLogin(true)
-            //     setUserId("")
-            //     setUserPassword("")
-            //     props.onHide();
-            //     if (pathname === "/") {
-            //         window.location.href = `${pathname}${nickName}`
-            //     } else {
-            //         window.location.href = `${pathname}/${nickName}`
-            //     }
-            // } else {
-            //     setLogin(false)
-            // }
         }
         return (
             <Modal className='modal'
@@ -268,7 +261,7 @@ function NavVillage() {
     } else {
         community = [`/free-board${nickName}`, `/pet-boast${nickName}`, `/training-method${nickName}`, `/used-market${nickName}`, `/text-write${nickName}`]
     }
-    // console.log(pathname)
+
     // console.log(`/write${"/" + nickName}`)
     return (
         <div>
