@@ -21,14 +21,14 @@ import java.net.URL;
 
 @Service
 @Slf4j
-public class OAuthServiceImpl implements OauthService {
+public class OauthServiceImpl implements OauthService {
 
     private final Environment env;
     private final RestTemplate restTemplate = new RestTemplate();
     private final MemberMapper memberMapper;
 
     @Autowired
-    public OAuthServiceImpl(MemberMapper memberMapper, Environment env) {
+    public OauthServiceImpl(MemberMapper memberMapper, Environment env) {
         this.memberMapper = memberMapper;
         this.env = env;
     }
