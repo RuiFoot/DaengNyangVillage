@@ -10,7 +10,7 @@ public class MemberInfoVO {
     private int memberNo;
     private String profileImg;
     private String inputAddress;
-    private String detailAddress;
+    private String detailedAddress;
     private String mypet;
     private String phoneNumber;
 }

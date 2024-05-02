@@ -8,7 +8,7 @@
         <result property="nickName" column="nickname"/>
         <result property="profileImg" column="profileImg"/>
         <result property="inputAddress" column="address"/>
-        <result property="detailAddress" column="addressDetail"/>
+        <result property="detailedAddress" column="addressDetail"/>
         <result property="mypet" column="favoritePet"/>
         <result property="phoneNumber" column="phoneNumber"/>
 
