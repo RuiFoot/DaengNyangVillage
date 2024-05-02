@@ -40,7 +40,7 @@ function Mypage() {
                 backgroundColor: `${isDark ? themes.dark.navFooterBgColor : themes.light.bgColor}`,
                 borderBottom: `1px solid ${isDark ? themes.dark.color : "rgba(0, 0, 0, 0.5)"}`
             }}>
-                <NavItems style={{ color: `${pathname === `/my-info/${loginedNickName}` ? "#F2884B" : `${isDark ? themes.dark.color : themes.light.color}`}` }} href={`/my-info/${loginedNickName}`}>
+                <NavItems style={{ color: `${pathname === `/my-info/${loginedNickName}` || pathname === `/my-info-change/${loginedNickName}` ? "#F2884B" : `${isDark ? themes.dark.color : themes.light.color}`}` }} href={`/my-info/${loginedNickName}`}>
                     내 정보
                 </NavItems>
                 <NavItems style={{ color: `${pathname === `/change-passwd/${loginedNickName}` ? "#F2884B" : `${isDark ? themes.dark.color : themes.light.color}`}` }} href={`/change-passwd/${loginedNickName}`} >
