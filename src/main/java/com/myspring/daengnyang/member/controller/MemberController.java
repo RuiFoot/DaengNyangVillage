@@ -66,7 +66,7 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<MemberVO> login(
             @RequestBody Map<String, String> request,
-            HttpServletRequest httpRequest
+            HttpSession session
     ) {
         String email = request.get("email");
         String enteredPassword = request.get("password");
@@ -75,14 +75,14 @@ public class MemberController {
 
         Integer memberNo = storedMember.getMemberNo();
         String storedPasswordHash = storedMember.getPassword();
-
+        MemberInfoVO memberInfoVO = memberService.getMemberInfo(memberNo);
         boolean passwordMatches =
                 passwordEncoder.matches(enteredPassword, storedPasswordHash);
         log.info("비밀번호 매칭 : " + passwordMatches);
         if (passwordMatches) {
             storedMember.setPassword(null);
-            HttpSession session = httpRequest.getSession();
             session.setAttribute("memberNo", memberNo);
+            session.setAttribute("nickname",memberInfoVO.getNickname());
 
             return ResponseEntity.ok(storedMember);
 
