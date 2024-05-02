@@ -29,7 +29,7 @@ function CommunityNav() {
 
     useEffect(() => {
         if (sessionStorage.getItem("logined") !== null) {
-            setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickName)
+            setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickname)
         }
     });
 

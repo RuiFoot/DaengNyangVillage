@@ -14,3 +14,11 @@
 .listGroup {
     overflow: auto;
 }
+
+.recommendBtn {
+    border: 1px solid;
+}
+
+.recommendBtn:hover {
+    border: 1px solid #F288CD;
+}

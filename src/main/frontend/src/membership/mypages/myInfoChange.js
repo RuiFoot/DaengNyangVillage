@@ -81,7 +81,7 @@ function MyInfoChange() {
     const baseUrl = "http://localhost:8080";
     const pathname = window.location.pathname;
     // 이전 회원 정보
-    let previousInfo = JSON.parse(localStorage.getItem("member"))
+    let previousInfo = JSON.parse(sessionStorage.getItem("logined"))
     console.log(previousInfo)
     console.log(`${previousInfo.profileImg}`)
 

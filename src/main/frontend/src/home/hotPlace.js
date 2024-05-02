@@ -66,7 +66,7 @@ function HotPlaceList() {
                             color: `${isDark ? themes.dark.color : themes.light.color}`,
                             backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
                         }}
-                            href={`/detail-photo/${e[4]}${url}`}
+                            href={`/recommend-place-detail/${e[4]}${url}`}
                         >
                             <PlaceItemTitle>{e[0]}</PlaceItemTitle>
                             <PlaceItemImg style={{ backgroundImage: `url(${e[3]})` }} />
@@ -80,7 +80,7 @@ function HotPlaceList() {
                             color: `${isDark ? themes.dark.color : themes.light.color}`,
                             backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
                         }}
-                            href={`/detail-photo/${e[4]}${url}`}
+                            href={`/recommend-place-detail/${e[4]}${url}`}
                         >
                             <PlaceItemTitle>{e[0]}</PlaceItemTitle>
                             <PlaceItemImg style={{ backgroundImage: `url(${e[3]})` }} />

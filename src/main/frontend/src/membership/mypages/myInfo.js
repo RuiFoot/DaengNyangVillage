@@ -52,7 +52,7 @@ const UserAddress = styled.div`
 
 function MyInfo() {
     const isDark = useRecoilValue(isDarkAtom);
-    const userData = JSON.parse(window.localStorage.getItem("member"))
+    const userData = JSON.parse(sessionStorage.getItem("logined"))
     console.log(userData)
     return (
         <>
