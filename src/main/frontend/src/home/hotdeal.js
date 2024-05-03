@@ -137,7 +137,7 @@ function HotdealBar() {
               <HotdealItem key={index} onClick={() => handleProductClick(product.link)}>
                 <div>
                   <HotdealItemImg style={{ backgroundImage: `url(${product.image})` }} />
-                  <HotdealItemName>{product.name}</HotdealItemName>
+                  <HotdealItemName>{product.name.slice(0, 40)}</HotdealItemName>
                 </div>
                 <HotdealItemPrice>{product.price}</HotdealItemPrice>
               </HotdealItem>

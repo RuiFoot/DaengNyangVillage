@@ -34,7 +34,7 @@ margin: 15px 0 10px 0;
 function ChangePasswd() {
     const isDark = useRecoilValue(isDarkAtom);
     const baseUrl = "http://localhost:8080";   //스프링부트 연동시
-    const previousInfo = JSON.parse(localStorage.getItem("member")) // 이전 회원 정보
+    const previousInfo = JSON.parse(sessionStorage.getItem("logined")) // 이전 회원 정보
 
     //새 비밀번호
     const [newPasswd, setNewPasswd] = useState("")
@@ -44,7 +44,7 @@ function ChangePasswd() {
 
     //저장될 맴버정보
     const [memberInfo, setMemberInfo] = useState({
-        email: previousInfo.email,
+        // email: previousInfo.email,
         password: "",
         passwordCheck: "",
         profileImg: "",
