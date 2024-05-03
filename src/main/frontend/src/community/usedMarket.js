@@ -7,6 +7,7 @@ import CommunityHeader from './communityHeader';
 import Pagination from "../pagination";
 import { useState } from 'react';
 import { GoDotFill } from "react-icons/go";
+import HotdealBar from '../home/hotdeal';
 
 const Container = styled.div`
 min-height: calc(100vh - 86px);
@@ -68,6 +69,7 @@ function UsedMarket() {
             backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
         }}>
             <CommunityNav />
+            <HotdealBar />
             <CommunityHeader />
             < PlaceItems >
                 {hotPlaceArr.slice(startPost - 1, endPost).map((e, i) => (

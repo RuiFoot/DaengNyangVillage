@@ -35,7 +35,7 @@ margin: 15px 0 10px 0;
 function ChangePasswdLick() {
     const isDark = useRecoilValue(isDarkAtom);
     const baseUrl = "http://localhost:8080";   //스프링부트 연동시
-    const previousInfo = JSON.parse(localStorage.getItem("member")) // 이전 회원 정보
+    const previousInfo = JSON.parse(localStorage.getItem("member")) // 이전 회원 정보 받아오는 닉네임으로 db에서 찾아야함
     //새 비밀번호
     let userNickName = useParams();
     console.log(userNickName.nickNameLink)
