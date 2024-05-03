@@ -261,9 +261,6 @@ function NavVillage() {
     } else {
         community = [`/free-board${nickName}`, `/pet-boast${nickName}`, `/training-method${nickName}`, `/used-market${nickName}`, `/text-write${nickName}`]
     }
-    console.log(url)
-    console.log(nickName)
-    console.log(`/free-board${"/" + nickName}`)
     return (
         <div>
             <Navbar expand="lg" className="navbar"
