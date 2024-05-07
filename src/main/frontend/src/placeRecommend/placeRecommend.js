@@ -241,7 +241,7 @@ function PlaceRecommend() {
                                             검색
                                         </Button>
                                     </InputGroup>
-
+                                    </Card.Header>
                                 <ListGroup className="listGroup" variant="flush">
                                     {areaList.map((e, i) => (
                                         <ListGroup.Item key={i}>
