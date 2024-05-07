@@ -15,7 +15,9 @@
                 "boardName",
                 "createDate",
                 "reviewCnt",
-                "imgPath"
+                "imgPath",
+                "Area",
+                "Price"
             FROM
                 "Board"
             WHERE
@@ -71,9 +73,11 @@
         <![CDATA[
             INSERT INTO "Board"
                 ("boardId", "memberNo", "nickname",
-                "category", "boardName", "createDate", "reviewCnt", "imgPath")
+                "category", "boardName", "createDate", "reviewCnt", "imgPath",
+                "Area", "Price")
             VALUES (#{boardId}, #{boardPostVO.memberNo}, #{boardPostVO.nickname},
-                    #{boardPostVO.category}, #{boardPostVO.boardName}, SYSDATE, 0, #{boardPostVO.imgPath})
+                    #{boardPostVO.category}, #{boardPostVO.boardName}, SYSDATE, 0, #{boardPostVO.imgPath},
+                    #{boardPostVO.Area}, #{boardPostVO.Price})
         ]]>
     </insert>
 
