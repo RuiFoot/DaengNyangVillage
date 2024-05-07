@@ -93,9 +93,11 @@
         <![CDATA[
             INSERT INTO "BoardDetail"
                 ("boardId", "nickname", "memberNo", "category",
-                "BoardName", "Field", "imgPath", "createDate")
+                "BoardName", "Field", "imgPath", "createDate",
+                "tradeTime", "Price", "Area", "detailLocation")
             VALUES (#{boardPostVO.boardId}, #{boardPostVO.nickname}, #{boardPostVO.memberNo}, #{boardPostVO.category},
-                    #{boardPostVO.boardName}, #{boardPostVO.field}, #{boardPostVO.imgPath}, #{createDate})
+                    #{boardPostVO.boardName}, #{boardPostVO.field}, #{boardPostVO.imgPath}, #{createDate},
+                    #{boardPostVO.tradeTime}, #{boardPostVO.Price}, #{boardPostVO.Area}, #{boardPostVO.detailLocation})
         ]]>
     </insert>
 
