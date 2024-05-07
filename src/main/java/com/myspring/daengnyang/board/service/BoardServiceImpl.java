@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -55,6 +57,22 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void postBoard(BoardPostVO boardPostVO) {
         boardMapper.postBoard(boardPostVO);
+        int boardId = boardMapper.getBoardId();
+        System.out.println("boardId : " + boardId);
+
+        boardPostVO.setBoardId(boardId);
+        boardMapper.postBoardDetail(boardPostVO);
+
+    }
+
+    @Override
+    public void postReview(ReviewVO reviewVO) {
+        int memberNo = boardMapper.getMemberNo(reviewVO.getNickname());
+        System.out.println(memberNo);
+
+        reviewVO.setMemberNo(memberNo);
+
+        boardMapper.postReview(reviewVO);
     }
 
 }

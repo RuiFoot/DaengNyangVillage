@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 function Bumper() {
     return (
-        <div style={{ height: '100px' }}></div>
+        <div style={{ height: '98px' }}></div>
     );
 }
 

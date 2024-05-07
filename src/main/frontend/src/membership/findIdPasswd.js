@@ -1,18 +1,20 @@
 import styled from "styled-components";
-import Bumper from "../layout/Bumper";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useState } from "react";
 import emailjs from 'emailjs-com';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
 import './membershipStyle.css'
 
 const Container = styled.div`
+min-height: calc(100vh - 86px);
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-margin: 0 6vw;
 `
 const Content = styled.div`
 margin-top: 20px;
@@ -28,7 +30,8 @@ margin-bottom: 10px;
 const UserId = styled.div`
 `
 
-function ForgetIdPassWd() {
+function FindIdPasswd() {
+    const isDark = useRecoilValue(isDarkAtom);
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
     const [numCheck, setNumCheck] = useState()
@@ -69,7 +72,7 @@ function ForgetIdPassWd() {
             // 여기서 정의해야하는 것은 위에서 만든 메일 템플릿에 지정한 변수({{ }})에 대한 값을 담아줘야한다.
             const templateParams = {
                 toEmail: email,
-                message: `http://localhost:3000/ChangePasswdLick/${memberInfo.nickName}`,
+                message: `http://localhost:3000/change-passwd-lick/${memberInfo.nickName}`,
                 toName: memberInfo.nickName
             };
             emailjs
@@ -97,8 +100,11 @@ function ForgetIdPassWd() {
 
     return (
         <>
-            <Bumper />
-            <Container>
+            <Container
+                style={{
+                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                }}>
                 <Content>
                     <Title>내 계정 ID 찾기</Title>
                     <Text>내 계정 ID를 찾으려면 전화번호를 입력하세요.</Text>
@@ -159,4 +165,4 @@ function ForgetIdPassWd() {
     );
 }
 
-export default ForgetIdPassWd;
+export default FindIdPasswd;

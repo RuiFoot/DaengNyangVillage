@@ -13,6 +13,8 @@ public interface OauthService {
 
     String kakaoUnlink(Long target_id);
 
+    //---------------------------------------------------------
+
     /**
      * 구글
      */
@@ -21,5 +23,14 @@ public interface OauthService {
     String getGoogleAccessToken(String authorizationCode);
 
     JsonNode getUserResource(String accessToken);
+
+
+    //---------------------------------------------------------
+
+    String getNaverAccessToken(String code, String state);
+
+    String getNaverUserInfo(String accessToken);
+
+    String NaverLogin(String loginResult);
 
 }

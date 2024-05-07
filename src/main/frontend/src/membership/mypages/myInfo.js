@@ -9,10 +9,12 @@ import { useState } from "react";
 import '../membershipStyle.css'
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
-import MypageNavbar from './MypageNavbar';
+import MypageNavbar from './mypageNavbar';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../../atoms';
+import themes from "../../theme";
 
 const Container = styled.div`
-margin: 0 6vw;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -43,6 +45,7 @@ justify-content: center;
 `
 
 function MyInfo() {
+    const isDark = useRecoilValue(isDarkAtom);
     // baseUrl 스프링 부트 연동, pathname 현재 주소
     const baseUrl = "http://localhost:8080";
     const pathname = window.location.pathname;
@@ -155,7 +158,10 @@ function MyInfo() {
     return (
         <>
             <MypageNavbar />
-            <Container>
+            <Container style={{
+                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            }}>
                 <EditTitle>댕냥 빌리지 회원정보 수정</EditTitle>
                 <InputForm>
                     <InputTitle>프로필 이미지</InputTitle>

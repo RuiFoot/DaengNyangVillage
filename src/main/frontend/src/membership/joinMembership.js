@@ -1,4 +1,4 @@
-import Bumper from "../layout/Bumper";
+import Bumper from "../layout/bumper";
 import styled from "styled-components";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -10,9 +10,11 @@ import { useState } from "react";
 import './membershipStyle.css'
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
 
 const Container = styled.div`
-margin: 0 6vw;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -43,6 +45,9 @@ justify-content: center;
 `
 
 function JoinMembership() {
+
+    const isDark = useRecoilValue(isDarkAtom);
+
     const baseUrl = "http://localhost:8080";
     //다음 주소 api
     const [show, setShow] = useState(false);
@@ -168,7 +173,10 @@ function JoinMembership() {
     };
 
     return (
-        <Container>
+        <Container style={{
+            color: `${isDark ? themes.dark.color : themes.light.color}`,
+            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+        }}>
             <Bumper />
             <JoinTitle>댕냥 빌리지 회원가입을 환영합니다.</JoinTitle>
             <InputForm>

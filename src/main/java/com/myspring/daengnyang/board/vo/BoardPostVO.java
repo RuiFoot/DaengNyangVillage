@@ -14,4 +14,5 @@ public class BoardPostVO {
     private String BoardName;
     private String field;
     private String imgPath;
+    private int boardId;
 }

@@ -1,28 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import NavVillage from "./layout/NavVillage";
-import SideBar from "./layout/SideBar";
+import NavVillage from "./layout/navVillage";
+import SideBar from "./layout/sideBar";
 import Footer from "./layout/footer";
-import Router from "./Router";
+import Router from "./router";
 import "./style.css"
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
-import { isDarkAtom } from './atoms';
-import styled from "styled-components";
-import themes from "./theme";
-
-
-
+import { RecoilRoot } from 'recoil';
 
 function App() {
   return (
     <>
       <RecoilRoot>
-        <div id="App">
+        <div id="app">
           <NavVillage />
           <SideBar />
           <Router />

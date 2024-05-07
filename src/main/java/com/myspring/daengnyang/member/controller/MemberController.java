@@ -200,10 +200,43 @@ public class MemberController {
         }
     }
 
+    //---------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * 네이버 로그인
+     * @return
+     */
+
+
+
+    @GetMapping("/oauth/naver")
+    public boolean naverCallback(@RequestParam String code, @RequestParam String state, HttpServletRequest httpRequest){
+        log.info("code : " + code + "state : " + state);
+        String accessToken = oAuthService.getNaverAccessToken(code, state);
+        String loginResult = oAuthService.getNaverUserInfo(accessToken);
+        String memberNo = oAuthService.NaverLogin(loginResult);
+        if (memberNo != null) {
+            HttpSession session = httpRequest.getSession();
+            session.setAttribute("memberNo", memberNo);
+            log.info("로그인이 정상 처리 되었습니다.");
+            return true;
+        } else {
+            log.info("로그인 오류 발생");
+            return false;
+        }
+     }
+
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------
+
+
     @GetMapping("/logout")
-    public void Logout(HttpSession session) throws Exception {
+    public boolean Logout(HttpSession session) throws Exception {
         log.info("Logout");
         session.invalidate();
+        return true;
         // return "redirect:/member/main"; 얼럿창출력안하고싶을때 사용
     }
 

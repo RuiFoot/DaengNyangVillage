@@ -5,10 +5,14 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
-import MypageNavbar from './MypageNavbar';
+import Bumper from "../../layout/bumper";
+import { useParams } from "react-router-dom";
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../../atoms';
+import themes from "../../theme";
 
 const Container = styled.div`
-margin: 0 6vw;
+min-height: calc(100vh - 184px);
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -28,17 +32,20 @@ const InputTitle = styled.div`
 margin: 15px 0 10px 0;
 `
 
-function ChangePasswd() {
+function ChangePasswdLick() {
+    const isDark = useRecoilValue(isDarkAtom);
     const baseUrl = "http://localhost:8080";   //스프링부트 연동시
     const previousInfo = JSON.parse(localStorage.getItem("member")) // 이전 회원 정보
-
     //새 비밀번호
+    let userNickName = useParams();
+    console.log(userNickName.nickNameLink)
     const [newPasswd, setNewPasswd] = useState("")
     const onNewChange = (e) => {
         setNewPasswd(e.target.value)
     }
 
-    //저장될 맴버정보
+    //저장될 맴버정보 
+    //스프링부트 연동시 userNickName.nickNameLink 값을 이용해서 특정맴버정보를 불러옴
     const [memberInfo, setMemberInfo] = useState({
         email: previousInfo.email,
         password: "",
@@ -95,13 +102,15 @@ function ChangePasswd() {
             passwordCheck: "",
         }) //인풋 클리어
         setNewPasswd("") //인풋 클리어
-        window.sessionStorage.removeItem("logined") //로그인 해제
         window.location.href = "/" // 홈화면이동
     }
     return (
         <>
-            <MypageNavbar />
-            <Container>
+            <Bumper />
+            <Container style={{
+                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            }}>
                 <EditTitle>댕냥 빌리지 비밀번호 변경</EditTitle>
                 <InputForm>
                     <InputTitle>새 비밀번호</InputTitle>
@@ -162,4 +171,4 @@ function ChangePasswd() {
     );
 }
 
-export default ChangePasswd;
+export default ChangePasswdLick;

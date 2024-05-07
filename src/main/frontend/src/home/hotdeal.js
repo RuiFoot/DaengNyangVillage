@@ -16,17 +16,21 @@ const HotdealTitle = styled.div`
 const HotdealItems = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  row-gap: 20px;
+  column-gap: 30px;
   justify-content: center;
+  height: 350px;
+  overflow: hidden;
 `;
 
 const HotdealItem = styled.div`
-  width: 300px;
+  width: 200px;
+  height: 350px;
   cursor: pointer; /* 클릭 가능하도록 커서 설정 */
 `;
 
 const HotdealItemImg = styled.div`
-  height: 300px;
+  height: 200px;
   width: 100%;
   background-image: url(${props => props.image});
   background-size: cover;
@@ -42,15 +46,20 @@ const HotdealItemPrice = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #f65151;
+  font-weight: 800;
+  font-size: 25px;
 `;
 
 const LoadingContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
 async function fetchRandomProducts(count) {
+
   try {
     const apiUrl = "http://localhost:22000/";
     const response = await fetch(apiUrl);
@@ -90,7 +99,7 @@ function HotdealBar() {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const randomProducts = await fetchRandomProducts(4);
+      const randomProducts = await fetchRandomProducts(7);
       setProducts(randomProducts);
       setIsLoading(false);
     };
@@ -110,13 +119,15 @@ function HotdealBar() {
       {isLoading ? (
         <LoadingContainer>
           <HotdealTitle>상품 정보 로딩중...</HotdealTitle>
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
+          <div style={{ display: "flex", alignItems: "center", height: "350px" }}>
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </div>
         </LoadingContainer>
       ) : (
         <>
-          <HotdealTitle>오늘의 인기 반려동물 제품</HotdealTitle>
+          <HotdealTitle>오늘의 인기 상품</HotdealTitle>
           <HotdealItems>
             {products.map((product, index) => (
               <HotdealItem key={index} onClick={() => handleProductClick(product.link)}>

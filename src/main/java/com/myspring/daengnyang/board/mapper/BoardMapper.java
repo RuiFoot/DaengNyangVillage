@@ -7,6 +7,7 @@ import com.myspring.daengnyang.board.vo.ReviewVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -25,5 +26,9 @@ public interface BoardMapper {
 
     void deleteBoard(@Param("boardId") int boardId);
     void deleteBoardReview(@Param("boardReviewNum") int boardReviewNum);
-    void postBoard(@Param("boardPostVO") BoardPostVO boardPostVO);
+    int postBoard(@Param("boardPostVO") BoardPostVO boardPostVO);
+    void postBoardDetail(@Param("boardPostVO") BoardPostVO boardPostVO);
+    int getBoardId();
+    void postReview(@Param("reviewVO") ReviewVO reviewVO);
+    int getMemberNo(@Param("nickname") String nickname);
 }

@@ -76,10 +76,13 @@ npm i express
 npm i xml2js
 npm install cors
 
-4월25일 로고 설정
-npm install react-bootstrap@next bootstrap@5.3.0
-
 4월 24일 추가
 다크모드를 위한 state 전달
 npm install recoil
 
+<<<<<<< HEAD
+=======
+4월 26일
+글쓰기 에디터
+npm install react-quill --save
+>>>>>>> 09249265c5430b57a419444604ebf6ae8c086dc8
