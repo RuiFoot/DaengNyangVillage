@@ -17,6 +17,7 @@ import UsedMarket from "./community/usedMarket";
 import Write from "./community/write";
 import MyInfoChange from "./membership/mypages/myInfoChange";
 import RecommendDetail from "./placeRecommend/recommendDetail";
+import TestFreeBoardDetail from "./testFreeBoardDetail";
 
 function Router() {
     if (window.sessionStorage.key(0) !== "logined") {
@@ -39,6 +40,7 @@ function Router() {
                 <Route path="/recommend-place-detail/:itemId" element={<RecommendDetail />}
                 />
                 <Route path="/change-passwd-lick/:nickNameLink" element={<ChangePasswdLick />} />
+                <Route path="/free-board-detail/:boardId" element={<TestFreeBoardDetail />} />
             </Routes>
         )
     } else {
@@ -64,6 +66,7 @@ function Router() {
                 />
                 <Route path="/recommend-place-detail/:itemId/:nickName" element={<RecommendDetail />}
                 />
+                <Route path="/free-board-detail/:boardId/:nickName" element={<TestFreeBoardDetail />} />
             </Routes>
         )
     }
