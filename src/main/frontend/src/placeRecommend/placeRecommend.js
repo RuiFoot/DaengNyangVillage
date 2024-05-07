@@ -95,11 +95,11 @@ let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천�
 //let categoryList = ["동물병원", "동물약국", "반려동물용품", "미용", "위탁관리", "식당", "카페", "호텔", "팬션", "여행지", "박물관", "문예회관"]
 
 function PlaceRecommend() {
-    const [map,setMap] = useState([null])
-    const [markers,setMarkers] = useState([])
-    const [categoryList,setCategoryList] = useState([]);
-    const [areaList,setAreaList] = useState([]);
-    const [address,setAddress] = useState([]);
+    const [map, setMap] = useState([null])
+    const [markers, setMarkers] = useState([])
+    const [categoryList, setCategoryList] = useState([]);
+    const [areaList, setAreaList] = useState([]);
+    const [address, setAddress] = useState([]);
 
     const isDark = useRecoilValue(isDarkAtom); //다크모드
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
@@ -115,15 +115,15 @@ function PlaceRecommend() {
         }
     }, [])
 
-     // 지역 리스트 받아오기
-     useEffect(() => {
+    // 지역 리스트 받아오기
+    useEffect(() => {
         axios.get(`${baseUrl}/animal`)
             .then((res) => {
                 setAreaList(res.data)
                 console.log(res.data)
             }).catch(error => {
                 console.error('Request failed : ', error);
-        })
+            })
     }, [])
 
     //카테고리 리스트 받아오기
@@ -136,7 +136,7 @@ function PlaceRecommend() {
                 console.error('Request failed : ', error);
             })
     }, []);
-   
+
     // 맵에 띄울 마커 정보 받기
     useEffect(() => {
         let searchLocation = "서울특별시";
@@ -241,7 +241,9 @@ function PlaceRecommend() {
                                             검색
                                         </Button>
                                     </InputGroup>
+
                                     </Card.Header>
+
                                 <ListGroup className="listGroup" variant="flush">
                                     {areaList.map((e, i) => (
                                         <ListGroup.Item key={i}>

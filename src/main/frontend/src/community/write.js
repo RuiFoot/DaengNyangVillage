@@ -154,7 +154,12 @@ function Write() {
         values.area = area
         values.field = quillValue
         values.imgPath = imageUrl
+        console.log(tradeTime)
         let body = {
+            tradeTime: tradeTime,
+            detailLocation: detailLocation,
+            price: price,
+            area: area,
             nickname: userNickName.nickName,
             memberNo: userNickName.memberNo,
             category: board,
