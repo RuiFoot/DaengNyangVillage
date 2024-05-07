@@ -15,6 +15,8 @@ import PetBoast from "./community/petBoast";
 import TrainingMethod from "./community/trainingMethod";
 import UsedMarket from "./community/usedMarket";
 import Write from "./community/write";
+import MyInfoChange from "./membership/mypages/myInfoChange";
+import RecommendDetail from "./placeRecommend/recommendDetail";
 
 function Router() {
     if (window.sessionStorage.key(0) !== "logined") {
@@ -34,6 +36,8 @@ function Router() {
                 />
                 <Route path="/used-market" element={<UsedMarket />}
                 />
+                <Route path="/recommend-place-detail/:itemId" element={<RecommendDetail />}
+                />
                 <Route path="/change-passwd-lick/:nickNameLink" element={<ChangePasswdLick />} />
             </Routes>
         )
@@ -44,6 +48,7 @@ function Router() {
                 <Route path="/place-recommend/:nickName" element={<PlaceRecommend />} />
                 <Route path="/about-us/:nickName" element={<AboutUs />} />
                 <Route path="/my-info/:nickName" element={<MyInfo />} />
+                <Route path="/my-info-change/:nickName" element={<MyInfoChange />} />
                 <Route path="/change-passwd/:nickName" element={<ChangePasswd />} />
                 <Route path="/selected-location/:nickName" element={<SelectedLocation />} />
                 <Route path="/written-by-me/:nickName" element={<WrittenByMe />} />
@@ -56,6 +61,8 @@ function Router() {
                 <Route path="/used-market/:nickName" element={<UsedMarket />}
                 />
                 <Route path="/write/:nickName" element={<Write />}
+                />
+                <Route path="/recommend-place-detail/:itemId/:nickName" element={<RecommendDetail />}
                 />
             </Routes>
         )

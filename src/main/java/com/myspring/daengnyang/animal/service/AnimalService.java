@@ -9,6 +9,8 @@ import java.util.List;
 public interface AnimalService {
     List<String> getClassification();
 
+    List<String> getSigungu(String sido);
+
     List<AnimalLocationVO> getLocation(String location, String classification);
 
 

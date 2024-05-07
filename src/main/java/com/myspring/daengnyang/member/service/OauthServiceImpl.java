@@ -21,14 +21,14 @@ import java.net.URL;
 
 @Service
 @Slf4j
-public class OAuthServiceImpl implements OauthService {
+public class OauthServiceImpl implements OauthService {
 
     private final Environment env;
     private final RestTemplate restTemplate = new RestTemplate();
     private final MemberMapper memberMapper;
 
     @Autowired
-    public OAuthServiceImpl(MemberMapper memberMapper, Environment env) {
+    public OauthServiceImpl(MemberMapper memberMapper, Environment env) {
         this.memberMapper = memberMapper;
         this.env = env;
     }
@@ -129,7 +129,7 @@ public class OAuthServiceImpl implements OauthService {
     }
 
     @Override
-    public String kakaoLogin(String loginResult) {
+    public long kakaoLogin(String loginResult) {
 
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(loginResult);
@@ -143,7 +143,7 @@ public class OAuthServiceImpl implements OauthService {
 
         if (memberMapper.getDuplicationEmail(Long.toString(id)) != null) { // 중복 된 값이 있을 경우
             log.info("이미 있는 계정 => 바로 로그인 진행");
-            return Long.toString(id);
+            return id;
         } else { // 없을 경우 회원가입 필요
             log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
             String password = "kakao";
@@ -153,20 +153,20 @@ public class OAuthServiceImpl implements OauthService {
             MemberInfoVO userInfo = new MemberInfoVO();
             userInfo.setMemberNo(memberNo);
             if (cnt == 0) {
-                userInfo.setNickname(nickname);
+                userInfo.setNickName(nickname);
             } else {
-                userInfo.setNickname(nickname + "Kakao");
+                userInfo.setNickName(nickname + "Kakao");
             }
             userInfo.setProfileImg(imgPath);
-            userInfo.setAddress("");
-            userInfo.setAddressDetail("");
-            userInfo.setFavoritePet("");
+            userInfo.setInputAddress("");
+            userInfo.setDetailedAddress("");
+            userInfo.setMypet("");
             userInfo.setPhoneNumber("");
             log.info(userInfo.toString());
-            memberMapper.createMemberInfo(userInfo.getNickname(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+            memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber());
             log.info("카카오 계정으로 회원가입 완료");
-            return Long.toString(id);
+            return id;
         }
     }
 
@@ -261,7 +261,7 @@ public class OAuthServiceImpl implements OauthService {
     }
 
     @Override
-    public String googleLogin(String loginResult) {
+    public MemberInfoVO googleLogin(String loginResult) {
 //        String accessToken = getGoogleAccessToken(code);
 //        JsonNode userResourceNode = getUserResource(accessToken);
 //        System.out.println("userResourceNode = " + userResourceNode);
@@ -288,7 +288,8 @@ public class OAuthServiceImpl implements OauthService {
         String DuplicationE = memberMapper.getDuplicationEmail(id);
         if (DuplicationE != null) { // 중복 된 값이 있을 경우
             log.info("이미 있는 계정 => 바로 로그인 진행");
-            return id;
+            int memberNo = memberMapper.getMemberNo(id);
+            return memberMapper.getMemberInfo(memberNo);
         } else { // 없을 경우 회원가입 필요
             log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
             String password = "google";
@@ -298,20 +299,20 @@ public class OAuthServiceImpl implements OauthService {
             MemberInfoVO userInfo = new MemberInfoVO();
             userInfo.setMemberNo(memberNo);
             if (cnt == 0) {
-                userInfo.setNickname(nickname);
+                userInfo.setNickName(nickname);
             } else {
-                userInfo.setNickname(nickname + "google");
+                userInfo.setNickName(nickname + "google");
             }
             userInfo.setProfileImg(imgPath);
-            userInfo.setAddress("");
-            userInfo.setAddressDetail("");
-            userInfo.setFavoritePet("");
+            userInfo.setInputAddress("");
+            userInfo.setDetailedAddress("");
+            userInfo.setMypet("");
             userInfo.setPhoneNumber("");
             log.info(userInfo.toString());
-            memberMapper.createMemberInfo(userInfo.getNickname(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+            memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber());
             log.info("구글 계정으로 회원가입 완료");
-            return id;
+            return userInfo;
         }
     }
 
@@ -446,7 +447,7 @@ public class OAuthServiceImpl implements OauthService {
     }
 
     @Override
-    public String NaverLogin(String loginResult) {
+    public MemberInfoVO NaverLogin(String loginResult) {
 
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(loginResult);
@@ -458,7 +459,8 @@ public class OAuthServiceImpl implements OauthService {
 
         if (memberMapper.getDuplicationEmail(id) != null) { // 중복 된 값이 있을 경우
             log.info("이미 있는 계정 => 바로 로그인 진행");
-            return id;
+            int memberNo = memberMapper.getMemberNo(id);
+            return memberMapper.getMemberInfo(memberNo);
         } else { // 없을 경우 회원가입 필요
             log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
             String password = "naver";
@@ -468,21 +470,29 @@ public class OAuthServiceImpl implements OauthService {
             MemberInfoVO userInfo = new MemberInfoVO();
             userInfo.setMemberNo(memberNo);
             if (cnt == 0) {
-                userInfo.setNickname(nickname);
+                userInfo.setNickName(nickname);
             } else {
-                userInfo.setNickname(nickname + "Naver");
+                userInfo.setNickName(nickname + "Naver");
             }
             userInfo.setProfileImg(imgPath);
-            userInfo.setAddress("");
-            userInfo.setAddressDetail("");
-            userInfo.setFavoritePet("");
+            userInfo.setInputAddress("");
+            userInfo.setDetailedAddress("");
+            userInfo.setMypet("");
             userInfo.setPhoneNumber(mobile);
             log.info(userInfo.toString());
-            memberMapper.createMemberInfo(userInfo.getNickname(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getAddress(), userInfo.getAddressDetail(), userInfo.getFavoritePet(), userInfo.getPhoneNumber());
+            memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber());
             log.info("네이버 계정으로 회원가입 완료");
-            return id;
+            return userInfo;
         }
+    }
+
+    public MemberInfoVO getMemberInfo(Long memberNo) {
+        log.info("멤버 정보 불러 오기 서비스 실행 => memberNo : " + memberNo);
+        MemberInfoVO memberInfoVO;
+        memberInfoVO = memberMapper.getMemberInfoL(memberNo);
+        log.info("멤버 정보 : " + memberInfoVO);
+        return memberInfoVO;
     }
 
 

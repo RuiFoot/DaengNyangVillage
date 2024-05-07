@@ -6,13 +6,16 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from "react";
+import { useRef, useState } from "react";
 import './membershipStyle.css'
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import themes from "../theme";
+import useUploadImage from "./useUploadImage";
+import { deleteObject, ref } from "firebase/storage";
+import { storage } from "../firebase";
 
 const Container = styled.div`
 display: flex;
@@ -43,12 +46,24 @@ display: flex;
 align-items: center;
 justify-content: center;
 `
+const ProfileImgBox = styled.div`
+margin: 10px;
+display: flex;
+justify-content: center;
+align-items: center;
+`
+const ProfileImgCheck = styled.div`
+height: 200px;
+width: 200px;
+background-position: center;
+background-size: cover;
+`
 
 function JoinMembership() {
 
     const isDark = useRecoilValue(isDarkAtom);
-
     const baseUrl = "http://localhost:8080";
+
     //다음 주소 api
     const [show, setShow] = useState(false);
     const [fullAddress, setFullAddress] = useState("주소검색을 이용해주세요")
@@ -95,11 +110,12 @@ function JoinMembership() {
     const [checked, setChecked] = useState()
 
     //입력받은 값 전송
-    async function handleSubmit(e) {
+    function handleSubmit(e) {
         e.preventDefault();
         memberInfo.inputAddress = fullAddress
         memberInfo.inputZonecode = zonecode
-        memberInfo.mypet = checkArr.join()
+        memberInfo.mypet = checkArr.join(", ")
+        memberInfo.profileImg = imageUrl
         delete memberInfo.passwordCheck;
 
         let body = {
@@ -139,11 +155,12 @@ function JoinMembership() {
 
     //유효성 검사
     const [emailCheck, setEmailCheck] = useState()
+    const [passwdCheck, setPasswdCheck] = useState()
     const [numCheck, setNumCheck] = useState()
     const [isDuplicationE, setIsDuplicationE] = useState()
     const [isDuplicationN, setIsDuplicationN] = useState()
     const isSame = password === passwordCheck;
-    const isValid = email !== '' && password !== '' && isSame === true && emailCheck === true && isDuplicationN === false && numCheck === true && isDuplicationE === false
+    const isValid = email !== '' && password !== '' && emailCheck === true && passwdCheck === true && isSame === true && emailCheck === true && isDuplicationN === false && numCheck === true && isDuplicationE === false
 
     const isEmail = (input) => {
         if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(input)) {
@@ -152,10 +169,20 @@ function JoinMembership() {
             setEmailCheck(false)
         }
     };
+
+    const isPassword = (input) => {
+        if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(input)) {
+            setPasswdCheck(true)
+        } else {
+            setPasswdCheck(false)
+        }
+
+    }
     const emailDuplicationCheck = (input) => {
         axios.get(`${baseUrl}/member/duplicationE?email=${input}`)
             .then((res) => {
                 setIsDuplicationE(res.data);
+                console.log(isDuplicationE)
             })
     }
     const isNickName = (input) => {
@@ -171,6 +198,45 @@ function JoinMembership() {
             setNumCheck(false)
         }
     };
+
+    //이미지 업로드
+    const [imageUrl, setImageUrl] = useState("");
+    const [file, setFile] = useState(null);
+    const [isLoding, setIsLoding] = useState()
+    const [clickUpload, setClickUpload] = useState(false)
+
+    const uploadImage = useUploadImage();
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        console.log(file);
+        setIsLoding(false)
+        if (file) {
+            const downloadUrl = await uploadImage(file);
+            console.log(downloadUrl);
+            setImageUrl(downloadUrl);
+            setIsLoding(true)
+            console.log("받기완료");
+        }
+    };
+
+    const imageHandler = async (e) => {
+        const files = e.target.files;
+        if (!files) return null;
+        setFile(files[0]);
+        setClickUpload(true)
+        console.log("요기");
+    };
+
+
+    const imgReset = async () => {
+        deleteObject(ref(storage, imageUrl));
+        console.log(file)
+        setImageUrl("")
+        setClickUpload(false)
+        setIsLoding()
+        setFile(null)
+    }
 
     return (
         <Container style={{
@@ -216,8 +282,18 @@ function JoinMembership() {
                         null
                         : emailCheck ?
                             <>
-                                {!isDuplicationE ? <p className="pass" >사용가능한 이메일입니다.</p>
-                                    : <p className="warning">이미 사용중인 이메일입니다.</p>
+
+                                {isDuplicationE === undefined ?
+                                    <p className="warning">중복 확인을 해주세요</p>
+                                    :
+                                    <>
+                                        {
+                                            isDuplicationE ?
+                                                <p className="pass" >이미 사용중인 이메일입니다</p>
+                                                :
+                                                <p className="pass" >중복 확인 완료 사용가능한 이메일입니다</p>
+                                        }
+                                    </>
                                 }
                             </>
                             :
@@ -232,13 +308,14 @@ function JoinMembership() {
                         value={password}
                         name="password"
                         onChange={onChange}
+                        onKeyUpCapture={() => { isPassword(password) }}
                     />
                 </InputGroup>
                 {
                     password.length === 0 ? null :
-                        password.length < 8 && password.length > 0
+                        !passwdCheck
                             ?
-                            <p className="warning">비밀번호는 8자리 이상이여야합니다.</p>
+                            <p className="warning">영문, 숫자, 특수문자로 이루어진 8자리 이상이여야 합니다.</p>
                             : <p className="pass">사용가능한 비밀번호입니다.</p>
 
                 }
@@ -263,16 +340,61 @@ function JoinMembership() {
                 }
                 <InputTitle>프로필 이미지</InputTitle>
                 <InputGroup className="inputGroup">
-                    <Form.Control value={profileImg || ""}
-                        name="profileImg"
-                        onChange={onChange} type="file" accept="image/*" />
+                    {
+                        !clickUpload && isLoding === undefined ?
+                            <>
+                                <Form.Control value={profileImg || ""}
+                                    name="profileImg"
+                                    onChange={imageHandler} type="file" accept="image/*" />
+                                <Button className="btns"
+                                    variant="outline-secondary"
+                                    onClick={onSubmit}>
+                                    업로드
+                                </Button>
+                            </>
+                            :
+                            <>
+                                {isLoding ?
+                                    <Button className="btns"
+                                        variant="outline-secondary"
+                                        onClick={imgReset}
+                                        style={{ width: "100%" }}>
+                                        다른 이미지 업로드
+                                    </Button>
+                                    : <Button className="btns"
+                                        variant="outline-secondary"
+                                        onClick={onSubmit}
+                                        style={{ width: "100%" }}>
+                                        업로드
+                                    </Button>
+                                }
+                            </>
+
+
+                    }
+
                 </InputGroup>
+                {
+                    !clickUpload && isLoding === undefined
+                        ?
+                        null
+                        :
+                        <>
+                            {isLoding ?
+                                <ProfileImgBox>
+                                    <ProfileImgCheck style={{ backgroundImage: `url(${imageUrl})` }}></ProfileImgCheck>
+                                </ProfileImgBox>
+                                :
+                                <p className="warning">업로드를 클릭해주세요</p>
+                            }
+                        </>
+                }
                 <InputTitle>어떤 반려동물과 함께 하십니까?</InputTitle>
                 <InputGroup className="inputGroup">
                     <CheckBox
                         id="checkboxDog"
                         type="checkbox"
-                        value="dog"
+                        value="강아지"
                         name="mypet"
                         onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
@@ -283,34 +405,12 @@ function JoinMembership() {
                     <CheckBox
                         id="checkboxCat"
                         type="checkbox"
-                        value="cat"
+                        value="고양이"
                         name="mypet"
                         onChange={(e) => { getCheck(e.target.value) }}
                         checked={checked}
                     />
                     <CheckBoxLabel htmlFor="checkboxCat">고양이</CheckBoxLabel>
-                </InputGroup>
-                <InputGroup className="inputGroup">
-                    <CheckBox
-                        id="checkboxFish"
-                        type="checkbox"
-                        value="fish"
-                        name="mypet"
-                        onChange={(e) => { getCheck(e.target.value) }}
-                        checked={checked}
-                    />
-                    <CheckBoxLabel htmlFor="checkboxFish">관상어</CheckBoxLabel>
-                </InputGroup>
-                <InputGroup className="inputGroup">
-                    <CheckBox
-                        id="checkboxEtc"
-                        type="checkbox"
-                        value="etc"
-                        name="mypet"
-                        onChange={(e) => { getCheck(e.target.value) }}
-                        checked={checked}
-                    />
-                    <CheckBoxLabel htmlFor="checkboxEtc">다른 반려동물</CheckBoxLabel>
                 </InputGroup>
                 <InputTitle>닉네임</InputTitle>
                 <InputGroup className="inputGroup">

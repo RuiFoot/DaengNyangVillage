@@ -200,6 +200,7 @@ function FreeBoard() {
         nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
     }
 
+
     const [board, setBoard] = useState({
         boardId: 0,
         memberNo: 0,
@@ -210,8 +211,9 @@ function FreeBoard() {
         reviewCnt: 0
     })
 
+    //스프링 통신
     useEffect(() => {
-        axios.get('/api/board/잡담')
+        axios.get('/api/board/자유 게시판')
             .then((res) => {
                 setBoard(res.data);
             })
@@ -221,7 +223,7 @@ function FreeBoard() {
     const isDark = useRecoilValue(isDarkAtom);
     const nowPage = useRecoilValue(presentPage);
     const totalPost = freeArr.length; // 총 게시물 수
-    const pageRange = 6; // 페이지당 보여줄 게시물 수
+    const pageRange = 10; // 페이지당 보여줄 게시물 수
     const totalPageNum = Math.ceil(freeArr.length / pageRange)
     const btnRange = 5; // 보여질 페이지 버튼의 개수
     const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호

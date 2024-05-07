@@ -2,6 +2,12 @@ import styled from "styled-components";
 import { GoDotFill } from "react-icons/go";
 import './homeStyle.css'
 import { useEffect, useState } from "react";
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
+import hotPlaceArr from "../imgDate";
+import defaultImg from "../defaultImgs";
+
 
 const PlaceItems = styled.div`
 display: grid;
@@ -11,7 +17,8 @@ display: grid;
   margin-bottom: 10px;
 `
 
-const PlaceItem = styled.div`
+const PlaceItem = styled.a`
+text-decoration: none;
 `
 const PlaceItemTitle = styled.div`
 display: flex;
@@ -33,10 +40,8 @@ font-size: clamp(90%, 1vw, 100%);
 const PlaceItemInfo = styled.div`
 font-size: clamp(90%, 1vw, 100%);
 `
-//6개
-let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천시 스포츠타운길 245", "리드줄, 매너벨트 필수 착용", "https://files.ban-life.com/content/2024/04/body_1711961501.jpg"], ["청도 프로방스", "경북 청도군 화양읍 이슬미로 272-23", "리쉬필수! 댕댕이들은 모~두 입장 가능!", "https://files.ban-life.com/content/2024/04/body_1712306959.jpg"], ["양평 레몬과오렌지", "경기도 양평군 단월면 양동로 229", "독채 숙소라 마당에서 프라이빗하게 뛰뛰하고 우리끼리 즐길 수 있어요", "https://files.ban-life.com/content/2024/04/body_1712301999.jpg"], ["캔버스 스테이 외관", "부산광역시 해운대구 해운대해변로197번길 13", " 강아지 수영장+루프탑", "https://files.ban-life.com/content/2024/04/body_1712316724.jpg"], ["태안 코리아 플라워 파크", "충남 태안 안면읍 꽃지해안로 400", "견종 무관하게 모두 동반 가능해요", "https://files.ban-life.com/content/2024/04/body_1712595967.jpg"], ["감성스테이 산아래", "충청남도 당진시 송산면 칠절길 95-17", "견종, 무게 제한 없음", "https://files.ban-life.com/content/2024/04/body_1712079373.jpg"]]
-
 function HotPlaceList() {
+    const isDark = useRecoilValue(isDarkAtom);
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -47,6 +52,23 @@ function HotPlaceList() {
             window.addEventListener('resize', handleResize)
         }
     }, [])
+    let url = ""
+    if (window.sessionStorage.key(0) === "logined") {
+        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+    }
+
+    const showImg = (e) => {
+        if (e === "미용") return defaultImg.미용
+        if (e === "박물관문예회관") return defaultImg.박물관문예회관
+        if (e === "병원") return defaultImg.병원
+        if (e === "약국") return defaultImg.약국
+        if (e === "식당") return defaultImg.식당
+        if (e === "여행지") return defaultImg.여행지
+        if (e === "애견용품") return defaultImg.애견용품
+        if (e === "유치원") return defaultImg.유치원
+        if (e === "카페") return defaultImg.카페
+        if (e === "호텔펜션") return defaultImg.호텔펜션
+    }
     return (
 
         < PlaceItems >
@@ -54,19 +76,29 @@ function HotPlaceList() {
                 // 화면 크기에 따라 가져오는 배열이 다름
                 windowSize > 979
                     ?
-                    wideHotPlaceArr.map((e, i) => (
-                        <PlaceItem key={i}>
+                    hotPlaceArr.slice(0, 6).map((e, i) => (
+                        <PlaceItem key={i} style={{
+                            color: `${isDark ? themes.dark.color : themes.light.color}`,
+                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                        }}
+                            href={`/recommend-place-detail/${e[4]}${url}`}
+                        >
                             <PlaceItemTitle>{e[0]}</PlaceItemTitle>
-                            <PlaceItemImg style={{ backgroundImage: `url(${e[3]})` }} />
+                            <PlaceItemImg style={{ backgroundImage: `url(${showImg(e[3])})` }} />
                             <PlaceItemAddress><GoDotFill />{e[1]}</PlaceItemAddress>
                             <PlaceItemInfo><GoDotFill />{e[2]}</PlaceItemInfo>
                         </PlaceItem>
                     ))
                     :
-                    wideHotPlaceArr.slice(0, 4).map((e, i) => (
-                        <PlaceItem key={i}>
+                    hotPlaceArr.slice(0, 4).map((e, i) => (
+                        <PlaceItem key={i} style={{
+                            color: `${isDark ? themes.dark.color : themes.light.color}`,
+                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                        }}
+                            href={`/recommend-place-detail/${e[4]}${url}`}
+                        >
                             <PlaceItemTitle>{e[0]}</PlaceItemTitle>
-                            <PlaceItemImg style={{ backgroundImage: `url(${e[3]})` }} />
+                            <PlaceItemImg style={{ backgroundImage: `url(${showImg(e[3])})` }} />
                             <PlaceItemAddress><GoDotFill />{e[1]}</PlaceItemAddress>
                             <PlaceItemInfo><GoDotFill />{e[2]}</PlaceItemInfo>
                         </PlaceItem>

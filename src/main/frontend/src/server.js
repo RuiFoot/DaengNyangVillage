@@ -7,7 +7,10 @@ const iconv = require("iconv-lite");
 // Express 앱 선언
 const app = express();
 
-app.use(cors()); // 모든 도메인에서의 요청 허용
+app.use(cors({
+    origin: '*', // 출처 허용 옵션
+    credential: 'true' // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
+}));
 // json 요청을 파싱할 수 있음
 app.use(express.json());
 
@@ -51,4 +54,24 @@ function removeDuplicates(array, key) {
 // 22000번 포트에서 서버 시작
 app.listen(22000, () => {
     console.log("SERVER IS RUNNING ON PORT 22000");
+});
+
+var http= require('http');
+
+const PORT = process.env.PORT || 3000;
+
+var httpServer = http.createServer(function (request, response) {
+    // Setting up Headers
+    response.setHeader('Access-Control-Allow-origin', '*'); // 모든 출처(orogin)을 허용
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // 모든 HTTP 메서드 허용
+    response.setHeader('Access-Control-Allow-Credentials', 'true'); // 클라이언트와 서버 간에 쿠키 주고받기 허용
+
+    // ...
+
+    response.writeHead(200, { 'Content-Type': 'text/plain' });
+    response.end('ok');
+});
+
+httpServer.listen(PORT, () => {
+    console.log('Server is running at port 3000...');
 });

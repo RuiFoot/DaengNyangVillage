@@ -1,13 +1,14 @@
 package com.myspring.daengnyang.member.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.myspring.daengnyang.member.vo.MemberInfoVO;
 
 public interface OauthService {
     String getKakaoAccessToken(String code);
 
     String getUserInfo(String accessToken);
 
-    String kakaoLogin(String loginResult);
+    long kakaoLogin(String loginResult);
 
     String kakaoLogout(Long target_id);
 
@@ -18,7 +19,7 @@ public interface OauthService {
     /**
      * 구글
      */
-    String googleLogin(String code);
+    MemberInfoVO googleLogin(String code);
 
     String getGoogleAccessToken(String authorizationCode);
 
@@ -31,6 +32,7 @@ public interface OauthService {
 
     String getNaverUserInfo(String accessToken);
 
-    String NaverLogin(String loginResult);
+    MemberInfoVO NaverLogin(String loginResult);
 
+    MemberInfoVO getMemberInfo(Long memberNo);
 }

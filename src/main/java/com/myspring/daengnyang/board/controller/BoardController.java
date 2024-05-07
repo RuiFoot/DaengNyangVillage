@@ -78,6 +78,7 @@ public class BoardController {
         boardService.modifyPost(boardPostVO);
     }
 
+
     @PatchMapping("/review")
     @ResponseBody
     public void modifyReview(@RequestBody ReviewVO reviewVO) {
@@ -85,6 +86,9 @@ public class BoardController {
         boardService.modifyReview(reviewVO);
     }
 
+    /**
+     * 댓글 작성 기능
+     */
     @PostMapping("/review")
     @ResponseBody
     public void postReview(@RequestBody ReviewVO reviewVO) {

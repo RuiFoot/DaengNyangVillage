@@ -205,7 +205,7 @@ function WrittenByMe() {
     const isDark = useRecoilValue(isDarkAtom);
     const nowPage = useRecoilValue(presentPage);
     const totalPost = myArr.length; // 총 게시물 수
-    const pageRange = 6; // 페이지당 보여줄 게시물 수
+    const pageRange = 10; // 페이지당 보여줄 게시물 수
     const totalPageNum = Math.ceil(myArr.length / pageRange)
     const btnRange = 5; // 보여질 페이지 버튼의 개수
     const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
@@ -233,7 +233,7 @@ function WrittenByMe() {
                                     </CommentsCount>
                                 </ListHeader>
                                 <ListFooter>
-                                    {e.writer}, {e.date}
+                                    {e.category}, {e.writer}, {e.date}
                                 </ListFooter>
                             </ListItem>
                         ))

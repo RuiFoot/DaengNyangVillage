@@ -13,6 +13,8 @@ import java.util.List;
 public interface AnimalMapper {
     List<String> getClassification();
 
+    List<String> getSigungu(@Param("sido") String sido);
+
     List<AnimalLocationVO> getLocation(@Param("location") String location, @Param("classification") String classification);
 
     List<AnimalLocationVO> getLocation2(@Param("animalNumList") List<Integer> animalNumList);

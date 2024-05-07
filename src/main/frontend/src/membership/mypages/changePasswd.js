@@ -34,7 +34,7 @@ margin: 15px 0 10px 0;
 function ChangePasswd() {
     const isDark = useRecoilValue(isDarkAtom);
     const baseUrl = "http://localhost:8080";   //스프링부트 연동시
-    const previousInfo = JSON.parse(localStorage.getItem("member")) // 이전 회원 정보
+    const previousInfo = JSON.parse(sessionStorage.getItem("logined")) // 이전 회원 정보
 
     //새 비밀번호
     const [newPasswd, setNewPasswd] = useState("")
@@ -44,7 +44,7 @@ function ChangePasswd() {
 
     //저장될 맴버정보
     const [memberInfo, setMemberInfo] = useState({
-        email: previousInfo.email,
+        // email: previousInfo.email,
         password: "",
         passwordCheck: "",
         profileImg: "",
@@ -67,9 +67,17 @@ function ChangePasswd() {
     }
 
     // 유효성 검사
+    const [passwdCheck, setPasswdCheck] = useState()
     const isSame = newPasswd === passwordCheck;
     const isValid = isSame === true && newPasswd.length > 7
+    const isPassword = (input) => {
+        if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(input)) {
+            setPasswdCheck(true)
+        } else {
+            setPasswdCheck(false)
+        }
 
+    }
     async function handleSubmit(e) {
         e.preventDefault();
         // 비밀번호 보안 해시
@@ -121,13 +129,14 @@ function ChangePasswd() {
                             value={newPasswd}
                             name="newPasswd"
                             onChange={onNewChange}
+                            onKeyUpCapture={() => { isPassword(newPasswd) }}
                         />
                     </InputGroup>
                     {
                         newPasswd.length === 0 ? null :
-                            newPasswd.length < 8 && newPasswd.length > 0
+                            !passwdCheck
                                 ?
-                                <p className="warning">비밀번호는 8자리 이상이여야합니다.</p>
+                                <p className="warning">영문, 숫자, 특수문자로 이루어진 8자리 이상이여야 합니다.</p>
                                 : <p className="pass">사용가능한 비밀번호입니다.</p>
 
                     }

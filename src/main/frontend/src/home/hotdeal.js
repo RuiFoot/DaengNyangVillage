@@ -64,6 +64,7 @@ const LoadingContainer = styled.div`
 async function fetchRandomProducts(count) {
 
   try {
+    // 이걸 22000포트로 새로 만들어서 가져오지 말고, apiURL로 하는 방법이 있을테니 그렇게 가져오는건 어떨가요?
     const apiUrl = "http://localhost:22000/";
     const response = await fetch(apiUrl);
     const data = await response.json();
@@ -136,7 +137,7 @@ function HotdealBar() {
               <HotdealItem key={index} onClick={() => handleProductClick(product.link)}>
                 <div>
                   <HotdealItemImg style={{ backgroundImage: `url(${product.image})` }} />
-                  <HotdealItemName>{product.name}</HotdealItemName>
+                  <HotdealItemName>{product.name.slice(0, 40)}</HotdealItemName>
                 </div>
                 <HotdealItemPrice>{product.price}</HotdealItemPrice>
               </HotdealItem>

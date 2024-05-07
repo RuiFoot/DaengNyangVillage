@@ -14,7 +14,8 @@
                 "category",
                 "boardName",
                 "createDate",
-                "reviewCnt"
+                "reviewCnt",
+                "imgPath"
             FROM
                 "Board"
             WHERE
@@ -70,9 +71,9 @@
         <![CDATA[
             INSERT INTO "Board"
                 ("boardId", "memberNo", "nickname",
-                "category", "boardName", "createDate", "reviewCnt")
+                "category", "boardName", "createDate", "reviewCnt", "imgPath")
             VALUES (#{boardId}, #{boardPostVO.memberNo}, #{boardPostVO.nickname},
-                    #{boardPostVO.category}, #{boardPostVO.boardName}, SYSDATE, 0)
+                    #{boardPostVO.category}, #{boardPostVO.boardName}, SYSDATE, 0, #{boardPostVO.imgPath})
         ]]>
     </insert>
 
@@ -96,6 +97,23 @@
                 "BoardName", "Field", "imgPath", "createDate")
             VALUES (#{boardPostVO.boardId}, #{boardPostVO.nickname}, #{boardPostVO.memberNo}, #{boardPostVO.category},
                     #{boardPostVO.boardName}, #{boardPostVO.field}, #{boardPostVO.imgPath}, #{createDate})
+        ]]>
+    </insert>
+
+    <insert id="postMarketBoardDetail" parameterType="com.myspring.daengnyang.board.vo.BoardPostVO">
+        <selectKey keyProperty="createDate" resultType="date" order="BEFORE">
+            SELECT "createDate"
+            FROM "Board"
+            WHERE "boardId" = #{boardPostVO.boardId}
+        </selectKey>
+        <![CDATA[
+            INSERT INTO "BoardDetail"
+                ("boardId", "nickname", "memberNo", "category",
+                "BoardName", "Field", "imgPath", "createDate",
+                "tradeTime", "Price", "Area", "detailLocation")
+            VALUES (#{boardPostVO.boardId}, #{boardPostVO.nickname}, #{boardPostVO.memberNo}, #{boardPostVO.category},
+                    #{boardPostVO.boardName}, #{boardPostVO.field}, #{boardPostVO.imgPath}, #{createDate},
+                    #{boardPostVO.tradeTime}, #{boardPostVO.Price}, #{boardPostVO.Area}, #{boardPostVO.detailLocation})
         ]]>
     </insert>
 
