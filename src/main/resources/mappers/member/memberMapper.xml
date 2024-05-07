@@ -11,6 +11,7 @@
         <result property="detailedAddress" column="addressDetail"/>
         <result property="mypet" column="favoritePet"/>
         <result property="phoneNumber" column="phoneNumber"/>
+        <result property="inputZonecode" column="inputZonecode"/>
 
 
     </resultMap>
@@ -59,8 +60,8 @@
 
     <insert id="createMemberInfo">
         <![CDATA[
-            INSERT INTO "memberInfo" ("nickname","memberNo","profileImg","address", "addressDetail","favoritePet","phoneNumber")
-            VALUES (#{nickname}, #{memberNo}, #{profileImg}, #{address}, #{addressDetail}, #{favoritePet}, #{phoneNumber})
+            INSERT INTO "memberInfo" ("nickname","memberNo","profileImg","address", "addressDetail","favoritePet","phoneNumber","inputZonecode")
+            VALUES (#{nickname}, #{memberNo}, #{profileImg}, #{address}, #{addressDetail}, #{favoritePet}, #{phoneNumber}, #{inputZonecode})
         ]]>
     </insert>
 
@@ -97,7 +98,8 @@
                 "address" = #{address},
                 "addressDetail" = #{addressDetail},
                 "favoritePet" = #{favoritePet},
-                "phoneNumber" = #{phoneNumber}
+                "phoneNumber" = #{phoneNumber},
+                "inputZonecode" = #{inputZonecode}
             WHERE "memberNo" = #{memberNo}
         ]]>
     </update>

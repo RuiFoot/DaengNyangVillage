@@ -13,4 +13,5 @@ public class SignupForm {
     private String addressDetail;
     private String favoritePet;
     private String phoneNumber;
+    private String inputZonecode;
 }
