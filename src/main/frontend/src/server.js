@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("cors");
+//const cors = require("cors");
 const axios = require("axios");
 const { parseStringPromise } = require("xml2js");
 const iconv = require("iconv-lite");
@@ -7,7 +7,7 @@ const iconv = require("iconv-lite");
 // Express 앱 선언
 const app = express();
 
-app.use(cors()); // 모든 도메인에서의 요청 허용
+//app.use(cors()); // 모든 도메인에서의 요청 허용
 // json 요청을 파싱할 수 있음
 app.use(express.json());
 

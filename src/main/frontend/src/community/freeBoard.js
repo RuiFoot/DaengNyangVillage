@@ -10,6 +10,151 @@ import Pagination from "../pagination";
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import "./communityStyle.css"
+import { Link } from "react-router-dom";
+import React from 'react';
+
+export let free=[{
+    boardId: 0,
+    memberNo: 0,
+    boardName: "옆집 개가 너무 짖어요",
+    nickname: "olzl",
+    createDate: "2024-12-12",
+    category: "자유게시판",
+    reviewCnt: 210,
+    text: "",
+    img: ""
+},{
+    boardId: 1,
+    memberNo: 0,
+    boardName: "우리집 고양이는 멍멍하고 울어요",
+    nickname: "olzl",
+    createDate: "2024-12-13",
+    category: "자유게시판",
+    reviewCnt: 10,
+    text: "",
+    img: ""
+},{
+    boardId: 2,
+    memberNo: 1,
+    boardName: "우리집 멍멍이 보고가요",
+    nickname: "송민영",
+    createDate: "2024-11-12",
+    category: "자유게시판",
+    reviewCnt: 3,
+    text: "",
+    img: ""
+},{
+    boardId: 3,
+    memberNo: 0,
+    boardName: "옆집 개가 너무 짖어요",
+    nickname: "olzl",
+    createDate: "2024-10-12",
+    category: "자유게시판",
+    reviewCnt: 210,
+    text: "",
+    img: ""
+},{
+    boardId: 3,
+    memberNo: 0,
+    boardName: "옆집 개가 너무 짖어요",
+    nickname: "olzl",
+    createDate: "2024-10-12",
+    category: "자유게시판",
+    reviewCnt: 210,
+    text: "",
+    img: ""
+},{
+    boardId: 4,
+    memberNo: 0,
+    boardName: "옆집 개가 너무 짖어요",
+    nickname: "olzl",
+    createDate: "2024-09-12",
+    category: "자유게시판",
+    reviewCnt: 210,
+    text: "",
+    img: ""
+},{
+    boardId: 5,
+    memberNo: 0,
+    boardName: "옆집 개가 너무 짖어요",
+    nickname: "olzl",
+    createDate: "2024-08-12",
+    category: "자유게시판",
+    reviewCnt: 210,
+    text: "",
+    img: ""
+},{
+    boardId: 2,
+    memberNo: 3,
+    boardName: "우리집 멍멍이 보고가요",
+    nickname: "정승호",
+    createDate: "2024-07-12",
+    category: "자유게시판",
+    reviewCnt: 3,
+    text: "",
+    img: ""
+},{
+    boardId: 2,
+    memberNo: 4,
+    boardName: "우리집 멍멍이 보고가요",
+    nickname: "이상빈",
+    createDate: "2024-06-12",
+    category: "자유게시판",
+    reviewCnt: 3,
+    text: "",
+    img: ""
+},{
+    boardId: 2,
+    memberNo: 2,
+    boardName: "우리집 멍멍이 보고가요",
+    nickname: "백진욱",
+    createDate: "2024-05-12",
+    category: "자유게시판",
+    reviewCnt: 3,
+    text: "",
+    img: ""
+},{
+    boardId: 2,
+    memberNo: 1,
+    boardName: "우리집 멍멍이 보고가요",
+    nickname: "송민영",
+    createDate: "2024-04-12",
+    category: "자유게시판",
+    reviewCnt: 3,
+    text: "",
+    img: ""
+},{
+    boardId: 2,
+    memberNo: 4,
+    boardName: "우리집 멍멍이 보고가요",
+    nickname: "이상빈",
+    createDate: "2024-03-12",
+    category: "자유게시판",
+    reviewCnt: 3,
+    text: "",
+    img: ""
+},{
+    boardId: 2,
+    memberNo: 3,
+    boardName: "우리집 멍멍이 보고가요",
+    nickname: "정승호",
+    createDate: "2024-02-12",
+    category: "자유게시판",
+    reviewCnt: 3,
+    text: "",
+    img: ""
+},{
+    boardId: 2,
+    memberNo: 2,
+    boardName: "우리집 멍멍이 보고가요",
+    nickname: "백진욱",
+    createDate: "2024-01-12",
+    category: "자유게시판",
+    reviewCnt: 3,
+    text: "",
+    img: ""
+}]
+
 
 let free1 = {
     boardId: 0,
@@ -156,6 +301,8 @@ let free13 = {
     img: ""
 }
 
+
+
 const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
@@ -204,6 +351,7 @@ function FreeBoard() {
     if (window.sessionStorage.key(0) === "logined") {
         nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
     }
+
 
     const [board, setBoard] = useState({
         boardId: 0,
@@ -275,16 +423,14 @@ function FreeBoard() {
                             key={i}
                             style={{ borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
                         >
-                            <ListHeader>
-                                <ListTitle className="fw-bold">{e.boardName}
-                                </ListTitle>
-                                <CommentsCount>
-                                    {e.reviewCnt}
-                                </CommentsCount>
-                            </ListHeader>
-                            <ListFooter>
-                                {e.nickname}, {e.createDate}
-                            </ListFooter>
+                            {/* Link 컴포넌트 추가 */}
+                            <Link to={`/post/${e.boardId}`}>
+                                <ListHeader>
+                                    <ListTitle className="fw-bold">{e.boardName}</ListTitle>
+                                    <CommentsCount>{e.reviewCnt}</CommentsCount>
+                                </ListHeader>
+                                <ListFooter>{e.nickname}, {e.createDate}</ListFooter>
+                            </Link>
                         </ListItem>
                     ))
                 }
