@@ -27,19 +27,26 @@ text-align: center;
 font-size: clamp(90%, 5vw, 160%);
 margin: 10px 6vw;
 `
+// 체크박스 css
 const TopContants = styled.div`
-margin: 10px 6vw;
+margin: 10px 3vw;
 display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: repeat(2, 1fr) 5fr;
   grid-auto-rows: minmax(100px, auto);
-  gap: 15px;
+  gap: 5px;
 `
 const CheckBoxs = styled.div`
 display: flex;
 justify-content: center;
 height: 500px;
+// width: 300px;
+
 `
+
 const Map = styled.div`
+height: 500px;
+grid-column: 3 / span 1;
+
 `
 
 const PlaceItems = styled.div`
@@ -47,7 +54,7 @@ display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-auto-rows: minmax(100px, auto);
   gap: 15px;
-  margin: 10px 6vw;
+  margin: 10px 3vw;
 `
 
 const PlaceItem = styled.div`
@@ -88,12 +95,12 @@ let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천�
 //let categoryList = ["동물병원", "동물약국", "반려동물용품", "미용", "위탁관리", "식당", "카페", "호텔", "팬션", "여행지", "박물관", "문예회관"]
 
 function PlaceRecommend() {
-    const [map, setMap] = useState([null])
+    const [map,setMap] = useState([null])
+    const [markers,setMarkers] = useState([])
+    const [categoryList,setCategoryList] = useState([]);
+    const [areaList,setAreaList] = useState([]);
+    const [address,setAddress] = useState([]);
 
-    const [markers, setMarkers] = useState([])
-
-    const [categoryList, setCategoryList] = useState([]);
-    const [address, setAddress] = useState([]);
     const isDark = useRecoilValue(isDarkAtom); //다크모드
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
@@ -108,42 +115,54 @@ function PlaceRecommend() {
         }
     }, [])
 
+     // 지역 리스트 받아오기
+     useEffect(() => {
+        axios.get(`${baseUrl}/animal`)
+            .then((res) => {
+                setAreaList(res.data)
+                console.log(res.data)
+            }).catch(error => {
+                console.error('Request failed : ', error);
+        })
+    }, [])
+
+    //카테고리 리스트 받아오기
     useEffect(() => {
         axios.get(`${baseUrl}/animal`)
             .then((res) => {
                 setCategoryList(res.data)
-
-                // console.log(res.data)
-
+                console.log(res.data)
             }).catch(error => {
                 console.error('Request failed : ', error);
             })
     }, []);
-
+   
+    // 맵에 띄울 마커 정보 받기
     useEffect(() => {
         let searchLocation = "서울특별시";
         let classification = "동물병원";
         axios.get(`${baseUrl}/animal/location/${searchLocation}?classification=${classification}`)
             .then((res) => {
                 setAddress(res.data)
-                console.log(res.data)
+                // console.log(res.data)
             }).catch(error => {
                 console.error('Request failed : ', error);
             })
     }, [])
 
+    // 카카오맵 초기화
     useEffect(() => {
-        // 카카오맵 초기화
         const container = document.getElementById('map');
         const options = {
             center: new kakao.maps.LatLng(37.5664056, 126.9778222),
-            level: 10
+            level: 8
         };
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
     }, []);
 
-    useEffect(() => {
+    // useEffect(() => {
+    const handleButtonClick = () => {
         // 주소 정보를 이용하여 마커 표시
         if (address && Object.keys(address).length > 0 && map) {
             // 이전에 생성된 마커들 제거
@@ -191,7 +210,7 @@ function PlaceRecommend() {
             // 새로운 마커들을 저장하여 나중에 제거할 수 있도록 함
             setMarkers(newMarkers);
         }
-    }, [address, map]);
+    };
 
     return (
         <Container style={{
@@ -213,18 +232,26 @@ function PlaceRecommend() {
                                 }} className="cardHeader">
                                     <InputGroup className="inputGroup mb-3" >
                                         <Form.Control
-                                            placeholder="🔍지역을 입력해주세요"
+                                            placeholder="지역을 선택해주세요"
                                             aria-label="Recipient's username"
                                             aria-describedby="basic-addon2"
 
                                         />
-                                        <Button variant="outline-secondary" id="button-addon2">
+                                        <Button variant="outline-secondary" id="button-addon2" onClick={handleButtonClick}>
                                             검색
                                         </Button>
                                     </InputGroup>
-                                </Card.Header>
-                                <ListGroup
-                                    className="listGroup" variant="flush">
+
+                                <ListGroup className="listGroup" variant="flush">
+                                    {areaList.map((e, i) => (
+                                        <ListGroup.Item key={i}>
+                                            <CheckBox id={i} type="checkbox"></CheckBox>
+                                            <CheckBoxLabel>{e}</CheckBoxLabel>
+                                        </ListGroup.Item>
+                                    ))}
+                                </ListGroup>
+                                <ListGroup className="listGroup" variant="flush">
+
                                     {categoryList.map((e, i) => (
                                         <ListGroup.Item key={i} style={{
                                             color: `${isDark ? themes.dark.color : themes.light.color}`,
@@ -250,15 +277,23 @@ function PlaceRecommend() {
                                 }} className="cardHeader">
                                     <InputGroup className="inputGroup mb-3">
                                         <Form.Control
-                                            placeholder="🔍지역을 입력해주세요"
+                                            placeholder="지역을 선택해주세요"
                                             aria-label="Recipient's username"
                                             aria-describedby="basic-addon2"
                                         />
-                                        <Button variant="outline-secondary" id="button-addon2">
+                                        <Button variant="outline-secondary" id="button-addon2" onClick={handleButtonClick}>
                                             검색
                                         </Button>
                                     </InputGroup>
                                 </Card.Header>
+                                <ListGroup className="listGroup" variant="flush">
+                                    {areaList.map((e, i) => (
+                                        <ListGroup.Item key={i}>
+                                            <CheckBox id={i} type="checkbox"></CheckBox>
+                                            <CheckBoxLabel>{e}</CheckBoxLabel>
+                                        </ListGroup.Item>
+                                    ))}
+                                </ListGroup>
                                 <ListGroup className="listGroup" variant="flush">
                                     {categoryList.map((e, i) => (
                                         <ListGroup.Item key={i} style={{
@@ -274,9 +309,7 @@ function PlaceRecommend() {
                         </CheckBoxs>
                         <Map>
                             <div id="map" style={{
-
-                                width: '500px',
-
+                                width: '100%',
                                 height: '500px'
                             }}></div>
                         </Map>
