@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
 import themes from "../theme";
-import wideHotPlaceArr from "../data";
+import hotPlaceArr from "../imgDate";
+import defaultImg from "../defaultImgs";
+
 
 const PlaceItems = styled.div`
 display: grid;
@@ -54,6 +56,19 @@ function HotPlaceList() {
     if (window.sessionStorage.key(0) === "logined") {
         url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
     }
+
+    const showImg = (e) => {
+        if (e === "미용") return defaultImg.미용
+        if (e === "박물관문예회관") return defaultImg.박물관문예회관
+        if (e === "병원") return defaultImg.병원
+        if (e === "약국") return defaultImg.약국
+        if (e === "식당") return defaultImg.식당
+        if (e === "여행지") return defaultImg.여행지
+        if (e === "애견용품") return defaultImg.애견용품
+        if (e === "유치원") return defaultImg.유치원
+        if (e === "카페") return defaultImg.카페
+        if (e === "호텔펜션") return defaultImg.호텔펜션
+    }
     return (
 
         < PlaceItems >
@@ -61,7 +76,7 @@ function HotPlaceList() {
                 // 화면 크기에 따라 가져오는 배열이 다름
                 windowSize > 979
                     ?
-                    wideHotPlaceArr.map((e, i) => (
+                    hotPlaceArr.slice(0, 6).map((e, i) => (
                         <PlaceItem key={i} style={{
                             color: `${isDark ? themes.dark.color : themes.light.color}`,
                             backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
@@ -69,13 +84,13 @@ function HotPlaceList() {
                             href={`/recommend-place-detail/${e[4]}${url}`}
                         >
                             <PlaceItemTitle>{e[0]}</PlaceItemTitle>
-                            <PlaceItemImg style={{ backgroundImage: `url(${e[3]})` }} />
+                            <PlaceItemImg style={{ backgroundImage: `url(${showImg(e[3])})` }} />
                             <PlaceItemAddress><GoDotFill />{e[1]}</PlaceItemAddress>
                             <PlaceItemInfo><GoDotFill />{e[2]}</PlaceItemInfo>
                         </PlaceItem>
                     ))
                     :
-                    wideHotPlaceArr.slice(0, 4).map((e, i) => (
+                    hotPlaceArr.slice(0, 4).map((e, i) => (
                         <PlaceItem key={i} style={{
                             color: `${isDark ? themes.dark.color : themes.light.color}`,
                             backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
@@ -83,7 +98,7 @@ function HotPlaceList() {
                             href={`/recommend-place-detail/${e[4]}${url}`}
                         >
                             <PlaceItemTitle>{e[0]}</PlaceItemTitle>
-                            <PlaceItemImg style={{ backgroundImage: `url(${e[3]})` }} />
+                            <PlaceItemImg style={{ backgroundImage: `url(${showImg(e[3])})` }} />
                             <PlaceItemAddress><GoDotFill />{e[1]}</PlaceItemAddress>
                             <PlaceItemInfo><GoDotFill />{e[2]}</PlaceItemInfo>
                         </PlaceItem>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Bumper from "../layout/bumper";
-import wideHotPlaceArr from "../data";
+import hotPlaceArr from "../imgDate";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from 'recoil';
@@ -14,6 +14,7 @@ import { FaStar, FaHeart } from "react-icons/fa6";
 import React, { useRef } from "react"
 import "./placeRecommendStyle.css"
 import { MdOutlineReply } from "react-icons/md";
+import defaultImg from "../defaultImgs";
 
 const Container = styled.div`
 min-height: calc(100vh - 179px);
@@ -82,6 +83,8 @@ const CommentsItems = styled.div`
 margin: 20px 10px;
 display: flex;
 justify-content: center;
+padding-bottom: 5px;
+border-bottom: 1px solid;
 `
 
 const CommentsRightBox = styled.div`
@@ -156,7 +159,7 @@ function RecommendDetail() {
     const params = useParams();
     const userInfo = JSON.parse(sessionStorage.getItem("logined"))
     // 현재 url에 맞는 글 가져오기 (현재 url에 id전송으로 대체)
-    const test = wideHotPlaceArr.filter((e) => e[4] === Number(params.itemId))
+    const test = hotPlaceArr.filter((e) => e[4] === Number(params.itemId))
 
     // 윈도우 가로 사이즈에 따른 변화 적용
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
@@ -429,6 +432,21 @@ function RecommendDetail() {
         console.log(userReReviews)
         console.log(e)
     }
+
+    //이미지 디폴트 값
+
+    const showImg = (e) => {
+        if (e === "미용") return defaultImg.미용
+        if (e === "박물관문예회관") return defaultImg.박물관문예회관
+        if (e === "병원") return defaultImg.병원
+        if (e === "약국") return defaultImg.약국
+        if (e === "식당") return defaultImg.식당
+        if (e === "여행지") return defaultImg.여행지
+        if (e === "애견용품") return defaultImg.애견용품
+        if (e === "유치원") return defaultImg.유치원
+        if (e === "카페") return defaultImg.카페
+        if (e === "호텔펜션") return defaultImg.호텔펜션
+    }
     return (
         <>
             <Bumper />
@@ -443,7 +461,7 @@ function RecommendDetail() {
                             {test[0][0]}
                             <FaHeart style={{ cursor: "pointer", margin: "10px", color: `${heart ? "red" : "#F2F2F2"}` }} onClick={clickHeart} />
                         </Title>
-                        <Img style={{ backgroundImage: `url(${test[0][3]})` }} />
+                        <Img style={{ backgroundImage: `url(${showImg(test[0][3])})` }} />
                     </LeftItems>
                     <RightItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 6vw 0 10px"}` }}>
                         <Title>{starRankAVG()}</Title>
