@@ -13,4 +13,5 @@ public class MemberInfoVO {
     private String detailedAddress;
     private String mypet;
     private String phoneNumber;
+    private String inputZonecode;
 }
