@@ -15,5 +15,7 @@ public class BoardVO {
     private String boardName;
     private Date createDate;
     private String imgPath;
+    private String Price;
+    private String Area;
     private int reviewCnt;
 }
