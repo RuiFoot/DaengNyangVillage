@@ -65,6 +65,14 @@
             FROM "animalClassification"
         ]]>
     </select>
+
+    <select id="getSigungu" parameterType="String" resultType="String">
+        <![CDATA[
+            SELECT "SIGUNGU"
+            FROM "animalArea"
+            WHERE "SIDO" = #{sido}
+        ]]>
+    </select>
     <select id="getLocation" parameterType="String" resultMap="LocationResultmap">
         <![CDATA[
         SELECT *
