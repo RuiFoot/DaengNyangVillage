@@ -213,7 +213,7 @@ function FreeBoard() {
 
     //스프링 통신
     useEffect(() => {
-        axios.get('/api/board/잡담')
+        axios.get('/api/board/자유 게시판')
             .then((res) => {
                 setBoard(res.data);
             })
