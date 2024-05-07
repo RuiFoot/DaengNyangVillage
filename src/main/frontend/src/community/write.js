@@ -15,6 +15,7 @@ import './communityStyle.css'
 // import QuillImageDropAndPaste from "quill-image-drop-and-paste"; 이미지 드롭
 import { storage } from "../firebase";
 import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
+import axios from "axios";
 
 const Container = styled.div`
 `
@@ -38,7 +39,7 @@ margin: 80px 0 0 0;
 
 function Write() {
     const [imageUrl, setImageUrl] = useState([]); // 새로운 상태 추가
-
+    const baseUrl = "http://localhost:8080";
     // 배포용 URL
     const quillRef = useRef(null); // useRef로 ref 생성
 
@@ -78,7 +79,7 @@ function Write() {
 
     const isDark = useRecoilValue(isDarkAtom);
     const [quillValue, setQuillValue] = useState("");
-    console.log(quillValue)
+    // console.log(quillValue)
     const modules = useMemo(() => {
         return {
             toolbar: {
@@ -120,7 +121,7 @@ function Write() {
         "background",
     ];
     const userNickName = JSON.parse(window.sessionStorage.getItem("logined"))
-    console.log(userNickName.nickName)
+    // console.log(userNickName.nickName)
     let referrer = document.referrer; //이전 페이지 url
     const [board, setBoard] = useState()
     const [area, setArea] = useState("지역을 입력해주세요")
@@ -153,7 +154,22 @@ function Write() {
         values.area = area
         values.field = quillValue
         values.imgPath = imageUrl
-        localStorage.setItem("write", JSON.stringify(values)); // 로컬스토리지 저장
+        let body = {
+            nickname: userNickName.nickName,
+            memberNo: userNickName.memberNo,
+            category: board,
+            field: quillValue,
+            imgPath: imageUrl.join(", "),
+            boardId: 0,
+            boardName: values.boardName
+        }
+        axios.post(`${baseUrl}/board`, body
+        ).then((response) => {
+            console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+        }).catch((error) => {
+            console.log(error);				//오류발생시 실행
+        })
+        // localStorage.setItem("write", JSON.stringify(values)); // 로컬스토리지 저장
         setQuillValue("")
         setValues({
             nickname: userNickName.nickName,
@@ -171,8 +187,8 @@ function Write() {
 
     //잘나오나 확인용
     let test = JSON.parse(window.localStorage.getItem("write"))
-    console.log(test)
-    console.log(imageUrl)
+    // console.log(test)
+    // console.log(imageUrl)
 
     useEffect(() => {
         if (referrer.includes("free")) {
@@ -191,8 +207,9 @@ function Write() {
     }
     const areaBtn = (input) => {
         setArea(input)
-        console.log(area)
+        // console.log(area)
     }
+
     return (
         <Container style={{
             color: `${isDark ? themes.dark.color : themes.light.color}`,
