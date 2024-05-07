@@ -6,6 +6,7 @@ import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.board.vo.ReviewVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,7 @@ public interface BoardMapper {
 
     int postBoard(@Param("boardPostVO") BoardPostVO boardPostVO);
     void postBoardDetail(@Param("boardPostVO") BoardPostVO boardPostVO);
+    void postMarketBoardDetail(@Param("boardPostVO") BoardPostVO boardPostVO);
     int getBoardId();
     void postReview(@Param("reviewVO") ReviewVO reviewVO);
     int getMemberNo(@Param("nickname") String nickname);

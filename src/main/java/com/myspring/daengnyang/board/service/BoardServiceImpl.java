@@ -59,10 +59,16 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.postBoard(boardPostVO);
         int boardId = boardMapper.getBoardId();
         System.out.println("boardId : " + boardId);
-
         boardPostVO.setBoardId(boardId);
-        boardMapper.postBoardDetail(boardPostVO);
 
+        String category = boardPostVO.getCategory();
+
+        if(category.equals("댕냥 마켓")) {
+            System.out.println(category);
+            boardMapper.postMarketBoardDetail(boardPostVO);
+        } else {
+            boardMapper.postBoardDetail(boardPostVO);
+        }
     }
 
     @Override
