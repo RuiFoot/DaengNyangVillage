@@ -146,7 +146,9 @@
     <update id="modifyPost" parameterType="com.myspring.daengnyang.board.vo.BoardPostVO">
         <![CDATA[
             UPDATE "Board"
-            SET "category" = #{boardPostVO.category}, "boardName" = #{boardPostVO.boardName}
+            SET "category" = #{boardPostVO.category}, "boardName" = #{boardPostVO.boardName},
+                "imgPath" = #{boardPostVO.imgPath}, "Area" = #{boardPostVO.Area},
+                "Price" = #{boardPostVO.Price}, "PREFACE" = #{boardPostVO.preface}
             WHERE "boardId" = #{boardPostVO.boardId}
         ]]>
     </update>
@@ -155,7 +157,10 @@
         <![CDATA[
             UPDATE "BoardDetail"
             SET "category" = #{boardPostVO.category}, "BoardName" = #{boardPostVO.boardName},
-                "Field" = #{boardPostVO.field}, "imgPath" = #{boardPostVO.imgPath}
+                "Field" = #{boardPostVO.field}, "imgPath" = #{boardPostVO.imgPath},
+                "tradeTime" = #{boardPostVO.tradeTime}, "Price" = #{boardPostVO.Price},
+                "Area" = #{boardPostVO.Area}, "detailLocation" = #{boardPostVO.detailLocation},
+                "PREFACE" = #{boardPostVO.preface}
             WHERE "boardId" = #{boardPostVO.boardId}
         ]]>
     </update>
