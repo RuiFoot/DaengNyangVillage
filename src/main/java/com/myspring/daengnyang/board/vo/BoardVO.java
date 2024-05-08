@@ -17,5 +17,6 @@ public class BoardVO {
     private String imgPath;
     private String Price;
     private String Area;
+    private String preface;
     private int reviewCnt;
 }

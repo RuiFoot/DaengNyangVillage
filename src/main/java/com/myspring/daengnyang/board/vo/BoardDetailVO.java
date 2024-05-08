@@ -16,5 +16,6 @@ public class BoardDetailVO {
     private String field;
     private String imgPath;
     private Date createDate;
+    private String preface;
 
 }
