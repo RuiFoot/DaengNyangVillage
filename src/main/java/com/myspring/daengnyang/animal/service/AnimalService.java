@@ -27,4 +27,6 @@ public interface AnimalService {
     List<AnimalLocationVO> getRecommend(Integer memberNo, String sido, String sigungu);
 
     boolean favoriteCheck(Integer memberNo, Integer animalNum);
+
+    boolean getFavorite(Integer animalNum, Integer memberNo);
 }

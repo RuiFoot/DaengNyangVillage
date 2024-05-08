@@ -58,7 +58,6 @@
         <result property="createDate" column="createDate"/>
     </resultMap>
 
-
     <select id="getClassification" parameterType="String" resultType="String">
         <![CDATA[
             SELECT *
@@ -126,14 +125,24 @@
         VALUES (#{memberNo}, #{animalNum}, SYSDATE, 1)
     </insert>
 
+    <select id="getFavorite" parameterType="Integer" resultType="int">
+        <![CDATA[
+            SELECT "Field"
+            FROM "favorite"
+            WHERE #{animalNum} = "animalNum" AND #{memberNo} = "memberNo"
+        ]]>
+    </select>
+
+
+
     <insert id="animalReviewPost" parameterType="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
         <selectKey keyProperty="animalReviewNum" resultType="java.lang.Integer" order="BEFORE">
             SELECT animal_review_seq.NEXTVAL FROM DUAL
         </selectKey>
         INSERT INTO "animalReview" ("animalReviewNum", "animalNum", "nickname", "memberNo", "review", "star",
-        "createDate")
+        "createDate", "PROFILEIMG")
         VALUES (#{animalReviewNum}, #{animalPost.animalNum}, #{animalPost.nickname}, #{animalPost.memberNo},
-        #{animalPost.review}, #{animalPost.star}, SYSDATE)
+        #{animalPost.review}, #{animalPost.star}, SYSDATE, #{animalPost.profileImg})
     </insert>
 
     <update id="updateAnimalReview" parameterType="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
@@ -141,7 +150,8 @@
         SET "animalNum" = #{animalPost.animalNum},
         "review" = #{animalPost.review},
         "star" = #{animalPost.star},
-        "createDate" = SYSDATE
+        "createDate" = SYSDATE,
+        "PROFILEIMG" = #{animalPost.profileImg}
         WHERE "animalReviewNum" = #{animalPost.animalReviewNum}
     </update>
 

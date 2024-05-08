@@ -115,4 +115,9 @@ public class AnimalServiceImpl implements AnimalService {
         return checked > 0;
     }
 
+    @Override
+    public boolean getFavorite(Integer animalNum, Integer memberNo) {
+        return animalMapper.getFavorite(animalNum, memberNo) > 0;
+    }
+
 }
