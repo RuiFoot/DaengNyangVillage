@@ -8,7 +8,6 @@ import Pagination from "../pagination";
 import HotdealBar from '../home/hotdeal';
 import { useEffect, useState } from 'react';
 import { GoDotFill } from "react-icons/go";
-import hotPlaceArr from '../imgDate';
 import axios from "axios";
 
 const Container = styled.div`
@@ -40,12 +39,18 @@ background-position: center;
 margin: 10px 0;
 `
 const MarketItemAddress = styled.div`
-font-size: clamp(90%, 1vw, 100%);
 `
 const MarketItemPrice = styled.div`
-font-size: clamp(90%, 1vw, 100%);
 `
-
+const ListFooter = styled.div`
+display: flex;
+flex-direction: column;
+align-items: end;
+`
+const ListItemWriter = styled.div`
+`
+const ListItemDate = styled.div`
+`
 function UsedMarket() {
     const isDark = useRecoilValue(isDarkAtom); //다크모드
     const nowPage = useRecoilValue(presentPage); //페이지네이션
@@ -60,13 +65,6 @@ function UsedMarket() {
             window.addEventListener('resize', handleResize)
         }
     }, [])
-
-    const totalPost = hotPlaceArr.length; // 총 게시물 수
-    const pageRange = 12; // 페이지당 보여줄 게시물 수
-    const totalPageNum = Math.ceil(hotPlaceArr.length / pageRange)
-    const btnRange = 5; // 보여질 페이지 버튼의 개수
-    const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
-    const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
     //스프링 통신
     const [board, setBoard] = useState({
@@ -85,6 +83,12 @@ function UsedMarket() {
                 setBoard(res.data);
             })
     }, []);
+    const totalPost = board.length; // 총 게시물 수
+    const pageRange = 12; // 페이지당 보여줄 게시물 수
+    const totalPageNum = Math.ceil(board.length / pageRange)
+    const btnRange = 5; // 보여질 페이지 버튼의 개수
+    const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
+    const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
     //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
     const representImg = (e) => {
@@ -114,6 +118,10 @@ function UsedMarket() {
                             {representImg(e.imgPath)}
                             <MarketItemAddress><GoDotFill />거래 장소 : {e.area}</MarketItemAddress>
                             <MarketItemPrice><GoDotFill />가격 : {e.price}</MarketItemPrice>
+                            <ListFooter>
+                                <ListItemWriter>작성자 : {e.nickname}</ListItemWriter>
+                                <ListItemDate>{e.createDate.replace("T", ", ").slice(0, 17)}</ListItemDate>
+                            </ListFooter>
                         </MarketItem>
                     ))}
             </MarketItems >

@@ -7,7 +7,7 @@ import { isDarkAtom } from '../atoms';
 import themes from "../theme";
 import hotPlaceArr from "../imgDate";
 import defaultImg from "../defaultImgs";
-
+import axios from "axios";
 
 const PlaceItems = styled.div`
 display: grid;
@@ -69,6 +69,36 @@ function HotPlaceList() {
         if (e === "카페") return defaultImg.카페
         if (e === "호텔펜션") return defaultImg.호텔펜션
     }
+
+    //스프링 통신
+    // const [board, setBoard] = useState({
+    //     animalNum: 0,
+    //     largeClassification: "",
+    //     facilityName: "",
+    //     subClassification: "",
+    //     sido: "",
+    //     sigungu: "",
+    //     eupmyeondong: "",
+    //     ri: "",
+    //     houseNumber: "",
+    //     streetName: "",
+    //     buildingNumber: "",
+    //     latitude: "",
+    //     longitude: "",
+    //     star: 0,
+    //     imgPath: "",
+    //     roadAddress: "",
+    //     numberAddress: ""
+    // })
+
+    // useEffect(() => {
+    //     axios.get('/api/animal/favorite')
+    //         .then((res) => {
+    //             setBoard(res.data);
+    //         })
+    //     console.log(board)
+    // }, []);
+
     return (
 
         < PlaceItems >
