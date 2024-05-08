@@ -125,20 +125,15 @@ function Write() {
     let referrer = document.referrer; //이전 페이지 url
     const [board, setBoard] = useState()
     const [area, setArea] = useState("지역을 입력해주세요")
+    const [preface, setPreface] = useState("머릿말을 선택해주세요")
     const [values, setValues] = useState({
-        nickname: userNickName.nickName,
-        memberNo: 10,
-        category: board,
-        area: area,
         boardName: "",
         detailLocation: "",
         tradeTime: "",
-        price: "",
-        imgPath: "",
-        field: quillValue
+        price: ""
     })
 
-    const { nickname, memberNo, boardName, detailLocation, tradeTime, price, imgPath, field } = values; // 비구조화 할당
+    const { boardName, detailLocation, tradeTime, price } = values; // 비구조화 할당
 
     function onChange(e) {
         const { value, name } = e.target;
@@ -150,11 +145,11 @@ function Write() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        values.category = board
-        values.area = area
-        values.field = quillValue
-        values.imgPath = imageUrl
-        console.log(tradeTime)
+        // values.category = board
+        // values.area = area
+        // values.field = quillValue
+        // values.imgPath = imageUrl
+        // console.log(tradeTime)
         let body = {
             tradeTime: tradeTime,
             detailLocation: detailLocation,
@@ -170,9 +165,9 @@ function Write() {
         }
         axios.post(`${baseUrl}/board`, body
         ).then((response) => {
-            console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+            console.log(response.data);	//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {
-            console.log(error);				//오류발생시 실행
+            console.log(error);	//오류발생시 실행
         })
         // localStorage.setItem("write", JSON.stringify(values)); // 로컬스토리지 저장
         setQuillValue("")
@@ -214,6 +209,10 @@ function Write() {
         setArea(input)
         // console.log(area)
     }
+    const prefaceBtn = (input) => {
+        setPreface(input)
+        console.log(preface)
+    }
 
     return (
         <Container style={{
@@ -239,30 +238,76 @@ function Write() {
                         </Dropdown.Menu>
                     </Dropdown>
                     {
-                        board === "댕냥 마켓" ?
+                        board === "자유 게시판" ?
                             <Dropdown>
                                 <Dropdown.Toggle style={{
                                     color: `${isDark ? themes.dark.color : themes.light.color}`,
                                     backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
                                 }} id="dropdown-basic"
                                     className='registerBtns'>
-                                    {area}
+                                    {preface}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item onClick={() => areaBtn("경기도")}>경기도</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => areaBtn("강원도")}>강원도</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => areaBtn("충청북도")}>충청북도</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => areaBtn("충청남도")}>충청남도</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => areaBtn("전라북도")}>전라북도</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => areaBtn("전라남도")}>전라남도</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => areaBtn("경상북도")}>경상북도</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => areaBtn("경상남도")}>경상남도</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => areaBtn("제주도")}>제주도</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => prefaceBtn("잡담")}>잡담</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => prefaceBtn("할인정보")}>할인정보</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => prefaceBtn("유머")}>유머</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            : null
+                            : board === "훈련 방법 공유" ?
+                                <Dropdown>
+                                    <Dropdown.Toggle style={{
+                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    }} id="dropdown-basic"
+                                        className='registerBtns'>
+                                        {preface}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item onClick={() => prefaceBtn("강아지")}>강아지</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => prefaceBtn("고양이")}>고양이</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => prefaceBtn("다른 반려동물")}>다른 반려동물</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                : board === "댕냥 마켓" ?
+                                    <Dropdown>
+                                        <Dropdown.Toggle style={{
+                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                        }} id="dropdown-basic"
+                                            className='registerBtns'>
+                                            {preface}
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item onClick={() => prefaceBtn("팝니다")}>팝니다</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => prefaceBtn("삽니다")}>삽니다</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    : null
                     }
-
+                    {
+                        board === "댕냥 마켓" &&
+                        <Dropdown>
+                            <Dropdown.Toggle style={{
+                                marginLeft: "10px",
+                                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                            }} id="dropdown-basic"
+                                className='registerBtns'>
+                                {area}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => areaBtn("경기도")}>경기도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("강원도")}>강원도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("충청북도")}>충청북도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("충청남도")}>충청남도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("전라북도")}>전라북도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("전라남도")}>전라남도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("경상북도")}>경상북도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("경상남도")}>경상남도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("제주도")}>제주도</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    }
                 </Dropdowns>
                 <Inputs>
                     <InputGroup className="mb-3">
@@ -316,12 +361,13 @@ function Write() {
                 {/* 폼길이 조정 */}
                 <InputFooter>
                     <Button style={{
+                        width: "100px",
                         color: `${isDark ? themes.dark.color : themes.light.color}`,
                         backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`,
                         marginBottom: "20px"
                     }} className='registerBtns'
                         onClick={handleSubmit}
-                    >등록</Button>
+                    >등 록</Button>
                 </InputFooter>
             </InputForm>
             {

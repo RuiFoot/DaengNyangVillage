@@ -10,173 +10,24 @@ import { isDarkAtom, presentPage } from '../atoms';
 import Pagination from "../pagination";
 import "./communityStyle.css"
 
-let free1 = {
-    boardId: 0,
-    memberNo: 0,
-    boardName: "옆집 개가 너무 짖어요",
-    nickname: "olzl",
-    createDate: "2024-12-12",
-    category: "자유게시판",
-    reviewCnt: 210,
-    text: "",
-    img: ""
-}
-
-let free2 = {
-    boardId: 1,
-    memberNo: 0,
-    boardName: "우리집 고양이는 멍멍하고 울어요",
-    nickname: "olzl",
-    createDate: "2024-12-13",
-    category: "자유게시판",
-    reviewCnt: 10,
-    text: "",
-    img: ""
-}
-let free3 = {
-    boardId: 2,
-    memberNo: 1,
-    boardName: "우리집 멍멍이 보고가요",
-    nickname: "송민영",
-    createDate: "2024-11-12",
-    category: "자유게시판",
-    reviewCnt: 3,
-    text: "",
-    img: ""
-}
-let free4 = {
-    boardId: 3,
-    memberNo: 0,
-    boardName: "옆집 개가 너무 짖어요",
-    nickname: "olzl",
-    createDate: "2024-10-12",
-    category: "자유게시판",
-    reviewCnt: 210,
-    text: "",
-    img: ""
-}
-let free5 = {
-    boardId: 4,
-    memberNo: 0,
-    boardName: "옆집 개가 너무 짖어요",
-    nickname: "olzl",
-    createDate: "2024-09-12",
-    category: "자유게시판",
-    reviewCnt: 210,
-    text: "",
-    img: ""
-}
-let free6 = {
-    boardId: 5,
-    memberNo: 0,
-    boardName: "옆집 개가 너무 짖어요",
-    nickname: "olzl",
-    createDate: "2024-08-12",
-    category: "자유게시판",
-    reviewCnt: 210,
-    text: "",
-    img: ""
-}
-let free7 = {
-    boardId: 2,
-    memberNo: 3,
-    boardName: "우리집 멍멍이 보고가요",
-    nickname: "정승호",
-    createDate: "2024-07-12",
-    category: "자유게시판",
-    reviewCnt: 3,
-    text: "",
-    img: ""
-}
-let free8 = {
-    boardId: 2,
-    memberNo: 4,
-    boardName: "우리집 멍멍이 보고가요",
-    nickname: "이상빈",
-    createDate: "2024-06-12",
-    category: "자유게시판",
-    reviewCnt: 3,
-    text: "",
-    img: ""
-}
-let free9 = {
-    boardId: 2,
-    memberNo: 2,
-    boardName: "우리집 멍멍이 보고가요",
-    nickname: "백진욱",
-    createDate: "2024-05-12",
-    category: "자유게시판",
-    reviewCnt: 3,
-    text: "",
-    img: ""
-}
-let free10 = {
-    boardId: 2,
-    memberNo: 1,
-    boardName: "우리집 멍멍이 보고가요",
-    nickname: "송민영",
-    createDate: "2024-04-12",
-    category: "자유게시판",
-    reviewCnt: 3,
-    text: "",
-    img: ""
-}
-let free11 = {
-    boardId: 2,
-    memberNo: 4,
-    boardName: "우리집 멍멍이 보고가요",
-    nickname: "이상빈",
-    createDate: "2024-03-12",
-    category: "자유게시판",
-    reviewCnt: 3,
-    text: "",
-    img: ""
-}
-let free12 = {
-    boardId: 2,
-    memberNo: 3,
-    boardName: "우리집 멍멍이 보고가요",
-    nickname: "정승호",
-    createDate: "2024-02-12",
-    category: "자유게시판",
-    reviewCnt: 3,
-    text: "",
-    img: ""
-}
-let free13 = {
-    boardId: 2,
-    memberNo: 2,
-    boardName: "우리집 멍멍이 보고가요",
-    nickname: "백진욱",
-    createDate: "2024-01-12",
-    category: "자유게시판",
-    reviewCnt: 3,
-    text: "",
-    img: ""
-}
-
 const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
-
-const ListItem = styled.div`
+const ListItem = styled.a`
+cursor: pointer;
+text-decoration: none;
 display: flex;
 justify-content: center;
-height: 80px;
-margin: 5px 0;
-border-bottom: 1px solid rgba(0, 0, 0, 0.234);
+border-bottom: 1px solid;
 flex-direction: column;
+&:hover {
+    border-bottom: 1px solid #F288CD;
+}
 `
 const ListHeader = styled.div`
 display: flex;
 align-items: center;
 margin: 5px 0 5px 5px;
-`
-const ListFooter = styled.div`
-display: flex;
-align-items: center;
-margin: 5px;
-justify-content: end;
 `
 const ListTitle = styled.div`
 margin: 0 5px 0 0;
@@ -190,20 +41,46 @@ color: white;
 font-size: 14px;
 padding: 0 5px;
 `
-
-
-let freeArr = [free1, free2, free3, free4, free5, free6, free7, free8, free9, free10, free11, free12, free13]
+const ListFooter = styled.div`
+display: flex;
+flex-direction: column;
+align-items: end;
+`
+const ListItemWriter = styled.div`
+`
+const ListItemDate = styled.div`
+`
 
 function TrainingMethod() {
-    let nickName
-    if (window.sessionStorage.key(0) === "logined") {
-        nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
-    }
     const isDark = useRecoilValue(isDarkAtom);
     const nowPage = useRecoilValue(presentPage);
-    const totalPost = freeArr.length; // 총 게시물 수
+
+    //현재 로그인한 유저의 닉네임
+    let url = ""
+    if (window.sessionStorage.key(0) === "logined") {
+        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+    }
+    //스프링 통신
+    const [board, setBoard] = useState({
+        boardId: 0,
+        memberNo: 0,
+        nickname: "",
+        category: "",
+        boardName: "",
+        createDate: "",
+        reviewCnt: 0
+    })
+
+    useEffect(() => {
+        axios.get('/api/board/훈련 방법 공유')
+            .then((res) => {
+                setBoard(res.data);
+            })
+    }, []);
+
+    const totalPost = board.length; // 총 게시물 수
     const pageRange = 10; // 페이지당 보여줄 게시물 수
-    const totalPageNum = Math.ceil(freeArr.length / pageRange)
+    const totalPageNum = Math.ceil(board.length / pageRange)
     const btnRange = 5; // 보여질 페이지 버튼의 개수
     const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
     const endPost = startPost + pageRange - 1; // 끝 게시물 번호
@@ -216,10 +93,11 @@ function TrainingMethod() {
             <CommunityHeader />
             <ListGroup style={{ margin: `10px 6vw` }}>
                 {
-                    freeArr.slice(startPost - 1, endPost).map((e, i) => (
+                    board.length > 0 &&
+                    board.slice(startPost - 1, endPost).map((e, i) => (
                         <ListItem
                             key={i}
-                            style={{ borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
+                            style={{ color: `${isDark ? themes.dark.color : themes.light.color}`, borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
                         >
                             <ListHeader>
                                 <ListTitle className="fw-bold">{e.boardName}
@@ -229,7 +107,8 @@ function TrainingMethod() {
                                 </CommentsCount>
                             </ListHeader>
                             <ListFooter>
-                                {e.nickname}, {e.createDate}
+                                <ListItemWriter>작성자 : {e.nickname}</ListItemWriter>
+                                <ListItemDate>{e.createDate.replace("T", ", ").slice(0, 17)}</ListItemDate>
                             </ListFooter>
                         </ListItem>
                     ))
