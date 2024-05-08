@@ -9,6 +9,7 @@ import HotdealBar from '../home/hotdeal';
 import { useEffect, useState } from 'react';
 import { GoDotFill } from "react-icons/go";
 import axios from "axios";
+import defaultImg from "../img/defaultImg.png"
 
 const Container = styled.div`
 min-height: calc(100vh - 86px);
@@ -22,8 +23,9 @@ grid-template-columns: repeat(auto-fit, 300px);
 grid-auto-rows: minmax(100px, auto);
 gap: 15px;
 `
-const MarketItem = styled.div`
-
+const MarketItem = styled.a`
+text-decoration: none;
+cursor: pointer;
 `
 const MarketItemTitle = styled.div`
 display: flex;
@@ -54,6 +56,13 @@ const ListItemDate = styled.div`
 function UsedMarket() {
     const isDark = useRecoilValue(isDarkAtom); //다크모드
     const nowPage = useRecoilValue(presentPage); //페이지네이션
+    //현재 로그인한 유저 닉네임
+    const [loginedNickName, setLoginedNickName] = useState("")
+    useEffect(() => {
+        if (sessionStorage.getItem("logined") !== null) {
+            setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickName)
+        }
+    });
     //화면 가로 크기의 변화에 따라 보여주는 아이템 갯수 변화
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
@@ -70,6 +79,7 @@ function UsedMarket() {
     const [board, setBoard] = useState({
         boardId: 0,
         memberNo: 0,
+        preface: "",
         nickname: "",
         category: "",
         boardName: "",
@@ -81,6 +91,7 @@ function UsedMarket() {
         axios.get('/api/board/댕냥 마켓')
             .then((res) => {
                 setBoard(res.data);
+                console.log(res.data)
             })
     }, []);
     const totalPost = board.length; // 총 게시물 수
@@ -92,12 +103,19 @@ function UsedMarket() {
 
     //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
     const representImg = (e) => {
-        const index = e.indexOf(",")
-        return (
-            <MarketItemImg style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
-        )
-    }
+        if (e !== null) {
+            const index = e.indexOf(",")
+            return (
+                <MarketItemImg style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
+            )
+        } else {
+            return (
+                <MarketItemImg style={{ backgroundImage: `url(${defaultImg})` }} />
+            )
+        }
 
+    }
+    ///used-market-detail/:boardId/:nickName
     return (
         <Container style={{
             color: `${isDark ? themes.dark.color : themes.light.color}`,
@@ -113,8 +131,13 @@ function UsedMarket() {
                 {
                     board.length > 0 &&
                     board.slice(startPost - 1, endPost).map((e, i) => (
-                        <MarketItem key={i}>
-                            <MarketItemTitle>{e.boardName}</MarketItemTitle>
+                        <MarketItem style={{
+                            color: `${isDark ? themes.dark.color : themes.light.color}`
+                        }}
+                            key={i}
+                            href={`/used-market-detail/${e.boardId}${loginedNickName}`}
+                        >
+                            <MarketItemTitle>[{e.preface}] {e.boardName}</MarketItemTitle>
                             {representImg(e.imgPath)}
                             <MarketItemAddress><GoDotFill />거래 장소 : {e.area}</MarketItemAddress>
                             <MarketItemPrice><GoDotFill />가격 : {e.price}</MarketItemPrice>
