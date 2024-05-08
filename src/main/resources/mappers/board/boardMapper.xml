@@ -118,10 +118,11 @@
             INSERT INTO "BoardDetail"
                 ("boardId", "nickname", "memberNo", "category",
                 "BoardName", "Field", "imgPath", "createDate",
-                "tradeTime", "Price", "Area", "detailLocation")
+                "tradeTime", "Price", "Area", "detailLocation", "PREFACE")
             VALUES (#{boardPostVO.boardId}, #{boardPostVO.nickname}, #{boardPostVO.memberNo}, #{boardPostVO.category},
                     #{boardPostVO.boardName}, #{boardPostVO.field}, #{boardPostVO.imgPath}, #{createDate},
-                    #{boardPostVO.tradeTime}, #{boardPostVO.Price}, #{boardPostVO.Area}, #{boardPostVO.detailLocation})
+                    #{boardPostVO.tradeTime}, #{boardPostVO.Price}, #{boardPostVO.Area}, #{boardPostVO.detailLocation},
+                    #{boardPostVO.preface})
         ]]>
     </insert>
 
