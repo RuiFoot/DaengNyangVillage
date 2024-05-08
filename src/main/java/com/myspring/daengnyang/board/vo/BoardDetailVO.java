@@ -17,5 +17,8 @@ public class BoardDetailVO {
     private String imgPath;
     private Date createDate;
     private String preface;
-
+    private String tradeTime;
+    private String Price;
+    private String Area;
+    private String detailLocation;
 }
