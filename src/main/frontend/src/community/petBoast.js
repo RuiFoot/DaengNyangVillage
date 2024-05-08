@@ -6,9 +6,7 @@ import CommunityNav from "./communityNav";
 import CommunityHeader from './communityHeader';
 import Pagination from "../pagination";
 import { useEffect, useState } from 'react';
-import { GoDotFill } from "react-icons/go";
-import hotPlaceArr from '../imgDate';
-import defaultImg from '../defaultImgs';
+import defaultImg from '../img/defaultImg.png';
 import axios from "axios";
 
 const Container = styled.div`
@@ -74,6 +72,7 @@ function PetBoast() {
         boardId: 0,
         memberNo: 0,
         nickname: "",
+        preface: "",
         category: "",
         boardName: "",
         createDate: "",
@@ -97,10 +96,16 @@ function PetBoast() {
 
     //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
     const representImg = (e) => {
-        const index = e.indexOf(",")
-        return (
-            <PetImg style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
-        )
+        if (e !== null) {
+            const index = e.indexOf(",")
+            return (
+                <PetImg style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
+            )
+        } else {
+            return (
+                <PetImg style={{ backgroundImage: `url(${defaultImg})` }} />
+            )
+        }
     }
     return (
         <Container style={{

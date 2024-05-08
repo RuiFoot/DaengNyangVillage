@@ -65,6 +65,7 @@ function TrainingMethod() {
         boardId: 0,
         memberNo: 0,
         nickname: "",
+        preface: "",
         category: "",
         boardName: "",
         createDate: "",
@@ -100,7 +101,7 @@ function TrainingMethod() {
                             style={{ color: `${isDark ? themes.dark.color : themes.light.color}`, borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
                         >
                             <ListHeader>
-                                <ListTitle className="fw-bold">{e.boardName}
+                                <ListTitle className="fw-bold">[{e.preface}] {e.boardName}
                                 </ListTitle>
                                 <CommentsCount>
                                     {e.reviewCnt}

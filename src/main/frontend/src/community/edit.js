@@ -1,5 +1,5 @@
-import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { isDarkAtom, editData } from '../atoms';
 import styled from "styled-components";
 import themes from "../theme";
 import Bumper from '../layout/bumper';
@@ -16,7 +16,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { storage } from "../firebase";
 import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
 import axios from "axios";
-
+import { useParams } from 'react-router-dom';
 const Container = styled.div`
 `
 
@@ -36,11 +36,47 @@ display: flex;
 justify-content: end;
 `
 
-function Write() {
+function Edit() {
     const [imageUrl, setImageUrl] = useState([]); // 새로운 상태 추가
     const baseUrl = "http://localhost:8080";
     // 배포용 URL
     const quillRef = useRef(null); // useRef로 ref 생성
+    const params = useParams()
+    const [editContent, setEditContent] = useState({
+        area: "",
+        detailLocation: "",
+        field: "",
+        preface: "",
+        price: "",
+        tradeTime: "",
+        boardId: 0,
+        memberNo: 0,
+        preface: "",
+        nickname: "",
+        category: "",
+        boardName: "",
+        createDate: "",
+        imgPath: ""
+    })
+    useEffect(() => {
+        axios.get(`/api/board/detail/${params.boardId}`)
+            .then((res) => {
+                setEditContent(res.data);
+                console.log(res.data)
+            })
+    }, []);
+    useEffect(() => {
+        setValues({
+            boardName: editContent.boardName,
+            detailLocation: editContent.detailLocation,
+            tradeTime: editContent.tradeTime,
+            price: editContent.price
+        })
+        setQuillValue(editContent.field)
+        setPreface(editContent.preface)
+        setArea(editContent.area)
+    }, [editContent]);
+
 
     // 이미지 핸들러
     const imageHandler = () => {
@@ -121,7 +157,7 @@ function Write() {
     const userInfo = JSON.parse(window.sessionStorage.getItem("logined"))
 
     let referrer = document.referrer; //이전 페이지 url
-    const [board, setBoard] = useState()
+    const [board, setBoard] = useState(editContent.category)
     const [area, setArea] = useState("지역을 입력해주세요")
     const [preface, setPreface] = useState("머릿말을 선택해주세요")
     const [values, setValues] = useState({
@@ -140,8 +176,14 @@ function Write() {
             [name]: value
         });
     }
-
+    //이미지 찾기
+    const findImg = (input) => {
+        return input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")))
+    }
     const handleSubmit = (e) => {
+        // console.log(quillValue.indexOf("img"))
+        // console.log(quillValue.indexOf(">", quillValue.indexOf("img")))
+        console.log(quillValue.slice(quillValue.indexOf("http"), quillValue.indexOf(">", quillValue.indexOf("img"))))
         e.preventDefault();
         let body = {
             tradeTime: tradeTime,
@@ -153,22 +195,24 @@ function Write() {
             memberNo: userInfo.memberNo,
             category: board,
             field: quillValue,
-            imgPath: imageUrl.join(", "),
-            boardId: 0,
+            imgPath: findImg(quillValue),
+            boardId: params.boardId,
             boardName: values.boardName
         }
-        axios.post(`${baseUrl}/board`, body
+        axios.patch(`${baseUrl}/board`, body
         ).then((response) => {
             console.log(response.data);	//정상 통신 후 응답된 메시지 출력
-            if (board === "자유 게시판") {
-                window.location.href = `/free-board/${userInfo.nickName}`
-            } else if (board === "반려동물 자랑") {
-                window.location.href = `/pet-boast/${userInfo.nickName}`
-            } else if (board === "훈련 방법 공유") {
-                window.location.href = `/training-method/${userInfo.nickName}`
-            } else if (board === "댕냥 마켓") {
-                window.location.href = `/used-market/${userInfo.nickName}`
-            }
+            console.log(imageUrl);	//정상 통신 후 응답된 메시지 출력
+            console.log(quillValue);	//정상 통신 후 응답된 메시지 출력
+            // if (board === "자유 게시판") {
+            //     window.location.href = `/free-board/${userInfo.nickName}`
+            // } else if (board === "반려동물 자랑") {
+            //     window.location.href = `/pet-boast/${userInfo.nickName}`
+            // } else if (board === "훈련 방법 공유") {
+            //     window.location.href = `/training-method/${userInfo.nickName}`
+            // } else if (board === "댕냥 마켓") {
+            //     window.location.href = `/used-market/${userInfo.nickName}`
+            // }
         }).catch((error) => {
             console.log(error);	//오류발생시 실행
         })
@@ -367,14 +411,14 @@ function Write() {
                                 backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
                             }} className='registerBtns'
                                 onClick={handleSubmit}
-                            >등 록</Button>
+                            >수 정</Button>
                         </InputFooter>
                         :
                         <InputFooter>
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 내용을 입력해주세요</Tooltip>}>
                                 <span className="d-inline-block">
                                     <Button className='registerBtns' disabled style={{ width: "120px", backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`, pointerEvents: 'none' }}>
-                                        등록
+                                        수 정
                                     </Button>
                                 </span>
                             </OverlayTrigger>
@@ -387,13 +431,13 @@ function Write() {
                                     backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
                                 }} className='registerBtns'
                                     onClick={handleSubmit}
-                                >등 록</Button>
+                                >수 정</Button>
                             </InputFooter>
                             : <InputFooter>
                                 <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 머릿말, 내용을 입력해주세요</Tooltip>}>
                                     <span className="d-inline-block">
                                         <Button className='registerBtns' disabled style={{ width: "120px", backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`, pointerEvents: 'none' }}>
-                                            등록
+                                            수 정
                                         </Button>
                                     </span>
                                 </OverlayTrigger>
@@ -404,4 +448,4 @@ function Write() {
     );
 }
 
-export default Write;
+export default Edit;
