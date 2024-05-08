@@ -26,7 +26,8 @@ public interface MemberMapper {
 
     MemberInfoVO getMemberInfoL(@Param("memberNo") Long memberNo);
 
-    List<Integer> getFavorite(@Param("memberNo") Integer memberNo);
+    List<AnimalLocationVO> getFavorite(@Param("memberNo") Integer memberNo);
+
 
     BoardVO getMemberPost(@Param("memberNo") Integer memberNo);
 

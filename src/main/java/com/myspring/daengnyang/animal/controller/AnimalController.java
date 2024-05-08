@@ -63,7 +63,8 @@ public class AnimalController {
     //-----------------------------------------------------------------------------------------------
 
     @GetMapping("/favorite")
-    public List<AnimalLocationVO> getFavoriteLocation() {
+    public List<AnimalLocationVO> getFavoriteLocation(@RequestParam Integer memberNo) {
+
         return null;
     }
 
@@ -74,6 +75,11 @@ public class AnimalController {
         log.info("memberNo : " + memberNo + " / animalNum : " + animalNum);
 
         return animalService.favoriteCheck(memberNo, animalNum);
+    }
+
+    @GetMapping("/favorite/{animalNum}")
+    public boolean favoriteNum(@PathVariable("animalNum") Integer animalNum, @RequestParam Integer memberNo) {
+        return animalService.getFavorite(animalNum, memberNo);
     }
 
     //-----------------------------------------------------------------------------------------------

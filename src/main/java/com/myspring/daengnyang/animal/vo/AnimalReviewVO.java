@@ -13,6 +13,7 @@ public class AnimalReviewVO {
     private Integer animalNum;
     private String nickname;
     private Integer memberNo;
+    private String profileImg;
     private String review;
     private Integer star;
     private Date createDate;

@@ -89,12 +89,12 @@ public class BoardController {
     /**
      * 댓글 작성 기능
      */
+
     @PostMapping("/review")
     @ResponseBody
     public void postReview(@RequestBody ReviewVO reviewVO) {
         log.info("댓글 쓰기 컨트롤러 실행");
         boardService.postReview(reviewVO);
     }
-
 
 }
