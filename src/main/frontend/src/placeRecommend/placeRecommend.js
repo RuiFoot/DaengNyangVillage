@@ -29,24 +29,27 @@ margin: 10px 6vw;
 `
 // 체크박스 css
 const TopContants = styled.div`
-margin: 10px 3vw;
+margin: 10px 6vw;
 display: grid;
-  grid-template-columns: repeat(2, 1fr) 5fr;
+  grid-template-columns: 1fr 2fr;
   grid-auto-rows: minmax(100px, auto);
-  gap: 5px;
+  gap: 15px;
 `
 const CheckBoxs = styled.div`
 display: flex;
 justify-content: center;
 height: 500px;
-// width: 300px;
-
+width: 100%;
+`
+const List = styled.div`
+display: flex;
+flex-direction: row;
+height: 410px;
+justify-content: center;
 `
 
 const Map = styled.div`
 height: 500px;
-grid-column: 3 / span 1;
-
 `
 
 const PlaceItems = styled.div`
@@ -54,7 +57,7 @@ display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-auto-rows: minmax(100px, auto);
   gap: 15px;
-  margin: 10px 3vw;
+  margin: 10px 6vw;
 `
 
 const PlaceItem = styled.div`
@@ -115,9 +118,21 @@ function PlaceRecommend() {
         }
     }, [])
 
-     // 지역 리스트 받아오기
-     useEffect(() => {
+    //카테고리 리스트 받아오기
+    useEffect(() => {
         axios.get(`${baseUrl}/animal`)
+            .then((res) => {
+                setCategoryList(res.data)
+                // console.log(res.data)
+            }).catch(error => {
+                console.error('Request failed : ', error);
+            })
+    }, []);
+
+    // 지역 리스트 받아오기
+    useEffect(() => {
+        let areaName = "경기도";
+        axios.get(`${baseUrl}/animal/area?sido=${areaName}`)
             .then((res) => {
                 setAreaList(res.data)
                 console.log(res.data)
@@ -125,17 +140,6 @@ function PlaceRecommend() {
                 console.error('Request failed : ', error);
         })
     }, [])
-
-    //카테고리 리스트 받아오기
-    useEffect(() => {
-        axios.get(`${baseUrl}/animal`)
-            .then((res) => {
-                setCategoryList(res.data)
-                console.log(res.data)
-            }).catch(error => {
-                console.error('Request failed : ', error);
-            })
-    }, []);
    
     // 맵에 띄울 마커 정보 받기
     useEffect(() => {
@@ -155,13 +159,12 @@ function PlaceRecommend() {
         const container = document.getElementById('map');
         const options = {
             center: new kakao.maps.LatLng(37.5664056, 126.9778222),
-            level: 8
+            level: 5
         };
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
     }, []);
 
-    // useEffect(() => {
     const handleButtonClick = () => {
         // 주소 정보를 이용하여 마커 표시
         if (address && Object.keys(address).length > 0 && map) {
@@ -171,20 +174,21 @@ function PlaceRecommend() {
             });
             // 새로운 마커들 생성
             var newMarkers = [];
+            var bounds = new kakao.maps.LatLngBounds(); //재설정 범위정보를 가지고 있을
             for (var j = 0; j < Object.keys(address).length; j++) {
-                var content = {
+                var content = { // 객체 정보 저장
                     title: address[j].facilityName,
                     LatLng: new kakao.maps.LatLng(address[j].latitude, address[j].longitude),
                     roadAddress: address[j].roadAddress,
                 }
-                var newMarker = new kakao.maps.Marker({
+                var newMarker = new kakao.maps.Marker({ //새로운 마커 생성 및 표시
                     map: map,
                     position: content.LatLng,
                     title: content.title
                 });
-                newMarkers.push(newMarker);
-                // 마커 클릭 시 오버레이 표시
-                (function (marker, place) {
+                newMarkers.push(newMarker); //새로 생성된 마커를 배열에 추가
+                bounds.extend(content.LatLng); //latlngbound 객체에 좌표 추가
+                (function (marker, place) { // 마커 클릭 시 오버레이 표시
                     kakao.maps.event.addListener(marker, 'click', function () {
                         var overlay = new kakao.maps.CustomOverlay({
                             content: '<div class="wrap">' +
@@ -207,8 +211,8 @@ function PlaceRecommend() {
                     });
                 })(newMarker, content);
             }
-            // 새로운 마커들을 저장하여 나중에 제거할 수 있도록 함
-            setMarkers(newMarkers);
+            map.setBounds(bounds); // 지도 범위 재설정
+            setMarkers(newMarkers); // 새로운 마커들을 저장하여 나중에 제거할 수 있도록 함
         }
     };
 
@@ -235,40 +239,40 @@ function PlaceRecommend() {
                                             placeholder="지역을 선택해주세요"
                                             aria-label="Recipient's username"
                                             aria-describedby="basic-addon2"
-
                                         />
                                         <Button variant="outline-secondary" id="button-addon2" onClick={handleButtonClick}>
                                             검색
                                         </Button>
                                     </InputGroup>
-                                    </Card.Header>
-                                <ListGroup className="listGroup" variant="flush">
-                                    {areaList.map((e, i) => (
-                                        <ListGroup.Item key={i}>
-                                            <CheckBox id={i} type="checkbox"></CheckBox>
-                                            <CheckBoxLabel>{e}</CheckBoxLabel>
-                                        </ListGroup.Item>
-                                    ))}
-                                </ListGroup>
-                                <ListGroup className="listGroup" variant="flush">
-
-                                    {categoryList.map((e, i) => (
-                                        <ListGroup.Item key={i} style={{
-                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                        }}>
-                                            <CheckBox id={i} type="checkbox"></CheckBox>
-                                            <CheckBoxLabel>{e}</CheckBoxLabel>
-                                        </ListGroup.Item>
-                                    ))}
-                                </ListGroup>
+                                </Card.Header>
+                                <List>
+                                    <ListGroup className="areaListGroup" variant="flush">
+                                        {areaList.map((e, i) => (
+                                            <ListGroup.Item key={i}>
+                                                <CheckBox id={i} type="checkbox"></CheckBox>
+                                                <CheckBoxLabel>{e}</CheckBoxLabel>
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                    <ListGroup className="categoryListGroup" variant="flush">
+                                        {categoryList.map((e, i) => (
+                                            <ListGroup.Item key={i} style={{
+                                                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                            }}>
+                                                <CheckBox id={i} type="checkbox"></CheckBox>
+                                                <CheckBoxLabel>{e}</CheckBoxLabel>
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </List>
                             </Card>
                         </CheckBoxs>
                         <Map id="map">
                         </Map>
                     </TopContants>
                     :
-                    <TopContants style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
+                    <TopContants style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))' }}>
                         <CheckBoxs >
                             <Card className="card" >
                                 <Card.Header style={{
@@ -286,25 +290,27 @@ function PlaceRecommend() {
                                         </Button>
                                     </InputGroup>
                                 </Card.Header>
-                                <ListGroup className="listGroup" variant="flush">
-                                    {areaList.map((e, i) => (
-                                        <ListGroup.Item key={i}>
-                                            <CheckBox id={i} type="checkbox"></CheckBox>
-                                            <CheckBoxLabel>{e}</CheckBoxLabel>
-                                        </ListGroup.Item>
-                                    ))}
-                                </ListGroup>
-                                <ListGroup className="listGroup" variant="flush">
-                                    {categoryList.map((e, i) => (
-                                        <ListGroup.Item key={i} style={{
-                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                        }}>
-                                            <CheckBox id={i} type="checkbox"></CheckBox>
-                                            <CheckBoxLabel>{e}</CheckBoxLabel>
-                                        </ListGroup.Item>
-                                    ))}
-                                </ListGroup>
+                                <List>
+                                    <ListGroup className="areaListGroup" variant="flush">
+                                        {areaList.map((e, i) => (
+                                            <ListGroup.Item key={i}>
+                                                <CheckBox id={i} type="checkbox"></CheckBox>
+                                                <CheckBoxLabel>{e}</CheckBoxLabel>
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                    <ListGroup className="categoryListGroup" variant="flush">
+                                        {categoryList.map((e, i) => (
+                                            <ListGroup.Item key={i} style={{
+                                                color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                            }}>
+                                                <CheckBox id={i} type="checkbox"></CheckBox>
+                                                <CheckBoxLabel>{e}</CheckBoxLabel>
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </List>
                             </Card>
                         </CheckBoxs>
                         <Map>
