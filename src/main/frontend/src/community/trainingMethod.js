@@ -98,6 +98,7 @@ function TrainingMethod() {
                     board.slice(startPost - 1, endPost).map((e, i) => (
                         <ListItem
                             key={i}
+                            href={`/free-board-detail/${e.boardId}${url}`}
                             style={{ color: `${isDark ? themes.dark.color : themes.light.color}`, borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
                         >
                             <ListHeader>

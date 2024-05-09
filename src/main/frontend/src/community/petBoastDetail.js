@@ -25,23 +25,6 @@ const CategoryTitle = styled.div`
 font-size: 30px;
 margin: 10px;
 `
-const Items = styled.div`
-width: 100%;
- display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  grid-auto-rows: minmax(100px, auto);
-`
-const LeftItems = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-`
-const RightItems = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-`
 const Title = styled.div`
 font-size: 25px;
 margin: 10px 0;
@@ -53,14 +36,6 @@ width: 95%;
 background-position: center;
 background-size: cover;
 `
-const Address = styled.div`
-margin-bottom: 10px;
-`
-const TradeTime = styled.div`
-margin-bottom: 10px;
-`
-const TradePrice = styled.div`
-`
 const CreateDate = styled.div`
 text-align: end;
 `
@@ -70,16 +45,6 @@ display: flex;
 flex-direction: column;
 align-items: center;
 margin: 20px 0;
-`
-const ContentTitleBox = styled.div`
-width: 88vw;
-margin: 20px 0 10px 0;
-display: flex;
-justify-content: start;
-border-bottom: 1px solid;
-`
-const ContentTitle = styled.div`
-font-size: 20px;
 `
 const ContentBtns = styled.div`
 display: flex;
@@ -153,21 +118,15 @@ margin: 10px 0;
 display: flex;
 justify-content: end;
 `
-const ReReviewOutBox = styled.div`
+const ContentFooter = styled.div`
+gap: 10px;
+width: 88vw;
 display: flex;
-align-items: center;
+flex-direction: column;
+align-items: end;
 justify-content: end;
 `
-const ReReviewBox = styled.div`
-width: 90%;
-`
-const Replyd = styled.div`
-display: flex;
-transform: rotate( 180deg );
-margin-right: 10px;
-`
-
-function UsedMarketDetail() {
+function PetBoastDetail() {
     const baseUrl = "http://localhost:8080";
     const isDark = useRecoilValue(isDarkAtom); // 다크모드
     const params = useParams()
@@ -257,7 +216,7 @@ function UsedMarketDetail() {
         axios.delete(`/api/board/${e}`)
             .then((res) => {
                 setContent(res.data);
-                window.location.href = `/used-market/${userInfo.nickName}`
+                window.location.href = `/pet-boast/${userInfo.nickName}`
             })
     }
 
@@ -429,56 +388,42 @@ function UsedMarketDetail() {
                 backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
             }}>
                 <CategoryTitle>{content.category}</CategoryTitle>
-                <Items>
-                    <LeftItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 10px 0 6vw"}` }}>
-                        <Title>
-                            [{content.preface}] {content.boardName}
-                        </Title>
-                        {representImg(content.imgPath)}
-                    </LeftItems>
-                    <RightItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 6vw 0 10px"}` }}>
-                        <div>
-                            <Title>
-                                {
-                                    window.sessionStorage.getItem("logined") === null ?
-                                        null :
-                                        <ContentBtns>
-                                            <Button style={{
-                                                margin: "0 5px",
-                                                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                            }} className="recommendBtn"
-                                                onClick={() => editContentBtn(content.boardId)}
-                                            >수정</Button>
-                                            <Button style={{
-                                                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                            }} className="recommendBtn"
-                                                onClick={() => deleteContentBtn(content.boardId)}
-                                            >삭제</Button>
-                                        </ContentBtns>
-                                }
-                            </Title>
-                            <Address>주소 : {content.area} {content.detailLocation}</Address>
-                            <TradeTime>거래 가능 시간 : {content.tradeTime}</TradeTime>
-                            <TradePrice>가격 : {content.price}</TradePrice>
-                        </div>
-                        <div>
-                            {
-                                content.createDate ?
-                                    <CreateDate>{content.createDate.replace("T", ", ").slice(0, 17)}</CreateDate>
-                                    :
-                                    null
-                            }
-                        </div>
-                    </RightItems>
-                </Items>
-                <ContentTitleBox>
-                    <ContentTitle>상세 내용</ContentTitle>
-                </ContentTitleBox>
+
+                <Title>
+                    {content.boardName}
+                </Title>
                 <ContentField dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(content.field)
                 }} />
+                <ContentFooter>
+                    <>
+                        {
+                            window.sessionStorage.getItem("logined") === null ?
+                                null :
+                                <ContentBtns>
+                                    <Button style={{
+                                        margin: "0 5px",
+                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    }} className="recommendBtn"
+                                        onClick={() => editContentBtn(content.boardId)}
+                                    >수정</Button>
+                                    <Button style={{
+                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    }} className="recommendBtn"
+                                        onClick={() => deleteContentBtn(content.boardId)}
+                                    >삭제</Button>
+                                </ContentBtns>
+                        }
+                    </>
+                    {
+                        content.createDate ?
+                            <CreateDate>{content.createDate.replace("T", ", ").slice(0, 17)}</CreateDate>
+                            :
+                            null
+                    }
+                </ContentFooter>
                 <ReviewsTitleBox>
                     <ReviewsTitle>Reviews {getReview.length}</ReviewsTitle>
                 </ReviewsTitleBox>
@@ -619,4 +564,4 @@ function UsedMarketDetail() {
     );
 }
 
-export default UsedMarketDetail;
+export default PetBoastDetail;

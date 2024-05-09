@@ -21,8 +21,12 @@ grid-template-columns: repeat(auto-fit, 300px);
 grid-auto-rows: minmax(100px, auto);
 gap: 15px;
 `
-const PetBoastItem = styled.div`
-
+const PetBoastItem = styled.a`
+text-decoration: none;
+cursor: pointer;
+&:hover {
+    transform: scale(1.02);
+}
 `
 const PetBoastTitle = styled.div`
 display: flex;
@@ -46,10 +50,32 @@ const ListItemWriter = styled.div`
 `
 const ListItemDate = styled.div`
 `
+const ListHeader = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 5px 0 5px 5px;
+`
+const CommentsCount = styled.div`
+border: 1px solid ;
+border-radius: 5px;
+margin-left: 10px;
+padding: 0 5px;
+font-size: clamp(100%, 1vw, 120%);
+`
 
 function PetBoast() {
     const isDark = useRecoilValue(isDarkAtom);
     const nowPage = useRecoilValue(presentPage);
+
+    //현재 로그인한 유저 닉네임
+    const [loginedNickName, setLoginedNickName] = useState("")
+    useEffect(() => {
+        if (sessionStorage.getItem("logined") !== null) {
+            setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickName)
+        }
+    });
+
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -120,8 +146,18 @@ function PetBoast() {
             }} >
                 {board.length > 0 &&
                     board.slice(startPost - 1, endPost).map((e, i) => (
-                        <PetBoastItem key={i}>
-                            <PetBoastTitle>{e.boardName}</PetBoastTitle>
+                        <PetBoastItem style={{
+                            color: `${isDark ? themes.dark.color : themes.light.color}`
+                        }}
+                            key={i}
+                            href={`/pet-boast-detail/${e.boardId}${loginedNickName}`}
+                        >
+                            <ListHeader>
+                                <PetBoastTitle>{e.boardName}</PetBoastTitle>
+                                <CommentsCount>
+                                    {e.reviewCnt}
+                                </CommentsCount>
+                            </ListHeader>
                             {representImg(e.imgPath)}
                             <ListFooter>
                                 <ListItemWriter>작성자 : {e.nickname}</ListItemWriter>

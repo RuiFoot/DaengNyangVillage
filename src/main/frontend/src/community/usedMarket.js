@@ -26,6 +26,9 @@ gap: 15px;
 const MarketItem = styled.a`
 text-decoration: none;
 cursor: pointer;
+&:hover {
+    transform: scale(1.02);
+}
 `
 const MarketItemTitle = styled.div`
 display: flex;
@@ -53,6 +56,20 @@ const ListItemWriter = styled.div`
 `
 const ListItemDate = styled.div`
 `
+const ListHeader = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 5px 0 5px 5px;
+`
+const CommentsCount = styled.div`
+border: 1px solid ;
+border-radius: 5px;
+margin-left: 10px;
+padding: 0 5px;
+font-size: clamp(100%, 1vw, 120%);
+`
+
 function UsedMarket() {
     const isDark = useRecoilValue(isDarkAtom); //다크모드
     const nowPage = useRecoilValue(presentPage); //페이지네이션
@@ -137,7 +154,12 @@ function UsedMarket() {
                             key={i}
                             href={`/used-market-detail/${e.boardId}${loginedNickName}`}
                         >
-                            <MarketItemTitle>[{e.preface}] {e.boardName}</MarketItemTitle>
+                            <ListHeader>
+                                <MarketItemTitle>[{e.preface}] {e.boardName}</MarketItemTitle>
+                                <CommentsCount>
+                                    {e.reviewCnt}
+                                </CommentsCount>
+                            </ListHeader>
                             {representImg(e.imgPath)}
                             <MarketItemAddress><GoDotFill />거래 장소 : {e.area}</MarketItemAddress>
                             <MarketItemPrice><GoDotFill />가격 : {e.price}</MarketItemPrice>

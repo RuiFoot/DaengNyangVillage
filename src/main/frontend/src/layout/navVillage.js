@@ -255,11 +255,22 @@ function NavVillage() {
     let mypages = [`/my-info/${nickName}`, `/my-info-change/${nickName}`, `/change-passwd/${nickName}`, `/selected-location/${nickName}`, `/written-by-me/${nickName}`]
     // 커뮤니티안의 페이지들 주소
     //두가지 로그인시 로그인 아닐시 나눠야함 
-    let community
-    if (login) {
-        community = [`/free-board${"/" + nickName}`, `/pet-boast${"/" + nickName}`, `/training-method${"/" + nickName}`, `/used-market${"/" + nickName}`, `/text-write${"/" + nickName}`, `/write${"/" + nickName}`]
-    } else {
-        community = [`/free-board${nickName}`, `/pet-boast${nickName}`, `/training-method${nickName}`, `/used-market${nickName}`, `/text-write${nickName}`]
+    let community = [`free`, `pet`, `training`, `used`, `write`, "edit"]
+    const lightOn = (path, board) => {
+        if (path.indexOf("-", 1) === -1) {
+
+            if (board.indexOf(path.slice(1, path.indexOf("/", 1))) !== -1) {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            if (board.indexOf(path.slice(1, path.indexOf("-", 1))) !== -1) {
+                return true
+            } else {
+                return false
+            }
+        }
     }
     return (
         <div>
@@ -288,7 +299,7 @@ function NavVillage() {
                             className="me-auto my-2 my-lg-0"
                             navbarScroll
                         >
-                            <Nav.Link style={{ color: `${community.includes(pathname) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/free-board${url}`}
+                            <Nav.Link style={{ color: `${lightOn(pathname, community) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/free-board${url}`}
                             >
                                 커뮤니티
                             </Nav.Link>

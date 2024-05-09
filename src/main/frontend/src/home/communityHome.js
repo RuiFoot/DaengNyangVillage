@@ -3,8 +3,12 @@ import { useEffect, useState } from "react";
 import { BsCardText } from "react-icons/bs";
 import { IoRestaurantOutline } from "react-icons/io5";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { HiOutlinePhoto } from "react-icons/hi2";
 import axios from "axios";
 import defaultImg from "../img/defaultImg.png"
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
 
 const Communitylists = styled.div`
 display: grid;
@@ -26,15 +30,23 @@ const ArticleTitle = styled.div`
 font-weight: bold;
 margin-bottom: 10px;
 `
-const Content = styled.div`
-border-top : 1px solid #B2BEBF;
-border-bottom : 1px solid #B2BEBF;
+const Content = styled.a`
+text-decoration: none;
+cursor: pointer;
+border-top : 1px solid ;
+border-bottom : 1px solid ;
 margin-bottom: 5px;
 padding: 5px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+
 `
-const ImgContent = styled.div`
-border-top : 1px solid #B2BEBF;
-border-bottom : 1px solid #B2BEBF;
+const ImgContent = styled.a`
+text-decoration: none;
+cursor: pointer;
+border-top : 1px solid ;
+border-bottom : 1px solid ;
 margin-bottom: 5px;
 padding: 5px;
 display: flex;
@@ -49,9 +61,6 @@ flex-direction: column;
 const Writer = styled.div`
 text-align: end;
 `
-const Area = styled.div`
-text-align: end;
-`
 const Date = styled.div`
 text-align: end;
 `
@@ -64,7 +73,14 @@ background-size: cover;
 `
 
 function CommunityHome() {
-
+    const isDark = useRecoilValue(isDarkAtom);
+    //현재 로그인한 유저 닉네임
+    const [loginedNickName, setLoginedNickName] = useState("")
+    useEffect(() => {
+        if (sessionStorage.getItem("logined") !== null) {
+            setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickName)
+        }
+    });
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -182,7 +198,14 @@ function CommunityHome() {
                     {
                         freeBoard.length > 0 &&
                         freeBoard.slice(0, 3).map((e, i) => (
-                            <Content key={i}>
+                            <Content
+                                style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                key={i}
+                                href={`/free-board-detail/${e.boardId}${loginedNickName}`}
+                            >
                                 <ArticleTitle>[{e.preface}] {e.boardName}</ArticleTitle>
                                 <Writer>{e.nickname}</Writer>
                                 <Date>{e.createDate.replace("T", ", ").slice(0, 17)}</Date>
@@ -191,11 +214,18 @@ function CommunityHome() {
                     }
                 </Communitylist>
                 <Communitylist>
-                    <CommunityTitle><IoRestaurantOutline style={{ marginRight: '5px' }} /> 반려동물 자랑</CommunityTitle>
+                    <CommunityTitle><HiOutlinePhoto style={{ marginRight: '5px' }} />반려동물 자랑</CommunityTitle>
                     {
                         petBoastBoard.length > 0 &&
                         petBoastBoard.slice(0, 3).map((e, i) => (
-                            <ImgContent key={i}>
+                            <ImgContent
+                                style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                key={i}
+                                href={`/pet-boast-detail/${e.boardId}${loginedNickName}`}
+                            >
                                 {representImg(e.imgPath)}
                                 <TextBox>
                                     <ArticleTitle>{e.boardName}</ArticleTitle>
@@ -213,7 +243,14 @@ function CommunityHome() {
                     {
                         trainingBoard.length > 0 &&
                         trainingBoard.slice(0, 3).map((e, i) => (
-                            <Content key={i}>
+                            <Content
+                                style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                key={i}
+                                href={`/training-method-detail/${e.boardId}${loginedNickName}`}
+                            >
                                 <ArticleTitle>[{e.preface}] {e.boardName}</ArticleTitle>
                                 <Writer>{e.nickname}</Writer>
                                 <Date>{e.createDate.replace("T", ", ").slice(0, 17)}</Date>
@@ -226,12 +263,19 @@ function CommunityHome() {
                     {
                         marketBoard.length > 0 &&
                         marketBoard.slice(0, 3).map((e, i) => (
-                            <ImgContent key={i}>
+                            <ImgContent
+                                style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                key={i}
+                                href={`/used-market-detail/${e.boardId}${loginedNickName}`}
+                            >
                                 {representImg(e.imgPath)}
                                 <TextBox>
                                     <ArticleTitle>[{e.preface}] {e.boardName}</ArticleTitle>
                                     <>
-                                        <Writer>{e.nickname}</Writer>
+                                        <Writer>{e.area} {e.nickname}</Writer>
                                         <Date>{e.createDate.replace("T", ", ").slice(0, 17)}</Date>
                                     </>
                                 </TextBox>
