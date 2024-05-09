@@ -93,6 +93,14 @@
         ]]>
     </select>
 
+    <select id="getBoardID" resultType="int">
+        <![CDATA[
+            SELECT "boardId"
+            FROM "Boardreview"
+            WHERE "boardReviewNum" = #{boardReviewNum}
+        ]]>
+    </select>
+
     <insert id="postBoardDetail" parameterType="com.myspring.daengnyang.board.vo.BoardPostVO">
         <selectKey keyProperty="createDate" resultType="date" order="BEFORE">
             SELECT "createDate"

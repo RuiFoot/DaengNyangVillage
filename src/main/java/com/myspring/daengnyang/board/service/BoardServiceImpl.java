@@ -92,4 +92,8 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.modifyReview(reviewVO);
     }
 
+    @Override
+    public int getBoardId(int boardReviewNum) {
+        return boardMapper.getBoardID(boardReviewNum);
+    }
 }

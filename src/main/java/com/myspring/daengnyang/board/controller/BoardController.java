@@ -62,6 +62,10 @@ public class BoardController {
     public void deleteBoardReview(@PathVariable("boardReviewNum") int boardReviewNum) {
         log.info("댓글 삭제 컨트롤러 실행 => boardReviewNum : " + boardReviewNum);
         boardService.deleteBoardReview(boardReviewNum);
+
+        int boardId = boardService.getBoardId(boardReviewNum);
+        System.out.println(boardId);
+        boardService.removeReview(boardId);
     }
 
     @PostMapping("")
@@ -95,6 +99,9 @@ public class BoardController {
     public void postReview(@RequestBody ReviewVO reviewVO) {
         log.info("댓글 쓰기 컨트롤러 실행");
         boardService.postReview(reviewVO);
+
+        int boardId = reviewVO.getBoardId();
+        boardService.registerReview(boardId);
     }
 
 }
