@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public BoardVO getMemberPost(Integer memberNo) {
+    public List<BoardVO> getMemberPost(Integer memberNo) {
         return memberMapper.getMemberPost(memberNo);
     }
 

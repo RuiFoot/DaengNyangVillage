@@ -22,7 +22,7 @@ public interface MemberService {
 
     List<AnimalLocationVO> getFavorite(Integer memberNo);
 
-    BoardVO getMemberPost(Integer memberNo);
+    List<BoardVO> getMemberPost(Integer memberNo);
 
     boolean getDuplicationEmail(String email);
 
