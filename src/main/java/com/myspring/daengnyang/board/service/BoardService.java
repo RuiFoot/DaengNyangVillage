@@ -21,5 +21,6 @@ public interface BoardService {
     void modifyPost(BoardPostVO boardPostVO);
     void modifyReview(ReviewVO reviewVO);
     void postReview(ReviewVO reviewVO);
+    int getBoardId(int boardReviewNum);
 
 }
