@@ -9,8 +9,10 @@ import com.myspring.daengnyang.animal.vo.FavoriteCheckRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 
@@ -42,8 +44,12 @@ public class AnimalController {
     }
 
     @GetMapping("/location/{searchLocation}")
-    public List<AnimalLocationVO> animalLocation(@PathVariable("searchLocation") String location, @RequestParam String classification) {
+    public List<AnimalLocationVO> animalLocation(
+            @PathVariable("searchLocation") String location,
+            @RequestParam String classification,
+            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) { // page : 2 => 페이지 보내야함
         log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + location + ", Params : " + classification);
+        log.info("pageable : " + pageable);
         return animalService.getLocation(location, classification);
     }
 
@@ -59,14 +65,7 @@ public class AnimalController {
         return animalService.getRecommend(memberNo, sido, sigungu);
     }
 
-
     //-----------------------------------------------------------------------------------------------
-
-    @GetMapping("/favorite")
-    public List<AnimalLocationVO> getFavoriteLocation(@RequestParam Integer memberNo) {
-
-        return null;
-    }
 
     @PutMapping("/favorite")
     public boolean favoriteCheck(@RequestBody FavoriteCheckRequest request) {
