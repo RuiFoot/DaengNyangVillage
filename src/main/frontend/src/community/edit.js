@@ -64,6 +64,7 @@ function Edit() {
                 setEditContent(res.data);
                 console.log(res.data)
             })
+
     }, []);
     useEffect(() => {
         setValues({
@@ -75,8 +76,23 @@ function Edit() {
         setQuillValue(editContent.field)
         setPreface(editContent.preface)
         setArea(editContent.area)
-    }, [editContent]);
+        //내용안에서 이미지만 추출
+        let count = editContent.field.split('http').length - 1;
+        let newStartIndex = 0
+        let startIndex = 0
+        console.log(count)
+        for (let i = 0; i < count; i++) {
+            if (editContent.field.indexOf(`"></p>`) !== -1) {
+                startIndex = editContent.field.indexOf("http", newStartIndex);
+                newStartIndex = editContent.field.indexOf(`"></p>`, startIndex);
+                imageUrl.push(editContent.field.slice(startIndex, newStartIndex))
+            }
+            console.log(imageUrl)
+        }
+    }, [editContent.field]);
 
+
+    // console.log(imageUrl)
 
     // 이미지 핸들러
     const imageHandler = () => {
@@ -103,9 +119,9 @@ function Edit() {
                         editor.setSelection(range.index + 1);
                         console.log('url 확인', url);
                         imageUrl.push(url);
+                        console.log(imageUrl)
                     });
                 });
-
             } catch (error) {
                 console.log(error);
             }
@@ -176,14 +192,16 @@ function Edit() {
             [name]: value
         });
     }
-    //이미지 찾기
+    //첫번째 이미지 찾기
     const findImg = (input) => {
-        return input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")))
+        console.log(input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1))
+        return input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1)
+    }
+
+    const imgCheck = (input) => {
+
     }
     const handleSubmit = (e) => {
-        // console.log(quillValue.indexOf("img"))
-        // console.log(quillValue.indexOf(">", quillValue.indexOf("img")))
-        console.log(quillValue.slice(quillValue.indexOf("http"), quillValue.indexOf(">", quillValue.indexOf("img"))))
         e.preventDefault();
         let body = {
             tradeTime: tradeTime,
@@ -204,15 +222,15 @@ function Edit() {
             console.log(response.data);	//정상 통신 후 응답된 메시지 출력
             console.log(imageUrl);	//정상 통신 후 응답된 메시지 출력
             console.log(quillValue);	//정상 통신 후 응답된 메시지 출력
-            // if (board === "자유 게시판") {
-            //     window.location.href = `/free-board/${userInfo.nickName}`
-            // } else if (board === "반려동물 자랑") {
-            //     window.location.href = `/pet-boast/${userInfo.nickName}`
-            // } else if (board === "훈련 방법 공유") {
-            //     window.location.href = `/training-method/${userInfo.nickName}`
-            // } else if (board === "댕냥 마켓") {
-            //     window.location.href = `/used-market/${userInfo.nickName}`
-            // }
+            if (board === "자유 게시판") {
+                window.location.href = `/free-board/${userInfo.nickName}`
+            } else if (board === "반려동물 자랑") {
+                window.location.href = `/pet-boast/${userInfo.nickName}`
+            } else if (board === "훈련 방법 공유") {
+                window.location.href = `/training-method/${userInfo.nickName}`
+            } else if (board === "댕냥 마켓") {
+                window.location.href = `/used-market/${userInfo.nickName}`
+            }
         }).catch((error) => {
             console.log(error);	//오류발생시 실행
         })
