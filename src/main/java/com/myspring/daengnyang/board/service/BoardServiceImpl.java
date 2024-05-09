@@ -94,6 +94,6 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public int getBoardId(int boardReviewNum) {
-        return boardMapper.getBoardID(boardReviewNum);
+        return boardMapper.getBoardIdReview(boardReviewNum);
     }
 }
