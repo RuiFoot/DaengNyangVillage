@@ -14,7 +14,7 @@ import './communityStyle.css'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { storage } from "../firebase";
-import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
+import { uploadBytes, getDownloadURL, deleteObject, ref } from "firebase/storage";
 import axios from "axios";
 import { useParams } from 'react-router-dom';
 const Container = styled.div`
@@ -37,11 +37,27 @@ justify-content: end;
 `
 
 function Edit() {
-    const [imageUrl, setImageUrl] = useState([]); // 새로운 상태 추가
+    const [imgUrl, setImageUrl] = useState([]); // 새로운 상태 추가
     const baseUrl = "http://localhost:8080";
     // 배포용 URL
     const quillRef = useRef(null); // useRef로 ref 생성
     const params = useParams()
+
+    const imgCheck = (input) => {
+        //내용안에서 이미지만 추출
+        let count = input.split('http').length - 1;
+        let newStartIndex = 0
+        let startIndex = 0
+        console.log(count)
+        for (let i = 0; i < count; i++) {
+            if (input.indexOf(`"></p>`) !== -1) {
+                startIndex = input.indexOf("http", newStartIndex);
+                newStartIndex = input.indexOf(`"></p>`, startIndex);
+                imgUrl.push(input.slice(startIndex, newStartIndex))
+            }
+            console.log(imgUrl)
+        }
+    }
     const [editContent, setEditContent] = useState({
         area: "",
         detailLocation: "",
@@ -85,14 +101,14 @@ function Edit() {
             if (editContent.field.indexOf(`"></p>`) !== -1) {
                 startIndex = editContent.field.indexOf("http", newStartIndex);
                 newStartIndex = editContent.field.indexOf(`"></p>`, startIndex);
-                imageUrl.push(editContent.field.slice(startIndex, newStartIndex))
+                imgUrl.push(editContent.field.slice(startIndex, newStartIndex))
             }
-            console.log(imageUrl)
+            console.log(imgUrl)
         }
     }, [editContent.field]);
 
 
-    // console.log(imageUrl)
+    // console.log(imgUrl)
 
     // 이미지 핸들러
     const imageHandler = () => {
@@ -118,8 +134,8 @@ function Edit() {
                         // URL 삽입 후 커서를 이미지 뒷 칸으로 이동
                         editor.setSelection(range.index + 1);
                         console.log('url 확인', url);
-                        imageUrl.push(url);
-                        console.log(imageUrl)
+                        imgUrl.push(url);
+                        console.log(imgUrl)
                     });
                 });
             } catch (error) {
@@ -197,18 +213,34 @@ function Edit() {
         console.log(input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1))
         return input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1)
     }
-
-    const imgCheck = (input) => {
-
-    }
+    const [newImgUrlArr, setNewImgUrlArr] = useState([])
     const handleSubmit = (e) => {
+        //내용안에서 이미지만 추출
+        let count = quillValue.split('http').length - 1;
+        let newStartIndex = 0
+        let startIndex = 0
+        console.log(count)
+        for (let i = 0; i < count; i++) {
+            if (quillValue.indexOf(`"></p>`) !== -1) {
+                startIndex = quillValue.indexOf("http", newStartIndex);
+                newStartIndex = quillValue.indexOf(`"></p>`, startIndex);
+                newImgUrlArr.push(quillValue.slice(startIndex, newStartIndex))
+            }
+            console.log(newImgUrlArr)
+        }
+        const deletImgs = imgUrl.filter(x => !newImgUrlArr.includes(x));
+        console.log(deletImgs)
+        for (let i = 0; i < deletImgs.length; i++) {
+            deleteObject(ref(storage, deletImgs[i]));
+        }
         e.preventDefault();
+        area === null && setArea("")
         let body = {
-            tradeTime: tradeTime,
-            detailLocation: detailLocation,
+            tradeTime: tradeTime === null ? "" : tradeTime,
+            detailLocation: detailLocation === null ? "" : detailLocation,
             preface: preface,
-            price: price,
-            area: area,
+            price: price === null ? "" : price,
+            area: area === null ? "" : area,
             nickname: userInfo.nickName,
             memberNo: userInfo.memberNo,
             category: board,
@@ -217,10 +249,11 @@ function Edit() {
             boardId: params.boardId,
             boardName: values.boardName
         }
+        console.log(body)
         axios.patch(`${baseUrl}/board`, body
         ).then((response) => {
             console.log(response.data);	//정상 통신 후 응답된 메시지 출력
-            console.log(imageUrl);	//정상 통신 후 응답된 메시지 출력
+            console.log(imgUrl);	//정상 통신 후 응답된 메시지 출력
             console.log(quillValue);	//정상 통신 후 응답된 메시지 출력
             if (board === "자유 게시판") {
                 window.location.href = `/free-board/${userInfo.nickName}`
@@ -408,7 +441,7 @@ function Edit() {
                             : null
                     }
                 </Inputs>
-                <div style={{ height: "450px" }}>
+                <div style={{ height: "500px" }}>
                     <ReactQuill
                         theme="snow"
                         ref={quillRef}
