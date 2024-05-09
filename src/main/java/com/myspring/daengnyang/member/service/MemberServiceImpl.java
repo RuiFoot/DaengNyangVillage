@@ -66,12 +66,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<AnimalLocationVO> getFavorite(Integer memberNo) {
-        List<Integer> favoriteAnimalNum = memberMapper.getFavorite(memberNo);
-        return animalMapper.getLocation2(favoriteAnimalNum);
+        return memberMapper.getFavorite(memberNo);
     }
 
     @Override
-    public BoardVO getMemberPost(Integer memberNo) {
+    public List<BoardVO> getMemberPost(Integer memberNo) {
         return memberMapper.getMemberPost(memberNo);
     }
 

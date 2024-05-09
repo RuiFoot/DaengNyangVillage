@@ -42,11 +42,13 @@
         ]]>
     </select>
 
-    <select id="getFavorite" resultType="Integer">
+    <select id="getFavorite" resultType="com.myspring.daengnyang.animal.vo.AnimalLocationVO">
         <![CDATA[
-            SELECT "animalNum"
-            FROM "favorite"
-            WHERE "memberNo" = #{memberNo}
+            SELECT A.*
+            FROM "animalLocation" A,
+                 (select * from "favorite" f where f."memberNo" = #{memberNo} and f."Field" = 1) f
+            WHERE f."animalNum" = A."animalNum"
+            ORDER BY "favDate" DESC
         ]]>
     </select>
 

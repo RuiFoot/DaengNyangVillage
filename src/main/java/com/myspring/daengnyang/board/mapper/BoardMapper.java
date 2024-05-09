@@ -36,6 +36,7 @@ public interface BoardMapper {
     void postBoardDetail(@Param("boardPostVO") BoardPostVO boardPostVO);
     void postMarketBoardDetail(@Param("boardPostVO") BoardPostVO boardPostVO);
     int getBoardId();
+    int getBoardIdReview(@Param("boardReviewNum") int boardReviewNum);
     void postReview(@Param("reviewVO") ReviewVO reviewVO);
     int getMemberNo(@Param("nickname") String nickname);
 

@@ -9,8 +9,12 @@ import com.myspring.daengnyang.animal.vo.FavoriteCheckRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 
@@ -41,10 +45,16 @@ public class AnimalController {
         return animalService.getSigungu(sido);
     }
 
-    @GetMapping("/location/{searchLocation}")
-    public List<AnimalLocationVO> animalLocation(@PathVariable("searchLocation") String location, @RequestParam String classification) {
-        log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + location + ", Params : " + classification);
-        return animalService.getLocation(location, classification);
+    @GetMapping("/location/{sido}")
+    public ResponseEntity<?> animalLocation(
+            @PathVariable("sido") String sido,
+            @RequestParam("sigungu") String sigungu,
+            @RequestParam String classification,
+            @PageableDefault(size = 10, sort = "star", direction = Sort.Direction.DESC) Pageable pageable) { // page : 2 => 페이지 보내야함
+        log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + sido + ", Params : " + classification);
+        log.info("pageable : " + pageable);
+        Page<?> paging = animalService.getLocation(sido,sigungu, classification, pageable);
+        return ResponseEntity.ok(paging);
     }
 
     @GetMapping("/detail/{animalNum}")
@@ -59,13 +69,7 @@ public class AnimalController {
         return animalService.getRecommend(memberNo, sido, sigungu);
     }
 
-
     //-----------------------------------------------------------------------------------------------
-
-    @GetMapping("/favorite")
-    public List<AnimalLocationVO> getFavoriteLocation() {
-        return null;
-    }
 
     @PutMapping("/favorite")
     public boolean favoriteCheck(@RequestBody FavoriteCheckRequest request) {
@@ -74,6 +78,11 @@ public class AnimalController {
         log.info("memberNo : " + memberNo + " / animalNum : " + animalNum);
 
         return animalService.favoriteCheck(memberNo, animalNum);
+    }
+
+    @GetMapping("/favorite/{animalNum}")
+    public boolean favoriteNum(@PathVariable("animalNum") Integer animalNum, @RequestParam Integer memberNo) {
+        return animalService.getFavorite(animalNum, memberNo);
     }
 
     //-----------------------------------------------------------------------------------------------

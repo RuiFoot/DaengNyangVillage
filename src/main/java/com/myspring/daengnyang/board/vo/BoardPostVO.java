@@ -15,6 +15,7 @@ public class BoardPostVO {
     private String field;
     private String imgPath;
     private int boardId;
+    private String preface; // 말머리
 
     /**
      * 댕냥마켓

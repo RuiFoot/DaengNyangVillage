@@ -3,15 +3,12 @@ import { useEffect, useState } from "react";
 import { BsCardText } from "react-icons/bs";
 import { IoRestaurantOutline } from "react-icons/io5";
 import { MdOutlineShoppingCart } from "react-icons/md";
-
-let freeArr = [["옆집 개가 너무 짖어요", "박현수", "2024-04-12"], ["우리집 고양이는 멍멍하고 울어요", "박현수", "2024-04-12"], ["우리집 멍멍이 보고가요", "송민영", "2024-04-12"]]
-
-let marketArr = [["배변패드 팝니다", "경상북도", "정승호", "2024-04-12"], ["캣타워 중고 삽니다", "경기도", "이상빈", "2024-04-12"], ["멍멍이 모자 삽니다", "경기도", "송민영", "2024-04-12"]]
-
-let trainingArr = [["고양이한태 손 받는 방법", "정승호", "2024-04-12"], ["배변 훈련", "이상빈", "2024-04-12"], ["햄스터 산책 방법", "송민영", "2024-04-12"]]
-
-let shopArr = [["금남멧돼지", "경기도", "백진욱", "2024-04-12"], ["알베로", "경기도", "이상빈", "2024-04-12"], ["배롱정원", "제주도", "송민영", "2024-04-12"]]
-
+import { HiOutlinePhoto } from "react-icons/hi2";
+import axios from "axios";
+import defaultImg from "../img/defaultImg.png"
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+import themes from "../theme";
 
 const Communitylists = styled.div`
 display: grid;
@@ -33,26 +30,57 @@ const ArticleTitle = styled.div`
 font-weight: bold;
 margin-bottom: 10px;
 `
-const Content = styled.div`
-border-top : 1px solid #B2BEBF;
-border-bottom : 1px solid #B2BEBF;
+const Content = styled.a`
+text-decoration: none;
+cursor: pointer;
+border-top : 1px solid ;
+border-bottom : 1px solid ;
 margin-bottom: 5px;
 padding: 5px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+
+`
+const ImgContent = styled.a`
+text-decoration: none;
+cursor: pointer;
+border-top : 1px solid ;
+border-bottom : 1px solid ;
+margin-bottom: 5px;
+padding: 5px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+`
+const TextBox = styled.div`
+width: 100%;
+display: flex;
+flex-direction: column;
 `
 const Writer = styled.div`
 text-align: end;
 `
-const Area = styled.div`
-text-align: end;
-
-`
 const Date = styled.div`
 text-align: end;
 `
+const Img = styled.div`
+margin-right: 10px;
+height: 80px;
+width: 80px;
+background-position: center;
+background-size: cover;
+`
 
 function CommunityHome() {
-
-
+    const isDark = useRecoilValue(isDarkAtom);
+    //현재 로그인한 유저 닉네임
+    const [loginedNickName, setLoginedNickName] = useState("")
+    useEffect(() => {
+        if (sessionStorage.getItem("logined") !== null) {
+            setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickName)
+        }
+    });
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -63,6 +91,104 @@ function CommunityHome() {
             window.addEventListener('resize', handleResize)
         }
     }, [])
+
+    // 스프링 통신
+    const [freeBoard, setFreeBoard] = useState({
+        boardId: 0,
+        memberNo: 0,
+        nickname: "",
+        category: "",
+        preface: "",
+        boardName: "",
+        createDate: "",
+        imgPath: "",
+        reviewCnt: 0,
+        area: "",
+        price: ""
+    })
+    const [trainingBoard, setTrainingBoard] = useState({
+        boardId: 0,
+        memberNo: 0,
+        nickname: "",
+        category: "",
+        preface: "",
+        boardName: "",
+        createDate: "",
+        imgPath: "",
+        reviewCnt: 0,
+        area: "",
+        price: ""
+    })
+    const [petBoastBoard, setPetBoastBoard] = useState({
+        boardId: 0,
+        memberNo: 0,
+        nickname: "",
+        category: "",
+        preface: "",
+        boardName: "",
+        createDate: "",
+        imgPath: "",
+        reviewCnt: 0,
+        area: "",
+        price: ""
+    })
+    const [marketBoard, setMarketBoard] = useState({
+        boardId: 0,
+        memberNo: 0,
+        nickname: "",
+        category: "",
+        preface: "",
+        boardName: "",
+        createDate: "",
+        imgPath: "",
+        reviewCnt: 0,
+        area: "",
+        price: ""
+    })
+    //최신순 정렬 백에서 정렬해서 주면 없애도됨
+    // const sort = (e) => {
+    //     if (e.length > 0) {
+    //         let sorted = e.sort((a, b) => b.boardId - a.boardId)
+    //         return e
+    //     }
+    // }
+    useEffect(() => {
+        axios.get('/api/board/자유 게시판')
+            .then((res) => {
+                setFreeBoard(res.data);
+                console.log(res.data)
+            })
+        console.log(freeBoard)
+        axios.get('/api/board/훈련 방법 공유')
+            .then((res) => {
+                setTrainingBoard(res.data);
+            })
+        console.log(trainingBoard)
+        axios.get('/api/board/반려동물 자랑')
+            .then((res) => {
+                setPetBoastBoard(res.data);
+            })
+        console.log(petBoastBoard)
+        axios.get('/api/board/댕냥 마켓')
+            .then((res) => {
+                setMarketBoard(res.data);
+            })
+        console.log(marketBoard)
+    }, []);
+
+    //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
+    const representImg = (e) => {
+        if (e !== null) {
+            const index = e.indexOf(",")
+            return (
+                <Img style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
+            )
+        } else {
+            return (
+                <Img style={{ backgroundImage: `url(${defaultImg})` }} />
+            )
+        }
+    }
     return (
         // 화면 크기에 따라 계시판의 width가 달라짐
         <>
@@ -70,37 +196,64 @@ function CommunityHome() {
                 <Communitylist>
                     <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 자유게시판</CommunityTitle>
                     {
-                        freeArr.map((e, i) => (
-                            <Content key={i}>
-                                <ArticleTitle>{e[0]}</ArticleTitle>
-                                <Writer>{e[1]}</Writer>
-                                <Date>{e[2]}</Date>
+                        freeBoard.length > 0 &&
+                        freeBoard.slice(0, 3).map((e, i) => (
+                            <Content
+                                style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                key={i}
+                                href={`/free-board-detail/${e.boardId}${loginedNickName}`}
+                            >
+                                <ArticleTitle>[{e.preface}] {e.boardName}</ArticleTitle>
+                                <Writer>{e.nickname}</Writer>
+                                <Date>{e.createDate.replace("T", ", ").slice(0, 17)}</Date>
                             </Content>
-
+                        ))
+                    }
+                </Communitylist>
+                <Communitylist>
+                    <CommunityTitle><HiOutlinePhoto style={{ marginRight: '5px' }} />반려동물 자랑</CommunityTitle>
+                    {
+                        petBoastBoard.length > 0 &&
+                        petBoastBoard.slice(0, 3).map((e, i) => (
+                            <ImgContent
+                                style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                key={i}
+                                href={`/pet-boast-detail/${e.boardId}${loginedNickName}`}
+                            >
+                                {representImg(e.imgPath)}
+                                <TextBox>
+                                    <ArticleTitle>{e.boardName}</ArticleTitle>
+                                    <>
+                                        <Writer>{e.nickname}</Writer>
+                                        <Date>{e.createDate.replace("T", ", ").slice(0, 17)}</Date>
+                                    </>
+                                </TextBox>
+                            </ImgContent>
                         ))
                     }
                 </Communitylist>
                 <Communitylist>
                     <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 훈련 방법 공유</CommunityTitle>
                     {
-                        trainingArr.map((e, i) => (
-                            <Content key={i}>
-                                <ArticleTitle>{e[0]}</ArticleTitle>
-                                <Writer>{e[1]}</Writer>
-                                <Date>{e[2]}</Date>
-                            </Content>
-                        ))
-                    }
-                </Communitylist>
-                <Communitylist>
-                    <CommunityTitle><IoRestaurantOutline style={{ marginRight: '5px' }} /> 식당, 카페 추천</CommunityTitle>
-                    {
-                        shopArr.map((e, i) => (
-                            <Content key={i}>
-                                <ArticleTitle>{e[0]}</ArticleTitle>
-                                <Area>{e[1]}</Area>
-                                <Writer>{e[2]}</Writer>
-                                <Date>{e[3]}</Date>
+                        trainingBoard.length > 0 &&
+                        trainingBoard.slice(0, 3).map((e, i) => (
+                            <Content
+                                style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                key={i}
+                                href={`/training-method-detail/${e.boardId}${loginedNickName}`}
+                            >
+                                <ArticleTitle>[{e.preface}] {e.boardName}</ArticleTitle>
+                                <Writer>{e.nickname}</Writer>
+                                <Date>{e.createDate.replace("T", ", ").slice(0, 17)}</Date>
                             </Content>
                         ))
                     }
@@ -108,13 +261,25 @@ function CommunityHome() {
                 <Communitylist>
                     <CommunityTitle><MdOutlineShoppingCart style={{ marginRight: '5px' }} /> 댕냥 마켓</CommunityTitle>
                     {
-                        marketArr.map((e, i) => (
-                            <Content key={i}>
-                                <ArticleTitle>{e[0]}</ArticleTitle>
-                                <Area>{e[1]}</Area>
-                                <Writer>{e[2]}</Writer>
-                                <Date>{e[3]}</Date>
-                            </Content>
+                        marketBoard.length > 0 &&
+                        marketBoard.slice(0, 3).map((e, i) => (
+                            <ImgContent
+                                style={{
+                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                }}
+                                key={i}
+                                href={`/used-market-detail/${e.boardId}${loginedNickName}`}
+                            >
+                                {representImg(e.imgPath)}
+                                <TextBox>
+                                    <ArticleTitle>[{e.preface}] {e.boardName}</ArticleTitle>
+                                    <>
+                                        <Writer>{e.area} {e.nickname}</Writer>
+                                        <Date>{e.createDate.replace("T", ", ").slice(0, 17)}</Date>
+                                    </>
+                                </TextBox>
+                            </ImgContent>
                         ))
                     }
                 </Communitylist>

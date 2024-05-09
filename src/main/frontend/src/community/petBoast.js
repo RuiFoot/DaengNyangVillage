@@ -6,9 +6,8 @@ import CommunityNav from "./communityNav";
 import CommunityHeader from './communityHeader';
 import Pagination from "../pagination";
 import { useEffect, useState } from 'react';
-import { GoDotFill } from "react-icons/go";
-import hotPlaceArr from '../imgDate';
-import defaultImg from '../defaultImgs';
+import defaultImg from '../img/defaultImg.png';
+import axios from "axios";
 
 const Container = styled.div`
 min-height: calc(100vh - 86px);
@@ -22,8 +21,12 @@ grid-template-columns: repeat(auto-fit, 300px);
 grid-auto-rows: minmax(100px, auto);
 gap: 15px;
 `
-const PetBoastItem = styled.div`
-
+const PetBoastItem = styled.a`
+text-decoration: none;
+cursor: pointer;
+&:hover {
+    transform: scale(1.02);
+}
 `
 const PetBoastTitle = styled.div`
 display: flex;
@@ -36,16 +39,46 @@ const PetImg = styled.div`
 height: 227px;
 background-size: cover;
 background-position: center;
-margin-bottom: 5px;
+margin: 10px 0;
+`
+const ListFooter = styled.div`
+display: flex;
+flex-direction: column;
+align-items: end;
+`
+const ListItemWriter = styled.div`
+`
+const ListItemDate = styled.div`
+`
+const ListHeader = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 5px 0 5px 5px;
+`
+const CommentsCount = styled.div`
+border: 1px solid ;
+border-radius: 5px;
+margin-left: 10px;
+padding: 0 5px;
+font-size: clamp(100%, 1vw, 120%);
 `
 
 function PetBoast() {
     const isDark = useRecoilValue(isDarkAtom);
     const nowPage = useRecoilValue(presentPage);
+
+    //현재 로그인한 유저 닉네임
+    const [loginedNickName, setLoginedNickName] = useState("")
+    useEffect(() => {
+        if (sessionStorage.getItem("logined") !== null) {
+            setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickName)
+        }
+    });
+
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
-        console.log(window.innerWidth)
     }
     useEffect(() => {
         window.addEventListener('resize', handleResize);
@@ -53,26 +86,53 @@ function PetBoast() {
             window.addEventListener('resize', handleResize)
         }
     }, [])
-    const totalPost = hotPlaceArr.length; // 총 게시물 수
+
+    //현재 로그인한 유저의 닉네임
+    let url = ""
+    if (window.sessionStorage.key(0) === "logined") {
+        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+    }
+
+    //스프링 통신
+    const [board, setBoard] = useState({
+        boardId: 0,
+        memberNo: 0,
+        nickname: "",
+        preface: "",
+        category: "",
+        boardName: "",
+        createDate: "",
+        imgPath: "",
+        reviewCnt: 0
+    })
+    useEffect(() => {
+        axios.get('/api/board/반려동물 자랑')
+            .then((res) => {
+                setBoard(res.data);
+                console.log(res.data)
+            })
+    }, []);
+
+    const totalPost = board.length; // 총 게시물 수
     const pageRange = 12; // 페이지당 보여줄 게시물 수
-    const totalPageNum = Math.ceil(hotPlaceArr.length / pageRange)
+    const totalPageNum = Math.ceil(board.length / pageRange)
     const btnRange = 5; // 보여질 페이지 버튼의 개수
     const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
     const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
-    const showImg = (e) => {
-        if (e === "미용") return defaultImg.미용
-        if (e === "박물관문예회관") return defaultImg.박물관문예회관
-        if (e === "병원") return defaultImg.병원
-        if (e === "약국") return defaultImg.약국
-        if (e === "식당") return defaultImg.식당
-        if (e === "여행지") return defaultImg.여행지
-        if (e === "애견용품") return defaultImg.애견용품
-        if (e === "유치원") return defaultImg.유치원
-        if (e === "카페") return defaultImg.카페
-        if (e === "호텔펜션") return defaultImg.호텔펜션
+    //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
+    const representImg = (e) => {
+        if (e !== null) {
+            const index = e.indexOf(",")
+            return (
+                <PetImg style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
+            )
+        } else {
+            return (
+                <PetImg style={{ backgroundImage: `url(${defaultImg})` }} />
+            )
+        }
     }
-
     return (
         <Container style={{
             color: `${isDark ? themes.dark.color : themes.light.color}`,
@@ -84,12 +144,27 @@ function PetBoast() {
                 gridTemplateColumns: windowSize > 1790 ?
                     "repeat(auto-fit,250px)" : "repeat(auto-fit,350px)"
             }} >
-                {hotPlaceArr.slice(startPost - 1, endPost).map((e, i) => (
-                    <PetBoastItem key={i}>
-                        <PetBoastTitle>{e[0]}</PetBoastTitle>
-                        <PetImg style={{ backgroundImage: `url(${showImg(e[3])})` }} />
-                    </PetBoastItem>
-                ))}
+                {board.length > 0 &&
+                    board.slice(startPost - 1, endPost).map((e, i) => (
+                        <PetBoastItem style={{
+                            color: `${isDark ? themes.dark.color : themes.light.color}`
+                        }}
+                            key={i}
+                            href={`/pet-boast-detail/${e.boardId}${loginedNickName}`}
+                        >
+                            <ListHeader>
+                                <PetBoastTitle>{e.boardName}</PetBoastTitle>
+                                <CommentsCount>
+                                    {e.reviewCnt}
+                                </CommentsCount>
+                            </ListHeader>
+                            {representImg(e.imgPath)}
+                            <ListFooter>
+                                <ListItemWriter>작성자 : {e.nickname}</ListItemWriter>
+                                <ListItemDate>{e.createDate.replace("T", ", ").slice(0, 17)}</ListItemDate>
+                            </ListFooter>
+                        </PetBoastItem>
+                    ))}
             </PetBoastItems >
             <Pagination totalPost={totalPost} pageRange={pageRange} btnRange={btnRange} totalPageNum={totalPageNum} />
         </Container>

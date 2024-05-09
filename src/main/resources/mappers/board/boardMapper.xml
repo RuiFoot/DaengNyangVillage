@@ -17,11 +17,13 @@
                 "reviewCnt",
                 "imgPath",
                 "Area",
-                "Price"
+                "Price",
+                "PREFACE"
             FROM
                 "Board"
             WHERE
                 "category" = #{category}
+            ORDER BY "createDate" DESC
         ]]>
     </select>
 
@@ -33,12 +35,14 @@
                 "nickname",
                 "memberNo",
                 "review",
-                "star",
-                "createDate"
+                "createDate",
+                "PROFILEIMG"
             FROM
                 "Boardreview"
             WHERE
                 "boardId" = #{boardId}
+            ORDER BY
+                "createDate" DESC
         ]]>
     </select>
 
@@ -74,10 +78,10 @@
             INSERT INTO "Board"
                 ("boardId", "memberNo", "nickname",
                 "category", "boardName", "createDate", "reviewCnt", "imgPath",
-                "Area", "Price")
+                "Area", "Price", "PREFACE")
             VALUES (#{boardId}, #{boardPostVO.memberNo}, #{boardPostVO.nickname},
                     #{boardPostVO.category}, #{boardPostVO.boardName}, SYSDATE, 0, #{boardPostVO.imgPath},
-                    #{boardPostVO.Area}, #{boardPostVO.Price})
+                    #{boardPostVO.Area}, #{boardPostVO.Price}, #{boardPostVO.preface})
         ]]>
     </insert>
 
@@ -86,6 +90,14 @@
             SELECT "boardId"
             FROM "Board"
             WHERE "boardId" = (SELECT MAX("boardId") FROM "Board")
+        ]]>
+    </select>
+
+    <select id="getBoardIdReview" resultType="int">
+        <![CDATA[
+            SELECT "boardId"
+            FROM "Boardreview"
+            WHERE "boardReviewNum" = #{boardReviewNum}
         ]]>
     </select>
 
@@ -98,9 +110,9 @@
         <![CDATA[
             INSERT INTO "BoardDetail"
                 ("boardId", "nickname", "memberNo", "category",
-                "BoardName", "Field", "imgPath", "createDate")
+                "BoardName", "Field", "imgPath", "createDate", "PREFACE")
             VALUES (#{boardPostVO.boardId}, #{boardPostVO.nickname}, #{boardPostVO.memberNo}, #{boardPostVO.category},
-                    #{boardPostVO.boardName}, #{boardPostVO.field}, #{boardPostVO.imgPath}, #{createDate})
+                    #{boardPostVO.boardName}, #{boardPostVO.field}, #{boardPostVO.imgPath}, #{createDate}, #{boardPostVO.preface})
         ]]>
     </insert>
 
@@ -114,10 +126,11 @@
             INSERT INTO "BoardDetail"
                 ("boardId", "nickname", "memberNo", "category",
                 "BoardName", "Field", "imgPath", "createDate",
-                "tradeTime", "Price", "Area", "detailLocation")
+                "tradeTime", "Price", "Area", "detailLocation", "PREFACE")
             VALUES (#{boardPostVO.boardId}, #{boardPostVO.nickname}, #{boardPostVO.memberNo}, #{boardPostVO.category},
                     #{boardPostVO.boardName}, #{boardPostVO.field}, #{boardPostVO.imgPath}, #{createDate},
-                    #{boardPostVO.tradeTime}, #{boardPostVO.Price}, #{boardPostVO.Area}, #{boardPostVO.detailLocation})
+                    #{boardPostVO.tradeTime}, #{boardPostVO.Price}, #{boardPostVO.Area}, #{boardPostVO.detailLocation},
+                    #{boardPostVO.preface})
         ]]>
     </insert>
 
@@ -127,9 +140,9 @@
         </selectKey>
         <![CDATA[
             INSERT INTO "Boardreview"
-                ("boardReviewNum", "boardId", "nickname", "memberNo", "review", "createDate")
+                ("boardReviewNum", "boardId", "nickname", "memberNo", "review", "createDate", "PROFILEIMG")
             VALUES (#{boardReviewNum}, #{reviewVO.boardId}, #{reviewVO.nickname},
-                    #{reviewVO.memberNo}, #{reviewVO.review}, SYSDATE)
+                    #{reviewVO.memberNo}, #{reviewVO.review}, SYSDATE, #{reviewVO.profileImg})
         ]]>
     </insert>
 
@@ -142,7 +155,9 @@
     <update id="modifyPost" parameterType="com.myspring.daengnyang.board.vo.BoardPostVO">
         <![CDATA[
             UPDATE "Board"
-            SET "category" = #{boardPostVO.category}, "boardName" = #{boardPostVO.boardName}
+            SET "category" = #{boardPostVO.category}, "boardName" = #{boardPostVO.boardName},
+                "imgPath" = #{boardPostVO.imgPath}, "Area" = #{boardPostVO.Area},
+                "Price" = #{boardPostVO.Price}, "PREFACE" = #{boardPostVO.preface}
             WHERE "boardId" = #{boardPostVO.boardId}
         ]]>
     </update>
@@ -151,7 +166,10 @@
         <![CDATA[
             UPDATE "BoardDetail"
             SET "category" = #{boardPostVO.category}, "BoardName" = #{boardPostVO.boardName},
-                "Field" = #{boardPostVO.field}, "imgPath" = #{boardPostVO.imgPath}
+                "Field" = #{boardPostVO.field}, "imgPath" = #{boardPostVO.imgPath},
+                "tradeTime" = #{boardPostVO.tradeTime}, "Price" = #{boardPostVO.Price},
+                "Area" = #{boardPostVO.Area}, "detailLocation" = #{boardPostVO.detailLocation},
+                "PREFACE" = #{boardPostVO.preface}
             WHERE "boardId" = #{boardPostVO.boardId}
         ]]>
     </update>

@@ -1,5 +1,5 @@
-import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { isDarkAtom, editData } from '../atoms';
 import styled from "styled-components";
 import themes from "../theme";
 import Bumper from '../layout/bumper';
@@ -14,9 +14,9 @@ import './communityStyle.css'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { storage } from "../firebase";
-import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
+import { uploadBytes, getDownloadURL, deleteObject, ref } from "firebase/storage";
 import axios from "axios";
-
+import { useParams } from 'react-router-dom';
 const Container = styled.div`
 `
 
@@ -36,11 +36,79 @@ display: flex;
 justify-content: end;
 `
 
-function Write() {
-    const [imageUrl, setImageUrl] = useState([]); // 새로운 상태 추가
+function Edit() {
+    const [imgUrl, setImageUrl] = useState([]); // 새로운 상태 추가
     const baseUrl = "http://localhost:8080";
     // 배포용 URL
     const quillRef = useRef(null); // useRef로 ref 생성
+    const params = useParams()
+
+    const imgCheck = (input) => {
+        //내용안에서 이미지만 추출
+        let count = input.split('http').length - 1;
+        let newStartIndex = 0
+        let startIndex = 0
+        console.log(count)
+        for (let i = 0; i < count; i++) {
+            if (input.indexOf(`"></p>`) !== -1) {
+                startIndex = input.indexOf("http", newStartIndex);
+                newStartIndex = input.indexOf(`"></p>`, startIndex);
+                imgUrl.push(input.slice(startIndex, newStartIndex))
+            }
+            console.log(imgUrl)
+        }
+    }
+    const [editContent, setEditContent] = useState({
+        area: "",
+        detailLocation: "",
+        field: "",
+        preface: "",
+        price: "",
+        tradeTime: "",
+        boardId: 0,
+        memberNo: 0,
+        preface: "",
+        nickname: "",
+        category: "",
+        boardName: "",
+        createDate: "",
+        imgPath: ""
+    })
+    useEffect(() => {
+        axios.get(`/api/board/detail/${params.boardId}`)
+            .then((res) => {
+                setEditContent(res.data);
+                console.log(res.data)
+            })
+
+    }, []);
+    useEffect(() => {
+        setValues({
+            boardName: editContent.boardName,
+            detailLocation: editContent.detailLocation,
+            tradeTime: editContent.tradeTime,
+            price: editContent.price
+        })
+        setQuillValue(editContent.field)
+        setPreface(editContent.preface)
+        setArea(editContent.area)
+        //내용안에서 이미지만 추출
+        let count = editContent.field.split('http').length - 1;
+        let newStartIndex = 0
+        let startIndex = 0
+        console.log(count)
+        for (let i = 0; i < count; i++) {
+            if (editContent.field.indexOf(`"></p>`) !== -1) {
+                startIndex = editContent.field.indexOf("http", newStartIndex);
+                newStartIndex = editContent.field.indexOf(`"></p>`, startIndex);
+                imgUrl.push(editContent.field.slice(startIndex, newStartIndex))
+            }
+            console.log(imgUrl)
+        }
+    }, [editContent.field]);
+
+
+    // console.log(imgUrl)
 
     // 이미지 핸들러
     const imageHandler = () => {
@@ -66,10 +134,10 @@ function Write() {
                         // URL 삽입 후 커서를 이미지 뒷 칸으로 이동
                         editor.setSelection(range.index + 1);
                         console.log('url 확인', url);
-                        imageUrl.push(url);
+                        imgUrl.push(url);
+                        console.log(imgUrl)
                     });
                 });
-
             } catch (error) {
                 console.log(error);
             }
@@ -121,7 +189,7 @@ function Write() {
     const userInfo = JSON.parse(window.sessionStorage.getItem("logined"))
 
     let referrer = document.referrer; //이전 페이지 url
-    const [board, setBoard] = useState()
+    const [board, setBoard] = useState(editContent.category)
     const [area, setArea] = useState("지역을 입력해주세요")
     const [preface, setPreface] = useState("머릿말을 선택해주세요")
     const [values, setValues] = useState({
@@ -140,26 +208,53 @@ function Write() {
             [name]: value
         });
     }
-
+    //첫번째 이미지 찾기
+    const findImg = (input) => {
+        console.log(input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1))
+        return input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1)
+    }
+    const [newImgUrlArr, setNewImgUrlArr] = useState([])
     const handleSubmit = (e) => {
+        //내용안에서 이미지만 추출
+        let count = quillValue.split('http').length - 1;
+        let newStartIndex = 0
+        let startIndex = 0
+        console.log(count)
+        for (let i = 0; i < count; i++) {
+            if (quillValue.indexOf(`"></p>`) !== -1) {
+                startIndex = quillValue.indexOf("http", newStartIndex);
+                newStartIndex = quillValue.indexOf(`"></p>`, startIndex);
+                newImgUrlArr.push(quillValue.slice(startIndex, newStartIndex))
+            }
+            console.log(newImgUrlArr)
+        }
+        const deletImgs = imgUrl.filter(x => !newImgUrlArr.includes(x));
+        console.log(deletImgs)
+        for (let i = 0; i < deletImgs.length; i++) {
+            deleteObject(ref(storage, deletImgs[i]));
+        }
         e.preventDefault();
+        area === null && setArea("")
         let body = {
-            tradeTime: tradeTime,
-            detailLocation: detailLocation,
+            tradeTime: tradeTime === null ? "" : tradeTime,
+            detailLocation: detailLocation === null ? "" : detailLocation,
             preface: preface,
-            price: price,
-            area: area,
+            price: price === null ? "" : price,
+            area: area === null ? "" : area,
             nickname: userInfo.nickName,
             memberNo: userInfo.memberNo,
             category: board,
             field: quillValue,
-            imgPath: imageUrl.join(", "),
-            boardId: 0,
+            imgPath: findImg(quillValue),
+            boardId: params.boardId,
             boardName: values.boardName
         }
-        axios.post(`${baseUrl}/board`, body
+        console.log(body)
+        axios.patch(`${baseUrl}/board`, body
         ).then((response) => {
             console.log(response.data);	//정상 통신 후 응답된 메시지 출력
+            console.log(imgUrl);	//정상 통신 후 응답된 메시지 출력
+            console.log(quillValue);	//정상 통신 후 응답된 메시지 출력
             if (board === "자유 게시판") {
                 window.location.href = `/free-board/${userInfo.nickName}`
             } else if (board === "반려동물 자랑") {
@@ -346,7 +441,7 @@ function Write() {
                             : null
                     }
                 </Inputs>
-                <div style={{ height: "450px" }}>
+                <div style={{ height: "500px" }}>
                     <ReactQuill
                         theme="snow"
                         ref={quillRef}
@@ -367,14 +462,14 @@ function Write() {
                                 backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
                             }} className='registerBtns'
                                 onClick={handleSubmit}
-                            >등 록</Button>
+                            >수 정</Button>
                         </InputFooter>
                         :
                         <InputFooter>
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 내용을 입력해주세요</Tooltip>}>
                                 <span className="d-inline-block">
                                     <Button className='registerBtns' disabled style={{ width: "120px", backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`, pointerEvents: 'none' }}>
-                                        등록
+                                        수 정
                                     </Button>
                                 </span>
                             </OverlayTrigger>
@@ -387,13 +482,13 @@ function Write() {
                                     backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
                                 }} className='registerBtns'
                                     onClick={handleSubmit}
-                                >등 록</Button>
+                                >수 정</Button>
                             </InputFooter>
                             : <InputFooter>
                                 <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 머릿말, 내용을 입력해주세요</Tooltip>}>
                                     <span className="d-inline-block">
                                         <Button className='registerBtns' disabled style={{ width: "120px", backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`, pointerEvents: 'none' }}>
-                                            등록
+                                            수 정
                                         </Button>
                                     </span>
                                 </OverlayTrigger>
@@ -404,4 +499,4 @@ function Write() {
     );
 }
 
-export default Write;
+export default Edit;

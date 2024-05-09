@@ -4,12 +4,18 @@ import com.myspring.daengnyang.animal.mapper.AnimalMapper;
 import com.myspring.daengnyang.animal.vo.AnimalDetailVO;
 import com.myspring.daengnyang.animal.vo.AnimalLocationVO;
 import com.myspring.daengnyang.animal.vo.AnimalReviewVO;
+import com.myspring.daengnyang.common.vo.Paging;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -33,10 +39,29 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public List<AnimalLocationVO> getLocation(String location, String classification) {
-        log.info("시설 위치 정보 조회 서비스 실행 => classification : " + location + ", classification : " + classification);
-        return animalMapper.getLocation(location, classification);
+    public Page<AnimalLocationVO> getLocation(String sido, String sigungu, String classification, Pageable pageable) {
+        log.info("시설 위치 정보 조회 서비스 실행 => classification : " + sido + ", classification : " + classification);
+
+        Map<String,String> formData = new HashMap<>();
+        formData.put("sido",sido);
+        formData.put("sigungu",sigungu);
+        formData.put("classification",classification);
+
+
+        Paging<?> requestList = Paging.builder().data(formData).pageable(pageable).build();
+
+        log.info(requestList.toString());
+
+        List<AnimalLocationVO> locationData = animalMapper.getLocation(requestList);
+
+        log.info(locationData.toString());
+
+        int total = animalMapper.getLocationCount(formData);
+        log.info("total : " + total);
+
+        return new PageImpl<>(locationData,pageable,total);
     }
+
 
     @Override
     public AnimalDetailVO getDetail(Integer animalNum) {
@@ -113,6 +138,11 @@ public class AnimalServiceImpl implements AnimalService {
     public boolean favoriteCheck(Integer memberNo, Integer animalNum) {
         Integer checked = animalMapper.favoriteCheck(memberNo, animalNum);
         return checked > 0;
+    }
+
+    @Override
+    public boolean getFavorite(Integer animalNum, Integer memberNo) {
+        return animalMapper.getFavorite(animalNum, memberNo) > 0;
     }
 
 }

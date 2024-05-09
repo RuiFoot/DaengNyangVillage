@@ -58,7 +58,6 @@
         <result property="createDate" column="createDate"/>
     </resultMap>
 
-
     <select id="getClassification" parameterType="String" resultType="String">
         <![CDATA[
             SELECT *
@@ -73,29 +72,57 @@
             WHERE "SIDO" = #{sido}
         ]]>
     </select>
-    <select id="getLocation" parameterType="String" resultMap="LocationResultmap">
+    <select id="getLocation" parameterType="com.myspring.daengnyang.common.vo.Paging" resultMap="LocationResultmap">
         <![CDATA[
         SELECT *
-        FROM "animalLocation"
-        WHERE INSTR("sido", #{location}) > 0
-        AND "subClassification" = #{classification}
-        AND ROWNUM <= 30
+        FROM (
+            SELECT A.*, ROWNUM rn
+            FROM (
+                SELECT *
+                FROM "animalLocation"
+        ]]>
+                <where>
+                    <if test="data.sido != null and data.sido != ''">
+                        AND INSTR("sido", #{data.sido}) > 0
+                    </if>
+                    <if test="data.sigungu != null and data.sigungu != ''">
+                        AND INSTR("sigungu", #{data.sigungu}) > 0
+                    </if>
+                    <if test="data.classification != null and data.classification != ''">
+                        AND "subClassification" = #{data.classification}
+                    </if>
+                </where>
+                <if test="pageable.sort != null and !pageable.sort.isEmpty()">
+                    ORDER BY
+                    <foreach collection="pageable.sort" item="order" separator=",">
+                        "${order.property}" ${order.direction}
+                    </foreach>
+                </if>
+        <![CDATA[
+            ) A
+            WHERE ROWNUM <= #{pageable.offset}+#{pageable.pageSize}
+        )
+        WHERE rn > #{pageable.offset}
     ]]>
     </select>
-    <select id="getLocation2" parameterType="Integer" resultMap="LocationResultmap">
+
+    <select id="getLocationCount" parameterType="Map" resultType="Integer">
         <![CDATA[
-        SELECT *
-        FROM "animalLocation"
-        ]]>
+        SELECT COUNT(*) AS CNT
+        FROM "animalLocation"]]>
         <where>
-            <if test="animalNumList != null and animalNumList.size() > 0">
-                <![CDATA["animalNum" IN]]>
-                <foreach item="animalNum" collection="animalNumList" open="(" separator="," close=")">
-                    #{animalNum}
-                </foreach>
+            <if test="sido != null and sido != ''">
+                AND INSTR("sido", #{sido}) > 0
+            </if>
+            <if test="sigungu != null and sigungu != ''">
+                AND INSTR("sigungu", #{sigungu}) > 0
+            </if>
+            <if test="classification != null and classification != ''">
+                AND "subClassification" = #{classification}
             </if>
         </where>
     </select>
+
     <select id="getDetail" parameterType="Integer" resultMap="DetailResultmap">
         <![CDATA[
             SELECT *
@@ -126,14 +153,24 @@
         VALUES (#{memberNo}, #{animalNum}, SYSDATE, 1)
     </insert>
 
+    <select id="getFavorite" parameterType="Integer" resultType="int">
+        <![CDATA[
+            SELECT "Field"
+            FROM "favorite"
+            WHERE #{animalNum} = "animalNum" AND #{memberNo} = "memberNo"
+        ]]>
+    </select>
+
+
+
     <insert id="animalReviewPost" parameterType="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
         <selectKey keyProperty="animalReviewNum" resultType="java.lang.Integer" order="BEFORE">
             SELECT animal_review_seq.NEXTVAL FROM DUAL
         </selectKey>
         INSERT INTO "animalReview" ("animalReviewNum", "animalNum", "nickname", "memberNo", "review", "star",
-        "createDate")
+        "createDate", "PROFILEIMG")
         VALUES (#{animalReviewNum}, #{animalPost.animalNum}, #{animalPost.nickname}, #{animalPost.memberNo},
-        #{animalPost.review}, #{animalPost.star}, SYSDATE)
+        #{animalPost.review}, #{animalPost.star}, SYSDATE, #{animalPost.profileImg})
     </insert>
 
     <update id="updateAnimalReview" parameterType="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
@@ -141,7 +178,8 @@
         SET "animalNum" = #{animalPost.animalNum},
         "review" = #{animalPost.review},
         "star" = #{animalPost.star},
-        "createDate" = SYSDATE
+        "createDate" = SYSDATE,
+        "PROFILEIMG" = #{animalPost.profileImg}
         WHERE "animalReviewNum" = #{animalPost.animalReviewNum}
     </update>
 

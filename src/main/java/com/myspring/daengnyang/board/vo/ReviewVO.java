@@ -14,4 +14,5 @@ public class ReviewVO {
     public int memberNo;
     public String review;
     public Date createDate;
+    public String profileImg;
 }
