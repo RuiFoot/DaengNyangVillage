@@ -35,8 +35,8 @@
                 "nickname",
                 "memberNo",
                 "review",
-                "star",
-                "createDate"
+                "createDate",
+                "PROFILEIMG"
             FROM
                 "Boardreview"
             WHERE
@@ -132,9 +132,9 @@
         </selectKey>
         <![CDATA[
             INSERT INTO "Boardreview"
-                ("boardReviewNum", "boardId", "nickname", "memberNo", "review", "createDate")
+                ("boardReviewNum", "boardId", "nickname", "memberNo", "review", "createDate", "PROFILEIMG")
             VALUES (#{boardReviewNum}, #{reviewVO.boardId}, #{reviewVO.nickname},
-                    #{reviewVO.memberNo}, #{reviewVO.review}, SYSDATE)
+                    #{reviewVO.memberNo}, #{reviewVO.review}, SYSDATE, #{reviewVO.profileImg})
         ]]>
     </insert>
 
