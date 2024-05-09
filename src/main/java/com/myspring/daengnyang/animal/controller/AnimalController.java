@@ -9,8 +9,10 @@ import com.myspring.daengnyang.animal.vo.FavoriteCheckRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -43,14 +45,16 @@ public class AnimalController {
         return animalService.getSigungu(sido);
     }
 
-    @GetMapping("/location/{searchLocation}")
-    public List<AnimalLocationVO> animalLocation(
-            @PathVariable("searchLocation") String location,
+    @GetMapping("/location/{sido}")
+    public ResponseEntity<?> animalLocation(
+            @PathVariable("sido") String sido,
+            @RequestParam("sigungu") String sigungu,
             @RequestParam String classification,
-            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) { // page : 2 => 페이지 보내야함
-        log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + location + ", Params : " + classification);
+            @PageableDefault(size = 10, sort = "star", direction = Sort.Direction.DESC) Pageable pageable) { // page : 2 => 페이지 보내야함
+        log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + sido + ", Params : " + classification);
         log.info("pageable : " + pageable);
-        return animalService.getLocation(location, classification);
+        Page<?> paging = animalService.getLocation(sido,sigungu, classification, pageable);
+        return ResponseEntity.ok(paging);
     }
 
     @GetMapping("/detail/{animalNum}")

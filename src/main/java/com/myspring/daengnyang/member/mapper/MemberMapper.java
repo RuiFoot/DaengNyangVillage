@@ -29,7 +29,7 @@ public interface MemberMapper {
     List<AnimalLocationVO> getFavorite(@Param("memberNo") Integer memberNo);
 
 
-    BoardVO getMemberPost(@Param("memberNo") Integer memberNo);
+    List<BoardVO> getMemberPost(@Param("memberNo") Integer memberNo);
 
     String getDuplicationEmail(@Param("email") String email);
 
