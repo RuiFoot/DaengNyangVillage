@@ -93,7 +93,7 @@
         ]]>
     </select>
 
-    <select id="getBoardID" resultType="int">
+    <select id="getBoardIdReview" resultType="int">
         <![CDATA[
             SELECT "boardId"
             FROM "Boardreview"

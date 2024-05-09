@@ -61,10 +61,9 @@ public class BoardController {
     @DeleteMapping("/review/{boardReviewNum}")
     public void deleteBoardReview(@PathVariable("boardReviewNum") int boardReviewNum) {
         log.info("댓글 삭제 컨트롤러 실행 => boardReviewNum : " + boardReviewNum);
-        boardService.deleteBoardReview(boardReviewNum);
-
         int boardId = boardService.getBoardId(boardReviewNum);
         System.out.println(boardId);
+        boardService.deleteBoardReview(boardReviewNum);
         boardService.removeReview(boardId);
     }
 
