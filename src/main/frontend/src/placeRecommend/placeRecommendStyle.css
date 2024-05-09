@@ -1,6 +1,6 @@
 .card {
-    width: 350px;
-    /* min-width: 350px; */
+    width: 400px;
+    /* min-width: 400px; */
 }
 
 .cardHeader {
@@ -11,8 +11,13 @@
     height: 100%;
 }
 
-.listGroup {
+.areaListGroup{
     overflow: auto;
+    width: 100%;
+}
+.categoryListGroup{
+    overflow: auto;
+    width: 100%;
 }
 
 .recommendBtn {
