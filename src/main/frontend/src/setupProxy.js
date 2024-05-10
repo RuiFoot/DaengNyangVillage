@@ -8,4 +8,11 @@ module.exports = function (app) {
             changeOrigin: true,
         })
     );
+    app.use(
+        '/11api',
+        createProxyMiddleware({
+            target: "https://openapi.11st.co.kr/",
+            changeOrigin : true,
+        })
+    )
 };

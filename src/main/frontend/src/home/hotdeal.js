@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Spinner } from "react-bootstrap";
+import axios from "axios";
 
 const Container = styled.div`
   margin: 0 6vw;
@@ -61,6 +62,47 @@ const LoadingContainer = styled.div`
   justify-content: center;
 `;
 
+const getItem = () =>{
+  const apiUrl = "/openapi/OpenApiService.tmall";
+  const apiKey = "ec85dc7117b8f778becbc434db04d1c9";
+  const keyword = "반려동물";
+  const url = `/11api${apiUrl}?key=${apiKey}&apiCode=ProductSearch&keyword=${keyword}`;
+
+  axios.get(url).then((res) =>{
+
+    console.log(res.data); // xml
+
+    const data = []
+
+    try{
+      if (data && data.length > 0) {
+        const randomProducts = [];
+        for (let i = 0; i < data.length; i++) {
+          const randomIndex = Math.floor(Math.random() * data.length);
+          const selectedProduct = data[randomIndex];
+          randomProducts.push({ //localhost:22000에서 불러온 데이터
+            name: selectedProduct.ProductName[0],
+            price: `${selectedProduct.ProductPrice[0]}원`,
+            image: selectedProduct.ProductImage300[0],
+            link: selectedProduct.DetailPageUrl[0], // DetailPageUrl 사용
+          });
+        }
+        return randomProducts;
+      } else {
+        throw new Error("상품 정보가 없습니다.");
+      }
+    }catch(error){
+      console.error("상품 정보를 가져오지 못했습니다.", error);
+      return Array.from({ length: 6 }, () => ({
+        name: "상품 정보를 가져오지 못했습니다.",
+        price: "가격 정보 없음",
+        image: "기본 이미지 URL",
+        link: "기본 링크 URL", // 에러 시 기본 링크 추가
+      }));
+    }
+  });
+}
+
 async function fetchRandomProducts(count) {
 
   try {
@@ -101,6 +143,8 @@ function HotdealBar() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+
+    getItem();
     const fetchData = async () => {
       setIsLoading(true);
       const randomProducts = await fetchRandomProducts(7);
