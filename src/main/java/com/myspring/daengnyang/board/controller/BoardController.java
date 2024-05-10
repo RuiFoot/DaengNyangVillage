@@ -1,10 +1,7 @@
 package com.myspring.daengnyang.board.controller;
 
 import com.myspring.daengnyang.board.service.BoardService;
-import com.myspring.daengnyang.board.vo.BoardDetailVO;
-import com.myspring.daengnyang.board.vo.BoardPostVO;
-import com.myspring.daengnyang.board.vo.BoardVO;
-import com.myspring.daengnyang.board.vo.ReviewVO;
+import com.myspring.daengnyang.board.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +40,14 @@ public class BoardController {
         return list;
     }
 
+    // 대댓글 목록 조회
+    @GetMapping("/review/review")
+    public List<RReviewVO> reviewReviewList(@RequestParam int boardReviewNum) throws Exception {
+        log.info("대댓글 목록 조회 컨드롤러 실행 => reviewNum : " + boardReviewNum);
+        List<RReviewVO> list = boardService.selectReviewReviewList(boardReviewNum);
+        return list;
+    }
+
     // 게시글 상세
     @GetMapping(value="/detail/{boardId}")
     @ResponseBody
@@ -67,6 +72,16 @@ public class BoardController {
         boardService.removeReview(boardId);
     }
 
+    @DeleteMapping("/review/review")
+    public void deleteReviewReview(@RequestParam int reviewId, @RequestParam int boardReviewNum) {
+        log.info("대댓글 삭제 컨트롤러 실행 => reivewId : " + reviewId);
+        int boardId = boardService.getBoardId(boardReviewNum);
+        System.out.println(boardId);
+        boardService.deleteReviewReview(reviewId);
+        boardService.removeReview(boardId);
+    }
+
+
     @PostMapping("")
     @ResponseBody
     public void postBoard(@RequestBody BoardPostVO boardPostVO) {
@@ -89,6 +104,13 @@ public class BoardController {
         boardService.modifyReview(reviewVO);
     }
 
+    @PatchMapping("/review/review")
+    @ResponseBody
+    public void modifyReviewReview(@RequestBody RReviewVO reviewVO) {
+        log.info("대댓글 수정 컨트롤러 실행");
+        boardService.modifyReviewReview(reviewVO);
+    }
+
     /**
      * 댓글 작성 기능
      */
@@ -98,6 +120,16 @@ public class BoardController {
     public void postReview(@RequestBody ReviewVO reviewVO) {
         log.info("댓글 쓰기 컨트롤러 실행");
         boardService.postReview(reviewVO);
+
+        int boardId = reviewVO.getBoardId();
+        boardService.registerReview(boardId);
+    }
+
+    @PostMapping("/review/review")
+    @ResponseBody
+    public void postReview(@RequestBody RReviewVO reviewVO) {
+        log.info("댓글 쓰기 컨트롤러 실행");
+        boardService.postReviewReview(reviewVO);
 
         int boardId = reviewVO.getBoardId();
         boardService.registerReview(boardId);

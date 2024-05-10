@@ -46,6 +46,26 @@
         ]]>
     </select>
 
+    <select id="selectReviewReviewList" parameterType="int" resultType="com.myspring.daengnyang.board.vo.RReviewVO">
+        <![CDATA[
+            SELECT
+                "boardReviewNum",
+                "boardId",
+                "nickname",
+                "memberNo",
+                "review",
+                "createDate",
+                "profileImg",
+                "reviewId"
+            FROM
+                "BoardreviewReview"
+            WHERE
+                "boardReviewNum" = #{boardReviewNum}
+            ORDER BY
+                "createDate" DESC
+        ]]>
+    </select>
+
     <update id="updateReviewCnt">
         UPDATE "Board"
         SET "reviewCnt" = "reviewCnt" + #{amount}
@@ -68,6 +88,12 @@
         DELETE
         FROM "Boardreview"
         WHERE "boardReviewNum" = #{boardReviewNum}
+    </delete>
+
+    <delete id="deleteReviewReview">
+        DELETE
+        FROM "BoardreviewReview"
+        WHERE "reviewId" = #{reviewId}
     </delete>
 
     <insert id="postBoard" useGeneratedKeys="true" keyProperty="boardId" parameterType="com.myspring.daengnyang.board.vo.BoardPostVO">
@@ -146,6 +172,19 @@
         ]]>
     </insert>
 
+    <insert id="postReviewReview" useGeneratedKeys="true" keyProperty="reviewId" parameterType="com.myspring.daengnyang.board.vo.RReviewVO">
+        <selectKey keyProperty="reviewId" resultType="int" order="BEFORE">
+            SELECT reviewid_seq.NEXTVAL FROM dual
+        </selectKey>
+        <![CDATA[
+            INSERT INTO "BoardreviewReview"
+                ("boardReviewNum", "boardId", "nickname", "memberNo", "review", "createDate", "profileImg", "reviewId")
+            VALUES (#{reviewVO.boardReviewNum}, #{reviewVO.boardId}, #{reviewVO.nickname},
+                    #{reviewVO.memberNo}, #{reviewVO.review}, SYSDATE, #{reviewVO.profileImg},
+                    #{reviewId})
+        ]]>
+    </insert>
+
     <select id="getMemberNo" resultType="int" parameterType="String">
         SELECT "memberNo"
         FROM "memberInfo"
@@ -179,6 +218,14 @@
             UPDATE "Boardreview"
             SET "review" = #{reviewVO.review}
             WHERE "boardReviewNum" = #{reviewVO.boardReviewNum}
+        ]]>
+    </update>
+
+    <update id="modifyReviewReview" parameterType="com.myspring.daengnyang.board.vo.RReviewVO">
+        <![CDATA[
+            UPDATE "BoardreviewReview"
+            SET "review" = #{reviewVO.review}
+            WHERE "reviewId" = #{reviewVO.reviewId}
         ]]>
     </update>
 

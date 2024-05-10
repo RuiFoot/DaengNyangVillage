@@ -1,10 +1,7 @@
 package com.myspring.daengnyang.board.service;
 
 import com.myspring.daengnyang.board.mapper.BoardMapper;
-import com.myspring.daengnyang.board.vo.BoardDetailVO;
-import com.myspring.daengnyang.board.vo.BoardPostVO;
-import com.myspring.daengnyang.board.vo.BoardVO;
-import com.myspring.daengnyang.board.vo.ReviewVO;
+import com.myspring.daengnyang.board.vo.*;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +27,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public List<RReviewVO> selectReviewReviewList(int boardReviewNum) throws Exception {
+        return boardMapper.selectReviewReviewList(boardReviewNum);
+    }
+
+    @Override
     public void registerReview(int boardId) {
         boardMapper.updateReviewCnt(boardId, 1);
     }
@@ -52,6 +54,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void deleteBoardReview(int boardReviewNum) {
         boardMapper.deleteBoardReview(boardReviewNum);
+    }
+
+    @Override
+    public void deleteReviewReview(int reviewId) {
+        boardMapper.deleteReviewReview(reviewId);
     }
 
     @Override
@@ -82,6 +89,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public void postReviewReview(RReviewVO reviewVO) {
+        int memberNo = boardMapper.getMemberNo(reviewVO.getNickname());
+        System.out.println(memberNo);
+
+        reviewVO.setMemberNo(memberNo);
+
+        boardMapper.postReviewReview(reviewVO);
+    }
+
+    @Override
     public void modifyPost(BoardPostVO boardPostVO) {
         boardMapper.modifyPost(boardPostVO);
         boardMapper.modifyPostDetail(boardPostVO);
@@ -90,6 +107,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void modifyReview(ReviewVO reviewVO) {
         boardMapper.modifyReview(reviewVO);
+    }
+
+    @Override
+    public void modifyReviewReview(RReviewVO reviewVO) {
+        boardMapper.modifyReviewReview(reviewVO);
     }
 
     @Override
