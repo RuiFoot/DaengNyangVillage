@@ -83,8 +83,19 @@ function MyInfo() {
                     </Boxs>
                 </UserInfo>
                 <Button className="changBtn"
+                    style={{
+                        color: switchColor,
+                        backgroundColor: switchBgColor
+                    }}
                     onClick={() => window.location.href = `/my-info-change/${userData.nickName}`}
                 >회원 정보 수정</Button>
+                <Button className="changBtn"
+                    style={{
+                        color: switchColor,
+                        backgroundColor: switchBgColor
+                    }}
+                    onClick={() => alert("정말 탈퇴 하시겠습니까?")}
+                >회원 탈퇴</Button>
             </Container>
         </>
     )
