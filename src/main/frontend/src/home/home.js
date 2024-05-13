@@ -59,7 +59,10 @@ const DivideLine = styled.div`
 let url = ""
 
 function Home() {
+  //다크모드
   const isDark = useRecoilValue(isDarkAtom);
+  const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+  const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
 
   if (window.sessionStorage.key(0) === "logined") {
     url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
@@ -68,8 +71,8 @@ function Home() {
   return (
     <Container className="Container"
       style={{
-        color: `${isDark ? themes.dark.color : themes.light.color}`,
-        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+        color: switchColor,
+        backgroundColor: switchBgColor
       }}>
       <Bumper />
       <Carousel>
@@ -84,14 +87,14 @@ function Home() {
         <Place>
           <a href={`/place-recommend${url}`}>
             <PlaceTitle style={{
-              color: `${isDark ? themes.dark.color : themes.light.color}`
+              color: switchColor
             }}>인기장소</PlaceTitle></a>
           <HotPlaceList />
         </Place>
         <Community>
           <a href={`/free-board${url}`}>
             <CommunityTitle style={{
-              color: `${isDark ? themes.dark.color : themes.light.color}`
+              color: switchColor
             }}>커뮤니티</CommunityTitle></a>
           <CommunityHome />
         </Community>

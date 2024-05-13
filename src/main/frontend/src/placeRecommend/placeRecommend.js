@@ -142,7 +142,7 @@ function PlaceRecommend() {
             }).catch(error => {
                 console.error('Request failed : ', error);
 
-        })
+            })
     }, [])
 
     // 맵에 띄울 마커 정보 받기

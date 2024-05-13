@@ -21,12 +21,15 @@ const Copyright = styled.div`
 `
 
 function Footer() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
 
     return (
         <FooterContainer style={{
-            color: `${isDark ? themes.dark.color : themes.light.color}`,
-            backgroundColor: `${isDark ? themes.dark.navFooterBgColor : themes.light.bgColor}`
+            color: switchColor,
+            backgroundColor: switchBgColor
         }}>
             <Icons>
                 <FaXTwitter className="footerIcon" />

@@ -32,7 +32,7 @@ text-align: center;
 font-size: clamp(80%, 5vw, 120%);
 `
 const InputTitle = styled.div`
-margin: 15px 0 10px 0;
+margin: 35px 0 10px 0;
 `
 
 const CheckBox = styled.input`
@@ -76,7 +76,10 @@ background-size: cover;
 border-radius: 40px;
 `
 function MyInfoChange() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     // baseUrl 스프링 부트 연동, pathname 현재 주소
     const baseUrl = "http://localhost:8080";
     const pathname = window.location.pathname;
@@ -234,8 +237,8 @@ function MyInfoChange() {
         <>
             <MypageNavbar />
             <Container style={{
-                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                color: switchColor,
+                backgroundColor: switchBgColor
             }}>
                 <EditTitle>댕냥 빌리지 회원정보 수정</EditTitle>
                 <InputForm>
@@ -413,7 +416,7 @@ function MyInfoChange() {
                                 </button>
                                 : <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">회원 정보가 유효하지 않습니다.</Tooltip>}>
                                     <span className="d-inline-block">
-                                        <Button id="joinBtn" disabled style={{ pointerEvents: 'none' }}>
+                                        <Button id="joinBtn" disabled style={{ marginTop: "30px", pointerEvents: 'none' }}>
                                             회원 정보 수정
                                         </Button>
                                     </span>
