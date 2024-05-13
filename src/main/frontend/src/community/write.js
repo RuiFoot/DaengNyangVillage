@@ -3,7 +3,9 @@ import { isDarkAtom } from '../atoms';
 import styled from "styled-components";
 import themes from "../theme";
 import Bumper from '../layout/bumper';
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
+import { ImageActions } from '@xeger/quill-image-actions';
+import { ImageFormats } from '@xeger/quill-image-formats';
 import "react-quill/dist/quill.snow.css";
 import { useEffect, useState, useRef, useMemo } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -19,7 +21,6 @@ import axios from "axios";
 
 const Container = styled.div`
 `
-
 const InputForm = styled.div`
 min-height: calc(100vh - 159px);
 margin: 0 6vw;
@@ -35,8 +36,15 @@ const InputFooter = styled.div`
 display: flex;
 justify-content: end;
 `
+//이미지 사이즈 변경
+Quill.register('modules/imageActions', ImageActions);
+Quill.register('modules/imageFormats', ImageFormats);
 
 function Write() {
+    //다크모드
+    const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const [imageUrl, setImageUrl] = useState([]); // 새로운 상태 추가
     const baseUrl = "http://localhost:8080";
     // 배포용 URL
@@ -75,11 +83,11 @@ function Write() {
             }
         });
     };
-
-    const isDark = useRecoilValue(isDarkAtom);
     const [quillValue, setQuillValue] = useState("");
     const modules = useMemo(() => {
         return {
+            imageActions: {},
+            imageFormats: {},
             toolbar: {
                 container: [
                     [{ header: [1, 2, false] }],
@@ -98,6 +106,9 @@ function Write() {
                     // 이미지 처리는 우리가 직접 imageHandler라는 함수로 처리할 것이다.
                     image: imageHandler,
                 },
+                ImageResize: { //이미지 사이즈 변경
+                    modules: ['Resize']
+                }
             }
         }
     }, [])
@@ -117,6 +128,9 @@ function Write() {
         "align",
         "color",
         "background",
+        'float',
+        'height',
+        'width'
     ];
     const userInfo = JSON.parse(window.sessionStorage.getItem("logined"))
 
@@ -213,16 +227,16 @@ function Write() {
 
     return (
         <Container style={{
-            color: `${isDark ? themes.dark.color : themes.light.color}`,
-            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            color: switchColor,
+            backgroundColor: switchBgColor
         }}>
             <Bumper />
             <InputForm>
                 <Dropdowns >
                     <Dropdown style={{ marginRight: "10px" }}>
                         <Dropdown.Toggle style={{
-                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                            color: switchColor,
+                            backgroundColor: switchBgColor
                         }} id="dropdown-basic"
                             className='registerBtns'>
                             {board}
@@ -238,8 +252,8 @@ function Write() {
                         board === "자유 게시판" ?
                             <Dropdown>
                                 <Dropdown.Toggle style={{
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }} id="dropdown-basic"
                                     className='registerBtns'>
                                     {preface}
@@ -253,8 +267,8 @@ function Write() {
                             : board === "훈련 방법 공유" ?
                                 <Dropdown>
                                     <Dropdown.Toggle style={{
-                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                        color: switchColor,
+                                        backgroundColor: switchBgColor
                                     }} id="dropdown-basic"
                                         className='registerBtns'>
                                         {preface}
@@ -268,8 +282,8 @@ function Write() {
                                 : board === "댕냥 마켓" ?
                                     <Dropdown>
                                         <Dropdown.Toggle style={{
-                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                            color: switchColor,
+                                            backgroundColor: switchBgColor
                                         }} id="dropdown-basic"
                                             className='registerBtns'>
                                             {preface}
@@ -286,8 +300,8 @@ function Write() {
                         <Dropdown>
                             <Dropdown.Toggle style={{
                                 marginLeft: "10px",
-                                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                color: switchColor,
+                                backgroundColor: switchBgColor
                             }} id="dropdown-basic"
                                 className='registerBtns'>
                                 {area}
@@ -346,14 +360,14 @@ function Write() {
                             : null
                     }
                 </Inputs>
-                <div style={{ height: "450px" }}>
+                <div style={{ minHeight: "450px", height: "fit-content" }}>
                     <ReactQuill
                         theme="snow"
                         ref={quillRef}
                         modules={modules}
                         formats={formats}
                         value={quillValue || ""}
-                        style={{ height: "400px" }}
+                        style={{ minHeight: "400px" }}
                         onChange={setQuillValue}
                     />
                 </div>
@@ -362,9 +376,10 @@ function Write() {
                     board === "반려동물 자랑" ? quillValue.length > 0 && boardName.length > 0 ?
                         <InputFooter>
                             <Button style={{
+                                margin: "10px 0",
                                 width: "120px",
-                                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                color: switchColor,
+                                backgroundColor: switchBgColor
                             }} className='registerBtns'
                                 onClick={handleSubmit}
                             >등 록</Button>
@@ -373,7 +388,7 @@ function Write() {
                         <InputFooter>
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 내용을 입력해주세요</Tooltip>}>
                                 <span className="d-inline-block">
-                                    <Button className='registerBtns' disabled style={{ width: "120px", backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`, pointerEvents: 'none' }}>
+                                    <Button className='registerBtns' disabled style={{ margin: "10px 0", width: "120px", backgroundColor: switchBgColor, pointerEvents: 'none' }}>
                                         등록
                                     </Button>
                                 </span>
@@ -382,9 +397,10 @@ function Write() {
                         : quillValue.length > 0 && boardName.length > 0 && board.length > 0 ?
                             <InputFooter>
                                 <Button style={{
+                                    margin: "10px 0",
                                     width: "120px",
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }} className='registerBtns'
                                     onClick={handleSubmit}
                                 >등 록</Button>
@@ -392,7 +408,7 @@ function Write() {
                             : <InputFooter>
                                 <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 머릿말, 내용을 입력해주세요</Tooltip>}>
                                     <span className="d-inline-block">
-                                        <Button className='registerBtns' disabled style={{ width: "120px", backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`, pointerEvents: 'none' }}>
+                                        <Button className='registerBtns' disabled style={{ margin: "10px 0", width: "120px", backgroundColor: switchBgColor, pointerEvents: 'none' }}>
                                             등록
                                         </Button>
                                     </span>

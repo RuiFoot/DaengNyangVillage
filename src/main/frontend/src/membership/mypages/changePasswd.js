@@ -32,7 +32,10 @@ margin: 15px 0 10px 0;
 `
 
 function ChangePasswd() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const baseUrl = "http://localhost:8080";   //스프링부트 연동시
     const previousInfo = JSON.parse(sessionStorage.getItem("logined")) // 이전 회원 정보
 
@@ -114,8 +117,8 @@ function ChangePasswd() {
         <>
             <MypageNavbar />
             <Container style={{
-                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                color: switchColor,
+                backgroundColor: switchBgColor
             }}>
                 <EditTitle>댕냥 빌리지 비밀번호 변경</EditTitle>
                 <InputForm>

@@ -55,10 +55,8 @@ background-size: cover;
 `
 const Precautions = styled.div`
 `
-
 const Address = styled.div`
 `
-
 const ReviewsTitleBox = styled.div`
 width: 88vw;
 margin: 20px 0 10px 0;
@@ -75,7 +73,6 @@ flex-direction: column;
 width: 88vw;
 margin: 0 0 10px 0;
 `
-
 const CommentsInputs = styled.div`
 margin: 20px 10px 0px 10px;
 `
@@ -86,7 +83,6 @@ justify-content: center;
 padding-bottom: 5px;
 border-bottom: 1px solid;
 `
-
 const CommentsRightBox = styled.div`
 display: flex;
 flex-direction: column;
@@ -109,7 +105,6 @@ align-items: center;
 margin-right: 20px;
 `
 const CommentsText = styled.pre`
-
 `
 const CommentsNickName = styled.div`
 text-align: center;
@@ -120,7 +115,6 @@ display: flex;
 justify-content: end;
 `
 const CommentsDate = styled.div`
-
 `
 const CommentsRank = styled.div`
 `
@@ -155,7 +149,10 @@ margin-right: 10px;
 `
 
 function RecommendDetail() {
-    const isDark = useRecoilValue(isDarkAtom); // 다크모드
+    //다크모드
+    const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const params = useParams();
     const userInfo = JSON.parse(sessionStorage.getItem("logined"))
     // 현재 url에 맞는 글 가져오기 (현재 url에 id전송으로 대체)
@@ -209,7 +206,6 @@ function RecommendDetail() {
     const deleteReview = (e) => {
         setUserReviews(userReviews.filter((item) => item.reviewId !== e))
         test[0][5].splice(test[0][5].findIndex((e) => e[2] === e), 1) // 별점 입력 삭제
-        setUserReReviews([])
         console.log(userReviews)
         console.log(test)
     }
@@ -271,7 +267,7 @@ function RecommendDetail() {
         return starRank
     }
 
-    //댓글 입력
+    //댓글 인풋
     const dropdown = () => {
         return (
             <StarInput>
@@ -279,8 +275,8 @@ function RecommendDetail() {
                     <Dropdown>
                         <Dropdown.Toggle style={{
                             margin: "0 10px 0 0",
-                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                            color: switchColor,
+                            backgroundColor: switchBgColor
                         }} className="recommendBtn" id="dropdown-basic">
                             별점({star})
                         </Dropdown.Toggle>
@@ -315,8 +311,8 @@ function RecommendDetail() {
                 </InputGroup>
                 <ButtonBox>
                     <Button style={{
-                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                        color: switchColor,
+                        backgroundColor: switchBgColor
                     }} className="recommendBtn" id="button-addon2"
                         onClick={reviewId !== undefined ? uploadEditReview : uploadReview}
                     >
@@ -348,8 +344,8 @@ function RecommendDetail() {
                         <>
                             <div>이미 리뷰를 작성하셨습니다.</div>
                             <Button className="recommendBtn" style={{
-                                margin: "10px 0 10px 0", color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                margin: "10px 0 10px 0", color: switchColor,
+                                backgroundColor: switchBgColor
                             }}
                                 onClick={goMyReview}
                             >
@@ -401,40 +397,7 @@ function RecommendDetail() {
         console.log(params)
     }
 
-    //대댓글
-    const [onReReview, setOnReReview] = useState()
-    const [userReReviews, setUserReReviews] = useState([])
-    const [reReview, setReReview] = useState()
-    const addReview = (e) => {
-        setOnReReview(e)
-        console.log("이글에 댓글담 " + onReReview)
-    }
-
-    const upLoadReReview = (e) => {
-        userReReviews.push({
-            memberNo: userInfo.memberNo,
-            reviewId: onReReview,
-            nickName: userInfo.nickName,
-            createDate: formattedDate,
-            reReviewId: today.getTime(),
-            profileImg: `${userInfo.profileImg}`,
-            boardId: params.itemId,
-            reReview: reReview
-        })
-        setReReview()
-        setOnReReview()
-        console.log(reReview)
-        console.log(userReReviews)
-    }
-
-    const deleteReReview = (e) => {
-        setUserReReviews(userReReviews.filter((item) => item.reReviewId !== e))
-        console.log(userReReviews)
-        console.log(e)
-    }
-
     //이미지 디폴트 값
-
     const showImg = (e) => {
         if (e === "미용") return defaultImg.미용
         if (e === "박물관문예회관") return defaultImg.박물관문예회관
@@ -451,8 +414,8 @@ function RecommendDetail() {
         <>
             <Bumper />
             <Container style={{
-                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                color: switchColor,
+                backgroundColor: switchBgColor
             }}>
                 <CategoryTitle>장소 추천</CategoryTitle>
                 <Items>
@@ -509,21 +472,15 @@ function RecommendDetail() {
                                             userInfo.memberNo === e.memberNo ?
                                                 <EditDeleteBox >
                                                     <Button style={{
-                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                                    }} className="recommendBtn"
-                                                        onClick={() => addReview(e.reviewId)}
-                                                    >댓글 달기</Button>
-                                                    <Button style={{
                                                         margin: "0 5px",
-                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                                        color: switchColor,
+                                                        backgroundColor: switchBgColor
                                                     }} className="recommendBtn"
                                                         onClick={() => editReview(e, i)}
                                                     >수정</Button>
                                                     <Button style={{
-                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                                        color: switchColor,
+                                                        backgroundColor: switchBgColor
                                                     }} className="recommendBtn"
                                                         onClick={() => deleteReview(e.reviewId)}
                                                     >삭제</Button>
@@ -533,84 +490,6 @@ function RecommendDetail() {
                                         }
                                     </CommentsRightBox>
                                 </CommentsItems>
-                                {
-                                    onReReview === e.reviewId ?
-                                        <>
-                                            <>
-                                                <InputGroup className="mb-3">
-                                                    <Form.Control
-                                                        as="textarea"
-                                                        wrap="hard"
-                                                        cols="20"
-                                                        value={reReview}
-                                                        name="reReview"
-                                                        onChange={(e) => setReReview(e.target.value)}
-                                                        aria-label="Recipient's username"
-                                                        aria-describedby="basic-addon2"
-                                                    />
-                                                </InputGroup>
-                                                <ButtonBox>
-                                                    <Button style={{
-                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                                    }} className="recommendBtn" id="button-addon2"
-                                                        onClick={() => upLoadReReview(e.reviewId)}
-                                                    >
-                                                        댓글 등록
-                                                    </Button>
-                                                </ButtonBox>
-
-                                            </>
-                                        </>
-                                        : null
-                                }
-                                {
-                                    userReReviews.map((e, i) => (
-                                        <ReReviewOutBox>
-                                            <Replyd>
-                                                <MdOutlineReply style={{ fontSize: "50px" }} />
-                                            </Replyd>
-
-                                            <ReReviewBox>
-                                                <CommentsItems key={i}>
-                                                    <CommentsLeftBox>
-                                                        <CommentsImg id={e.memberNo} style={{ backgroundImage: `url(${e.profileImg})` }} />
-                                                        <CommentsNickName>{e.nickName}</CommentsNickName>
-                                                    </CommentsLeftBox>
-                                                    <CommentsRightBox id={e.reviewId}>
-                                                        <CommentsRank>
-                                                            {starRank(e.rank)}
-                                                        </CommentsRank>
-                                                        <CommentsText>{e.reReview}</CommentsText>
-                                                        <Date>
-                                                            <CommentsDate>{e.createDate}</CommentsDate>
-                                                        </Date>
-                                                        {
-                                                            userInfo.memberNo === e.memberNo ?
-                                                                <EditDeleteBox >
-                                                                    {/* <Button style={{
-                                                                        margin: "0 5px",
-                                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                                                    }} className="recommendBtn"
-                                                                    // onClick={() => editReview(e, i)}
-                                                                    >수정</Button> */}
-                                                                    <Button style={{
-                                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                                                    }} className="recommendBtn"
-                                                                        onClick={() => deleteReReview(e.reReviewId)}
-                                                                    >삭제</Button>
-
-                                                                </EditDeleteBox>
-                                                                : null
-                                                        }
-                                                    </CommentsRightBox>
-                                                </CommentsItems>
-                                            </ReReviewBox>
-                                        </ReReviewOutBox>
-                                    ))
-                                }
                             </>
                         ))
                     }

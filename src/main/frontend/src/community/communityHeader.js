@@ -15,7 +15,8 @@ justify-content: flex-end;
 
 function CommunityHeader() {
     const isDark = useRecoilValue(isDarkAtom);
-
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     let nickName
     if (window.sessionStorage.key(0) === "logined") {
         nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
@@ -28,8 +29,8 @@ function CommunityHeader() {
         <BoardHeader>
             <Dropdown >
                 <Dropdown.Toggle className="headerBtn" id="dropdown-basic" style={{
-                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                    color: switchColor,
+                    backgroundColor: switchBgColor
                 }}>
                     정렬
                 </Dropdown.Toggle>
@@ -41,8 +42,8 @@ function CommunityHeader() {
             {
                 window.sessionStorage.key(0) === "logined" ?
                     <Button className="headerBtn" style={{
-                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                        color: switchColor,
+                        backgroundColor: switchBgColor
                     }}
                         onClick={goWrite}
                     >글쓰기</Button>
@@ -50,8 +51,8 @@ function CommunityHeader() {
                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">로그인 해주세요</Tooltip>}>
                         <span className="d-inline-block">
                             <Button className="headerBtn" disabled style={{
-                                pointerEvents: 'none', color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                pointerEvents: 'none', color: switchColor,
+                                backgroundColor: switchBgColor
                             }}>
                                 글쓰기
                             </Button>

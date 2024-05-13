@@ -41,7 +41,10 @@ const PlaceItemInfo = styled.div`
 font-size: clamp(90%, 1vw, 100%);
 `
 function HotPlaceList() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -71,33 +74,33 @@ function HotPlaceList() {
     }
 
     //스프링 통신
-    // const [board, setBoard] = useState({
-    //     animalNum: 0,
-    //     largeClassification: "",
-    //     facilityName: "",
-    //     subClassification: "",
-    //     sido: "",
-    //     sigungu: "",
-    //     eupmyeondong: "",
-    //     ri: "",
-    //     houseNumber: "",
-    //     streetName: "",
-    //     buildingNumber: "",
-    //     latitude: "",
-    //     longitude: "",
-    //     star: 0,
-    //     imgPath: "",
-    //     roadAddress: "",
-    //     numberAddress: ""
-    // })
+    const [board, setBoard] = useState({
+        animalNum: 0,
+        largeClassification: "",
+        facilityName: "",
+        subClassification: "",
+        sido: "",
+        sigungu: "",
+        eupmyeondong: "",
+        ri: "",
+        houseNumber: "",
+        streetName: "",
+        buildingNumber: "",
+        latitude: "",
+        longitude: "",
+        star: 0,
+        imgPath: "",
+        roadAddress: "",
+        numberAddress: ""
+    })
 
-    // useEffect(() => {
-    //     axios.get('/api/animal/favorite')
-    //         .then((res) => {
-    //             setBoard(res.data);
-    //         })
-    //     console.log(board)
-    // }, []);
+    useEffect(() => {
+        axios.get('/api/animal/recommend')
+            .then((res) => {
+                setBoard(res.data);
+                console.log(res.data)
+            })
+    }, []);
 
     return (
 
@@ -108,8 +111,8 @@ function HotPlaceList() {
                     ?
                     hotPlaceArr.slice(0, 6).map((e, i) => (
                         <PlaceItem key={i} style={{
-                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                            color: switchColor,
+                            backgroundColor: switchBgColor
                         }}
                             href={`/recommend-place-detail/${e[4]}${url}`}
                         >
@@ -122,8 +125,8 @@ function HotPlaceList() {
                     :
                     hotPlaceArr.slice(0, 4).map((e, i) => (
                         <PlaceItem key={i} style={{
-                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                            color: switchColor,
+                            backgroundColor: switchBgColor
                         }}
                             href={`/recommend-place-detail/${e[4]}${url}`}
                         >

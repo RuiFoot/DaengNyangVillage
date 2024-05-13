@@ -73,7 +73,10 @@ background-size: cover;
 `
 
 function CommunityHome() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     //현재 로그인한 유저 닉네임
     const [loginedNickName, setLoginedNickName] = useState("")
     useEffect(() => {
@@ -200,8 +203,8 @@ function CommunityHome() {
                         freeBoard.slice(0, 3).map((e, i) => (
                             <Content
                                 style={{
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }}
                                 key={i}
                                 href={`/free-board-detail/${e.boardId}${loginedNickName}`}
@@ -220,8 +223,8 @@ function CommunityHome() {
                         petBoastBoard.slice(0, 3).map((e, i) => (
                             <ImgContent
                                 style={{
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }}
                                 key={i}
                                 href={`/pet-boast-detail/${e.boardId}${loginedNickName}`}
@@ -245,8 +248,8 @@ function CommunityHome() {
                         trainingBoard.slice(0, 3).map((e, i) => (
                             <Content
                                 style={{
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }}
                                 key={i}
                                 href={`/training-method-detail/${e.boardId}${loginedNickName}`}
@@ -265,8 +268,8 @@ function CommunityHome() {
                         marketBoard.slice(0, 3).map((e, i) => (
                             <ImgContent
                                 style={{
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }}
                                 key={i}
                                 href={`/used-market-detail/${e.boardId}${loginedNickName}`}

@@ -95,3 +95,9 @@ npm install firebase
 4월 30일 추가
 프로필 사진 추가를위한 고유한 아이디 값을 생성
 npm install react-uuid
+
+5월 10일 추가
+이미지 입력시 리사이즈 기능
+npm i @xeger/quill-image-actions
+npm i @xeger/quill-image-formats
+npm install quill-image-resize

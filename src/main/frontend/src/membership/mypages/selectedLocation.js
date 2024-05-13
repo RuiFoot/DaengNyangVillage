@@ -23,7 +23,6 @@ grid-auto-rows: minmax(100px, auto);
 gap: 15px;
 `
 const PlaceItem = styled.div`
-
 `
 const PlaceItemTitle = styled.div`
 display: flex;
@@ -46,7 +45,10 @@ font-size: clamp(90%, 1vw, 100%);
 `
 
 function SelectedLocation() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const nowPage = useRecoilValue(presentPage);
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
@@ -83,8 +85,8 @@ function SelectedLocation() {
         <div>
             <MypageNavbar />
             <Container style={{
-                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                color: switchColor,
+                backgroundColor: switchBgColor
             }}>
                 < PlaceItems style={{
                     gridTemplateColumns: windowSize > 1790 ?

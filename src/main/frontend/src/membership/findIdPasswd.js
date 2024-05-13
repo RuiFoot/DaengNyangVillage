@@ -31,7 +31,10 @@ const UserId = styled.div`
 `
 
 function FindIdPasswd() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
     const [numCheck, setNumCheck] = useState()
@@ -102,8 +105,8 @@ function FindIdPasswd() {
         <>
             <Container
                 style={{
-                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                    color: switchColor,
+                    backgroundColor: switchBgColor
                 }}>
                 <Content>
                     <Title>내 계정 ID 찾기</Title>
