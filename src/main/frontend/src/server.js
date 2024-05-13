@@ -56,7 +56,7 @@ app.listen(22000, () => {
     console.log("SERVER IS RUNNING ON PORT 22000");
 });
 
-var http= require('http');
+var http = require('http');
 
 const PORT = process.env.PORT || 3000;
 

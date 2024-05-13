@@ -51,15 +51,11 @@
     padding: 10px;
     border-radius: 10px;
     transition-duration: 0.3s;
-    color: black;
-    border-color: #F288CD;
-    background-color: white;
+    border-color: white;
 }
 
 .changBtn:hover {
-    color: white;
     border-color: #F288CD;
-    background-color: #F288CD;
 }
 
 .postModal {
