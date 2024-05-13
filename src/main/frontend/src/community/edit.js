@@ -1,5 +1,5 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { isDarkAtom, editData } from '../atoms';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
 import styled from "styled-components";
 import themes from "../theme";
 import Bumper from '../layout/bumper';
@@ -17,9 +17,9 @@ import { storage } from "../firebase";
 import { uploadBytes, getDownloadURL, deleteObject, ref } from "firebase/storage";
 import axios from "axios";
 import { useParams } from 'react-router-dom';
+
 const Container = styled.div`
 `
-
 const InputForm = styled.div`
 min-height: calc(100vh - 159px);
 margin: 0 6vw;
@@ -37,6 +37,10 @@ justify-content: end;
 `
 
 function Edit() {
+    //다크 모드
+    const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const [imgUrl, setImageUrl] = useState([]); // 새로운 상태 추가
     const baseUrl = "http://localhost:8080";
     // 배포용 URL
@@ -144,7 +148,6 @@ function Edit() {
         });
     };
 
-    const isDark = useRecoilValue(isDarkAtom);
     const [quillValue, setQuillValue] = useState("");
     const modules = useMemo(() => {
         return {
@@ -165,7 +168,7 @@ function Edit() {
                 handlers: {
                     // 이미지 처리는 우리가 직접 imageHandler라는 함수로 처리할 것이다.
                     image: imageHandler,
-                },
+                }
             }
         }
     }, [])
@@ -184,7 +187,7 @@ function Edit() {
         "image",
         "align",
         "color",
-        "background",
+        "background"
     ];
     const userInfo = JSON.parse(window.sessionStorage.getItem("logined"))
 
@@ -308,16 +311,16 @@ function Edit() {
 
     return (
         <Container style={{
-            color: `${isDark ? themes.dark.color : themes.light.color}`,
-            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            color: switchColor,
+            backgroundColor: switchBgColor
         }}>
             <Bumper />
             <InputForm>
                 <Dropdowns >
                     <Dropdown style={{ marginRight: "10px" }}>
                         <Dropdown.Toggle style={{
-                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                            color: switchColor,
+                            backgroundColor: switchBgColor
                         }} id="dropdown-basic"
                             className='registerBtns'>
                             {board}
@@ -333,8 +336,8 @@ function Edit() {
                         board === "자유 게시판" ?
                             <Dropdown>
                                 <Dropdown.Toggle style={{
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }} id="dropdown-basic"
                                     className='registerBtns'>
                                     {preface}
@@ -348,8 +351,8 @@ function Edit() {
                             : board === "훈련 방법 공유" ?
                                 <Dropdown>
                                     <Dropdown.Toggle style={{
-                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                        color: switchColor,
+                                        backgroundColor: switchBgColor
                                     }} id="dropdown-basic"
                                         className='registerBtns'>
                                         {preface}
@@ -363,8 +366,8 @@ function Edit() {
                                 : board === "댕냥 마켓" ?
                                     <Dropdown>
                                         <Dropdown.Toggle style={{
-                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                            color: switchColor,
+                                            backgroundColor: switchBgColor
                                         }} id="dropdown-basic"
                                             className='registerBtns'>
                                             {preface}
@@ -381,8 +384,8 @@ function Edit() {
                         <Dropdown>
                             <Dropdown.Toggle style={{
                                 marginLeft: "10px",
-                                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                color: switchColor,
+                                backgroundColor: switchBgColor
                             }} id="dropdown-basic"
                                 className='registerBtns'>
                                 {area}
@@ -441,14 +444,14 @@ function Edit() {
                             : null
                     }
                 </Inputs>
-                <div style={{ height: "500px" }}>
+                <div style={{ minHeight: "450px", height: "fit-content" }}>
                     <ReactQuill
                         theme="snow"
                         ref={quillRef}
                         modules={modules}
                         formats={formats}
                         value={quillValue || ""}
-                        style={{ height: "400px" }}
+                        style={{ minHeight: "400px" }}
                         onChange={setQuillValue}
                     />
                 </div>
@@ -457,9 +460,10 @@ function Edit() {
                     board === "반려동물 자랑" ? quillValue.length > 0 && boardName.length > 0 ?
                         <InputFooter>
                             <Button style={{
+                                margin: "10px 0",
                                 width: "120px",
-                                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                color: switchColor,
+                                backgroundColor: switchBgColor
                             }} className='registerBtns'
                                 onClick={handleSubmit}
                             >수 정</Button>
@@ -468,7 +472,14 @@ function Edit() {
                         <InputFooter>
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 내용을 입력해주세요</Tooltip>}>
                                 <span className="d-inline-block">
-                                    <Button className='registerBtns' disabled style={{ width: "120px", backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`, pointerEvents: 'none' }}>
+                                    <Button className='registerBtns' disabled
+                                        style={{
+                                            margin: "10px 0",
+                                            width: "120px",
+                                            color: switchColor,
+                                            backgroundColor: switchBgColor,
+                                            pointerEvents: 'none'
+                                        }}>
                                         수 정
                                     </Button>
                                 </span>
@@ -477,9 +488,10 @@ function Edit() {
                         : quillValue.length > 0 && boardName.length > 0 && board.length > 0 ?
                             <InputFooter>
                                 <Button style={{
+                                    margin: "10px 0",
                                     width: "120px",
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }} className='registerBtns'
                                     onClick={handleSubmit}
                                 >수 정</Button>
@@ -487,7 +499,14 @@ function Edit() {
                             : <InputFooter>
                                 <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 머릿말, 내용을 입력해주세요</Tooltip>}>
                                     <span className="d-inline-block">
-                                        <Button className='registerBtns' disabled style={{ width: "120px", backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`, pointerEvents: 'none' }}>
+                                        <Button className='registerBtns' disabled
+                                            style={{
+                                                margin: "10px 0",
+                                                width: "120px",
+                                                color: switchColor,
+                                                backgroundColor: switchBgColor,
+                                                pointerEvents: 'none'
+                                            }}>
                                             수 정
                                         </Button>
                                     </span>

@@ -12,7 +12,6 @@ display: flex;
 flex-direction: column;
 align-items: center;
 `
-
 const UserInfo = styled.div`
 `
 const Boxs = styled.div`
@@ -25,14 +24,12 @@ font-size: 20px;
 margin-bottom: 5px;
 `
 const UserNickname = styled.div`
-
 `
 const UserImgBox = styled.div`
 margin: 20px;
 display: flex;
 justify-content: center;
 `
-
 const UserImg = styled.div`
 height: 200px;
 width: 200px;
@@ -40,26 +37,26 @@ background-position: center;
 background-size: cover;
 border-radius: 40px;
 `
-
 const UserPet = styled.div`
 `
-
 const UserNum = styled.div`
 `
-
 const UserAddress = styled.div`
 `
 
 function MyInfo() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const userData = JSON.parse(sessionStorage.getItem("logined"))
-    console.log(userData)
+
     return (
         <>
             <MypageNavbar />
             <Container style={{
-                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                color: switchColor,
+                backgroundColor: switchBgColor
             }}>
                 <UserInfo>
                     <Boxs>
@@ -86,8 +83,19 @@ function MyInfo() {
                     </Boxs>
                 </UserInfo>
                 <Button className="changBtn"
+                    style={{
+                        color: switchColor,
+                        backgroundColor: switchBgColor
+                    }}
                     onClick={() => window.location.href = `/my-info-change/${userData.nickName}`}
                 >회원 정보 수정</Button>
+                <Button className="changBtn"
+                    style={{
+                        color: switchColor,
+                        backgroundColor: switchBgColor
+                    }}
+                    onClick={() => alert("정말 탈퇴 하시겠습니까?")}
+                >회원 탈퇴</Button>
             </Container>
         </>
     )

@@ -102,20 +102,22 @@ margin: 0 5px;
 width: 50px;
 `
 
-//회원 데이터
-let localData
-const getDataLocalStorage = (name) => {
-    localData = JSON.parse(localStorage.getItem(name))
-    return JSON.stringify(localData);
-}
-
 // 네비바
 function NavVillage() {
-
     //현재 주소
     const pathname = window.location.pathname;
     const baseUrl = "http://localhost:8080";
-    const isDark = useRecoilValue(isDarkAtom); //다크모드
+    //다크모드
+    const [isOn, setisOn] = useRecoilState(isDarkAtom)
+    useEffect(() => {
+        localStorage.setItem('isDark', isOn)
+    }, [isOn]);
+    const toggleHandler = () => {
+        setisOn(!isOn)
+    };
+    const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const [login, setLogin] = useState();
 
     //로그인 모달
@@ -148,13 +150,17 @@ function NavVillage() {
                 if (pathname === "/") {
                     window.location.href = `${pathname}${nickName}`
                 } else {
-                    window.location.href = `${pathname}/${nickName}`
+                    if (pathname === "/join-membership") {
+                        window.location.href = `/${nickName}`
+                    } else {
+                        window.location.href = `${pathname}/${nickName}`
+                    }
+
                 }
-                // sessionStorage.setItem("logined", JSON.stringify(response.data))
                 const cookies = document.cookie.split(';');
                 console.log(cookies)
             }).catch((error) => {
-                console.log(error);				//오류발생시 실행
+                console.log(error);	//오류발생시 실행
                 setLogin(false)
             })
         }
@@ -165,8 +171,8 @@ function NavVillage() {
                 centered
             >
                 <Modal.Header style={{
-                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                    color: switchColor,
+                    backgroundColor: switchBgColor
                 }} className='modalHeader'>
                     <LoginLogo src={isOn ? themes.dark.logo : themes.light.logo}
                         onClick={() => { window.location.href = "/" }}
@@ -176,8 +182,8 @@ function NavVillage() {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{
-                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                    color: switchColor,
+                    backgroundColor: switchBgColor
                 }} >
                     <Form.Label htmlFor="inputemail">아이디</Form.Label>
                     <Form.Control
@@ -210,8 +216,8 @@ function NavVillage() {
                     </ModalBodyFooter>
                 </Modal.Body>
                 <Modal.Footer style={{
-                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                    color: switchColor,
+                    backgroundColor: switchBgColor
                 }} className='modalFooter'>
                     {
                         login === undefined ? null
@@ -242,36 +248,17 @@ function NavVillage() {
         window.location.href = "/"
     }
 
-    //다크모드
-    const [isOn, setisOn] = useRecoilState(isDarkAtom)
-    useEffect(() => {
-        localStorage.setItem('isDark', isOn)
-    }, [isOn]);
-    const toggleHandler = () => {
-        setisOn(!isOn)
-    };
-
-    // 마이페이지 안의 페이지들 주소
-    let mypages = [`/my-info/${nickName}`, `/my-info-change/${nickName}`, `/change-passwd/${nickName}`, `/selected-location/${nickName}`, `/written-by-me/${nickName}`]
-    // 커뮤니티안의 페이지들 주소
-    //두가지 로그인시 로그인 아닐시 나눠야함 
+    // 유저에게 현재 위치를 알려주기 위함
+    let mypages = [`my`, `change`, `selected`, `written`]
     let community = [`free`, `pet`, `training`, `used`, `write`, "edit"]
     const lightOn = (path, board) => {
         if (path.indexOf("-", 1) === -1) {
-
-            if (board.indexOf(path.slice(1, path.indexOf("/", 1))) !== -1) {
-                return true
-            } else {
-                return false
-            }
+            return board.indexOf(path.slice(1, path.indexOf("/", 1))) !== -1 ? true : false
         } else {
-            if (board.indexOf(path.slice(1, path.indexOf("-", 1))) !== -1) {
-                return true
-            } else {
-                return false
-            }
+            return board.indexOf(path.slice(1, path.indexOf("-", 1))) !== -1 ? true : false
         }
     }
+
     return (
         <div>
             <Navbar expand="lg" className="navbar"
@@ -320,43 +307,28 @@ function NavVillage() {
                             <ToggleContainer onClick={toggleHandler}>
                                 <div className={`toggle-container ${isOn ? "toggle--checked" : null}`}></div>
                                 <SunMoon style={{
-                                    color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                    backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
                                 }}
                                     className={`toggle-circle ${isOn ? "toggle--checked" : null}`}>{isOn ? <CiDark /> : <CiBrightnessDown />}</SunMoon>
                             </ToggleContainer>
-                            {
-                                login ?
-                                    <Nav.Link className='navLink' style={{
-                                        color: `${mypages.includes(pathname)
-                                            ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                                    }} href={`/my-info/${nickName}`}>
-                                        {nickName}님의 마이페이지
-                                    </Nav.Link>
-                                    :
-                                    <Nav.Link className='navLink' style={{
-                                        color: `${pathname === `/join-membership${url}`
-                                            ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                                    }} href={`/join-membership${url}`}>
-                                        회원가입
-                                    </Nav.Link>
-                            }
-                            {
-                                login ?
-                                    <Nav.Link >
-                                        <Button style={{ backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => LogOut()}>로그아웃
-                                        </Button>
-                                    </Nav.Link>
-                                    :
-                                    <Nav.Link >
-                                        <Button style={{ backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => setModalShow(true)}>로그인
-                                        </Button>
-                                        <LoginModal
-                                            show={modalShow}
-                                            onHide={() => setModalShow(false)}
-                                        />
-                                    </Nav.Link>
-                            }
+                            <Nav.Link className='navLink' style={{
+                                width: "170px",
+                                color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
+                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
+                            }} href={`/my-info/${nickName}`}>
+                                {
+                                    login ? `${nickName}님의 마이페이지` : "회원가입"
+                                }
+                            </Nav.Link>
+                            <Nav.Link >
+                                <Button style={{ width: "100px", backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => login ? LogOut() : setModalShow(true)}> {login ? "로그아웃" : "로그인"}
+                                </Button>
+                            </Nav.Link>
+                            <LoginModal
+                                show={modalShow}
+                                onHide={() => setModalShow(false)}
+                            />
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

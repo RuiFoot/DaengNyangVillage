@@ -22,3 +22,7 @@
 .btn:disabled {
     border: 1px solid;
 }
+
+.ql-container {
+    min-height: 400px;
+}

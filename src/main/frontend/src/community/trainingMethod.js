@@ -34,12 +34,9 @@ margin: 0 5px 0 0;
 font-size: clamp(100%, 5vw, 120%);
 `
 const CommentsCount = styled.div`
-border: 1px solid ;
-border-radius: 5px;
-background-color: #F288CD;
-color: white;
-font-size: 14px;
-padding: 0 5px;
+margin-left: 5px;
+color: #f65151;
+font-size: clamp(100%, 5vw, 120%);
 `
 const ListFooter = styled.div`
 display: flex;
@@ -52,8 +49,10 @@ const ListItemDate = styled.div`
 `
 
 function TrainingMethod() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
-    const nowPage = useRecoilValue(presentPage);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
 
     //현재 로그인한 유저의 닉네임
     let url = ""
@@ -79,16 +78,15 @@ function TrainingMethod() {
             })
     }, []);
 
-    const totalPost = board.length; // 총 게시물 수
-    const pageRange = 10; // 페이지당 보여줄 게시물 수
-    const totalPageNum = Math.ceil(board.length / pageRange)
-    const btnRange = 5; // 보여질 페이지 버튼의 개수
+    //페이지네이션
+    const nowPage = useRecoilValue(presentPage); //현재 페이지내이션 페이지
+    const pageRange = 12  //pageRange :한페이지에 보여줄 아이템 수
     const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
     const endPost = startPost + pageRange - 1; // 끝 게시물 번호
     return (
         <Container style={{
-            color: `${isDark ? themes.dark.color : themes.light.color}`,
-            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            color: switchColor,
+            backgroundColor: switchBgColor
         }}>
             <CommunityNav />
             <CommunityHeader />
@@ -98,14 +96,14 @@ function TrainingMethod() {
                     board.slice(startPost - 1, endPost).map((e, i) => (
                         <ListItem
                             key={i}
-                            href={`/free-board-detail/${e.boardId}${url}`}
-                            style={{ color: `${isDark ? themes.dark.color : themes.light.color}`, borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
+                            href={`/training-method-detail/${e.boardId}${url}`}
+                            style={{ color: switchColor, borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
                         >
                             <ListHeader>
                                 <ListTitle className="fw-bold">[{e.preface}] {e.boardName}
                                 </ListTitle>
                                 <CommentsCount>
-                                    {e.reviewCnt}
+                                    [{e.reviewCnt}]
                                 </CommentsCount>
                             </ListHeader>
                             <ListFooter>
@@ -116,7 +114,11 @@ function TrainingMethod() {
                     ))
                 }
             </ListGroup>
-            <Pagination totalPost={totalPost} pageRange={pageRange} btnRange={btnRange} totalPageNum={totalPageNum} />
+            <Pagination totalPost={board.length} pageRange={pageRange} btnRange={5} totalPageNum={Math.ceil(board.length / 12)} />
+            {/*
+             totalPageNum : 총 페이지내이션 수
+             btnRange : 보여질 페이지 버튼의 개수
+            */}
         </Container>
     );
 }

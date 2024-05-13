@@ -35,12 +35,9 @@ margin: 0 5px 0 0;
 font-size: clamp(100%, 5vw, 120%);
 `
 const CommentsCount = styled.div`
-border: 1px solid ;
-border-radius: 5px;
-background-color: #F288CD;
-color: white;
-font-size: 14px;
-padding: 0 5px;
+margin-left: 5px;
+color: #f65151;
+font-size: clamp(100%, 5vw, 120%);
 `
 const ListFooter = styled.div`
 display: flex;
@@ -54,7 +51,15 @@ const ListItemDate = styled.div`
 
 
 function FreeBoard() {
-
+    //다크모드
+    const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    //현재 로그인한 유저의 닉네임
+    let url = ""
+    if (window.sessionStorage.key(0) === "logined") {
+        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+    }
     //스프링 통신
     const [board, setBoard] = useState({
         boardId: 0,
@@ -74,24 +79,16 @@ function FreeBoard() {
             })
     }, []);
 
-    const isDark = useRecoilValue(isDarkAtom);
+    //페이지네이션
     const nowPage = useRecoilValue(presentPage);
-    const totalPost = board.length; // 총 게시물 수
-    const pageRange = 10; // 페이지당 보여줄 게시물 수
-    const totalPageNum = Math.ceil(board.length / pageRange)
-    const btnRange = 5; // 보여질 페이지 버튼의 개수
+    const pageRange = 12  //pageRange :한페이지에 보여줄 아이템 수
     const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
     const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
-    //현재 로그인한 유저의 닉네임
-    let url = ""
-    if (window.sessionStorage.key(0) === "logined") {
-        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
-    }
     return (
         <Container style={{
-            color: `${isDark ? themes.dark.color : themes.light.color}`,
-            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            color: switchColor,
+            backgroundColor: switchBgColor
         }}>
             <CommunityNav />
             <CommunityHeader />
@@ -102,13 +99,13 @@ function FreeBoard() {
                         <ListItem
                             key={i}
                             href={`/free-board-detail/${e.boardId}${url}`}
-                            style={{ color: `${isDark ? themes.dark.color : themes.light.color}`, borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
+                            style={{ color: switchColor, borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
                         >
                             <ListHeader>
                                 <ListTitle className="fw-bold">[{e.preface}] {e.boardName}
                                 </ListTitle>
                                 <CommentsCount>
-                                    {e.reviewCnt}
+                                    [{e.reviewCnt}]
                                 </CommentsCount>
                             </ListHeader>
                             <ListFooter>
@@ -119,7 +116,11 @@ function FreeBoard() {
                     ))
                 }
             </ListGroup>
-            <Pagination totalPost={totalPost} pageRange={pageRange} btnRange={btnRange} totalPageNum={totalPageNum} />
+            <Pagination totalPost={board.length} pageRange={pageRange} btnRange={5} totalPageNum={Math.ceil(board.length / 12)} />
+            {/*
+             totalPageNum : 총 페이지내이션 수
+             btnRange : 보여질 페이지 버튼의 개수
+            */}
         </Container>
     );
 }

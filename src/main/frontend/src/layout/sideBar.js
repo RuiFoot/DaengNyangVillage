@@ -71,7 +71,10 @@ const ManagerName = styled.div`
 font-size: 14px;
 `
 function SideBar() {
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     // 챗봇 온오프 버튼 위치
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -154,8 +157,8 @@ function SideBar() {
                     }} className="chatBotMobile" onClick={handleShow} />
             }
             <Offcanvas style={{
-                color: `${isDark ? themes.dark.color : themes.light.color}`,
-                backgroundColor: `${isDark ? themes.dark.navFooterBgColor : themes.light.bgColor}`
+                color: switchColor,
+                backgroundColor: switchBgColor
             }} show={show} onHide={handleClose} placement='end'>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>댕냥 챗봇</Offcanvas.Title>

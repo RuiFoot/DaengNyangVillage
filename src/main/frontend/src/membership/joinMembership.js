@@ -23,6 +23,7 @@ flex-direction: column;
 align-items: center;
 `
 const InputForm = styled.form`
+gap: 10px;
 margin: 15px;
 width: 432px;
 `
@@ -32,7 +33,7 @@ text-align: center;
 font-size: clamp(80%, 5vw, 120%);
 `
 const InputTitle = styled.div`
-margin: 15px 0 10px 0;
+margin: 40px 0 10px 0;
 `
 
 const CheckBox = styled.input`
@@ -60,8 +61,10 @@ background-size: cover;
 `
 
 function JoinMembership() {
-
+    //다크모드
     const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const baseUrl = "http://localhost:8080";
 
     //다음 주소 api
@@ -240,8 +243,8 @@ function JoinMembership() {
 
     return (
         <Container style={{
-            color: `${isDark ? themes.dark.color : themes.light.color}`,
-            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+            color: switchColor,
+            backgroundColor: switchBgColor
         }}>
             <Bumper />
             <JoinTitle>댕냥 빌리지 회원가입을 환영합니다.</JoinTitle>
@@ -518,7 +521,7 @@ function JoinMembership() {
                             </button>
                             : <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">회원가입 정보가 유효하지 않습니다.</Tooltip>}>
                                 <span className="d-inline-block">
-                                    <Button id="joinBtn" disabled style={{ pointerEvents: 'none' }}>
+                                    <Button id="joinBtn" disabled style={{ marginTop: "30px", pointerEvents: 'none' }}>
                                         회원가입
                                     </Button>
                                 </span>
