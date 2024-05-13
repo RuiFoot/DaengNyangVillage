@@ -2,8 +2,12 @@ package com.myspring.daengnyang.board.service;
 
 import com.myspring.daengnyang.board.mapper.BoardMapper;
 import com.myspring.daengnyang.board.vo.*;
+import com.myspring.daengnyang.common.vo.Paging;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -17,8 +21,19 @@ public class BoardServiceImpl implements BoardService {
     private BoardMapper boardMapper;
 
     @Override
-    public List<BoardVO> selectBoardList(String category) throws Exception {
-        return boardMapper.selectBoardList(category);
+    public Page<BoardVO> selectBoardList(String category, Pageable pageable) throws Exception {
+
+        Paging<Object> requestList = Paging.builder()
+                .data(category)
+                .pageable(pageable)
+                .build();
+
+        List<BoardVO> boardList = boardMapper.selectBoardList(requestList);
+        int total = boardMapper.boardListCnt(category);
+
+        System.out.println(total);
+
+        return new PageImpl<>(boardList, pageable, total);
     }
 
     @Override

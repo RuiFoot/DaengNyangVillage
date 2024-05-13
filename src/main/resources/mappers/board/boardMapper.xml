@@ -5,26 +5,45 @@
 <mapper namespace="com.myspring.daengnyang.board.mapper.BoardMapper">
 
     <!--게시글 목록에 필요한 내용인 글 번호, 제목, 조회 수, 작성일을 조회 -->
-    <select id="selectBoardList" parameterType="String" resultType="com.myspring.daengnyang.board.vo.BoardVO">
+    <select id="selectBoardList" parameterType="com.myspring.daengnyang.common.vo.Paging" resultType="com.myspring.daengnyang.board.vo.BoardVO">
         <![CDATA[
             SELECT
-                "boardId",
-                "memberNo",
-                "nickname",
-                "category",
-                "boardName",
-                "createDate",
-                "reviewCnt",
-                "imgPath",
-                "Area",
-                "Price",
-                "PREFACE"
-            FROM
-                "Board"
-            WHERE
-                "category" = #{category}
-            ORDER BY "createDate" DESC
+                *
+            FROM (
+                SELECT A.*, ROWNUM rn
+                FROM (
+                    SELECT *
+                    FROM "Board"
         ]]>
+                    <where>
+                        <if test="data != null and data != ''">
+                            AND "category" like #{data}
+                        </if>
+                    </where>
+                    <if test="pageable.sort != null and !pageable.sort.isEmpty()">
+                        ORDER BY
+                        <foreach collection="pageable.sort" item="order" separator=",">
+                            "${order.property}" ${order.direction}
+                        </foreach>
+                    </if>
+            <![CDATA[
+                ) A
+                WHERE ROWNUM <= #{pageable.offset} + #{pageable.pageSize}
+            )
+            WHERE rn > #{pageable.offset}
+            ]]>
+    </select>
+
+    <select id="boardListCnt" parameterType="String" resultType="Integer">
+        <![CDATA[
+            SELECT count(*) AS count
+            FROM "Board"
+        ]]>
+        <where>
+            <if test="category != null and category != ''" >
+                AND "category" like #{category}
+            </if>
+        </where>
     </select>
 
     <select id="selectBoardReviewList" parameterType="int" resultType="com.myspring.daengnyang.board.vo.ReviewVO">

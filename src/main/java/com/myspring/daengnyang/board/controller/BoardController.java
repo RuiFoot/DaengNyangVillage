@@ -4,6 +4,11 @@ import com.myspring.daengnyang.board.service.BoardService;
 import com.myspring.daengnyang.board.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +30,21 @@ public class BoardController {
     }
 
     // 게시글 목록 조회
+//    @GetMapping("{category}")
+//    public List<BoardVO> boardList(@PathVariable("category") String category) throws Exception {
+//        log.info("게시글 목록 조회 컨트롤러 실행 => category: " + category);
+//        List<BoardVO> list = boardService.selectBoardList(category);
+//        return list;
+//    }
     @GetMapping("{category}")
-    public List<BoardVO> boardList(@PathVariable("category") String category) throws Exception {
+    public ResponseEntity<?> boardList(
+            @PathVariable("category") String category,
+            @PageableDefault(size = 12, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable)
+            throws Exception {
         log.info("게시글 목록 조회 컨트롤러 실행 => category: " + category);
-        List<BoardVO> list = boardService.selectBoardList(category);
-        return list;
+        log.info("pageable : " + pageable);
+        Page<?> paging = boardService.selectBoardList(category, pageable);
+        return ResponseEntity.ok(paging);
     }
 
     // 댓글 목록 조회
