@@ -11,6 +11,6 @@ import org.springframework.data.domain.Pageable;
 @Getter
 @Setter
 public class Paging<T> {
-    private T data;
-    private Pageable pageable;
+    private T data; // 요청 파라미터
+    private Pageable pageable; // 페이지 설정 관련
 }

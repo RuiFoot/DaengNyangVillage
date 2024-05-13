@@ -1,13 +1,15 @@
 package com.myspring.daengnyang.board.service;
 
 import com.myspring.daengnyang.board.vo.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface BoardService {
-    List<BoardVO> selectBoardList(String category) throws Exception;
+    Page<BoardVO> selectBoardList(String category, Pageable pageable) throws Exception;
     List<ReviewVO> selectBoardReviewList(int boardId) throws Exception;
     List<RReviewVO> selectReviewReviewList(int boardReviewNum) throws Exception;
     public void registerReview(int boardId);

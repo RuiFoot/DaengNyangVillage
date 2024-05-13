@@ -1,6 +1,7 @@
 package com.myspring.daengnyang.board.mapper;
 
 import com.myspring.daengnyang.board.vo.*;
+import com.myspring.daengnyang.common.vo.Paging;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.security.core.parameters.P;
@@ -12,7 +13,8 @@ import java.util.List;
 public interface BoardMapper {
 
     // 카테고리 별 게시물 목록 조회
-    List<BoardVO> selectBoardList(@Param("category") String category) throws Exception;
+    List<BoardVO> selectBoardList(Paging<?> requestList) throws Exception;
+    int boardListCnt(String category);
 
     // 게시글 별 댓글 목록 조회
     List<ReviewVO> selectBoardReviewList(@Param("boardId") int boardId) throws Exception;
