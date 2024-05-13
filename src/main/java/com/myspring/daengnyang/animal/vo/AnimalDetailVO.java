@@ -26,7 +26,7 @@ public class AnimalDetailVO {
     private String infield;
     private String outfield;
     private String addPay;
-    private Integer star;
+    private double star;
     private String tel;
     private String imgPath;
 }

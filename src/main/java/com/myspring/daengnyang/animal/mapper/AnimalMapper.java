@@ -33,5 +33,13 @@ public interface AnimalMapper {
 
     Integer deleteAnimalReview(@Param("animalReviewNum") Integer animalReviewNum);
 
+    Integer updateAnimalStar1(@Param("animalNum") Integer animalNum);
+
+    Integer updateAnimalStar2(@Param("animalNum") Integer animalNum);
+
+    Integer getAnimalNum(@Param("animalReviewNum") Integer animalReviewNum);
+
     int getFavorite(@Param("animalNum") Integer animalNum, @Param("memberNo") Integer memberNo);
+
+    List<AnimalLocationVO> getPopular();
 }

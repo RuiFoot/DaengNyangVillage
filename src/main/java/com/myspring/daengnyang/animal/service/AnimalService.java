@@ -31,4 +31,6 @@ public interface AnimalService {
     boolean favoriteCheck(Integer memberNo, Integer animalNum);
 
     boolean getFavorite(Integer animalNum, Integer memberNo);
+
+    List<AnimalLocationVO> getPopular();
 }

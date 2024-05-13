@@ -162,9 +162,11 @@ public class OauthServiceImpl implements OauthService {
             userInfo.setDetailedAddress("");
             userInfo.setMypet("");
             userInfo.setPhoneNumber("");
+            userInfo.setInputZonecode("");
             log.info(userInfo.toString());
             memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber());
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber(),
+                    userInfo.getInputZonecode());
             log.info("카카오 계정으로 회원가입 완료");
             return id;
         }
@@ -310,7 +312,7 @@ public class OauthServiceImpl implements OauthService {
             userInfo.setPhoneNumber("");
             log.info(userInfo.toString());
             memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber());
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber(),"");
             log.info("구글 계정으로 회원가입 완료");
             return userInfo;
         }
@@ -481,7 +483,7 @@ public class OauthServiceImpl implements OauthService {
             userInfo.setPhoneNumber(mobile);
             log.info(userInfo.toString());
             memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber());
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber(),"");
             log.info("네이버 계정으로 회원가입 완료");
             return userInfo;
         }

@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,6 @@ public class AnimalServiceImpl implements AnimalService {
 
         Paging<?> requestList = Paging.builder().data(formData).pageable(pageable).build();
 
-        log.info(requestList.toString());
 
         List<AnimalLocationVO> locationData = animalMapper.getLocation(requestList);
 
@@ -79,6 +79,8 @@ public class AnimalServiceImpl implements AnimalService {
     public boolean animalReviewPost(AnimalReviewVO animalReviewVO) {
         try {
             Integer checked = animalMapper.animalReviewPost(animalReviewVO);
+            animalMapper.updateAnimalStar1(animalReviewVO.getAnimalNum());
+            animalMapper.updateAnimalStar2(animalReviewVO.getAnimalNum());
             return checked > 0;
         } catch (DataIntegrityViolationException e) {
             // 데이터 무결성 위반 등의 예외 처리
@@ -97,6 +99,8 @@ public class AnimalServiceImpl implements AnimalService {
     public boolean updateAnimalReview(AnimalReviewVO animalReview) {
         try {
             int rowsAffected = animalMapper.updateAnimalReview(animalReview);
+            animalMapper.updateAnimalStar1(animalReview.getAnimalNum());
+            animalMapper.updateAnimalStar2(animalReview.getAnimalNum());
             return rowsAffected > 0;
         } catch (DataIntegrityViolationException e) {
             // 데이터 무결성 위반 등의 예외 처리
@@ -114,7 +118,10 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public boolean deleteAnimalReview(Integer animalReviewNum) {
         try {
+            int animalNum = animalMapper.getAnimalNum(animalReviewNum);
             int rowsAffected = animalMapper.deleteAnimalReview(animalReviewNum);
+            animalMapper.updateAnimalStar1(animalNum);
+            animalMapper.updateAnimalStar2(animalNum);
             return rowsAffected > 0;
         } catch (DataIntegrityViolationException e) {
             // 데이터 무결성 위반 등의 예외 처리
@@ -143,6 +150,14 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public boolean getFavorite(Integer animalNum, Integer memberNo) {
         return animalMapper.getFavorite(animalNum, memberNo) > 0;
+    }
+
+    @Override
+    public List<AnimalLocationVO> getPopular() {
+        log.info("인기 장소 서비스 실행");
+        List<AnimalLocationVO> result = animalMapper.getPopular();
+        log.info(result.toString());
+        return result;
     }
 
 }

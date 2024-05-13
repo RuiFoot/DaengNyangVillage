@@ -45,8 +45,9 @@ public class MemberServiceImpl implements MemberService {
         userInfo.setDetailedAddress(signupForm.getAddressDetail());
         userInfo.setMypet(signupForm.getFavoritePet());
         userInfo.setPhoneNumber(signupForm.getPhoneNumber());
+        userInfo.setInputZonecode(signupForm.getInputZonecode());
         memberMapper.createMemberInfo(userInfo.getNickName(), memberNo, userInfo.getProfileImg(),
-                userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber());
+                userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber(), userInfo.getInputZonecode());
     }
 
     @Override
@@ -104,9 +105,10 @@ public class MemberServiceImpl implements MemberService {
         vo.setDetailedAddress(memberInfoVO.getDetailedAddress());
         vo.setMypet(memberInfoVO.getMypet());
         vo.setPhoneNumber(memberInfoVO.getPhoneNumber());
+        vo.setInputZonecode(memberInfoVO.getInputZonecode());
 
         memberMapper.updateProfile(vo.getNickName(), vo.getMemberNo(), vo.getProfileImg(), vo.getInputAddress(),
-                vo.getDetailedAddress(), vo.getMypet(), vo.getPhoneNumber());
+                vo.getDetailedAddress(), vo.getMypet(), vo.getPhoneNumber(), vo.getInputZonecode());
     }
 
 

@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class OauthController {
 
     private final OauthServiceImpl oAuthService;
-    private final MemberService memberService;
+
     @Autowired
-    public OauthController(OauthServiceImpl oAuthService, MemberService memberService) {
+    public OauthController(OauthServiceImpl oAuthService) {
         this.oAuthService = oAuthService;
-        this.memberService = memberService;
     }
 
     /**

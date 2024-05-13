@@ -50,7 +50,7 @@ public class AnimalController {
             @PathVariable("sido") String sido,
             @RequestParam("sigungu") String sigungu,
             @RequestParam String classification,
-            @PageableDefault(size = 10, sort = "star", direction = Sort.Direction.DESC) Pageable pageable) { // page : 2 => 페이지 보내야함
+            @PageableDefault(page = 0,size = 12, sort = "star", direction = Sort.Direction.DESC) Pageable pageable) { // page : 2 => 페이지 보내야함
         log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + sido + ", Params : " + classification);
         log.info("pageable : " + pageable);
         Page<?> paging = animalService.getLocation(sido,sigungu, classification, pageable);
@@ -111,4 +111,8 @@ public class AnimalController {
     }
     //-----------------------------------------------------------------------------------------------
 
+    @GetMapping("/popular")
+    public List<AnimalLocationVO> animalPopular() {
+        return animalService.getPopular();
+    }
 }

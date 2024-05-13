@@ -91,6 +91,7 @@
                     <if test="data.classification != null and data.classification != ''">
                         AND "subClassification" = #{data.classification}
                     </if>
+                    AND "star" is not null
                 </where>
                 <if test="pageable.sort != null and !pageable.sort.isEmpty()">
                     ORDER BY
@@ -120,6 +121,7 @@
             <if test="classification != null and classification != ''">
                 AND "subClassification" = #{classification}
             </if>
+            AND "star" is not null
         </where>
     </select>
 
@@ -188,4 +190,43 @@
         WHERE "animalReviewNum"= #{animalReviewNum}
     </delete>
 
+    <update id="updateAnimalStar1" parameterType="Integer">
+        UPDATE "animalLocation"
+        SET "star" = (
+            SELECT AVG("star")
+            FROM "animalReview"
+            WHERE "animalNum" = #{animalNum}
+        )
+        WHERE "animalNum" = #{animalNum}
+    </update>
+
+    <update id="updateAnimalStar2" parameterType="Integer">
+        UPDATE "animalInfomation"
+        SET "star" = (
+            SELECT AVG("star")
+            FROM "animalReview"
+            WHERE "animalNum" = #{animalNum}
+        )
+        WHERE "animalNum" = #{animalNum}
+    </update>
+
+    <select id="getAnimalNum" resultType="Integer">
+        <![CDATA[
+        SELECT "animalNum"
+        FROM "animalReview"
+        WHERE "animalReviewNum" = #{animalReviewNum}
+        ]]>
+    </select>
+
+    <select id="getPopular" resultMap="LocationResultmap">
+        <![CDATA[
+            SELECT A.*
+            FROM (SELECT *
+                FROM "animalLocation"
+                WHERE "star" is not null
+                ORDER BY "star" DESC
+                ) A
+            WHERE ROWNUM <= 6
+        ]]>
+    </select>
 </mapper>
