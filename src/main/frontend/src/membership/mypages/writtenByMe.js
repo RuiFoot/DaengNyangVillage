@@ -50,7 +50,6 @@ font-size: clamp(100%, 5vw, 120%);
 function WrittenByMe() {
     //현재 로그인한 유저 닉네임
     const [loginedNickName, setLoginedNickName] = useState("")
-
     const baseUrl = "http://localhost:8080";
     //스프링 통신
     const [board, setBoard] = useState({
@@ -69,9 +68,11 @@ function WrittenByMe() {
     useEffect(() => {
         if (sessionStorage.getItem("logined") !== null) {
             setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickName)
+            console.log(JSON.parse(sessionStorage.getItem("logined")).memberNo)
             axios.get(`${baseUrl}/member/post?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}`)
                 .then((res) => {
-                    setBoard(res.data);
+                    setBoard(res.data.content);
+                    console.log(res.data)
                 })
         }
     }, []);

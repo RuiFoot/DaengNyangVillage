@@ -74,7 +74,7 @@ function TrainingMethod() {
     useEffect(() => {
         axios.get('/api/board/훈련 방법 공유')
             .then((res) => {
-                setBoard(res.data);
+                setBoard(res.data.content);
             })
     }, []);
 

@@ -9,6 +9,7 @@ import MypageNavbar from './mypageNavbar';
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../../components/atoms';
 import themes from "../../components/theme";
+import axios from 'axios';
 
 const Container = styled.div`
 min-height: calc(100vh - 229px);
@@ -41,32 +42,13 @@ function ChangePasswd() {
 
     //새 비밀번호
     const [newPasswd, setNewPasswd] = useState("")
+    const [passwordCheck, setPasswordCheck] = useState("")
     const onNewChange = (e) => {
         setNewPasswd(e.target.value)
     }
 
-    //저장될 맴버정보
-    const [memberInfo, setMemberInfo] = useState({
-        // email: previousInfo.email,
-        password: "",
-        passwordCheck: "",
-        profileImg: "",
-        mypet: previousInfo.mypet,
-        nickName: previousInfo.nickName,
-        phoneNumber: previousInfo.phoneNumber,
-        inputAddress: previousInfo.inputAddress,
-        inputZonecode: previousInfo.inputZonecode,
-        detailedAddress: previousInfo.detailedAddress
-    })
-
-    const { email, password, passwordCheck, profileImg, mypet, nickName, phoneNumber, inputAddress, inputZonecode, detailedAddress } = memberInfo; // 비구조화 할당
-
     function onChange(e) {
-        const { value, name } = e.target;
-        setMemberInfo({
-            ...memberInfo,
-            [name]: value
-        });
+        setPasswordCheck(e.target.value)
     }
 
     // 유효성 검사
@@ -85,31 +67,20 @@ function ChangePasswd() {
         e.preventDefault();
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
+        let body = {
+            memberNo: previousInfo.memberNo,
+            email: "string",
+            password: newPasswd,
+        }
+        axios.post(`${baseUrl}/member/password`, body
+        ).then((response) => {
+            console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+        }).catch((error) => {
+            console.log(error);				//오류발생시 실행
+        })
 
-        // 회원가입에서 값 줄때 사용
-        // let body = {
-        //     nickname: memberInfo.nickName,
-        //     profileImg: memberInfo.profileImg,
-        //     address: memberInfo.inputAddress,
-        //     addressDetail: memberInfo.detailedAddress,
-        //     favoritePet: memberInfo.mypet,
-        //     phoneNumber: memberInfo.phoneNumber
-        // }
-        // axios.post(`${baseUrl}/member/signup`, body
-        // ).then((response) => {
-        //     alert("댕냥빌리지 가입을 환영합니다.")
-        //     console.log(response.data);		//정상 통신 후 응답된 메시지 출력
-        // }).catch((error) => {
-        //     console.log(error);				//오류발생시 실행
-        // })
-        delete memberInfo.passwordCheck; //저장될 필요없음
-        memberInfo.password = newPasswd //비밀번호를 새비밀번호로 교체
-        localStorage.setItem("member", JSON.stringify(memberInfo)); // 로컬스토리지 저장
-        setMemberInfo({
-            password: "",
-            passwordCheck: "",
-        }) //인풋 클리어
         setNewPasswd("") //인풋 클리어
+        setPasswordCheck("")
         window.sessionStorage.removeItem("logined") //로그인 해제
         window.location.href = "/" // 홈화면이동
     }

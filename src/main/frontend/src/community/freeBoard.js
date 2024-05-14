@@ -73,7 +73,8 @@ function FreeBoard() {
     useEffect(() => {
         axios.get('/api/board/자유 게시판')
             .then((res) => {
-                setBoard(res.data);
+                setBoard(res.data.content);
+                console.log(res.data)
             })
     }, []);
 

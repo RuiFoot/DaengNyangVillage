@@ -103,7 +103,7 @@ function PetBoast() {
     useEffect(() => {
         axios.get('/api/board/반려동물 자랑')
             .then((res) => {
-                setBoard(res.data);
+                setBoard(res.data.content);
                 console.log(res.data)
             })
     }, []);

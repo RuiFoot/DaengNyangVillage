@@ -108,7 +108,7 @@ function UsedMarket() {
     useEffect(() => {
         axios.get('/api/board/댕냥 마켓')
             .then((res) => {
-                setBoard(res.data);
+                setBoard(res.data.content);
                 console.log(res.data)
             })
     }, []);
