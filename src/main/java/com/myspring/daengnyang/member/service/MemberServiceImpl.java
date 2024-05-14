@@ -111,5 +111,11 @@ public class MemberServiceImpl implements MemberService {
                 vo.getDetailedAddress(), vo.getMypet(), vo.getPhoneNumber(), vo.getInputZonecode());
     }
 
+    @Override
+    public void updatePassword(MemberVO memberVO) {
+        String newPassword = passwordEncoder.encode(memberVO.getPassword());
+        System.out.println(newPassword);
 
+        memberMapper.updatePassword(memberVO.getMemberNo(), newPassword);
+    }
 }

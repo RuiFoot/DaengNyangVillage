@@ -29,4 +29,6 @@ public interface MemberService {
     Boolean duplicationNickname(String nickname);
 
     void updateProfile(MemberInfoVO memberInfoVO);
+
+    void updatePassword(MemberVO memberVO);
 }

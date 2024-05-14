@@ -105,6 +105,14 @@
             WHERE "memberNo" = #{memberNo}
         ]]>
     </update>
+    
+    <update id="updatePassword">
+        <![CDATA[
+            UPDATE "member"
+            SET "password" = #{newPassword}
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </update>
 
 
 </mapper>

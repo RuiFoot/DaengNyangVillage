@@ -146,4 +146,10 @@ public class MemberController {
         return true;
     }
 
+    @PatchMapping("/password")
+    public void updatePassword(@RequestBody MemberVO memberVO) {
+        log.info("비밀번호 변경 컨트롤러 실행 : " + memberVO.getPassword());
+        memberService.updatePassword(memberVO);
+    }
+
 }

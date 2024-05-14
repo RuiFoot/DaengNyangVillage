@@ -40,5 +40,5 @@ public interface MemberMapper {
                        @Param("addressDetail") String addressDetail, @Param("favoritePet") String favoritePet,
                        @Param("phoneNumber") String phoneNumber, @Param("inputZonecode") String inputZonecode);
 
-
+    void updatePassword(@Param("memberNo") int memberNo, @Param("newPassword") String newPassword);
 }
