@@ -1,17 +1,14 @@
 import styled from "styled-components";
-import Bumper from "../layout/bumper";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DOMPurify from "dompurify"; //html 코드 번역
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import Button from 'react-bootstrap/Button';
 import React from "react"
-import { MdOutlineReply } from "react-icons/md";
-import defaultImg from '../img/defaultImg.png';
-import { storage } from "../firebase";
+import { storage } from "../servers/firebase";
 import { deleteObject, ref } from "firebase/storage";
 import Comments from "./comments";
 import CommunityNav from "./communityNav";
@@ -30,12 +27,6 @@ const Title = styled.div`
 font-size: 25px;
 margin: 10px 0;
 height: 40px;
-`
-const Img = styled.div`
-height: 500px;
-width: 95%;
-background-position: center;
-background-size: cover;
 `
 const ContentField = styled.div`
 width: 88vw;
@@ -67,8 +58,6 @@ function PetBoastDetail() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-    //스프링부트 통신 주소
-    const baseUrl = "http://localhost:8080";
     const params = useParams() //파라메터 가져오기
     const userInfo = JSON.parse(sessionStorage.getItem("logined"))
     //현재 로그인한 유저 닉네임
@@ -78,17 +67,6 @@ function PetBoastDetail() {
             setLoginedNickName(JSON.parse(sessionStorage.getItem("logined")).nickName)
         }
     });
-    // 윈도우 가로 사이즈에 따른 변화 적용
-    const [windowSize, setWindowSiz] = useState(window.innerWidth);
-    const handleResize = () => {
-        setWindowSiz(window.innerWidth)
-    }
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.addEventListener('resize', handleResize)
-        }
-    }, [])
 
     // 스프링부트
     const [content, setContent] = useState({
@@ -114,20 +92,7 @@ function PetBoastDetail() {
                 console.log(res.data)
             })
     }, []);
-
-    //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
-    const representImg = (e) => {
-        if (e !== null && e !== undefined) {
-            const index = e.indexOf(",")
-            return (
-                <Img style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
-            )
-        } else {
-            return (
-                <Img style={{ backgroundImage: `url(${defaultImg})` }} />
-            )
-        }
-    }
+    // 수정으로 이동
     const editContentBtn = (e) => {
         window.location.href = `/edit/${e}/${userInfo.nickName}`
     }

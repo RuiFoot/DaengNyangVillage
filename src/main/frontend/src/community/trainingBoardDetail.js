@@ -1,17 +1,14 @@
 import styled from "styled-components";
-import Bumper from "../layout/bumper";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DOMPurify from "dompurify"; //html 코드 번역
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import Button from 'react-bootstrap/Button';
 import React from "react"
-import { MdOutlineReply } from "react-icons/md";
-import defaultImg from '../img/defaultImg.png';
-import { storage } from "../firebase";
+import { storage } from "../servers/firebase";
 import { deleteObject, ref } from "firebase/storage";
 import Comments from "./comments";
 import CommunityNav from "./communityNav";
@@ -30,12 +27,6 @@ const Title = styled.div`
 font-size: 25px;
 margin: 10px 0;
 height: 40px;
-`
-const Img = styled.div`
-height: 500px;
-width: 95%;
-background-position: center;
-background-size: cover;
 `
 const ContentField = styled.div`
 width: 88vw;
@@ -68,8 +59,6 @@ function TrainingBoardDetail() {
   const isDark = useRecoilValue(isDarkAtom);
   const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
   const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-  //스프링부트 연동 주소
-  const baseUrl = "http://localhost:8080";
   const params = useParams()// 파라페터 가져오기
   const userInfo = JSON.parse(sessionStorage.getItem("logined"))
   //현재 로그인한 유저 닉네임
@@ -79,18 +68,7 @@ function TrainingBoardDetail() {
       setLoginedNickName(JSON.parse(sessionStorage.getItem("logined")).nickName)
     }
   });
-  // 윈도우 가로 사이즈에 따른 변화 적용
-  const [windowSize, setWindowSiz] = useState(window.innerWidth);
-  const handleResize = () => {
-    setWindowSiz(window.innerWidth)
-  }
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.addEventListener('resize', handleResize)
-    }
-  }, [])
-
+  // 스프링부트 연동
   const [content, setContent] = useState({
     boardId: 0,
     nickname: "",
@@ -109,7 +87,7 @@ function TrainingBoardDetail() {
         console.log(res.data)
       });
   }, [params.boardId]);
-
+  // 수정 페이지 이동
   const editContentBtn = (e) => {
     window.location.href = `/edit/${e}/${userInfo.nickName}`
   }

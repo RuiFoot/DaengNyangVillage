@@ -1,10 +1,10 @@
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom, presentPage } from '../atoms';
+import { isDarkAtom, presentPage } from '../components/atoms';
 import styled from "styled-components";
-import themes from "../theme";
+import themes from "../components/theme";
 import CommunityNav from "./communityNav";
 import CommunityHeader from './communityHeader';
-import Pagination from "../pagination";
+import Pagination from "../components/pagination";
 import HotdealBar from '../home/hotdeal';
 import { useEffect, useState } from 'react';
 import { GoDotFill } from "react-icons/go";

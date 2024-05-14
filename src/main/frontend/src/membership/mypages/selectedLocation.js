@@ -3,11 +3,11 @@ import { GoDotFill } from "react-icons/go";
 import { useEffect, useState } from "react";
 import MypageNavbar from './mypageNavbar';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom, presentPage } from '../../atoms';
-import themes from "../../theme";
-import Pagination from "../../pagination";
-import defaultImg from "../../defaultImgs";
-import hotPlaceArr from "../../imgDate";
+import { isDarkAtom, presentPage } from '../../components/atoms';
+import themes from "../../components/theme";
+import Pagination from "../../components/pagination";
+import defaultImg from "../../components/defaultImgs";
+import hotPlaceArr from "../../components/imgDate";
 
 const Container = styled.div`
 display: flex;

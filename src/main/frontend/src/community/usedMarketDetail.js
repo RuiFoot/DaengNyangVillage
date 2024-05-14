@@ -1,17 +1,15 @@
 import styled from "styled-components";
-import Bumper from "../layout/bumper";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DOMPurify from "dompurify"; //html 코드 번역
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import Button from 'react-bootstrap/Button';
 import React from "react"
-import { MdOutlineReply } from "react-icons/md";
 import defaultImg from '../img/defaultImg.png';
-import { storage } from "../firebase";
+import { storage } from "../servers/firebase";
 import { deleteObject, ref } from "firebase/storage";
 import Comments from "./comments";
 import CommunityNav from "./communityNav";

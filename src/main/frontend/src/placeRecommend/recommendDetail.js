@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import Bumper from "../layout/bumper";
-import hotPlaceArr from "../imgDate";
+import hotPlaceArr from "../components/imgDate";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -13,8 +13,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { FaStar, FaHeart } from "react-icons/fa6";
 import React, { useRef } from "react"
 import "./placeRecommendStyle.css"
-import { MdOutlineReply } from "react-icons/md";
-import defaultImg from "../defaultImgs";
+import defaultImg from "../components/defaultImgs";
 
 const Container = styled.div`
 min-height: calc(100vh - 179px);

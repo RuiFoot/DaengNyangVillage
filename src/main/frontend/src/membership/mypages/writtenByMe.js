@@ -2,9 +2,9 @@ import styled from "styled-components";
 import ListGroup from 'react-bootstrap/ListGroup';
 import MypageNavbar from './mypageNavbar';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom, presentPage } from '../../atoms';
-import themes from "../../theme";
-import Pagination from "../../pagination";
+import { isDarkAtom, presentPage } from '../../components/atoms';
+import themes from "../../components/theme";
+import Pagination from "../../components/pagination";
 import { useEffect, useState } from "react";
 import axios from "axios";
 

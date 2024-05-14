@@ -6,16 +6,16 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
-import { useRef, useState } from "react";
+import { useState } from "react";
 import './membershipStyle.css'
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import useUploadImage from "./useUploadImage";
 import { deleteObject, ref } from "firebase/storage";
-import { storage } from "../firebase";
+import { storage } from "../servers/firebase";
 
 const Container = styled.div`
 display: flex;
@@ -98,7 +98,7 @@ function JoinMembership() {
         detailedAddress: ""
     })
 
-    const { email, password, passwordCheck, profileImg, mypet, nickName, phoneNumber, inputAddress, inputZonecode, detailedAddress } = memberInfo; // 비구조화 할당
+    const { email, password, passwordCheck, profileImg, nickName, phoneNumber, detailedAddress } = memberInfo; // 비구조화 할당
 
     function onChange(e) {
         const { value, name } = e.target;
@@ -115,30 +115,23 @@ function JoinMembership() {
     //입력받은 값 전송
     function handleSubmit(e) {
         e.preventDefault();
-        memberInfo.inputAddress = fullAddress
-        memberInfo.inputZonecode = zonecode
-        memberInfo.mypet = checkArr.join(", ")
-        memberInfo.profileImg = imageUrl
-        delete memberInfo.passwordCheck;
-
         let body = {
             email: memberInfo.email,
             password: memberInfo.password,
             nickname: memberInfo.nickName,
-            profileImg: memberInfo.profileImg,
-            address: memberInfo.inputAddress,
+            profileImg: imageUrl,
+            address: fullAddress,
             addressDetail: memberInfo.detailedAddress,
-            favoritePet: memberInfo.mypet,
-            phoneNumber: memberInfo.phoneNumber
+            favoritePet: checkArr.join(", "),
+            phoneNumber: memberInfo.phoneNumber,
+            inputZonecode: zonecode
         }
         axios.post(`${baseUrl}/member/signup`, body
         ).then((response) => {
-            alert("댕냥빌리지 가입을 환영합니다.")
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
         })
-        localStorage.setItem("member", JSON.stringify(memberInfo)); // 로컬스토리지 저장
         setChecked(false)
         setMemberInfo({
             email: "",
@@ -152,6 +145,7 @@ function JoinMembership() {
             inputZonecode: "",
             detailedAddress: ""
         })
+        console.log(body)
         window.location.href = '/'
     }
 

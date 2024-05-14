@@ -4,16 +4,15 @@ import axios from "axios";
 import styled from "styled-components";
 import ListGroup from 'react-bootstrap/ListGroup';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom, presentPage } from '../atoms';
-import themes from "../theme";
-import Pagination from "../pagination";
+import { isDarkAtom, presentPage } from '../components/atoms';
+import themes from "../components/theme";
+import Pagination from "../components/pagination";
 import "./communityStyle.css"
 import CommunityHeader from "./communityHeader";
 
 const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
-
 const ListItem = styled.a`
 cursor: pointer;
 text-decoration: none;
@@ -48,7 +47,6 @@ const ListItemWriter = styled.div`
 `
 const ListItemDate = styled.div`
 `
-
 
 function FreeBoard() {
     //다크모드

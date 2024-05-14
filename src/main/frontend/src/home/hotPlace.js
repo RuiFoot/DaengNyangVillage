@@ -3,10 +3,10 @@ import { GoDotFill } from "react-icons/go";
 import './homeStyle.css'
 import { useEffect, useState } from "react";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
-import hotPlaceArr from "../imgDate";
-import defaultImg from "../defaultImgs";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
+import hotPlaceArr from "../components/imgDate";
+import defaultImg from "../components/defaultImgs";
 import axios from "axios";
 
 const PlaceItems = styled.div`
