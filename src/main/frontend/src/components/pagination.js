@@ -22,11 +22,13 @@ margin: 0 5px 20px 5px;
 `;
 
 function Pagination(props) {
+
     const [page, setPage] = useRecoilState(presentPage); // 현재 페이지 수
     const currentSet = Math.ceil(page / props.btnRange); // 현재 버튼이 몇번째 세트인지 나타내는 수
     const startPage = (currentSet - 1) * props.btnRange + 1; // 현재 보여질 버튼의 첫번째 수
     const endPage = startPage + props.btnRange - 1; // 현재 보여질 끝 버튼의 수
     const totalSet = Math.ceil(Math.ceil(props.totalPost / props.pageRange) / props.btnRange); // 전체 버튼 세트 수
+
     return (
         < Container >
             <Nav>

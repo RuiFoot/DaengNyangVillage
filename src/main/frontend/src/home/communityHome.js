@@ -157,23 +157,23 @@ function CommunityHome() {
     useEffect(() => {
         axios.get('/api/board/자유 게시판')
             .then((res) => {
-                setFreeBoard(res.data);
+                setFreeBoard(res.data.content);
                 console.log(res.data)
             })
         console.log(freeBoard)
         axios.get('/api/board/훈련 방법 공유')
             .then((res) => {
-                setTrainingBoard(res.data);
+                setTrainingBoard(res.data.content);
             })
         console.log(trainingBoard)
         axios.get('/api/board/반려동물 자랑')
             .then((res) => {
-                setPetBoastBoard(res.data);
+                setPetBoastBoard(res.data.content);
             })
         console.log(petBoastBoard)
         axios.get('/api/board/댕냥 마켓')
             .then((res) => {
-                setMarketBoard(res.data);
+                setMarketBoard(res.data.content);
             })
         console.log(marketBoard)
     }, []);

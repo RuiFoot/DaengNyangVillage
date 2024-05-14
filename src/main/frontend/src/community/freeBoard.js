@@ -9,7 +9,6 @@ import themes from "../components/theme";
 import Pagination from "../components/pagination";
 import "./communityStyle.css"
 import CommunityHeader from "./communityHeader";
-
 const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
@@ -59,29 +58,34 @@ function FreeBoard() {
         url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
     }
     //스프링 통신
-    const [board, setBoard] = useState({
-        boardId: 0,
-        memberNo: 0,
-        nickname: "",
-        preface: "",
-        category: "",
-        boardName: "",
-        createDate: "",
-        reviewCnt: 0
-    })
-
-    useEffect(() => {
-        axios.get('/api/board/자유 게시판')
-            .then((res) => {
-                setBoard(res.data);
-            })
-    }, []);
-
-    //페이지네이션
+    const [board, setBoard] = useState({})
+    const [page, setPage] = useState({})
     const nowPage = useRecoilValue(presentPage);
-    const pageRange = 12  //pageRange :한페이지에 보여줄 아이템 수
-    const startPost = (nowPage - 1) * pageRange + 1; // 시작 게시물 번호
-    const endPost = startPost + pageRange - 1; // 끝 게시물 번호
+    useEffect(() => {
+        axios.get(`/api/board/자유 게시판?page=${nowPage - 1}`)
+            .then((res) => {
+                setBoard(res.data.content);
+                setPage({
+                    empty: res.data.empty,
+                    first: res.data.first,
+                    last: res.data.last,
+                    number: res.data.number,
+                    numberOfElements: res.data.numberOfElements,
+                    pageable: res.data.pageable,
+                    size: res.data.size,
+                    sort: res.data.sort,
+                    totalElements: res.data.totalElements,
+                    totalPages: res.data.totalPages
+                })
+                console.log(res.data)
+            })
+    }, [nowPage]);
+    console.log(board)
+    console.log("지금 여기" + nowPage)
+    //페이지네이션
+
+    const pageRange = page.size //pageRange :한페이지에 보여줄 아이템 수
+    console.log(board.category)
 
     return (
         <Container style={{
@@ -93,7 +97,7 @@ function FreeBoard() {
             <ListGroup style={{ gap: "10px", margin: `10px 6vw` }}>
                 {
                     board.length > 0 &&
-                    board.slice(startPost - 1, endPost).map((e, i) => (
+                    board.map((e, i) => (
                         <ListItem
                             key={i}
                             href={`/free-board-detail/${e.boardId}${url}`}
@@ -114,7 +118,7 @@ function FreeBoard() {
                     ))
                 }
             </ListGroup>
-            <Pagination totalPost={board.length} pageRange={pageRange} btnRange={5} totalPageNum={Math.ceil(board.length / 12)} />
+            <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
             {/*
              totalPageNum : 총 페이지내이션 수
              btnRange : 보여질 페이지 버튼의 개수

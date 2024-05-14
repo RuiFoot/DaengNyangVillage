@@ -29,7 +29,9 @@ function Mypage() {
     const [loginedNickName, setLoginedNickName] = useState("")
 
     useEffect(() => {
-        setLoginedNickName(JSON.parse(sessionStorage.getItem("logined")).nickName)
+        if (JSON.parse(sessionStorage.getItem("logined")) !== null) {
+            setLoginedNickName(JSON.parse(sessionStorage.getItem("logined")).nickName)
+        }
     });
 
     return (
