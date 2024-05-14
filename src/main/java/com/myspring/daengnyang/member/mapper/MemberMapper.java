@@ -2,6 +2,7 @@ package com.myspring.daengnyang.member.mapper;
 
 import com.myspring.daengnyang.animal.vo.AnimalLocationVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
+import com.myspring.daengnyang.common.vo.Paging;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,7 +27,9 @@ public interface MemberMapper {
 
     MemberInfoVO getMemberInfoL(@Param("memberNo") Long memberNo);
 
-    List<AnimalLocationVO> getFavorite(@Param("memberNo") Integer memberNo);
+    List<AnimalLocationVO> getFavorite(Paging<?> paging);
+
+    int getFavoriteCount(@Param("memberNo") Integer memberNo);
 
 
     List<BoardVO> getMemberPost(@Param("memberNo") Integer memberNo);

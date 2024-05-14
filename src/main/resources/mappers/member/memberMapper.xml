@@ -42,14 +42,38 @@
         ]]>
     </select>
 
-    <select id="getFavorite" resultType="com.myspring.daengnyang.animal.vo.AnimalLocationVO">
+    <select id="getFavorite" parameterType="com.myspring.daengnyang.common.vo.Paging" resultType="com.myspring.daengnyang.animal.vo.AnimalLocationVO">
         <![CDATA[
-            SELECT A.*
-            FROM "animalLocation" A,
-                 (select * from "favorite" f where f."memberNo" = #{memberNo} and f."Field" = 1) f
-            WHERE f."animalNum" = A."animalNum"
-            ORDER BY "favDate" DESC
-        ]]>
+            SELECT *
+            FROM (
+                SELECT X.*, ROWNUM rn
+                FROM(
+                    SELECT AL.*
+                    FROM "animalLocation" AL, (SELECT FV."animalNum",FV."favDate" FROM "favorite" FV WHERE FV."memberNo" = #{data} AND FV."Field" = 1) F
+                    WHERE F."animalNum" = AL."animalNum"
+                    ]]>
+                    <if test="pageable.sort != null and !pageable.sort.isEmpty()">
+                        ORDER BY
+                        <foreach collection="pageable.sort" item="order" separator=",">
+                            F."${order.property}" ${order.direction}
+                        </foreach>
+                    </if>
+        <![CDATA[
+                    ) X
+                WHERE ROWNUM <= #{pageable.offset}+#{pageable.pageSize}
+                )
+            WHERE rn > #{pageable.offset}
+    ]]>
+    </select>
+
+    <select id="getFavoriteCount" parameterType="Integer" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) as CNT
+        FROM (
+            SELECT AL.*
+            FROM "animalLocation" AL, (SELECT FV."animalNum",FV."favDate" FROM "favorite" FV WHERE FV."memberNo" = #{memberNo} AND FV."Field" = 1) F
+            WHERE F."animalNum" = AL."animalNum" )
+            ]]>
     </select>
 
     <select id="getMemberPost" resultType="com.myspring.daengnyang.board.vo.BoardVO">
