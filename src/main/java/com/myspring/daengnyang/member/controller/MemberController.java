@@ -129,12 +129,6 @@ public class MemberController {
         return memberService.getFavorite(memberNo);
     }
 
-//    @GetMapping("/post")
-//    public List<BoardVO> getMemberPost(@RequestParam("memberNo") Integer memberNo) {
-//        log.info("내가 쓴 글 불러 오기 실행 / Param => memberNo : " + memberNo);
-//        return memberService.getMemberPost(memberNo);
-//    }
-
     @GetMapping("/post")
     public ResponseEntity<?> getMemberPost(
             @RequestParam("memberNo") int memberNo,
