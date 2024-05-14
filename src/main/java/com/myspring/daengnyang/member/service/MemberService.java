@@ -6,6 +6,8 @@ import com.myspring.daengnyang.board.vo.BoardVO;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import com.myspring.daengnyang.member.vo.SignupForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public interface MemberService {
 
     List<AnimalLocationVO> getFavorite(Integer memberNo);
 
-    List<BoardVO> getMemberPost(Integer memberNo);
+    Page<BoardVO> getMemberPost(int memberNo, Pageable pageable);
 
     boolean getDuplicationEmail(String email);
 

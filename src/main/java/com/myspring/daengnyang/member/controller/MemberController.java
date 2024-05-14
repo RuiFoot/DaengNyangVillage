@@ -10,6 +10,10 @@ import com.myspring.daengnyang.member.vo.SignupForm;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -125,10 +129,20 @@ public class MemberController {
         return memberService.getFavorite(memberNo);
     }
 
+//    @GetMapping("/post")
+//    public List<BoardVO> getMemberPost(@RequestParam("memberNo") Integer memberNo) {
+//        log.info("내가 쓴 글 불러 오기 실행 / Param => memberNo : " + memberNo);
+//        return memberService.getMemberPost(memberNo);
+//    }
+
     @GetMapping("/post")
-    public List<BoardVO> getMemberPost(@RequestParam("memberNo") Integer memberNo) {
+    public ResponseEntity<?> getMemberPost(
+            @RequestParam("memberNo") int memberNo,
+            @PageableDefault(size = 12, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
         log.info("내가 쓴 글 불러 오기 실행 / Param => memberNo : " + memberNo);
-        return memberService.getMemberPost(memberNo);
+        log.info("pageable : " + pageable);
+        Page<?> paging = memberService.getMemberPost(memberNo, pageable);
+        return ResponseEntity.ok(paging);
     }
 
     @GetMapping("/logout")

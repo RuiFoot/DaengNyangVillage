@@ -3,12 +3,16 @@ package com.myspring.daengnyang.member.service;
 import com.myspring.daengnyang.animal.mapper.AnimalMapper;
 import com.myspring.daengnyang.animal.vo.AnimalLocationVO;
 import com.myspring.daengnyang.board.vo.BoardVO;
+import com.myspring.daengnyang.common.vo.Paging;
 import com.myspring.daengnyang.member.mapper.MemberMapper;
 import com.myspring.daengnyang.member.vo.MemberInfoVO;
 import com.myspring.daengnyang.member.vo.MemberVO;
 import com.myspring.daengnyang.member.vo.SignupForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -71,8 +75,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<BoardVO> getMemberPost(Integer memberNo) {
-        return memberMapper.getMemberPost(memberNo);
+    public Page<BoardVO> getMemberPost(int memberNo, Pageable pageable) {
+
+        Paging<Object> requestList = Paging.builder()
+                .data(memberNo)
+                .pageable(pageable)
+                .build();
+
+        List<BoardVO> memberPostList = memberMapper.getMemberPost(requestList);
+        int total = memberMapper.memberPostCnt(memberNo);
+
+        System.out.println(total);
+
+        return new PageImpl<>(memberPostList, pageable, total);
     }
 
 
