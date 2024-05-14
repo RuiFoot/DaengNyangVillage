@@ -32,7 +32,8 @@ public interface MemberMapper {
     int getFavoriteCount(@Param("memberNo") Integer memberNo);
 
 
-    List<BoardVO> getMemberPost(@Param("memberNo") Integer memberNo);
+    List<BoardVO> getMemberPost(Paging<?> requestList);
+    int memberPostCnt(int memberNo);
 
     String getDuplicationEmail(@Param("email") String email);
 
@@ -43,5 +44,5 @@ public interface MemberMapper {
                        @Param("addressDetail") String addressDetail, @Param("favoritePet") String favoritePet,
                        @Param("phoneNumber") String phoneNumber, @Param("inputZonecode") String inputZonecode);
 
-
+    void updatePassword(@Param("memberNo") int memberNo, @Param("newPassword") String newPassword);
 }

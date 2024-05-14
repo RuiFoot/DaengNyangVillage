@@ -24,11 +24,13 @@ public interface MemberService {
 
     Page<AnimalLocationVO> getFavorite(Integer memberNo, Pageable pageable);
 
-    List<BoardVO> getMemberPost(Integer memberNo);
+    Page<BoardVO> getMemberPost(int memberNo, Pageable pageable);
 
     boolean getDuplicationEmail(String email);
 
     Boolean duplicationNickname(String nickname);
 
     void updateProfile(MemberInfoVO memberInfoVO);
+
+    void updatePassword(MemberVO memberVO);
 }

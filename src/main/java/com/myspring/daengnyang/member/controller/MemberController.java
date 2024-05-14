@@ -132,9 +132,13 @@ public class MemberController {
     }
 
     @GetMapping("/post")
-    public List<BoardVO> getMemberPost(@RequestParam("memberNo") Integer memberNo) {
+    public ResponseEntity<?> getMemberPost(
+            @RequestParam("memberNo") int memberNo,
+            @PageableDefault(size = 12, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
         log.info("내가 쓴 글 불러 오기 실행 / Param => memberNo : " + memberNo);
-        return memberService.getMemberPost(memberNo);
+        log.info("pageable : " + pageable);
+        Page<?> paging = memberService.getMemberPost(memberNo, pageable);
+        return ResponseEntity.ok(paging);
     }
 
     @GetMapping("/logout")
@@ -150,6 +154,12 @@ public class MemberController {
         log.info("회원정보 수정 컨트롤러 실행");
         memberService.updateProfile(memberInfoVO);
         return true;
+    }
+
+    @PatchMapping("/password")
+    public void updatePassword(@RequestBody MemberVO memberVO) {
+        log.info("비밀번호 변경 컨트롤러 실행 : " + memberVO.getPassword());
+        memberService.updatePassword(memberVO);
     }
 
 }

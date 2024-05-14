@@ -76,9 +76,38 @@
             ]]>
     </select>
 
-    <select id="getMemberPost" resultType="com.myspring.daengnyang.board.vo.BoardVO">
+    <select id="getMemberPost" parameterType="com.myspring.daengnyang.common.vo.Paging" resultType="com.myspring.daengnyang.board.vo.BoardVO">
         <![CDATA[
-            SELECT *
+            SELECT
+                *
+            FROM (
+                SELECT A.*, ROWNUM rn
+                FROM (
+                    SELECT *
+                    FROM "Board"
+        ]]>
+                    <where>
+                        <if test="data != null and data != ''">
+                            AND "memberNo" = #{data}
+                        </if>
+                    </where>
+                    <if test="pageable.sort != null and !pageable.sort.isEmpty()">
+                        ORDER BY
+                        <foreach collection="pageable.sort" item="order" separator=",">
+                            "${order.property}" ${order.direction}
+                        </foreach>
+                    </if>
+            <![CDATA[
+                ) A
+                WHERE ROWNUM <= #{pageable.offset} + #{pageable.pageSize}
+            )
+            WHERE rn > #{pageable.offset}
+            ]]>
+    </select>
+
+    <select id="memberPostCnt" parameterType="int" resultType="int">
+        <![CDATA[
+            SELECT count(*) AS count
             FROM "Board"
             WHERE "memberNo" = #{memberNo}
         ]]>
@@ -126,6 +155,14 @@
                 "favoritePet" = #{favoritePet},
                 "phoneNumber" = #{phoneNumber},
                 "inputZonecode" = #{inputZonecode}
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </update>
+    
+    <update id="updatePassword">
+        <![CDATA[
+            UPDATE "member"
+            SET "password" = #{newPassword}
             WHERE "memberNo" = #{memberNo}
         ]]>
     </update>

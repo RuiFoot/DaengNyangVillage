@@ -82,8 +82,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<BoardVO> getMemberPost(Integer memberNo) {
-        return memberMapper.getMemberPost(memberNo);
+    public Page<BoardVO> getMemberPost(int memberNo, Pageable pageable) {
+
+        Paging<Object> requestList = Paging.builder()
+                .data(memberNo)
+                .pageable(pageable)
+                .build();
+
+        List<BoardVO> memberPostList = memberMapper.getMemberPost(requestList);
+        int total = memberMapper.memberPostCnt(memberNo);
+
+        System.out.println(total);
+
+        return new PageImpl<>(memberPostList, pageable, total);
     }
 
 
@@ -122,5 +133,11 @@ public class MemberServiceImpl implements MemberService {
                 vo.getDetailedAddress(), vo.getMypet(), vo.getPhoneNumber(), vo.getInputZonecode());
     }
 
+    @Override
+    public void updatePassword(MemberVO memberVO) {
+        String newPassword = passwordEncoder.encode(memberVO.getPassword());
+        System.out.println(newPassword);
 
+        memberMapper.updatePassword(memberVO.getMemberNo(), newPassword);
+    }
 }
