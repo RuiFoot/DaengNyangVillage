@@ -75,6 +75,9 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public boolean animalReviewPost(AnimalReviewVO animalReviewVO) {
         try {
+            if (animalReviewVO.getProfileImg() == null){
+                animalReviewVO.setProfileImg("");
+            }
             Integer checked = animalMapper.animalReviewPost(animalReviewVO);
             animalMapper.updateAnimalStar1(animalReviewVO.getAnimalNum());
             animalMapper.updateAnimalStar2(animalReviewVO.getAnimalNum());
