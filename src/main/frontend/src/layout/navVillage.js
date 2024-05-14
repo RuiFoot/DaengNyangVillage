@@ -12,9 +12,10 @@ import { useEffect, useState } from 'react';
 import { CiBrightnessDown, CiDark } from "react-icons/ci";
 import "./layout.css"
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 axios.defaults.withCredentials = true;
 //css
@@ -104,8 +105,26 @@ width: 50px;
 
 // 네비바
 function NavVillage() {
+    // 소셜 로그인
+    const nowUrl = document.location.href
+    if (nowUrl.indexOf("code=") !== -1) {
+        const code = new URL(window.location.href).searchParams.get("code")
+        console.log(code)
+        axios.post(`https://kauth.kakao.com/oauth/token`,
+            {
+                code: code,
+            },
+        ).then((response) => {
+            console.log(response);	//오류발생시 실행
+        }).catch((error) => {
+            console.log(error);	//오류발생시 실행
+        })
+    }
     //현재 주소
     const pathname = window.location.pathname;
+
+    const params = useParams()
+    console.log(params)
     const baseUrl = "http://localhost:8080";
     //다크모드
     const [isOn, setisOn] = useRecoilState(isDarkAtom)
@@ -209,7 +228,7 @@ function NavVillage() {
                             <p>소셜 로그인</p>
                             <Logos>
                                 <NaverLogo className='socialLogo' src={naver} onClick={() => { alert("네이버~") }} />
-                                <KakaoLogo className='socialLogo' src={kakao} onClick={() => { alert("카카오~") }} />
+                                <KakaoLogo className='socialLogo' src={kakao} onClick={() => { window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=db0c282555cc32e78ecbce031761fc83&redirect_uri=http://localhost:3000/login/oauth2/code/kakao&response_type=code" }} />
                                 <GoogleLogo className='socialLogo' src={google} onClick={() => { alert("구글~") }} />
                             </Logos>
                         </Social>
@@ -316,7 +335,7 @@ function NavVillage() {
                                 width: "170px",
                                 color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
                                     ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                            }} href={`/my-info/${nickName}`}>
+                            }} href={login ? `/my-info/${nickName}` : `/join-membership`}>
                                 {
                                     login ? `${nickName}님의 마이페이지` : "회원가입"
                                 }

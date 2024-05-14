@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
+import { isDarkAtom } from '../components/atoms';
 import styled from "styled-components";
-import themes from "../theme";
+import themes from "../components/theme";
 import Bumper from '../layout/bumper';
 import ReactQuill, { Quill } from "react-quill";
 import { ImageActions } from '@xeger/quill-image-actions';
@@ -15,7 +15,7 @@ import Button from 'react-bootstrap/Button';
 import './communityStyle.css'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { storage } from "../firebase";
+import { storage } from "../servers/firebase";
 import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
 import axios from "axios";
 

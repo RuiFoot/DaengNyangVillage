@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import Bumper from "../layout/bumper";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 
 const CommunityNavbar = styled.div`
 border-bottom: 1px solid rgba(0, 0, 0, 0.5);
@@ -25,13 +24,13 @@ color: black;
 function CommunityNav() {
     //다크모드
     const isDark = useRecoilValue(isDarkAtom);
-    const [isOn, setisOn] = useRecoilState(isDarkAtom)
-    const pathname = window.location.pathname; //현재 화면 주소
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    const [isOn, setisOn] = useRecoilState(isDarkAtom)
     const lightOnOff = `${isOn ? themes.dark.color : themes.light.color}`
+    const pathname = window.location.pathname; //현재 화면 주소
 
-
+    // 현재 로그인한 유져의 닉네임
     const [loginedNickName, setLoginedNickName] = useState("")
     useEffect(() => {
         if (sessionStorage.getItem("logined") !== null) {
@@ -39,6 +38,8 @@ function CommunityNav() {
         }
     });
 
+
+    //유저가 현재 위치를 파악하기 위함
     let free = [`free`]
     let pet = [`pet`]
     let training = [`training`]

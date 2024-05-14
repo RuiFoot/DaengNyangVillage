@@ -7,8 +7,8 @@ import "./layout.css"
 import { IoChatbubblesOutline } from "react-icons/io5";
 import styled from "styled-components";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 
 const SideContainer = styled.div`
 `

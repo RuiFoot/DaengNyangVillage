@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
+import { isDarkAtom } from '../components/atoms';
 import styled from "styled-components";
-import themes from "../theme";
+import themes from "../components/theme";
 import Bumper from '../layout/bumper';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/Button';
 import './communityStyle.css'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { storage } from "../firebase";
+import { storage } from "../servers/firebase";
 import { uploadBytes, getDownloadURL, deleteObject, ref } from "firebase/storage";
 import axios from "axios";
 import { useParams } from 'react-router-dom';
@@ -47,21 +47,6 @@ function Edit() {
     const quillRef = useRef(null); // useRef로 ref 생성
     const params = useParams()
 
-    const imgCheck = (input) => {
-        //내용안에서 이미지만 추출
-        let count = input.split('http').length - 1;
-        let newStartIndex = 0
-        let startIndex = 0
-        console.log(count)
-        for (let i = 0; i < count; i++) {
-            if (input.indexOf(`"></p>`) !== -1) {
-                startIndex = input.indexOf("http", newStartIndex);
-                newStartIndex = input.indexOf(`"></p>`, startIndex);
-                imgUrl.push(input.slice(startIndex, newStartIndex))
-            }
-            console.log(imgUrl)
-        }
-    }
     const [editContent, setEditContent] = useState({
         area: "",
         detailLocation: "",
@@ -110,9 +95,6 @@ function Edit() {
             console.log(imgUrl)
         }
     }, [editContent.field]);
-
-
-    // console.log(imgUrl)
 
     // 이미지 핸들러
     const imageHandler = () => {
@@ -217,6 +199,7 @@ function Edit() {
         return input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1)
     }
     const [newImgUrlArr, setNewImgUrlArr] = useState([])
+    //글 수정
     const handleSubmit = (e) => {
         //내용안에서 이미지만 추출
         let count = quillValue.split('http').length - 1;
@@ -256,8 +239,6 @@ function Edit() {
         axios.patch(`${baseUrl}/board`, body
         ).then((response) => {
             console.log(response.data);	//정상 통신 후 응답된 메시지 출력
-            console.log(imgUrl);	//정상 통신 후 응답된 메시지 출력
-            console.log(quillValue);	//정상 통신 후 응답된 메시지 출력
             if (board === "자유 게시판") {
                 window.location.href = `/free-board/${userInfo.nickName}`
             } else if (board === "반려동물 자랑") {
@@ -285,6 +266,7 @@ function Edit() {
         })
     }
 
+    //카테고리 세팅
     useEffect(() => {
         if (referrer.includes("free")) {
             setBoard("자유 게시판")
@@ -297,16 +279,15 @@ function Edit() {
         }
     }, [])
 
+    //드롭다운 인풋값
     const boardBtn = (input) => {
         setBoard(input)
     }
     const areaBtn = (input) => {
         setArea(input)
-        // console.log(area)
     }
     const prefaceBtn = (input) => {
         setPreface(input)
-        console.log(preface)
     }
 
     return (

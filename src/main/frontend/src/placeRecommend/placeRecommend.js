@@ -9,8 +9,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import axios from "axios";
 
 const baseUrl = "http://localhost:8080";

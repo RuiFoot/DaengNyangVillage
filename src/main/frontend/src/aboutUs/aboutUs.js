@@ -1,8 +1,8 @@
 import Bumper from "../layout/bumper";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
+import { isDarkAtom } from '../components/atoms';
 import styled from "styled-components";
-import themes from "../theme";
+import themes from "../components/theme";
 
 const Container = styled.div`
 min-height: calc(100vh - 86px);

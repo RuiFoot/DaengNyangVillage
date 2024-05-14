@@ -2,8 +2,8 @@ import styled from "styled-components";
 import "../style.css"
 import { FaXTwitter, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa6";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 
 const FooterContainer = styled.div`
 display: flex;

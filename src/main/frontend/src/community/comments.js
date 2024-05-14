@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -94,11 +94,15 @@ margin-right: 10px;
 `
 
 function Comments() {
+    //스프링연동을 위한 url
     const baseUrl = "http://localhost:8080";
-    const isDark = useRecoilValue(isDarkAtom); // 다크모드
+    // 다크모드
+    const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    //useParams로 url에 파라미터 값 가져오기
     const params = useParams()
+    //현재 로그인한 유저의 정보
     const userInfo = JSON.parse(sessionStorage.getItem("logined"))
     const [getReview, setGetReview] = useState([{}])
     const [getReReview, setGetReReview] = useState([])

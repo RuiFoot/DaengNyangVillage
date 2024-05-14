@@ -6,8 +6,8 @@ import HotPlaceList from "./hotPlace";
 import CommunityHome from "./communityHome";
 import Bumper from "../layout/bumper";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 
 const Container = styled.div`
   display: grid;

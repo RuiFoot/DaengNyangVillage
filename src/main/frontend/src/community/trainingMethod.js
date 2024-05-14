@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import themes from "../theme";
+import themes from "../components/theme";
 import CommunityNav from "./communityNav";
 import CommunityHeader from './communityHeader';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ListGroup from 'react-bootstrap/ListGroup';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom, presentPage } from '../atoms';
-import Pagination from "../pagination";
+import { isDarkAtom, presentPage } from '../components/atoms';
+import Pagination from "../components/pagination";
 import "./communityStyle.css"
 
 const Container = styled.div`

@@ -5,8 +5,8 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { useState } from "react";
 import emailjs from 'emailjs-com';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import './membershipStyle.css'
 
 const Container = styled.div`
