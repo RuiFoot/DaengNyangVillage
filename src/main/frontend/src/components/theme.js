@@ -1,5 +1,5 @@
-import logo from './img/logo.png'
-import darklogo from './img/darklogo.png'
+import logo from '../img/logo.png'
+import darklogo from '../img/darklogo.png'
 
 const darkTheme = {
     logo: darklogo,

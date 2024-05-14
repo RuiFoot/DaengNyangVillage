@@ -8,8 +8,8 @@ import Button from 'react-bootstrap/Button';
 import Bumper from "../../layout/bumper";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../../atoms';
-import themes from "../../theme";
+import { isDarkAtom } from '../../components/atoms';
+import themes from "../../components/theme";
 
 const Container = styled.div`
 min-height: calc(100vh - 184px);

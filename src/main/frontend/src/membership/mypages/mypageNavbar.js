@@ -3,8 +3,8 @@ import Bumper from "../../layout/bumper";
 import { useEffect, useState } from "react";
 import '../membershipStyle.css'
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../../atoms';
-import themes from "../../theme";
+import { isDarkAtom } from '../../components/atoms';
+import themes from "../../components/theme";
 
 const MypageNav = styled.div`
 border-bottom: 1px solid rgba(0, 0, 0, 0.5);

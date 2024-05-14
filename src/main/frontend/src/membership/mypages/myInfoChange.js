@@ -11,11 +11,11 @@ import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import MypageNavbar from './mypageNavbar';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../../atoms';
-import themes from "../../theme";
+import { isDarkAtom } from '../../components/atoms';
+import themes from "../../components/theme";
 import useUploadImage from "../useUploadImage";
 import { deleteObject, ref } from "firebase/storage";
-import { storage } from "../../firebase";
+import { storage } from "../../servers/firebase";
 
 const Container = styled.div`
 display: flex;
@@ -82,13 +82,9 @@ function MyInfoChange() {
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     // baseUrl 스프링 부트 연동, pathname 현재 주소
     const baseUrl = "http://localhost:8080";
-    const pathname = window.location.pathname;
     // 이전 회원 정보
     let previousInfo = JSON.parse(sessionStorage.getItem("logined"))
     console.log(previousInfo)
-    console.log(`${previousInfo.profileImg}`)
-
-    console.log(previousInfo.mypet)
     const previousImg = `${previousInfo.profileImg}`
     //다음 주소 api
     const [fullAddress, setFullAddress] = useState(previousInfo.inputAddress)
@@ -112,6 +108,7 @@ function MyInfoChange() {
         email: previousInfo.email,
         password: previousInfo.password,
         profileImg: "",
+        memberNo: previousInfo.memberNo,
         mypet: previousInfo.mypet,
         nickName: previousInfo.nickName,
         phoneNumber: previousInfo.phoneNumber,
@@ -120,7 +117,7 @@ function MyInfoChange() {
         detailedAddress: previousInfo.detailedAddress
     })
 
-    const { profileImg, mypet, nickName, phoneNumber, inputAddress, inputZonecode, detailedAddress } = memberInfo; // 비구조화 할당
+    const { profileImg, nickName, phoneNumber, detailedAddress } = memberInfo; // 비구조화 할당
 
     function onChange(e) {
         const { value, name } = e.target;
@@ -136,30 +133,22 @@ function MyInfoChange() {
     //입력 받은 값 전송
     async function handleSubmit(e) {
         e.preventDefault();
-        memberInfo.inputAddress = fullAddress
-        memberInfo.inputZonecode = zonecode
-        memberInfo.mypet = checkArr.join(", ")
-        memberInfo.profileImg = imageUrl
-        // 비밀번호 보안 해시
-        // memberInfo.password = SHA256(password).toString();
-
-        // 회원가입에서 값 줄때 사용
-        // let body = {
-        //     nickname: memberInfo.nickName,
-        //     profileImg: memberInfo.profileImg,
-        //     address: memberInfo.inputAddress,
-        //     addressDetail: memberInfo.detailedAddress,
-        //     favoritePet: memberInfo.mypet,
-        //     phoneNumber: memberInfo.phoneNumber
-        // }
-        // axios.post(`${baseUrl}/member/signup`, body
-        // ).then((response) => {
-        //     alert("댕냥빌리지 가입을 환영합니다.")
-        //     console.log(response.data);		//정상 통신 후 응답된 메시지 출력
-        // }).catch((error) => {
-        //     console.log(error);				//오류발생시 실행
-        // })
-        localStorage.setItem("member", JSON.stringify(memberInfo)); // 로컬스토리지 저장
+        let body = {
+            nickName: memberInfo.nickName,
+            memberNo: memberInfo.memberNo,
+            profileImg: imageUrl,
+            inputAddress: memberInfo.inputAddress,
+            detailedAddress: memberInfo.detailedAddress,
+            mypet: checkArr.join(", "),
+            phoneNumber: memberInfo.phoneNumber,
+            inputZonecode: zonecode
+        }
+        axios.patch(`${baseUrl}/member/update`, body
+        ).then((response) => {
+            console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+        }).catch((error) => {
+            console.log(error);				//오류발생시 실행
+        })
         setChecked(false)
         setMemberInfo({
             profileImg: "",

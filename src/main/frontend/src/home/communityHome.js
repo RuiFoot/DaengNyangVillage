@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { BsCardText } from "react-icons/bs";
-import { IoRestaurantOutline } from "react-icons/io5";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { HiOutlinePhoto } from "react-icons/hi2";
 import axios from "axios";
 import defaultImg from "../img/defaultImg.png"
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
-import themes from "../theme";
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 
 const Communitylists = styled.div`
 display: grid;

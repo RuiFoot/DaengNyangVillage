@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../atoms';
+import { isDarkAtom } from '../components/atoms';
 import styled from "styled-components";
-import themes from "../theme";
+import themes from "../components/theme";
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';

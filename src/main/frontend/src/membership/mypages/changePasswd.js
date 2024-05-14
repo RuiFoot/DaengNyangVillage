@@ -7,8 +7,8 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
 import MypageNavbar from './mypageNavbar';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../../atoms';
-import themes from "../../theme";
+import { isDarkAtom } from '../../components/atoms';
+import themes from "../../components/theme";
 
 const Container = styled.div`
 min-height: calc(100vh - 229px);
