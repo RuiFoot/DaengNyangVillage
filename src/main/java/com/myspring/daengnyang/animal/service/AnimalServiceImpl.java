@@ -13,10 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -70,7 +67,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public AnimalReviewVO getReview(Integer animalNum) {
+    public List<AnimalReviewVO> getReview(Integer animalNum) {
         log.info("시설 댓글 정보 조회 서비스 실행 => animalNum : " + animalNum);
         return animalMapper.getReview(animalNum);
     }
@@ -137,8 +134,8 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public List<AnimalLocationVO> getRecommend(Integer memberNo, String sido, String sigungu) {
-        return null;
+    public List<AnimalLocationVO> getRecommend(String sido, String sigungu) {
+        return animalMapper.getRecommend(sido,sigungu);
     }
 
     @Override

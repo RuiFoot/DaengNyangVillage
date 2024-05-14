@@ -18,7 +18,7 @@ public interface AnimalService {
 
     AnimalDetailVO getDetail(Integer animalNum);
 
-    AnimalReviewVO getReview(Integer animalNum);
+    List<AnimalReviewVO> getReview(Integer animalNum);
 
     boolean animalReviewPost(AnimalReviewVO animalReviewVO);
 
@@ -26,7 +26,7 @@ public interface AnimalService {
 
     boolean deleteAnimalReview(Integer animalReviewNum);
 
-    List<AnimalLocationVO> getRecommend(Integer memberNo, String sido, String sigungu);
+    List<AnimalLocationVO> getRecommend(String sido, String sigungu);
 
     boolean favoriteCheck(Integer memberNo, Integer animalNum);
 

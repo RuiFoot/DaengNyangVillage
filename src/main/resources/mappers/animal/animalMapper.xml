@@ -85,7 +85,7 @@
                     <if test="data.sido != null and data.sido != ''">
                         AND INSTR("sido", #{data.sido}) > 0
                     </if>
-                    <if test="data.sigungu != null and data.sigungu != ''">
+                    <if test="data.sigungu != null and data.sigungu != '' and data.sigungu != '전체'">
                         AND INSTR("sigungu", #{data.sigungu}) > 0
                     </if>
                     <if test="data.classification != null and data.classification != ''">
@@ -115,7 +115,7 @@
             <if test="sido != null and sido != ''">
                 AND INSTR("sido", #{sido}) > 0
             </if>
-            <if test="sigungu != null and sigungu != ''">
+            <if test="data.sigungu != null and data.sigungu != '' and data.sigungu != '전체'">
                 AND INSTR("sigungu", #{sigungu}) > 0
             </if>
             <if test="classification != null and classification != ''">
@@ -227,6 +227,28 @@
                 ORDER BY "star" DESC
                 ) A
             WHERE ROWNUM <= 6
+        ]]>
+    </select>
+    <select id="getRecommend" resultMap="LocationResultmap">
+        <![CDATA[
+            SELECT *
+            FROM (
+                SELECT *
+                FROM "animalLocation"
+        ]]>
+                <where>
+                    <if test="sido != null and sido != ''">
+                        AND INSTR("sido", #{sido}) > 0
+                    </if>
+                    <if test="sigungu != null and sigungu != '' and sigungu != '전체'">
+                        AND INSTR("sigungu", #{sigungu}) > 0
+                    </if>
+
+                </where>
+                ORDER BY DBMS_RANDOM.RANDOM
+            )
+        <![CDATA[
+            WHERE ROWNUM <= 10
         ]]>
     </select>
 </mapper>

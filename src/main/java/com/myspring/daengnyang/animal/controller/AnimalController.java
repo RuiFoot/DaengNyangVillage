@@ -64,9 +64,8 @@ public class AnimalController {
     }
 
     @GetMapping("/recommend")
-    public List<AnimalLocationVO> animalrecommend(@RequestParam(required = false) Integer memberNo, @RequestParam(required = false, defaultValue = "서울") String sido, @RequestParam(required = false) String sigungu) {
-
-        return animalService.getRecommend(memberNo, sido, sigungu);
+    public List<AnimalLocationVO> animalrecommend(@RequestParam(required = false, defaultValue = "서울") String sido, @RequestParam(required = false) String sigungu) {
+        return animalService.getRecommend(sido, sigungu);
     }
 
     //-----------------------------------------------------------------------------------------------
@@ -88,7 +87,7 @@ public class AnimalController {
     //-----------------------------------------------------------------------------------------------
 
     @GetMapping("/review")
-    public AnimalReviewVO animalReview(@RequestParam Integer animalNum) {
+    public List<AnimalReviewVO> animalReview(@RequestParam Integer animalNum) {
         log.info("시설 댓글 정보 조회 컨트롤러 실행 => RequestParam : " + animalNum);
         return animalService.getReview(animalNum);
     }
@@ -115,4 +114,8 @@ public class AnimalController {
     public List<AnimalLocationVO> animalPopular() {
         return animalService.getPopular();
     }
+
+
+
+
 }

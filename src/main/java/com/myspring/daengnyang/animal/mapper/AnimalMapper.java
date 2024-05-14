@@ -23,7 +23,7 @@ public interface AnimalMapper {
 
     AnimalDetailVO getDetail(@Param("animalNum") Integer animalNum);
 
-    AnimalReviewVO getReview(@Param("animalNum") Integer animalNum);
+    List<AnimalReviewVO> getReview(@Param("animalNum") Integer animalNum);
 
     Integer animalReviewPost(@Param("animalPost") AnimalReviewVO animalReviewVO);
 
@@ -42,4 +42,6 @@ public interface AnimalMapper {
     int getFavorite(@Param("animalNum") Integer animalNum, @Param("memberNo") Integer memberNo);
 
     List<AnimalLocationVO> getPopular();
+    List<AnimalLocationVO> getRecommend(@Param("sido") String sido, @Param("sigungu") String sigungu);
+
 }
