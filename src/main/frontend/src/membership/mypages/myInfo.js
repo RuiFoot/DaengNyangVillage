@@ -5,6 +5,8 @@ import { isDarkAtom } from '../../components/atoms';
 import themes from "../../components/theme";
 import Button from 'react-bootstrap/Button';
 import '../membershipStyle.css'
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
 const Container = styled.div`
 min-height: calc(100vh - 229px);
@@ -49,7 +51,16 @@ function MyInfo() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-    const userData = JSON.parse(sessionStorage.getItem("logined"))
+    const [userData, setUserData] = useState(JSON.parse(sessionStorage.getItem("logined")))
+    useEffect(() => {
+        axios.get(`/api/member/mypage?memberNo=${userData.memberNo}`)
+            .then((res) => {
+                window.sessionStorage.removeItem("logined")
+                sessionStorage.setItem("logined", JSON.stringify(res.data))
+                setUserData(JSON.parse(sessionStorage.getItem("logined")))
+                console.log(res.data)
+            });
+    }, []);
 
     return (
         <>

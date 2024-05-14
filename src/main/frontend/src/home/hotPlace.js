@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
-import hotPlaceArr from "../components/imgDate";
 import defaultImg from "../components/defaultImgs";
 import axios from "axios";
 
@@ -45,6 +44,7 @@ function HotPlaceList() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    //화면크기에 따라서 보여주는 아이템 갯수 변화
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
@@ -55,22 +55,24 @@ function HotPlaceList() {
             window.addEventListener('resize', handleResize)
         }
     }, [])
+    //로그인 확인
     let url = ""
     if (window.sessionStorage.key(0) === "logined") {
         url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
     }
 
+    // 디폴트 이미지
     const showImg = (e) => {
         if (e === "미용") return defaultImg.미용
-        if (e === "박물관문예회관") return defaultImg.박물관문예회관
-        if (e === "병원") return defaultImg.병원
-        if (e === "약국") return defaultImg.약국
+        if (e === "문예회관" || e === "박물관" || e === "미술관") return defaultImg.박물관문예회관
+        if (e === "동물병원") return defaultImg.병원
+        if (e === "동물약국") return defaultImg.약국
         if (e === "식당") return defaultImg.식당
         if (e === "여행지") return defaultImg.여행지
-        if (e === "애견용품") return defaultImg.애견용품
-        if (e === "유치원") return defaultImg.유치원
+        if (e === "반려동물용품") return defaultImg.애견용품
+        if (e === "위탁관리") return defaultImg.유치원
         if (e === "카페") return defaultImg.카페
-        if (e === "호텔펜션") return defaultImg.호텔펜션
+        if (e === "펜션" || e === "호텔") return defaultImg.호텔펜션
     }
 
     //스프링 통신
@@ -95,7 +97,7 @@ function HotPlaceList() {
     })
 
     useEffect(() => {
-        axios.get('/api/animal/recommend')
+        axios.get('/api/animal/popular')
             .then((res) => {
                 setBoard(res.data);
                 console.log(res.data)
@@ -103,37 +105,22 @@ function HotPlaceList() {
     }, []);
 
     return (
-
         < PlaceItems >
             {
-                // 화면 크기에 따라 가져오는 배열이 다름
-                windowSize > 979
-                    ?
-                    hotPlaceArr.slice(0, 6).map((e, i) => (
+                board.length > 0 &&
+                board.slice(0, windowSize > 979
+                    ? 6 : 4).map((e, i) => (
                         <PlaceItem key={i} style={{
                             color: switchColor,
                             backgroundColor: switchBgColor
                         }}
-                            href={`/recommend-place-detail/${e[4]}${url}`}
+                            href={`/recommend-place-detail/${e.animalNum}${url}`}
                         >
-                            <PlaceItemTitle>{e[0]}</PlaceItemTitle>
-                            <PlaceItemImg style={{ backgroundImage: `url(${showImg(e[3])})` }} />
-                            <PlaceItemAddress><GoDotFill />{e[1]}</PlaceItemAddress>
-                            <PlaceItemInfo><GoDotFill />{e[2]}</PlaceItemInfo>
-                        </PlaceItem>
-                    ))
-                    :
-                    hotPlaceArr.slice(0, 4).map((e, i) => (
-                        <PlaceItem key={i} style={{
-                            color: switchColor,
-                            backgroundColor: switchBgColor
-                        }}
-                            href={`/recommend-place-detail/${e[4]}${url}`}
-                        >
-                            <PlaceItemTitle>{e[0]}</PlaceItemTitle>
-                            <PlaceItemImg style={{ backgroundImage: `url(${showImg(e[3])})` }} />
-                            <PlaceItemAddress><GoDotFill />{e[1]}</PlaceItemAddress>
-                            <PlaceItemInfo><GoDotFill />{e[2]}</PlaceItemInfo>
+                            <PlaceItemTitle>{e.facilityName}</PlaceItemTitle>
+                            <PlaceItemImg style={{ backgroundImage: e.imgPath === null ? `url(${showImg(e.subClassification)})` : `url(${showImg(e.imgPath)})` }} />
+                            <PlaceItemAddress><GoDotFill />{e.roadAddress} {e.houseNumber
+                            }</PlaceItemAddress>
+                            <PlaceItemInfo><GoDotFill />{e.largeClassification}</PlaceItemInfo>
                         </PlaceItem>
                     ))
             }

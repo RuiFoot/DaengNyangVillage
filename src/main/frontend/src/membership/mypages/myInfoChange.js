@@ -5,7 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import '../membershipStyle.css'
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
@@ -84,7 +84,6 @@ function MyInfoChange() {
     const baseUrl = "http://localhost:8080";
     // 이전 회원 정보
     let previousInfo = JSON.parse(sessionStorage.getItem("logined"))
-    console.log(previousInfo)
     const previousImg = `${previousInfo.profileImg}`
     //다음 주소 api
     const [fullAddress, setFullAddress] = useState(previousInfo.inputAddress)
@@ -99,11 +98,6 @@ function MyInfoChange() {
     }
 
     //회원 정보 변경시 받을 값
-    // 채크박스 값
-    const [checkArr, setCheckArr] = useState([])
-    const getCheck = (e) => {
-        setCheckArr(prevList => [...prevList, e]); //배열 스테이트 값추가
-    }
     const [memberInfo, setMemberInfo] = useState({
         email: previousInfo.email,
         password: previousInfo.password,
@@ -126,17 +120,55 @@ function MyInfoChange() {
             [name]: value
         });
     }
-
+    // 채크박스 값
+    const [checkArr, setCheckArr] = useState([])
+    const [catCheck, setCatCheck] = useState()
+    const [dogCheck, setDogCheck] = useState()
+    useEffect(() => {
+        if (memberInfo.mypet !== null) {
+            console.log(memberInfo.mypet)
+            memberInfo.mypet.indexOf("강아지") !== -1 ? setDogCheck(true) : setDogCheck(false)
+            memberInfo.mypet.indexOf("강아지") !== -1 && checkArr.push("강아지")
+            memberInfo.mypet.indexOf("고양이") !== -1 ? setCatCheck(true) : setCatCheck(false)
+            memberInfo.mypet.indexOf("고양이") !== -1 && checkArr.push("고양이")
+        }
+    }, []);
+    console.log(checkArr)
+    const getCheck = (e) => {
+        if (e === "강아지") {
+            setDogCheck(!dogCheck)
+            if (!dogCheck) {
+                setCheckArr(prevList => [...prevList, e]); //배열 스테이트 값추가
+                console.log(checkArr)
+            } else {
+                checkArr.splice(checkArr.indexOf(e), 1)
+                console.log(checkArr)
+            }
+        } else {
+            setCatCheck(!catCheck)
+            if (!catCheck) {
+                setCheckArr(prevList => [...prevList, e]); //배열 스테이트 값추가
+                console.log(checkArr)
+            } else {
+                checkArr.splice(checkArr.indexOf(e), 1)
+                console.log(checkArr)
+            }
+        }
+    }
     //채크 박스 해제
     const [checked, setChecked] = useState()
 
     //입력 받은 값 전송
     async function handleSubmit(e) {
+        if (imageUrl === "") {
+            console.log("durl")
+            setImageUrl(previousImg)
+        }
         e.preventDefault();
         let body = {
             nickName: memberInfo.nickName,
             memberNo: memberInfo.memberNo,
-            profileImg: imageUrl,
+            profileImg: imageUrl === "" ? previousImg : imageUrl,
             inputAddress: memberInfo.inputAddress,
             detailedAddress: memberInfo.detailedAddress,
             mypet: checkArr.join(", "),
@@ -145,6 +177,7 @@ function MyInfoChange() {
         }
         axios.patch(`${baseUrl}/member/update`, body
         ).then((response) => {
+            console.log(body);
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
@@ -291,7 +324,7 @@ function MyInfoChange() {
                             value="강아지"
                             name="mypet"
                             onChange={(e) => { getCheck(e.target.value) }}
-                            checked={previousInfo.mypet.search("강아지") === -1 ? checked : true}
+                            checked={dogCheck}
                         />
                         <CheckBoxLabel htmlFor="checkboxDog">강아지</CheckBoxLabel>
                     </InputGroup>
@@ -302,7 +335,7 @@ function MyInfoChange() {
                             value="고양이"
                             name="mypet"
                             onChange={(e) => { getCheck(e.target.value) }}
-                            checked={previousInfo.mypet.search("고양이") === -1 ? checked : true}
+                            checked={catCheck}
                         />
                         <CheckBoxLabel htmlFor="checkboxCat">고양이</CheckBoxLabel>
                     </InputGroup>

@@ -14,6 +14,7 @@ import { FaStar, FaHeart } from "react-icons/fa6";
 import React, { useRef } from "react"
 import "./placeRecommendStyle.css"
 import defaultImg from "../components/defaultImgs";
+import axios from "axios";
 
 const Container = styled.div`
 min-height: calc(100vh - 179px);
@@ -53,8 +54,10 @@ background-position: center;
 background-size: cover;
 `
 const Precautions = styled.div`
+font-size: clamp(100%, 2vw, 120%);
 `
 const Address = styled.div`
+font-size: clamp(100%, 2vw, 120%);
 `
 const ReviewsTitleBox = styled.div`
 width: 88vw;
@@ -133,26 +136,16 @@ const StarInput = styled.div`
 display: flex;
 align-items: center;
 `
-const ReReviewOutBox = styled.div`
-display: flex;
-align-items: center;
-justify-content: end;
-`
-const ReReviewBox = styled.div`
-width: 90%;
-`
-const Replyd = styled.div`
-display: flex;
-transform: rotate( 180deg );
-margin-right: 10px;
-`
 
 function RecommendDetail() {
     //다크모드
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    //스프링연동을 위한 url
+    const baseUrl = "http://localhost:8080";
     const params = useParams();
+    console.log(params)
     const userInfo = JSON.parse(sessionStorage.getItem("logined"))
     // 현재 url에 맞는 글 가져오기 (현재 url에 id전송으로 대체)
     const test = hotPlaceArr.filter((e) => e[4] === Number(params.itemId))
@@ -169,31 +162,82 @@ function RecommendDetail() {
         }
     }, [])
 
+    //스프링 통신
+    const [board, setBoard] = useState({
+        animalNum: 0,
+        largeClassification: "",
+        facilityName: "",
+        subClassification: "",
+        sido: "",
+        sigungu: "",
+        eupmyeondong: "",
+        ri: "",
+        houseNumber: "",
+        streetName: "",
+        buildingNumber: "",
+        latitude: "",
+        longitude: "",
+        star: 0,
+        imgPath: "",
+        roadAddress: "",
+        numberAddress: ""
+    })
+
+    useEffect(() => {
+        axios.get(`/api/animal/detail/${params.itemId}`)
+            .then((res) => {
+                setBoard(res.data);
+                console.log(res.data)
+            })
+    }, []);
+    // 디폴트 이미지
+    const showImg = (e) => {
+        if (e === "미용") return defaultImg.미용
+        if (e === "문예회관" || e === "박물관" || e === "미술관") return defaultImg.박물관문예회관
+        if (e === "동물병원") return defaultImg.병원
+        if (e === "동물약국") return defaultImg.약국
+        if (e === "식당") return defaultImg.식당
+        if (e === "여행지") return defaultImg.여행지
+        if (e === "반려동물용품") return defaultImg.애견용품
+        if (e === "위탁관리") return defaultImg.유치원
+        if (e === "카페") return defaultImg.카페
+        if (e === "펜션" || e === "호텔") return defaultImg.호텔펜션
+    }
     //댓글 입력
     const [userReviews, setUserReviews] = useState([])
     const [review, setReview] = useState("")
     const [star, setStar] = useState(1)
     const [reviewId, setReviewId] = useState()
-    const today = new window.Date()
-    const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+    const [getReview, setGetReview] = useState([])
     const uploadReview = () => {
         if (review.length > 0) {
-            userReviews.push({
-                reviewId: today.getTime(),
-                profileImg: `${userInfo.profileImg}`,
-                review: review,
+            let body = {
+                animalNum: params.itemId,
                 nickname: userInfo.nickName,
-                createDate: formattedDate,
-                rank: star,
-                boardId: params.itemId,
-                memberNo: userInfo.memberNo
+                memberNo: userInfo.memberNo,
+                profileImg: userInfo.profileImg,
+                review: review,
+                star: star
+            }
+            axios.post(`${baseUrl}/animal/review`, body
+            ).then((response) => {
+                setReview("")
+                console.log("됨?");
+                console.log(response);	//오류발생시 실행
+                // console.log(response.data);	//정상 통신 후 응답된 메시지 출력
+                // axios.get(`${baseUrl}/animal/review?animalNum=${params.itemId}`)
+                //     .then((res) => {
+                //         setGetReview(res.data);
+                //         // console.log(res.data)
+                //     })
+            }).catch((error) => {
+                console.log(error);	//오류발생시 실행
             })
             //내가단 댓글로
             const taget = document.getElementById("end");
             taget.scrollIntoView({ behavior: "smooth", block: "center" })
             setReview("")
             setStar(1)
-            test[0][5].push([userInfo.nickName, star, today.getTime()])//별점을 줬다는 데이터
             console.log(userReviews)
             console.log(test)
         } else {
@@ -228,7 +272,6 @@ function RecommendDetail() {
     const uploadEditReview = () => {
         if (review.length > 0) {
             userReviews[editIndex].review = review
-            userReviews[editIndex].createDate = formattedDate
             userReviews[editIndex].rank = star
             if (star !== undefined) {
                 test[0][5][test[0][5].findIndex((e) => e[0] === params.nickName)][1] = star // 별점 수정
@@ -396,19 +439,6 @@ function RecommendDetail() {
         console.log(params)
     }
 
-    //이미지 디폴트 값
-    const showImg = (e) => {
-        if (e === "미용") return defaultImg.미용
-        if (e === "박물관문예회관") return defaultImg.박물관문예회관
-        if (e === "병원") return defaultImg.병원
-        if (e === "약국") return defaultImg.약국
-        if (e === "식당") return defaultImg.식당
-        if (e === "여행지") return defaultImg.여행지
-        if (e === "애견용품") return defaultImg.애견용품
-        if (e === "유치원") return defaultImg.유치원
-        if (e === "카페") return defaultImg.카페
-        if (e === "호텔펜션") return defaultImg.호텔펜션
-    }
     return (
         <>
             <Bumper />
@@ -420,15 +450,22 @@ function RecommendDetail() {
                 <Items>
                     <LeftItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 10px 0 6vw"}` }}>
                         <Title>
-                            {test[0][0]}
+                            {board.facilityName}
                             <FaHeart style={{ cursor: "pointer", margin: "10px", color: `${heart ? "red" : "#F2F2F2"}` }} onClick={clickHeart} />
                         </Title>
-                        <Img style={{ backgroundImage: `url(${showImg(test[0][3])})` }} />
+                        <Img style={{ backgroundImage: board.imgPath === null ? `url(${showImg(board.subClassification)})` : `url(${showImg(board.imgPath)})` }} />
                     </LeftItems>
                     <RightItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 6vw 0 10px"}` }}>
                         <Title>{starRankAVG()}</Title>
-                        <Address>주소 : {test[0][1]}</Address>
-                        <Precautions>주의사항 : {test[0][2]}</Precautions>
+                        <Address>주소 : {board.roadAddress}</Address>
+                        <Precautions>가격 : {board.payInfo}</Precautions>
+                        <Precautions>휴일 : {board.holiday}</Precautions>
+                        <Precautions>전화번호 : {board.tel}</Precautions>
+                        <Precautions>주차 : {board.carInfo}</Precautions>
+                        <Precautions>제한 사항 : {board.precautions}</Precautions>
+                        <Precautions>반려동물 크기 제한 : {board.animalSize}</Precautions>
+                        <Precautions>실내 동반 : {board.infield}</Precautions>
+                        <Precautions>실외 동반 : {board.outfield}</Precautions>
                     </RightItems>
                 </Items>
                 <ReviewsTitleBox>
