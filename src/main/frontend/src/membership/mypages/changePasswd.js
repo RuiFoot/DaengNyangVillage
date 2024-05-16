@@ -74,18 +74,13 @@ function ChangePasswd() {
             email: "",
             password: newPasswd
         }
-        axios.patch(`${baseUrl}/member/password`, body
-            memberNo: previousInfo.memberNo,
-            email: "string",
-            password: newPasswd,
-        }
+
         axios.post(`${baseUrl}/member/password`, body
         ).then((response) => {
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
         })
-        setPasswordCheck("")
         setNewPasswd("") //인풋 클리어
         setPasswordCheck("")
         window.sessionStorage.removeItem("logined") //로그인 해제

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Spinner } from "react-bootstrap";
+import axios from "axios";
+import xmljs from 'xml-js';
 
 const Container = styled.div`
   margin: 0 6vw;
@@ -29,14 +31,14 @@ const HotdealItem = styled.div`
   justify-content: space-between;
   width: 200px;
   height: 350px;
-  cursor: pointer; /* 클릭 가능하도록 커서 설정 */
+  cursor: pointer;
 `;
 
 const HotdealItemImg = styled.div`
   height: 200px;
   width: 100%;
   background-image: url(${props => props.image});
-  background-size: cover;
+  background-size: cover; /* 변경된 부분 */
   background-position: center;
 `;
 
@@ -61,61 +63,75 @@ const LoadingContainer = styled.div`
   justify-content: center;
 `;
 
-async function fetchRandomProducts(count) {
-
-  try {
-    // 이걸 22000포트로 새로 만들어서 가져오지 말고, apiURL로 하는 방법이 있을테니 그렇게 가져오는건 어떨가요?
-    const apiUrl = "http://localhost:22000/";
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-
-    if (data && data.length > 0) {
-      const randomProducts = [];
-      for (let i = 0; i < count; i++) {
-        const randomIndex = Math.floor(Math.random() * data.length);
-        const selectedProduct = data[randomIndex];
-        randomProducts.push({ //localhost:22000에서 불러온 데이터
-          name: selectedProduct.ProductName[0],
-          price: `${selectedProduct.ProductPrice[0]}원`,
-          image: selectedProduct.ProductImage300[0],
-          link: selectedProduct.DetailPageUrl[0], // DetailPageUrl 사용
-        });
-      }
-      return randomProducts;
-    } else {
-      throw new Error("상품 정보가 없습니다.");
-    }
-  } catch (error) {
-    console.error("상품 정보를 가져오지 못했습니다.", error);
-    return Array.from({ length: count }, () => ({
-      name: "상품 정보를 가져오지 못했습니다.",
-      price: "가격 정보 없음",
-      image: "기본 이미지 URL",
-      link: "기본 링크 URL", // 에러 시 기본 링크 추가
-    }));
-  }
-}
+axios.defaults.withCredentials = true;
 
 function HotdealBar() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const randomProducts = await fetchRandomProducts(7);
-      setProducts(randomProducts);
+  const fetchProducts = async () => {
+    const apiUrl = "/openapi/OpenApiService.tmall";
+    const apiKey = "ec85dc7117b8f778becbc434db04d1c9";
+    const keyword = "반려동물";
+    const url = `/11api${apiUrl}?key=${apiKey}&apiCode=ProductSearch&keyword=${keyword}`;
+
+    try {
+      const res = await axios.get(url);
+      const jsonData = xmljs.xml2json(res.data, { compact: true });
+      const jsonParsed = JSON.parse(jsonData);
+      const productList = jsonParsed.ProductSearchResponse.Products.Product;
+
+      if (Array.isArray(productList)) {
+        const selectedProducts = [];
+        const totalProducts = productList.length;
+        const selectedIndices = new Set();
+
+        while (selectedIndices.size < 7) {
+          const randomIndex = Math.floor(Math.random() * totalProducts);
+          if (!selectedIndices.has(randomIndex)) {
+            selectedIndices.add(randomIndex);
+            const product = productList[randomIndex];
+            selectedProducts.push({
+              name: product.ProductName._cdata,
+              price: `${product.ProductPrice._text}원`,
+              image: product.ProductImage200._cdata,
+              link: product.DetailPageUrl._cdata,
+            });
+          }
+        }
+
+        setProducts(selectedProducts);
+      } else {
+        const product = productList;
+        setProducts([{
+          name: product.ProductName._cdata,
+          price: `${product.ProductPrice._text}원`,
+          image: product.ProductImage._cdata,
+          link: product.DetailPageUrl._cdata,
+        }]);
+      }
+
       setIsLoading(false);
-    };
+    } catch (error) {
+      console.error("상품 정보를 가져오는 동안 오류가 발생했습니다.", error);
+      setIsLoading(false);
+      setProducts(Array.from({ length: 6 }, () => ({
+        name: "상품 정보를 가져오지 못했습니다.",
+        price: "가격 정보 없음",
+        image: "기본 이미지 URL",
+        link: "기본 링크 URL",
+      })));
+    }
+  };
 
-    const intervalId = setInterval(fetchData, 10000);
-
-    // 컴포넌트가 언마운트될 때 인터벌을 클리어해야 합니다.
+  useEffect(() => {
+    fetchProducts();
+    const intervalId = setInterval(fetchProducts, 10000);
     return () => clearInterval(intervalId);
   }, []);
 
   const handleProductClick = (link) => {
-    window.open(link, "_blank"); // 새 창에서 링크 열기
+    window.open(link, "_blank");
   };
 
   return (
@@ -136,7 +152,7 @@ function HotdealBar() {
             {products.map((product, index) => (
               <HotdealItem key={index} onClick={() => handleProductClick(product.link)}>
                 <div>
-                  <HotdealItemImg style={{ backgroundImage: `url(${product.image})` }} />
+                  <HotdealItemImg image={product.image} />
                   <HotdealItemName>{product.name.slice(0, 40)}</HotdealItemName>
                 </div>
                 <HotdealItemPrice>{product.price}</HotdealItemPrice>
