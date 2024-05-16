@@ -12,7 +12,7 @@ module.exports = function (app) {
         '/11api',
         createProxyMiddleware({
             target: "https://openapi.11st.co.kr/",
-            changeOrigin : true,
+            changeOrigin: true,
         })
     )
 };

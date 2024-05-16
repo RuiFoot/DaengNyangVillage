@@ -54,33 +54,8 @@ function WrittenByMe() {
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     //현재 로그인한 유저 닉네임
     const [loginedNickName, setLoginedNickName] = useState("")
-
     const baseUrl = "http://localhost:8080";
     //스프링 통신
-    // const [board, setBoard] = useState({
-    //     boardId: 0,
-    //     memberNo: 0,
-    //     nickname: "",
-    //     category: "",
-    //     boardName: "",
-    //     createDate: "",
-    //     imgPath: "",
-    //     preface: "",
-    //     reviewCnt: 0,
-    //     price: "",
-    //     area: ""
-    // })
-    // useEffect(() => {
-    //     if (sessionStorage.getItem("logined") !== null) {
-    //         setLoginedNickName("/" + JSON.parse(sessionStorage.getItem("logined")).nickName)
-    //         axios.get(`${baseUrl}/member/post?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}`)
-    //             .then((res) => {
-    //                 setBoard(res.data);
-    //                 console.log(res.data)
-    //             })
-    //     }
-    // }, []);
-
 
     //알맞은 상세페이지 이동
     const checkCategory = (input) => {
