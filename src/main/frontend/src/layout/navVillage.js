@@ -105,6 +105,7 @@ width: 50px;
 
 // 네비바
 function NavVillage() {
+
     // 소셜 로그인
     const nowUrl = document.location.href
     if (nowUrl.indexOf("code=") !== -1) {

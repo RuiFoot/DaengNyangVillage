@@ -64,10 +64,17 @@ function ChangePasswd() {
 
     }
     async function handleSubmit(e) {
+        console.log(previousInfo)
         e.preventDefault();
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
         let body = {
+
+            memberNo: previousInfo.memberNo !== null && previousInfo.memberNo,
+            email: "",
+            password: newPasswd
+        }
+        axios.patch(`${baseUrl}/member/password`, body
             memberNo: previousInfo.memberNo,
             email: "string",
             password: newPasswd,
@@ -78,7 +85,7 @@ function ChangePasswd() {
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
         })
-
+        setPasswordCheck("")
         setNewPasswd("") //인풋 클리어
         setPasswordCheck("")
         window.sessionStorage.removeItem("logined") //로그인 해제
