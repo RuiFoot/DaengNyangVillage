@@ -82,13 +82,13 @@
                 FROM "animalLocation"
         ]]>
                 <where>
-                    <if test="data.sido != null and data.sido != ''">
+                    <if test="data.sido != null and data.sido != '전체'">
                         AND INSTR("sido", #{data.sido}) > 0
                     </if>
-                    <if test="data.sigungu != null and data.sigungu != '' and data.sigungu != '전체'">
+                    <if test="data.sigungu != null and data.sigungu != '전체'">
                         AND INSTR("sigungu", #{data.sigungu}) > 0
                     </if>
-                    <if test="data.classification != null and data.classification != ''">
+                    <if test="data.classification != null and data.classification != '전체' and data.classification !=''">
                         AND "subClassification" = #{data.classification}
                     </if>
                     AND "star" is not null
@@ -112,13 +112,13 @@
         SELECT COUNT(*) AS CNT
         FROM "animalLocation"]]>
         <where>
-            <if test="sido != null and sido != ''">
+            <if test="sido != null and sido !='전체'">
                 AND INSTR("sido", #{sido}) > 0
             </if>
-            <if test="data.sigungu != null and data.sigungu != '' and data.sigungu != '전체'">
+            <if test="sigungu != null and sigungu != '전체'">
                 AND INSTR("sigungu", #{sigungu}) > 0
             </if>
-            <if test="classification != null and classification != ''">
+            <if test="classification != null and classification != '전체' and classification !=''">
                 AND "subClassification" = #{classification}
             </if>
             AND "star" is not null

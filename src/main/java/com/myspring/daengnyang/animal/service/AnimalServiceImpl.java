@@ -48,6 +48,7 @@ public class AnimalServiceImpl implements AnimalService {
 
         Paging<?> requestList = Paging.builder().data(formData).pageable(pageable).build();
 
+        log.info(requestList.toString());
 
         List<AnimalLocationVO> locationData = animalMapper.getLocation(requestList);
 

@@ -48,8 +48,8 @@ public class AnimalController {
     @GetMapping("/location/{sido}")
     public ResponseEntity<?> animalLocation(
             @PathVariable("sido") String sido,
-            @RequestParam("sigungu") String sigungu,
-            @RequestParam String classification,
+            @RequestParam(value = "sigungu") String sigungu,
+            @RequestParam(defaultValue = "") String classification,
             @PageableDefault(page = 0,size = 12, sort = "star", direction = Sort.Direction.DESC) Pageable pageable) { // page : 2 => 페이지 보내야함
         log.info("시설 위치 정보 조회 컨트롤러 실행 => PathVariable : " + sido + ", Params : " + classification);
         log.info("pageable : " + pageable);

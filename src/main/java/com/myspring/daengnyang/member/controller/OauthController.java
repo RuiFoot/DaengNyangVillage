@@ -31,6 +31,8 @@ public class OauthController {
      *
      * @param code https://kauth.kakao.com/oauth/authorize?client_id=db0c282555cc32e78ecbce031761fc83&redirect_uri=http://localhost:8080/member/oauth/kakao&response_type=code
      *             <p>
+     *             https://kauth.kakao.com/oauth/authorize?client_id=db0c282555cc32e78ecbce031761fc83&redirect_uri=http://localhost:3000/login/oauth2/code/kakao&response_type=code
+     *
      *             https://kauth.kakao.com/oauth/logout?client_id=db0c282555cc32e78ecbce031761fc83&logout_redirect_uri=http://localhost:8080/member/oauth/kakao/logout
      */
     @GetMapping("/oauth/kakao")
