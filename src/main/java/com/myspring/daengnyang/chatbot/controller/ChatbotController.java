@@ -22,7 +22,6 @@ public class ChatbotController {
     @GetMapping("")
     public String chatbot(@RequestParam("message")String message){
         String result = chatbotService.sendMessage(message);
-        System.out.println(result);
         return result;
     }
 }
