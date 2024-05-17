@@ -269,6 +269,7 @@ function NavVillage() {
     }
 
     // 유저에게 현재 위치를 알려주기 위함
+    let place = [`recommend`, `place`]
     let mypages = [`my`, `change`, `selected`, `written`]
     let community = [`free`, `pet`, `training`, `used`, `write`, "edit"]
     const lightOn = (path, board) => {
@@ -310,10 +311,7 @@ function NavVillage() {
                             >
                                 커뮤니티
                             </Nav.Link>
-                            <Nav.Link style={{
-                                color: `${pathname === `/place-recommend${url}`
-                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                            }} className='navLink' href={`/place-recommend${url}`}>
+                            <Nav.Link style={{ color: `${lightOn(pathname, place) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` }} className='navLink' href={`/place-recommend${url}`}>
                                 장소추천
                             </Nav.Link>
                             <Nav.Link style={{
