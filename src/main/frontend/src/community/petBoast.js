@@ -13,7 +13,6 @@ const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
 const PetBoastItems = styled.div`
-min-height: calc(100vh - 229px);
 margin: 10px 6vw;
 display: grid;
 justify-content: center;

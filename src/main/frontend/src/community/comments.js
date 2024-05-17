@@ -10,6 +10,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import React, { useRef } from "react"
 import { MdOutlineReply } from "react-icons/md";
+import Modal from 'react-bootstrap/Modal';
 
 const ReviewsTitleBox = styled.div`
 width: 88vw;
@@ -152,12 +153,44 @@ function Comments() {
         }
     }
     //댓글 삭제
-    const deleteReview = (e) => {
-        axios.delete(`${baseUrl}/board/review/${e}`
+    const [show, setShow] = useState(false);
+    const [taget, setTaget] = useState()
+    const [tagetCheck, setTagetCheck] = useState()
+    const handleClose = () => setShow(false);
+    const handleShow = (e, check) => {
+        setShow(true)
+        setTaget(e)
+        setTagetCheck(check)
+    };
+    function DeleteModal() {
+        return (
+            <>
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>삭제 확인</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>정말 삭제 하시겠습니까?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            취소
+                        </Button>
+                        <Button variant="primary" onClick={tagetCheck === "댓글" ? deleteReview : deleteReReview}>
+                            삭제
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        );
+    }
+
+    const deleteReview = () => {
+        axios.delete(`${baseUrl}/board/review/${taget}`
         ).then(() => {
             axios.get(`${baseUrl}/board/review?boardId=${params.boardId}`)
                 .then((res) => {
                     setGetReview(res.data);
+                    setTaget()
+                    setShow(false)
                     // console.log(res.data)
                 })
         }).catch((error) => {
@@ -326,9 +359,9 @@ function Comments() {
         }
     }
     //대댓글 삭제
-    const deleteReReview = (e) => {
+    const deleteReReview = () => {
         // console.log(e)
-        axios.delete(`${baseUrl}/board/review/review?reviewId=${e.reviewId}&boardReviewNum=${e.boardReviewNum}`
+        axios.delete(`${baseUrl}/board/review/review?reviewId=${taget.reviewId}&boardReviewNum=${taget.boardReviewNum}`
         ).then((res) => {
             window.location.reload();
         }).catch((error) => {
@@ -337,6 +370,8 @@ function Comments() {
     }
     return (
         <>
+            <DeleteModal show={show}
+                onHide={() => setShow(false)} />
             <ReviewsTitleBox>
                 <ReviewsTitle>Reviews {getReview.length}</ReviewsTitle>
             </ReviewsTitleBox>
@@ -399,7 +434,7 @@ function Comments() {
                                                             color: switchColor,
                                                             backgroundColor: switchBgColor
                                                         }} className="recommendBtn"
-                                                            onClick={() => deleteReview(e.boardReviewNum)}
+                                                            onClick={() => handleShow(e.boardReviewNum, "댓글")}
                                                         >삭제</Button>
                                                     </>
                                                     : null
@@ -528,7 +563,7 @@ function Comments() {
                                                                                         backgroundColor: `${isDark ?
                                                                                             themes.dark.bgColor : themes.light.bgColor}`
                                                                                     }} className="recommendBtn"
-                                                                                        onClick={() => deleteReReview(k)}
+                                                                                        onClick={() => handleShow(k, "대댓글")}
                                                                                     >삭제</Button>
                                                                             }
                                                                         </EditDeleteBox>
