@@ -36,7 +36,7 @@ public class BoardController {
 //        List<BoardVO> list = boardService.selectBoardList(category);
 //        return list;
 //    }
-    @GetMapping("{category}")
+    @GetMapping("/{category}")
     public ResponseEntity<?> boardList(
             @PathVariable("category") String category,
             @PageableDefault(size = 12, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable)

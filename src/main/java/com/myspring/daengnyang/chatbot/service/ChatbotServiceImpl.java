@@ -32,6 +32,7 @@ public class ChatbotServiceImpl implements ChatbotService {
         String apiURL = "https://p3jljigyr4.apigw.ntruss.com/custom/v1/14115/3e6ba3ff1f9c6784da32d0980fcf6cd307350d79e75f760702b7781f73bd0c88";
         String secretKey = "eVRNWHV0V3JnYURjTHN4UE5aRE5jWk1BaHBPblNXQnM=";
         String chatbotMessage = "";
+        String[] resultMessage;
 
 
         try {
@@ -62,7 +63,7 @@ public class ChatbotServiceImpl implements ChatbotService {
             BufferedReader br;
 
             if (responseCode == 200) { // Normal call
-                System.out.println(con.getResponseMessage());
+                System.out.println("responseMessage : " + con.getResponseMessage());
 
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(
@@ -74,7 +75,7 @@ public class ChatbotServiceImpl implements ChatbotService {
                 //chatbotMessage = decodedString;
                 in.close();
                 // 응답 메세지 출력
-                System.out.println(chatbotMessage);
+                System.out.println("chatbotMessage : " + chatbotMessage);
             } else {  // Error occurred
                 chatbotMessage = con.getResponseMessage();
             }
@@ -82,6 +83,9 @@ public class ChatbotServiceImpl implements ChatbotService {
                 Exception e) {
             System.out.println(e);
         }
+        resultMessage = chatbotMessage.split("details");
+        String result = resultMessage[1];
+        chatbotMessage = result.substring(3, result.length()-5);
         return chatbotMessage;
     }
 
@@ -142,7 +146,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 
             requestBody = obj.toString();
 
-            System.out.println(requestBody);
+            System.out.println("requestBody : " + requestBody);
 
         } catch (Exception e){
             System.out.println("## Exception : " + e);
