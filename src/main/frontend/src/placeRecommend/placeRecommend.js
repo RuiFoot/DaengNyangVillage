@@ -12,10 +12,13 @@ import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
 import axios from "axios";
+import defaultImg from "../components/defaultImgs";
+import { FaStar } from "react-icons/fa6";
 
 const baseUrl = "http://localhost:8080";
 
 const Container = styled.div`
+min-height: calc(100vh - 86px);
   display: grid;
   gap: 15px;
 `;
@@ -50,16 +53,23 @@ height: 500px;
 `
 
 const PlaceItems = styled.div`
+min-height: 130px;
 display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+justify-content: center;
   grid-auto-rows: minmax(100px, auto);
   gap: 15px;
   margin: 10px 6vw;
 `
 
-const PlaceItem = styled.div`
+const PlaceItem = styled.a`
+text-decoration: none;
+cursor: pointer;
+&:hover {
+    transform: scale(1.02);
+}
 `
 const PlaceItemTitle = styled.div`
+height: 60px;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -70,7 +80,7 @@ const PlaceItemImg = styled.div`
 height: 227px;
 background-size: cover;
 background-position: center;
-margin-bottom: 5px;
+margin: 10px 0;
 `
 const PlaceItemAddress = styled.div`
 font-size: clamp(90%, 1vw, 100%);
@@ -86,11 +96,20 @@ margin-right: 5px;
 
 const CheckBoxLabel = styled.label`
 `
-
+const GoBack = styled.div`
+text-align: center;
+cursor: pointer;
+&:hover {
+    font-size: 17px;
+}
+`
+const SiGun = styled.div`
+display: flex;
+flex-direction: column;
+width: 400px;
+`
 const { kakao } = window;
 
-//6개
-let wideHotPlaceArr = [["춘천 삼악산 호수 케이블카", "강원 춘천시 스포츠타운길 245", "리드줄, 매너벨트 필수 착용", "https://files.ban-life.com/content/2024/04/body_1711961501.jpg"], ["청도 프로방스", "경북 청도군 화양읍 이슬미로 272-23", "리쉬필수! 댕댕이들은 모~두 입장 가능!", "https://files.ban-life.com/content/2024/04/body_1712306959.jpg"], ["양평 레몬과오렌지", "경기도 양평군 단월면 양동로 229", "독채 숙소라 마당에서 프라이빗하게 뛰뛰하고 우리끼리 즐길 수 있어요", "https://files.ban-life.com/content/2024/04/body_1712301999.jpg"], ["캔버스 스테이 외관", "부산광역시 해운대구 해운대해변로197번길 13", " 강아지 수영장+루프탑", "https://files.ban-life.com/content/2024/04/body_1712316724.jpg"], ["태안 코리아 플라워 파크", "충남 태안 안면읍 꽃지해안로 400", "견종 무관하게 모두 동반 가능해요", "https://files.ban-life.com/content/2024/04/body_1712595967.jpg"], ["감성스테이 산아래", "충청남도 당진시 송산면 칠절길 95-17", "견종, 무게 제한 없음", "https://files.ban-life.com/content/2024/04/body_1712079373.jpg"]]
 
 function PlaceRecommend() {
     const [map, setMap] = useState([null])
@@ -98,6 +117,9 @@ function PlaceRecommend() {
     const [categoryList, setCategoryList] = useState([]);
     const [areaList, setAreaList] = useState([]);
     const [address, setAddress] = useState([]);
+    const [sido, setSido] = useState()
+    const [checkedArea, setCheckedArea] = useState()
+    const [checkedCategory, setCheckedCategory] = useState()
     //다크모드
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
@@ -106,13 +128,31 @@ function PlaceRecommend() {
     const handleResize = () => {
         setWindowSiz(window.innerWidth)
     }
-
     useEffect(() => {
         window.addEventListener('resize', handleResize);
         return () => {
             window.addEventListener('resize', handleResize)
         }
     }, [])
+
+    //로그인 확인
+    let url = ""
+    if (window.sessionStorage.key(0) === "logined") {
+        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+    }
+
+    // 카카오맵 초기화
+    useEffect(() => {
+        const container = document.getElementById('map');
+        const options = {
+            center: new kakao.maps.LatLng(37.5664056, 126.9778222),
+            level: 5
+        };
+        const newMap = new kakao.maps.Map(container, options);
+        setMap(newMap);
+    }, []);
+
+
 
     //카테고리 리스트 받아오기
     useEffect(() => {
@@ -126,33 +166,9 @@ function PlaceRecommend() {
 
     }, []);
 
-    // 맵에 띄울 마커 정보 받기
-    useEffect(() => {
-        let searchLocation = "서울특별시";
-        let classification = "동물병원";
-        axios.get(`${baseUrl}/animal/location/${searchLocation}?classification=${classification}`)
-            .then((res) => {
-                setAddress(res.data)
-                // console.log(res.data)
-            }).catch(error => {
-                console.error('Request failed : ', error);
-            })
-    }, [])
-
-    // 카카오맵 초기화
-    useEffect(() => {
-        const container = document.getElementById('map');
-        const options = {
-            center: new kakao.maps.LatLng(37.5664056, 126.9778222),
-            level: 5
-        };
-        const newMap = new kakao.maps.Map(container, options);
-        setMap(newMap);
-    }, []);
-
-    const handleButtonClick = () => {
-        // 주소 정보를 이용하여 마커 표시
-        if (address && Object.keys(address).length > 0 && map) {
+    // 마커 생성 및 범위 재설정
+    const kakaomapMarker = (data) => {
+        if (data && Object.keys(data).length > 0 && map) { // 주소 정보를 이용하여 마커 표시
             // 이전에 생성된 마커들 제거
             markers.forEach(marker => {
                 marker.setMap(null);
@@ -160,28 +176,43 @@ function PlaceRecommend() {
             // 새로운 마커들 생성
             var newMarkers = [];
             var bounds = new kakao.maps.LatLngBounds(); //재설정 범위정보를 가지고 있을
-            for (var j = 0; j < Object.keys(address).length; j++) {
+            for (var j = 0; j < Object.keys(data).length; j++) {
                 var content = { // 객체 정보 저장
-                    title: address[j].facilityName,
-                    LatLng: new kakao.maps.LatLng(address[j].latitude, address[j].longitude),
-                    roadAddress: address[j].roadAddress,
+                    title: data[j].facilityName,
+                    LatLng: new kakao.maps.LatLng(data[j].latitude, data[j].longitude),
+                    roadAddress: data[j].roadAddress,
+                    animalNum: data[j].animalNum,
+                    largeClassification: data[j].largeClassification,
+                    subClassification: data[j].subClassification,
+                    buildingNumber: data[j].buildingNumber,
+                    star: data[j].star
                 }
                 var newMarker = new kakao.maps.Marker({ //새로운 마커 생성 및 표시
                     map: map,
                     position: content.LatLng,
-                    title: content.title
+                    title: content.title,
+                    animalNum: content.animalNum,
+                    largeClassification: content.largeClassification,
+                    subClassification: content.subClassification,
+                    buildingNumber: content.buildingNumber,
+                    star: content.star
                 });
                 newMarkers.push(newMarker); //새로 생성된 마커를 배열에 추가
                 bounds.extend(content.LatLng); //latlngbound 객체에 좌표 추가
                 (function (marker, place) { // 마커 클릭 시 오버레이 표시
                     kakao.maps.event.addListener(marker, 'click', function () {
+                        const placeStar = place.star === 0 ? "아직 평가가 없습니다." : place.star
                         var overlay = new kakao.maps.CustomOverlay({
-                            content: '<div class="wrap">' +
+                            content:
+                                '<div class="wrap">' +
                                 '    <div class="info">' +
-                                '        <div class="title">' + place.title + '</div>' +
+                                '        <div class="title">' + place.title +
+                                '        </div>' +
                                 '        <div class="body">' +
                                 '            <div class="desc">' +
+                                '                <div class="ellipsis">' + place.subClassification + '</div>' +
                                 '                <div class="ellipsis">' + place.roadAddress + '</div>' +
+                                '                <div class="jibun ellipsis">평점 : ' + placeStar +
                                 '            </div>' +
                                 '        </div>' +
                                 '    </div>' +
@@ -199,6 +230,31 @@ function PlaceRecommend() {
             map.setBounds(bounds); // 지도 범위 재설정
             setMarkers(newMarkers); // 새로운 마커들을 저장하여 나중에 제거할 수 있도록 함
         }
+    }
+
+    // 맵에 띄울 마커 정보 받기 
+    useEffect(() => {
+        axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=0`)
+            .then((res) => {
+                setAddress(res.data.content)
+                console.log(res)
+                console.log(res.data)
+            }).catch(error => {
+                console.error('Request failed : ', error);
+            })
+    }, [checkedCategory])
+
+    const handleButtonClick = () => {
+        axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=0`)
+            .then((res) => {
+                setAddress(res.data.content)
+                console.log(res.data)
+                kakaomapMarker(res.data.content)
+                //getList(res.data.content)
+            })
+            .catch((error) => {
+                console.error('가져오기 실패', error);
+            })
     };
 
     //시, 도 배열
@@ -206,6 +262,7 @@ function PlaceRecommend() {
 
     //시도 선택시 상세 군,구 또는 시, 군 선택가능 하게
     const bigAreaClicked = (e) => {
+        setSido(e)
         // console.log(e[e.length - 1]) //유저가 클릭한 채크박스의 마지막 글자(시, 도 구분)
         axios.get(`${baseUrl}/animal/area?sido=${e}`)
             .then((res) => {
@@ -228,36 +285,58 @@ function PlaceRecommend() {
     }
 
     //에리어 선택시 값 전달, 채크해제 시 중복값 입력방지
-    const [checkedArea, setCheckedArea] = useState([])
     const clickedArea = (e) => {
         console.log(e)
-        if (checkedArea.indexOf(e) === -1) {
-            checkedArea.push(e)
-        } else {
-            console.log(checkedArea.indexOf(e))
-            checkedArea.splice(checkedArea.indexOf(e), 1)
-        }
+        setCheckedArea(e)
         console.log("상세주소 : " + checkedArea)
     }
 
     //카테고리 선택시 값 전달, 채크해제 시 중복값 입력방지
-    const [checkedCategory, setCheckedCategory] = useState([])
     const clickedCategory = (e) => {
         console.log(e)
-        if (checkedCategory.indexOf(e) === -1) {
-            checkedCategory.push(e)
-        } else {
-            console.log(checkedCategory.indexOf(e))
-            checkedCategory.splice(checkedCategory.indexOf(e), 1)
-        }
+        setCheckedCategory(e)
         console.log("카테고리 : " + checkedCategory)
     }
+
+    // 디폴트 이미지
+    const showImg = (e) => {
+        if (e === "미용") return defaultImg.미용
+        if (e === "문예회관" || e === "박물관" || e === "미술관") return defaultImg.박물관문예회관
+        if (e === "동물병원") return defaultImg.병원
+        if (e === "동물약국") return defaultImg.약국
+        if (e === "식당") return defaultImg.식당
+        if (e === "여행지") return defaultImg.여행지
+        if (e === "반려동물용품") return defaultImg.애견용품
+        if (e === "위탁관리") return defaultImg.유치원
+        if (e === "카페") return defaultImg.카페
+        if (e === "펜션" || e === "호텔") return defaultImg.호텔펜션
+    }
+
+    //별점 표시
+    const starRankAVG = (e) => {
+        let starts = []
+        let starRank = []
+        let starRankAVGArr = Math.round(e)
+        console.log(starRankAVGArr)
+        for (let i = 0; i < starRankAVGArr; i++) {
+            starts.push("#F2D64B")
+        }
+        if (starts.length !== 5) {
+            for (let i = 0; i < 5 - starRankAVGArr; i++) {
+                starts.unshift("#F2F2F2")
+            }
+        }
+        for (let i = 0; i < starts.length; i++) {
+            starRank.push(<FaStar style={{ color: `${starts[i]}` }} />)
+        }
+        return starRank
+    }
+
     return (
         <Container style={{
             color: switchColor,
             backgroundColor: switchBgColor
         }}>
-
             <Bumper />
             <ContantTitle>장소 추천</ContantTitle>
             {
@@ -302,24 +381,28 @@ function PlaceRecommend() {
                                                 ))}
                                             </ListGroup>
                                             :
+                                            <SiGun>
+                                                <GoBack style={{
+                                                    color: switchColor, backgroundColor: switchBgColor
+                                                }} onClick={() => { goBack() }} >시, 도로 돌아가기</GoBack>
+                                                <ListGroup className="areaListGroup" variant="flush">
 
-                                            <ListGroup className="areaListGroup" variant="flush">
-                                                <div onClick={() => { goBack() }} >시, 도로 돌아가기</div>
-                                                {areaList.map((e, i) => (
-                                                    <ListGroup.Item key={i}
-                                                        style={{
-                                                            color: switchColor,
-                                                            backgroundColor: switchBgColor
-                                                        }}
-                                                    >
-                                                        <CheckBox
-                                                            value={e}
-                                                            onChange={(e) => clickedArea(e.target.value)}
-                                                            id={i} type="checkbox"></CheckBox>
-                                                        <CheckBoxLabel>{e}</CheckBoxLabel>
-                                                    </ListGroup.Item>
-                                                ))}
-                                            </ListGroup>
+                                                    {areaList.map((e, i) => (
+                                                        <ListGroup.Item key={i}
+                                                            style={{
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor
+                                                            }}
+                                                        >
+                                                            <CheckBox
+                                                                value={e}
+                                                                onChange={(e) => clickedArea(e.target.value)}
+                                                                id={i} type="checkbox"></CheckBox>
+                                                            <CheckBoxLabel>{e}</CheckBoxLabel>
+                                                        </ListGroup.Item>
+                                                    ))}
+                                                </ListGroup>
+                                            </SiGun>
                                     }
                                     <ListGroup className="categoryListGroup" variant="flush">
                                         {categoryList.map((e, i) => (
@@ -386,7 +469,6 @@ function PlaceRecommend() {
 
                                                 {/* 돌아가기 여기! */}
                                                 <div onClick={() => { goBack() }} >시, 도로 돌아가기</div>
-
                                                 {areaList.map((e, i) => (
                                                     <ListGroup.Item key={i}
                                                         style={{
@@ -428,28 +510,24 @@ function PlaceRecommend() {
                         </Map>
                     </TopContants>
             }
-            < PlaceItems >
+            < PlaceItems style={{
+                gridTemplateColumns: windowSize > 1790 ?
+                    "repeat(auto-fit,260px)" : "repeat(auto-fit,350px)"
+            }}  >
                 {
-                    // 화면 크기에 따라 가져오는 배열이 다름
-                    windowSize > 979
-                        ?
-                        wideHotPlaceArr.map((e, i) => (
-                            <PlaceItem key={i}>
-                                <PlaceItemTitle>{e[0]}</PlaceItemTitle>
-                                <PlaceItemImg style={{ backgroundImage: `url(${e[3]})` }} />
-                                <PlaceItemAddress><GoDotFill />{e[1]}</PlaceItemAddress>
-                                <PlaceItemInfo><GoDotFill />{e[2]}</PlaceItemInfo>
-                            </PlaceItem>
-                        ))
-                        :
-                        wideHotPlaceArr.slice(0, 4).map((e, i) => (
-                            <PlaceItem key={i}>
-                                <PlaceItemTitle>{e[0]}</PlaceItemTitle>
-                                <PlaceItemImg style={{ backgroundImage: `url(${e[3]})` }} />
-                                <PlaceItemAddress><GoDotFill />{e[1]}</PlaceItemAddress>
-                                <PlaceItemInfo><GoDotFill />{e[2]}</PlaceItemInfo>
-                            </PlaceItem>
-                        ))
+                    address.map((e, i) => (
+                        <PlaceItem key={i}
+                            style={{
+                                color: switchColor,
+                                backgroundColor: switchBgColor
+                            }}
+                            href={`/recommend-place-detail/${e.animalNum}${url}`}>
+                            <PlaceItemTitle>{e.facilityName}</PlaceItemTitle>
+                            <PlaceItemImg style={{ backgroundImage: e.imgPath === null ? `url(${showImg(e.subClassification)})` : `url(${showImg(e.imgPath)})` }} />
+                            <PlaceItemInfo><GoDotFill />평점 : {e.star === 0 ? "아직 평가가 없습니다." : starRankAVG(e.star)}</PlaceItemInfo>
+                            <PlaceItemAddress><GoDotFill />{e.roadAddress}</PlaceItemAddress>
+                        </PlaceItem>
+                    ))
                 }
             </PlaceItems >
         </Container>

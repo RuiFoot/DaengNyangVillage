@@ -376,15 +376,18 @@ function Comments() {
                                             >댓글 보기</Button>
                                             {
                                                 userInfo !== null &&
+                                                <Button style={{
+                                                    margin: "0 5px",
+                                                    color: switchColor,
+                                                    backgroundColor: switchBgColor
+                                                }} className="recommendBtn"
+                                                    onClick={() => addReview(e.boardReviewNum)}
+                                                >댓글 달기</Button>
+                                            }
+                                            {
+                                                userInfo !== null &&
                                                     userInfo.memberNo === e.memberNo ?
                                                     <>
-                                                        <Button style={{
-                                                            margin: "0 5px",
-                                                            color: switchColor,
-                                                            backgroundColor: switchBgColor
-                                                        }} className="recommendBtn"
-                                                            onClick={() => addReview(e.boardReviewNum)}
-                                                        >댓글 달기</Button>
                                                         <Button style={{
                                                             margin: "0 5px",
                                                             color: switchColor,

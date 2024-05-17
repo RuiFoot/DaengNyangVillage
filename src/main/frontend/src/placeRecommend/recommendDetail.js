@@ -28,9 +28,9 @@ margin: 10px;
 `
 const Items = styled.div`
 width: 100%;
- display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  grid-auto-rows: minmax(100px, auto);
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+grid-auto-rows: minmax(100px, auto);
 `
 const LeftItems = styled.div`
 display: flex;
@@ -145,10 +145,7 @@ function RecommendDetail() {
     //스프링연동을 위한 url
     const baseUrl = "http://localhost:8080";
     const params = useParams();
-    console.log(params)
     const userInfo = JSON.parse(sessionStorage.getItem("logined"))
-    // 현재 url에 맞는 글 가져오기 (현재 url에 id전송으로 대체)
-    const test = hotPlaceArr.filter((e) => e[4] === Number(params.itemId))
 
     // 윈도우 가로 사이즈에 따른 변화 적용
     const [windowSize, setWindowSiz] = useState(window.innerWidth);
@@ -182,14 +179,17 @@ function RecommendDetail() {
         roadAddress: "",
         numberAddress: ""
     })
-
     useEffect(() => {
         axios.get(`/api/animal/detail/${params.itemId}`)
             .then((res) => {
                 setBoard(res.data);
-                console.log(res.data)
+            })
+        axios.get(`${baseUrl}/animal/review?animalNum=${params.itemId}`)
+            .then((res) => {
+                setGetReview(res.data);
             })
     }, []);
+
     // 디폴트 이미지
     const showImg = (e) => {
         if (e === "미용") return defaultImg.미용
@@ -204,7 +204,6 @@ function RecommendDetail() {
         if (e === "펜션" || e === "호텔") return defaultImg.호텔펜션
     }
     //댓글 입력
-    const [userReviews, setUserReviews] = useState([])
     const [review, setReview] = useState("")
     const [star, setStar] = useState(1)
     const [reviewId, setReviewId] = useState()
@@ -222,14 +221,14 @@ function RecommendDetail() {
             axios.post(`${baseUrl}/animal/review`, body
             ).then((response) => {
                 setReview("")
-                console.log("됨?");
-                console.log(response);	//오류발생시 실행
-                // console.log(response.data);	//정상 통신 후 응답된 메시지 출력
-                // axios.get(`${baseUrl}/animal/review?animalNum=${params.itemId}`)
-                //     .then((res) => {
-                //         setGetReview(res.data);
-                //         // console.log(res.data)
-                //     })
+                axios.get(`/api/animal/detail/${params.itemId}`)
+                    .then((res) => {
+                        setBoard(res.data);
+                    })
+                axios.get(`${baseUrl}/animal/review?animalNum=${params.itemId}`)
+                    .then((res) => {
+                        setGetReview(res.data);
+                    })
             }).catch((error) => {
                 console.log(error);	//오류발생시 실행
             })
@@ -238,54 +237,64 @@ function RecommendDetail() {
             taget.scrollIntoView({ behavior: "smooth", block: "center" })
             setReview("")
             setStar(1)
-            console.log(userReviews)
-            console.log(test)
         } else {
             alert("내용을 입력해주세요.")
         }
     }
 
-    //삭제 백엔드 연결시 수정
+    //삭제
     const deleteReview = (e) => {
-        setUserReviews(userReviews.filter((item) => item.reviewId !== e))
-        test[0][5].splice(test[0][5].findIndex((e) => e[2] === e), 1) // 별점 입력 삭제
-        console.log(userReviews)
-        console.log(test)
+        axios.delete(`/api/animal/review?animalReviewNum=${e}`)
+            .then((res) => {
+                setGetReview(res.data);
+            })
     }
 
     //수정
     const [edit, setEdit] = useState(false)
-    const [editIndex, setEditIndex] = useState()
     const scrollRef = useRef([]);
     //인풋 창으로 이동
     const handleScrollView = () => {
         scrollRef.input.scrollIntoView({ behavior: "smooth", block: "center" });
     };
-    const editReview = (e, i) => {
+    const editReview = (e) => {
         handleScrollView()
         setEdit(true)
-        setReviewId(e.reviewId)
-        setStar(e.rank)
+        setReviewId(e.animalReviewNum)
+        setStar(e.star)
         setReview(e.review)
-        setEditIndex(i)
     }
     const uploadEditReview = () => {
         if (review.length > 0) {
-            userReviews[editIndex].review = review
-            userReviews[editIndex].rank = star
-            if (star !== undefined) {
-                test[0][5][test[0][5].findIndex((e) => e[0] === params.nickName)][1] = star // 별점 수정
-            } else {
-                test[0][5].push([userInfo.nickName, star])//별점을 줬다는 데이터
+            let body = {
+                animalReviewNum: reviewId,
+                animalNum: params.itemId,
+                nickname: userInfo.nickName,
+                memberNo: userInfo.memberNo,
+                profileImg: userInfo.profileImg,
+                review: review,
+                star: star,
+                createDate: ""
             }
+            axios.patch(`${baseUrl}/animal/review`, body
+            ).then((response) => {
+                axios.get(`/api/animal/detail/${params.itemId}`)
+                    .then((res) => {
+                        setBoard(res.data);
+                    })
+                axios.get(`${baseUrl}/animal/review?animalNum=${params.itemId}`)
+                    .then((res) => {
+                        setGetReview(res.data);
+                    })
+            }).catch((error) => {
+                console.log(error);	//오류발생시 실행
+            })
             const taget = document.getElementById(reviewId); //스크롤 이동
             taget.scrollIntoView({ behavior: "smooth", block: "center" })
             setReviewId()
             setReview("")
-            setEditIndex()
             setStar(1)
             setEdit(false)
-            console.log(userReviews)
         } else {
             alert("내용을 입력해주세요.")
         }
@@ -336,6 +345,7 @@ function RecommendDetail() {
             </StarInput>
         )
     }
+
     const wrietReview = () => {
         return (
             <>
@@ -358,20 +368,25 @@ function RecommendDetail() {
                     }} className="recommendBtn" id="button-addon2"
                         onClick={reviewId !== undefined ? uploadEditReview : uploadReview}
                     >
-                        댓글
+                        평점 등록
                     </Button>
                 </ButtonBox>
             </>
         )
     }
-    const goMyReview = () => {
-        const taget = document.getElementById(JSON.parse(sessionStorage.getItem("logined")).memberNo); //스크롤 이동
-        console.log(taget)
+    //스크롤 이동
+    const goMyReview = (e) => {
+        const taget = document.getElementById(e);
         taget.scrollIntoView({ behavior: "smooth", block: "center" })
     }
-    //중복평가 방지
+
+    // 중복평가 방지
     const preventDuplication = () => {
-        if (test[0][5].length === 0) {
+        let checkLength
+        if (getReview.length > 0) {
+            checkLength = getReview.filter((e) => e.nickname === userInfo.nickName && e.review !== null)
+        }
+        if (checkLength < 1 || checkLength === undefined) {
             return (
                 <>
                     {dropdown()}
@@ -379,66 +394,56 @@ function RecommendDetail() {
                 </>
             )
         } else {
-            for (let i = 0; i < test[0][5].length; i++) {
-                if (test[0][5][i][0] === params.nickName) {
-                    // console.log(test[0][5])
-                    return (
-                        <>
-                            <div>이미 리뷰를 작성하셨습니다.</div>
-                            <Button className="recommendBtn" style={{
-                                margin: "10px 0 10px 0", color: switchColor,
-                                backgroundColor: switchBgColor
-                            }}
-                                onClick={goMyReview}
-                            >
-                                내 리뷰 보러가기
-                            </Button>
-                        </>
-                    )
-                } else {
-                    return (
-                        <>
-                            {dropdown()}
-                            {wrietReview()}
-                        </>
-                    )
-                }
-            }
+            return (
+                <>
+                    <div>이미 평점을 작성하셨습니다.</div>
+                    <Button className="recommendBtn" style={{
+                        margin: "10px 0 10px 0", color: switchColor,
+                        backgroundColor: switchBgColor
+                    }}
+                        onClick={() => goMyReview(checkLength[0].animalReviewNum)}
+                    >
+                        내 평점 보러가기
+                    </Button>
+                </>
+            )
         }
     }
 
-    //별점 평균
+    //별점 표시
     const starRankAVG = () => {
         let starts = []
-        let starRankAVGArr = []
-        let starRankSum = 0
-        for (let i = 0; i < userReviews.length; i++) {
-            if (userReviews[i].rank !== undefined) {
-                starRankSum += userReviews[i].rank
-            }
-        }
-        let starRankAVG = Math.round(starRankSum / userReviews.filter((e) => e.rank !== undefined).length)
-        for (let i = 0; i < starRankAVG; i++) {
+        let starRank = []
+        let starRankAVGArr = Math.round(board.star)
+        for (let i = 0; i < starRankAVGArr; i++) {
             starts.push("#F2D64B")
         }
         if (starts.length !== 5) {
-            for (let i = 0; i < 5 - starRankAVG; i++) {
+            for (let i = 0; i < 5 - starRankAVGArr; i++) {
                 starts.unshift("#F2F2F2")
             }
         }
         for (let i = 0; i < starts.length; i++) {
-            starRankAVGArr.push(<FaStar style={{ color: `${starts[i]}` }} />)
+            starRank.push(<FaStar style={{ color: `${starts[i]}` }} />)
         }
-        return starRankAVGArr
+        return starRank
     }
 
     //찜
-    const [heart, setHeart] = useState(false)
+    const [checkHeart, setCheckHeart] = useState(false)
     const clickHeart = () => {
-        setHeart(!heart)
-        console.log(params)
+        setCheckHeart(!checkHeart)
+        let body = {
+            animalNum: params.itemId,
+            memberNo: userInfo.memberNo
+        }
+        axios.put(`/api/animal/favorite`, body
+        ).then((response) => {
+            console.log(response.data)
+        }).catch((error) => {
+            console.log(error);	//오류발생시 실행
+        })
     }
-
     return (
         <>
             <Bumper />
@@ -451,7 +456,7 @@ function RecommendDetail() {
                     <LeftItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 10px 0 6vw"}` }}>
                         <Title>
                             {board.facilityName}
-                            <FaHeart style={{ cursor: "pointer", margin: "10px", color: `${heart ? "red" : "#F2F2F2"}` }} onClick={clickHeart} />
+                            <FaHeart style={{ cursor: "pointer", margin: "10px", color: `${checkHeart ? "red" : "#F2F2F2"}` }} onClick={clickHeart} />
                         </Title>
                         <Img style={{ backgroundImage: board.imgPath === null ? `url(${showImg(board.subClassification)})` : `url(${showImg(board.imgPath)})` }} />
                     </LeftItems>
@@ -469,7 +474,7 @@ function RecommendDetail() {
                     </RightItems>
                 </Items>
                 <ReviewsTitleBox>
-                    <ReviewsTitle>Reviews {userReviews.length}</ReviewsTitle>
+                    <ReviewsTitle>Reviews {getReview.length}</ReviewsTitle>
                 </ReviewsTitleBox>
                 <Comments >
                     { //중복평가 방지
@@ -489,20 +494,21 @@ function RecommendDetail() {
                             : null
                     }
                     { //댓글 보여주기
-                        userReviews.map((e, i) => (
+                        getReview.length > 0 &&
+                        getReview.map((e, i) => (
                             <>
                                 <CommentsItems key={i}>
                                     <CommentsLeftBox>
-                                        <CommentsImg id={e.memberNo} style={{ backgroundImage: `url(${e.profileImg})` }} />
+                                        <CommentsImg id={e.animalReviewNum} style={{ backgroundImage: `url(${e.profileImg})` }} />
                                         <CommentsNickName>{e.nickname}</CommentsNickName>
                                     </CommentsLeftBox>
-                                    <CommentsRightBox id={e.reviewId}>
+                                    <CommentsRightBox id={e.animalReviewNum}>
                                         <CommentsRank>
-                                            {starRank(e.rank)}
+                                            {starRank(e.star)}
                                         </CommentsRank>
                                         <CommentsText>{e.review}</CommentsText>
                                         <Date>
-                                            <CommentsDate>{e.createDate}</CommentsDate>
+                                            <CommentsDate>{e.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
                                         </Date>
                                         {
                                             userInfo.memberNo === e.memberNo ?
@@ -512,13 +518,13 @@ function RecommendDetail() {
                                                         color: switchColor,
                                                         backgroundColor: switchBgColor
                                                     }} className="recommendBtn"
-                                                        onClick={() => editReview(e, i)}
+                                                        onClick={() => editReview(e)}
                                                     >수정</Button>
                                                     <Button style={{
                                                         color: switchColor,
                                                         backgroundColor: switchBgColor
                                                     }} className="recommendBtn"
-                                                        onClick={() => deleteReview(e.reviewId)}
+                                                        onClick={() => deleteReview(e.animalReviewNum)}
                                                     >삭제</Button>
 
                                                 </EditDeleteBox>
