@@ -21,15 +21,14 @@ public class ChatbotController {
         this.chatbotService = chatbotService;
     }
 
-
-//    @GetMapping("")
-//    public String chatbot(@RequestParam("message")String message){
-//        String result = chatbotService.sendMessage(message);
-//        return result;
-//    }
+    // @GetMapping("")
+    // public String chatbot(@RequestParam("message")String message){
+    // String result = chatbotService.sendMessage(message);
+    // return result;
+    // }
 
     @PostMapping("")
-    public Map<String, String> chatbot(@RequestBody ChatbotVO chatbotVO){
+    public Map<String, String> chatbot(@RequestBody ChatbotVO chatbotVO) {
         String result = chatbotService.sendMessage(chatbotVO.getMessage());
         System.out.println(result);
 

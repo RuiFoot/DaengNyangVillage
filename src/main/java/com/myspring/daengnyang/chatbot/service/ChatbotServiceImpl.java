@@ -1,11 +1,9 @@
 package com.myspring.daengnyang.chatbot.service;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
-
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -33,7 +31,6 @@ public class ChatbotServiceImpl implements ChatbotService {
         String secretKey = "eVRNWHV0V3JnYURjTHN4UE5aRE5jWk1BaHBPblNXQnM=";
         String chatbotMessage = "";
         String[] resultMessage;
-
 
         try {
             URL url = new URL(apiURL);
@@ -72,20 +69,19 @@ public class ChatbotServiceImpl implements ChatbotService {
                 while ((decodedString = in.readLine()) != null) {
                     chatbotMessage = decodedString;
                 }
-                //chatbotMessage = decodedString;
+                // chatbotMessage = decodedString;
                 in.close();
                 // 응답 메세지 출력
                 System.out.println("chatbotMessage : " + chatbotMessage);
-            } else {  // Error occurred
+            } else { // Error occurred
                 chatbotMessage = con.getResponseMessage();
             }
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
         resultMessage = chatbotMessage.split("details");
         String result = resultMessage[1];
-        chatbotMessage = result.substring(3, result.length()-5);
+        chatbotMessage = result.substring(3, result.length() - 5);
         return chatbotMessage;
     }
 
@@ -105,7 +101,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 
             return encodeBase64String;
 
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
 
@@ -123,11 +119,13 @@ public class ChatbotServiceImpl implements ChatbotService {
 
             long timestamp = new Date().getTime();
 
-            System.out.println("##"+timestamp);
+            System.out.println("##" + timestamp);
 
             obj.put("version", "v1");
             obj.put("userId", "U47b00b58c90f8e47428af8b7bddc1231heo2");
-//=> userId is a unique code for each chat user, not a fixed value, recommend use UUID. use different id for each user could help you to split chat history for users.
+            // => userId is a unique code for each chat user, not a fixed value, recommend
+            // use UUID. use different id for each user could help you to split chat history
+            // for users.
 
             obj.put("timestamp", timestamp);
 
@@ -137,18 +135,18 @@ public class ChatbotServiceImpl implements ChatbotService {
             data_obj.put("details", voiceMessage);
 
             JSONObject content_obj = new JSONObject();
-            content_obj.put("data",data_obj);
-            content_obj.put("type","text");
+            content_obj.put("data", data_obj);
+            content_obj.put("type", "text");
             bubbles_obj.add(content_obj);
 
-            obj.put("content",bubbles_obj);
+            obj.put("content", bubbles_obj);
             obj.put("event", "send");
 
             requestBody = obj.toString();
 
             System.out.println("requestBody : " + requestBody);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("## Exception : " + e);
         }
 

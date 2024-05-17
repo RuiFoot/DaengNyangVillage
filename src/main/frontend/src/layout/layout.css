@@ -168,15 +168,16 @@
 
 .questionBtn {
     margin: 5px;
+    color: black;
     border-color: #F2884B;
-    background-color: #F2884B;
+    background-color: white;
 
 }
 
 .questionBtn:hover {
-    color: #F2884B;
+    color: white;
     border-color: #F2884B;
-    background-color: white;
+    background-color: #F2884B;
 }
 
 .chatBotBtn {
