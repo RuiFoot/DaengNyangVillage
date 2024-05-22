@@ -41,6 +41,13 @@
             WHERE "memberNo" = #{memberNo}
         ]]>
     </select>
+    <select id="getMemberInfoL" resultMap="memberInfoResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "memberInfo"
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </select>
 
     <select id="getFavorite" parameterType="com.myspring.daengnyang.common.vo.Paging" resultType="com.myspring.daengnyang.animal.vo.AnimalLocationVO">
         <![CDATA[
