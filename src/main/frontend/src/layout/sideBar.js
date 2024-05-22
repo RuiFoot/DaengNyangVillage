@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
+import axios from "axios"
 
 const SideContainer = styled.div`
 `
@@ -75,6 +76,8 @@ function SideBar() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    // 스프링부트 연동 주소
+    const baseUrl = "http://localhost:8080";
     // 챗봇 온오프 버튼 위치
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -133,6 +136,15 @@ function SideBar() {
     const sendMessage = () => {
         userChatArr.push(["user", userChat])
         console.log(userChatArr)
+        let body = {
+            message: userChat
+        }
+        axios.post(`${baseUrl}/chatbot`, body
+        ).then((response) => {
+            console.log(response.data);    //오류발생시 실행
+        }).catch((error) => {
+            console.log(error);    //오류발생시 실행
+        })
         setUserChat("")
     }
     const sendAnswer = () => {
