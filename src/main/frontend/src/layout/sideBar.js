@@ -6,7 +6,9 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import "./layout.css"
 import { IoChatbubblesOutline } from "react-icons/io5";
 import styled from "styled-components";
-import axios from "axios";
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../components/atoms';
+import themes from "../components/theme";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
@@ -65,6 +67,12 @@ font-size: 16px;
 `
 
 function SideBar() {
+
+    //다크모드
+    const isDark = useRecoilValue(isDarkAtom);
+    const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
+    const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+
     // 스프링부트 연동 주소
     const baseUrl = "http://localhost:8080";
     // 챗봇 온오프 버튼 위치
@@ -113,16 +121,20 @@ function SideBar() {
     const [valueX, setValueX] = useState(0)
     // 메시지 전송
     const sendMessage = () => {
+
+        userChatArr.push(["user", userChat])
+        console.log(userChatArr)
+
         let body = {
             message: userChat
         }
         axios.post(`${baseUrl}/chatbot`, body
         ).then((response) => {
-            setValueX(prev => prev + 1);
-            userChatArr.push(["user", userChat])
-            userChatArr.push(["manager", JSON.stringify(response.data.result)])
+
+            console.log(response.data);    //오류발생시 실행
         }).catch((error) => {
-            console.log(error);	//오류발생시 실행
+            console.log(error);    //오류발생시 실행
+
         })
         setUserChat("")
     }

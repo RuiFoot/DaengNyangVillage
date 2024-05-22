@@ -64,7 +64,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(
-                                con.getInputStream()));
+                                con.getInputStream(), "UTF-8"));
                 String decodedString;
                 while ((decodedString = in.readLine()) != null) {
                     chatbotMessage = decodedString;

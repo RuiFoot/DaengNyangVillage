@@ -15,17 +15,21 @@
                     SELECT *
                     FROM "Board"
         ]]>
+                    <!-- category에 해당하는 게시글 필터링  -->
                     <where>
                         <if test="data != null and data != ''">
                             AND "category" like #{data}
                         </if>
                     </where>
+                    <!-- pageable.sort 파라미터를 기반으로 동적으로 정렬 조건 추가 -->
                     <if test="pageable.sort != null and !pageable.sort.isEmpty()">
                         ORDER BY
                         <foreach collection="pageable.sort" item="order" separator=",">
                             "${order.property}" ${order.direction}
                         </foreach>
                     </if>
+        <!-- pageable.offest : 페이지의 시작 인덱스
+             pageable.pageSize : 한 페이지에 표시할 최대 행 수 -->
             <![CDATA[
                 ) A
                 WHERE ROWNUM <= #{pageable.offset} + #{pageable.pageSize}
@@ -34,6 +38,7 @@
             ]]>
     </select>
 
+    <!-- 목록 카운트 -->
     <select id="boardListCnt" parameterType="String" resultType="Integer">
         <![CDATA[
             SELECT count(*) AS count
