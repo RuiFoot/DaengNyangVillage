@@ -168,7 +168,7 @@ public class OauthServiceImpl implements OauthService {
                     userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber(),
                     userInfo.getInputZonecode());
             log.info("카카오 계정으로 회원가입 완료");
-            return id;
+            return memberNo;
         }
     }
 
