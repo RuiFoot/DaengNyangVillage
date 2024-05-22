@@ -52,8 +52,7 @@ public class OauthServiceImpl implements OauthService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=db0c282555cc32e78ecbce031761fc83"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:8080/member/oauth/kak" +
-                    "ao"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&redirect_uri=http://localhost:3000/login/oauth2/code/kakao"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=").append(code);
             System.out.println(sb);
             bw.write(sb.toString());
