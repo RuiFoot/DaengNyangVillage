@@ -9,73 +9,70 @@ import styled from "styled-components";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
-import axios from "axios"
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const SideContainer = styled.div`
-`
-const FrequentQ = styled.div`
-margin-bottom: 10px;
-padding: 10px;
-border: 1px solid black;
-border-radius: 10px;
-border-color: #F2884B;
-`
-const FrequentHeader = styled.div`
-padding-bottom: 10px;
-margin-bottom: 10px;
-font-weight: 700;
-border-bottom: 1px solid #E7E1E8;
-`
-const FrequentBtns = styled.div`
-display: ruby;
 
 `
-const FrequentFooter = styled.div`
-margin-top: 10px;
-padding: 10px;
-border-top: 1px solid #E7E1E8;
+const FrequentQ = styled.div`
+width: 100%;
+margin-bottom: 10px;
+padding-bottom: 10px;
+border-bottom: 1px solid #F2884B;
 `
 const ChatBox = styled.div`
+margin-bottom: 20px;
 display: flex;
 flex-direction: column;
 `
-const ChatBoxManager = styled.div`
-display: flex;
-flex-direction: column;
-`
+
 const UserChat = styled.div`
+margin-bottom: 10px;
 width: 367px;
 display: flex;
 justify-content: end;
 & p {
+background-color: #FFE452;
 padding: 5px;
 margin: 5px 0;
-border: 1px solid #F2884B;
 border-radius: 5px 5px 0 5px;
 width: fit-content;
+box-shadow: 1px 1px 1px 1px #666
 }
 `
+const UserChatItem = styled.div`
+`
 const ManagerChat = styled.div`
+margin-bottom: 10px;
 width: 367px;
 display: flex;
 justify-content: start;
 flex-direction: column;
 & p {
+background-color: white;
 padding: 5px;
 margin: 5px 0;
-border: 1px solid #F288CD;
 border-radius: 5px 5px 5px 0;
 width: fit-content;
+box-shadow: 1px 1px 1px 1px #666
 }
 `
 const ManagerName = styled.div`
-font-size: 14px;
+font-size: 16px;
 `
+const UserName = styled.div`
+text-align: end;
+font-size: 16px;
+`
+
 function SideBar() {
+
     //다크모드
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+
     // 스프링부트 연동 주소
     const baseUrl = "http://localhost:8080";
     // 챗봇 온오프 버튼 위치
@@ -95,7 +92,14 @@ function SideBar() {
             setOn(true)
         };
     }, []);
-
+    const [nickName, setNickName] = useState("")
+    const [login, setLogin] = useState(false)
+    useEffect(() => {
+        if (window.sessionStorage.key(0) === "logined") {
+            setLogin(true)
+            setNickName(JSON.parse(sessionStorage.getItem("logined")).nickName)
+        }
+    }, []);
     //챗봇 내부
     //대답 자료
     const answerList = {
@@ -105,52 +109,34 @@ function SideBar() {
         회원정보변경: "로그인후 마이페이지를 이용해주세요."
     }
     const [userChat, setUserChat] = useState()
-    const [managerChat, setManagerChat] = useState()
     const [userChatArr, setUserChatArr] = useState([])
-    const [managerChatArr, setManagerChatArr] = useState([])
-    const [botAnswer, setBotAnswer] = useState()
     const [isChatOn, setIsChatOn] = useState(false)
     const userChatInput = (e) => {
         setUserChat(e.target.value)
     }
-    const managerChatInput = (e) => {
-        setManagerChat(e.target.value)
-    }
-
-    const idPasswd = () => {
-        setBotAnswer(answerList.로그인)
-    }
-    const social = () => {
-        setBotAnswer(answerList.소셜로그인비밀번호)
-    }
-    const placeAdd = () => {
-        setBotAnswer(answerList.추천장소추가)
-    }
-    const changeInfo = () => {
-        setBotAnswer(answerList.회원정보변경)
-    }
     const chatOn = () => {
         setIsChatOn(true)
     }
-
+    // 챗봇 즉시 반응시키기 위해 사용
+    const [valueX, setValueX] = useState(0)
+    // 메시지 전송
     const sendMessage = () => {
+
         userChatArr.push(["user", userChat])
         console.log(userChatArr)
+
         let body = {
             message: userChat
         }
         axios.post(`${baseUrl}/chatbot`, body
         ).then((response) => {
+
             console.log(response.data);    //오류발생시 실행
         }).catch((error) => {
             console.log(error);    //오류발생시 실행
+
         })
         setUserChat("")
-    }
-    const sendAnswer = () => {
-        userChatArr.push(["manager", managerChat])
-        console.log(managerChatArr)
-        setManagerChat("")
     }
 
     return (
@@ -169,27 +155,25 @@ function SideBar() {
                     }} className="chatBotMobile" onClick={handleShow} />
             }
             <Offcanvas style={{
-                color: switchColor,
-                backgroundColor: switchBgColor
+                backgroundColor: "#D6ECFF"
             }} show={show} onHide={handleClose} placement='end'>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>댕냥 챗봇</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body className="chatBotBody">
                     <FrequentQ>
-                        <FrequentHeader>
-                            자주 묻는 질문
-                        </FrequentHeader>
-                        <FrequentBtns>
-                            <Button className="questionBtn" onClick={idPasswd}>아이디/비밀번호</Button>
-                            <Button className="questionBtn" onClick={social}>소셜로그인</Button>
-                            <Button className="questionBtn" onClick={placeAdd}>추천장소 추가</Button>
-                            <Button className="questionBtn" onClick={changeInfo}>회원 정보 변경</Button>
-                            <Button className="questionBtn" onClick={chatOn}>1:1 상담</Button>
-                        </FrequentBtns>
-                        <FrequentFooter>
-                            {botAnswer}
-                        </FrequentFooter>
+                        {login ?
+                            <Button className="questionBtn" onClick={chatOn}>챗봇에게 질문하기</Button>
+                            :
+                            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">로그인 해주세요.</Tooltip>}>
+                                <span className="d-inline-block">
+                                    <Button disabled style={{ pointerEvents: 'none' }}>
+                                        챗봇에게 질문하기
+                                    </Button>
+                                </span>
+                            </OverlayTrigger>
+                        }
+
                     </FrequentQ>
                     {
                         isChatOn ?
@@ -199,7 +183,10 @@ function SideBar() {
                                         userChatArr.map((e, i) => (
                                             e[0] === "user" ?
                                                 <UserChat key={i}>
-                                                    <p>{e[1]}</p>
+                                                    <UserChatItem>
+                                                        <UserName>{nickName}</UserName>
+                                                        <p>{e[1]}</p>
+                                                    </UserChatItem>
                                                 </UserChat>
                                                 :
                                                 <ManagerChat key={i}>
@@ -224,28 +211,13 @@ function SideBar() {
                                         전송
                                     </Button>
                                 </InputGroup>
-                                <InputGroup className="mb-3">
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="답변을 입력해주세요"
-                                        aria-describedby="basic-addon2"
-                                        value={managerChat}
-                                        name="managerChat"
-                                        onChange={managerChatInput}
-                                    />
-                                    <Button className="chatBotBtn" variant="outline-secondary" id="button-addon2"
-                                        onClick={sendAnswer}
-                                    >
-                                        매니저
-                                    </Button>
-                                </InputGroup>
                             </>
                             :
                             <InputGroup className="mb-3">
                                 <Form.Control
                                     disabled
                                     type="text"
-                                    placeholder="1:1 상담 버튼을 클릭해주세요"
+                                    placeholder="챗봇에게 질문하기를 클릭해주세요"
                                     aria-describedby="basic-addon2"
                                     value={userChat}
                                     name="userChat"

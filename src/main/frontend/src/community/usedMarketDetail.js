@@ -13,6 +13,7 @@ import { storage } from "../servers/firebase";
 import { deleteObject, ref } from "firebase/storage";
 import Comments from "./comments";
 import CommunityNav from "./communityNav";
+import Modal from 'react-bootstrap/Modal';
 
 const Container = styled.div`
 min-height: calc(100vh - 179px);
@@ -158,8 +159,35 @@ function UsedMarketDetail() {
         window.location.href = `/edit/${e}/${userInfo.nickName}`
     }
     //글 삭제
+    const [show, setShow] = useState(false);
+    const [taget, setTaget] = useState()
+    const handleClose = () => setShow(false);
+    const handleShow = (e) => {
+        setShow(true)
+        setTaget(e)
+    };
+    function DeleteModal() {
+        return (
+            <>
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>삭제 확인</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>정말 삭제 하시겠습니까?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            취소
+                        </Button>
+                        <Button variant="primary" onClick={deleteContentBtn}>
+                            삭제
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        );
+    }
     const deleteImgArr = []
-    const deleteContentBtn = (e) => {
+    const deleteContentBtn = () => {
         console.log(content)
         //내용안에서 이미지만 추출
         let count = content.field.split('http').length - 1;
@@ -177,14 +205,19 @@ function UsedMarketDetail() {
         for (let i = 0; i < deleteImgArr.length; i++) {
             deleteObject(ref(storage, deleteImgArr[i]));
         }
-        axios.delete(`/api/board/${e}`)
+        axios.delete(`/api/board/${taget}`)
             .then((res) => {
                 setContent(res.data);
+                setShow(false)
+                setTaget()
                 window.location.href = `/used-market/${userInfo.nickName}`
             })
     }
+
     return (
         <>
+            <DeleteModal show={show}
+                onHide={() => setShow(false)} />
             <CommunityNav />
             <Container style={{
                 color: switchColor,
@@ -217,7 +250,7 @@ function UsedMarketDetail() {
                                                     color: switchColor,
                                                     backgroundColor: switchBgColor
                                                 }} className="recommendBtn"
-                                                    onClick={() => deleteContentBtn(content.boardId)}
+                                                    onClick={() => handleShow(content.boardId)}
                                                 >삭제</Button>
                                             </ContentBtns>
                                             : null

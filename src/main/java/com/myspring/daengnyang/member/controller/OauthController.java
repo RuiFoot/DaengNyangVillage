@@ -42,7 +42,8 @@ public class OauthController {
         System.out.println(accessToken);
         String loginResult = oAuthService.getUserInfo(accessToken);
         log.info("로그인 정보 : " + loginResult);
-        long memberNo = oAuthService.kakaoLogin(loginResult);
+        int memberNo = oAuthService.kakaoLogin(loginResult);
+        log.info("memberNo : " + memberNo);
         if (memberNo > 0) {
             MemberInfoVO memberInfoVO = oAuthService.getMemberInfo(memberNo);
             HttpSession session = httpRequest.getSession();

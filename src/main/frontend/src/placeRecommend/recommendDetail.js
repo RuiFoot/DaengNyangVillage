@@ -511,7 +511,8 @@ function RecommendDetail() {
                                             <CommentsDate>{e.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
                                         </Date>
                                         {
-                                            userInfo.memberNo === e.memberNo ?
+                                            userInfo !== null &&
+                                                userInfo.memberNo === e.memberNo ?
                                                 <EditDeleteBox >
                                                     <Button style={{
                                                         margin: "0 5px",

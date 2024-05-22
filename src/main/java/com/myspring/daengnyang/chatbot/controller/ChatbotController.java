@@ -21,15 +21,16 @@ public class ChatbotController {
         this.chatbotService = chatbotService;
     }
 
+    // @GetMapping("")
+    // public String chatbot(@RequestParam("message")String message){
+    // String result = chatbotService.sendMessage(message);
+    // return result;
+    // }
 
-//    @GetMapping("")
-//    public String chatbot(@RequestParam("message")String message){
-//        String result = chatbotService.sendMessage(message);
-//        return result;
-//    }
 
     @RequestMapping(value = "", method = RequestMethod.POST ,produces = "application/JSON; charset=utf8")
     public Map<String, String> chatbot(@RequestBody ChatbotVO chatbotVO){
+
         String result = chatbotService.sendMessage(chatbotVO.getMessage());
         System.out.println(result);
 

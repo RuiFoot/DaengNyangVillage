@@ -464,26 +464,28 @@ function PlaceRecommend() {
                                                 ))}
                                             </ListGroup>
                                             :
+                                            <SiGun>
+                                                <GoBack style={{
+                                                    color: switchColor, backgroundColor: switchBgColor
+                                                }} onClick={() => { goBack() }} >시, 도로 돌아가기</GoBack>
+                                                <ListGroup className="areaListGroup" variant="flush">
 
-                                            <ListGroup className="areaListGroup" variant="flush">
-
-                                                {/* 돌아가기 여기! */}
-                                                <div onClick={() => { goBack() }} >시, 도로 돌아가기</div>
-                                                {areaList.map((e, i) => (
-                                                    <ListGroup.Item key={i}
-                                                        style={{
-                                                            color: switchColor,
-                                                            backgroundColor: switchBgColor
-                                                        }}
-                                                    >
-                                                        <CheckBox
-                                                            value={e}
-                                                            onChange={(e) => clickedArea(e.target.value)}
-                                                            id={i} type="checkbox"></CheckBox>
-                                                        <CheckBoxLabel>{e}</CheckBoxLabel>
-                                                    </ListGroup.Item>
-                                                ))}
-                                            </ListGroup>
+                                                    {areaList.map((e, i) => (
+                                                        <ListGroup.Item key={i}
+                                                            style={{
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor
+                                                            }}
+                                                        >
+                                                            <CheckBox
+                                                                value={e}
+                                                                onChange={(e) => clickedArea(e.target.value)}
+                                                                id={i} type="checkbox"></CheckBox>
+                                                            <CheckBoxLabel>{e}</CheckBoxLabel>
+                                                        </ListGroup.Item>
+                                                    ))}
+                                                </ListGroup>
+                                            </SiGun>
                                     }
                                     <ListGroup className="categoryListGroup" variant="flush">
                                         {categoryList.map((e, i) => (
