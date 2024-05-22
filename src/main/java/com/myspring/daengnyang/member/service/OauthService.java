@@ -8,7 +8,7 @@ public interface OauthService {
 
     String getUserInfo(String accessToken);
 
-    long kakaoLogin(String loginResult);
+    int kakaoLogin(String loginResult);
 
     String kakaoLogout(Long target_id);
 
@@ -34,5 +34,5 @@ public interface OauthService {
 
     MemberInfoVO NaverLogin(String loginResult);
 
-    MemberInfoVO getMemberInfo(Long memberNo);
+    MemberInfoVO getMemberInfo(int memberNo);
 }

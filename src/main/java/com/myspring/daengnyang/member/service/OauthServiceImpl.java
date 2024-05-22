@@ -129,7 +129,7 @@ public class OauthServiceImpl implements OauthService {
     }
 
     @Override
-    public long kakaoLogin(String loginResult) {
+    public int kakaoLogin(String loginResult) {
 
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(loginResult);
@@ -142,8 +142,9 @@ public class OauthServiceImpl implements OauthService {
         log.info("id : " + id + "/ nickname : " + nickname + "/ imgPath : " + imgPath);
 
         if (memberMapper.getDuplicationEmail(Long.toString(id)) != null) { // 중복 된 값이 있을 경우
-            log.info("이미 있는 계정 => 바로 로그인 진행");
-            return id;
+            int memberNo = memberMapper.getMemberNo(Long.toString(id));
+            log.info("이미 있는 계정 => 바로 로그인 진행 : " + memberNo);
+            return memberNo;
         } else { // 없을 경우 회원가입 필요
             log.info("없는 계정 => 회원가입 후 로그인 진행 진행");
             String password = "kakao";
@@ -489,10 +490,10 @@ public class OauthServiceImpl implements OauthService {
         }
     }
 
-    public MemberInfoVO getMemberInfo(Long memberNo) {
+    public MemberInfoVO getMemberInfo(int memberNo) {
         log.info("멤버 정보 불러 오기 서비스 실행 => memberNo : " + memberNo);
         MemberInfoVO memberInfoVO;
-        memberInfoVO = memberMapper.getMemberInfoL(memberNo);
+        memberInfoVO = memberMapper.getMemberInfo(memberNo);
         log.info("멤버 정보 : " + memberInfoVO);
         return memberInfoVO;
     }
