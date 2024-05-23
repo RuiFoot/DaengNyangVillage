@@ -140,4 +140,18 @@ public class MemberServiceImpl implements MemberService {
 
         memberMapper.updatePassword(memberVO.getMemberNo(), newPassword);
     }
+
+    @Override
+    public String findEmail(String phoneNumber) {
+        phoneNumber = phoneNumber.replace("\"", "");
+        Integer memberNo = memberMapper.getMemberNoByPN(phoneNumber);
+        return memberMapper.findEmail(memberNo);
+    }
+
+    @Override
+    public String findNickname(String email) {
+        email = email.replace("\"", "");
+        Integer memberNo = memberMapper.getMemberNo(email);
+        return memberMapper.findNickname(memberNo);
+    }
 }

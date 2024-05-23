@@ -34,6 +34,14 @@
         ]]>
     </select>
 
+    <select id="getMemberNoByPN" resultType="Integer">
+        <![CDATA[
+            SELECT "memberNo"
+            FROM "memberInfo"
+            WHERE "phoneNumber" = #{phoneNumber}
+        ]]>
+    </select>
+
     <select id="getMemberInfo" resultMap="memberInfoResultmap">
         <![CDATA[
             SELECT *
@@ -166,6 +174,22 @@
             WHERE "memberNo" = #{memberNo}
         ]]>
     </update>
+
+    <select id="findEmail" parameterType="int" resultType="String">
+        <![CDATA[
+            SELECT "email"
+            FROM "member"
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </select>
+
+    <select id="findNickname" parameterType="int" resultType="String">
+        <![CDATA[
+            SELECT "nickname"
+            FROM "memberInfo"
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </select>
 
 
 </mapper>

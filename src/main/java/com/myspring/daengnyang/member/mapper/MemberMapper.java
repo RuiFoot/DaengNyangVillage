@@ -22,6 +22,7 @@ public interface MemberMapper {
     MemberVO getMember(@Param("email") String email);
 
     int getMemberNo(@Param("email") String email);
+    Integer getMemberNoByPN(@Param("phoneNumber") String phoneNumber);
 
     MemberInfoVO getMemberInfo(@Param("memberNo") Integer memberNo);
 
@@ -45,4 +46,7 @@ public interface MemberMapper {
                        @Param("phoneNumber") String phoneNumber, @Param("inputZonecode") String inputZonecode);
 
     void updatePassword(@Param("memberNo") int memberNo, @Param("newPassword") String newPassword);
+
+    String findEmail(@Param("memberNo") int memnberNo);
+    String findNickname(@Param("memberNo") int memberNo);
 }

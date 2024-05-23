@@ -33,4 +33,7 @@ public interface MemberService {
     void updateProfile(MemberInfoVO memberInfoVO);
 
     void updatePassword(MemberVO memberVO);
+
+    String findEmail(String phoneNumber);
+    String findNickname(String email);
 }
