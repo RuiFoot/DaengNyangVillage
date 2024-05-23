@@ -164,18 +164,20 @@ public class MemberController {
     }
 
     @PostMapping("/findEmail")
-    public Map<String, String> findEmail(@RequestBody String phoneNumber) {
+    public Map<String, String> findEmail(@RequestBody Map<String, String> phoneNumberMap) {
         log.info("이메일 찾기 컨트롤러 실행");
 
+        String phoneNumber = phoneNumberMap.get("phoneNumber");
         Map<String, String> map = new HashMap<>();
         map.put("email", memberService.findEmail(phoneNumber));
         return map;
     }
 
     @PostMapping("/findNickname")
-    public Map<String, String> findNickname(@RequestBody String email) {
+    public Map<String, String> findNickname(@RequestBody Map<String, String> emailMap) {
         log.info("닉네임 찾기 컨트롤러 실행");
 
+        String email = emailMap.get("email");
         Map<String, String> map = new HashMap<>();
         map.put("nickname", memberService.findNickname(email));
         return map;
