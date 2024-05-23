@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -161,5 +162,25 @@ public class MemberController {
         log.info("비밀번호 변경 컨트롤러 실행 : " + memberVO.getPassword());
         memberService.updatePassword(memberVO);
     }
+
+    @PostMapping("/findEmail")
+    public Map<String, String> findEmail(@RequestBody String phoneNumber) {
+        log.info("이메일 찾기 컨트롤러 실행");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("email", memberService.findEmail(phoneNumber));
+        return map;
+    }
+
+    @PostMapping("/findNickname")
+    public Map<String, String> findNickname(@RequestBody String email) {
+        log.info("닉네임 찾기 컨트롤러 실행");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("nickname", memberService.findNickname(email));
+        return map;
+    }
+
+
 
 }
