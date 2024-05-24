@@ -179,8 +179,8 @@ function RecommendDetail() {
         roadAddress: "",
         numberAddress: ""
     })
-    const [heart, setHeart] = useState()
-     useEffect(() => {
+
+    useEffect(() => {
         axios.get(`/api/animal/detail/${params.itemId}`)
             .then((res) => {
                 setBoard(res.data);

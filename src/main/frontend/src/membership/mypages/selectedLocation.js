@@ -7,7 +7,6 @@ import { isDarkAtom, presentPage } from '../../components/atoms';
 import themes from "../../components/theme";
 import Pagination from "../../components/pagination";
 import defaultImg from "../../components/defaultImgs";
-import hotPlaceArr from "../../components/imgDate";
 import axios from "axios";
 import { FaStar } from "react-icons/fa6";
 
