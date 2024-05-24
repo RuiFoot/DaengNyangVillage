@@ -436,6 +436,11 @@ function PlaceRecommend() {
                                                         }}
                                                     >
                                                         <Button
+                                                            style={{
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor,
+                                                                borderColor: switchColor
+                                                            }}
                                                             value={e}
                                                             onClick={(e) => bigAreaClicked(e.target.value)}
                                                             id={i} type="button">{e}</Button>
@@ -457,6 +462,11 @@ function PlaceRecommend() {
                                                             }}
                                                         >
                                                             <Button
+                                                                style={{
+                                                                    color: switchColor,
+                                                                    backgroundColor: switchBgColor,
+                                                                    borderColor: switchColor
+                                                                }}
                                                                 value={e}
                                                                 name="cityOption"
                                                                 onClick={(e) => clickedArea(e.target)}
@@ -474,6 +484,11 @@ function PlaceRecommend() {
                                                 backgroundColor: switchBgColor
                                             }}>
                                                 <Button
+                                                    style={{
+                                                        color: switchColor,
+                                                        backgroundColor: switchBgColor,
+                                                        borderColor: switchColor
+                                                    }}
                                                     value={e}
                                                     name="categoryOption"
                                                     onClick={(e) => clickedCategory(e.target)}
