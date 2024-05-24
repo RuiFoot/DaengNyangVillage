@@ -85,14 +85,13 @@ function Edit() {
         let count = editContent.field.split('http').length - 1;
         let newStartIndex = 0
         let startIndex = 0
-        console.log(count)
         for (let i = 0; i < count; i++) {
             if (editContent.field.indexOf(`"></p>`) !== -1) {
                 startIndex = editContent.field.indexOf("http", newStartIndex);
                 newStartIndex = editContent.field.indexOf(`"></p>`, startIndex);
                 imgUrl.push(editContent.field.slice(startIndex, newStartIndex))
             }
-            console.log(imgUrl)
+            // console.log(imgUrl)
         }
     }, [editContent.field]);
 
@@ -119,9 +118,9 @@ function Edit() {
                         editor.insertEmbed(range.index, "image", url);
                         // URL 삽입 후 커서를 이미지 뒷 칸으로 이동
                         editor.setSelection(range.index + 1);
-                        console.log('url 확인', url);
+                        // console.log('url 확인', url);
                         imgUrl.push(url);
-                        console.log(imgUrl)
+                        // console.log(imgUrl)
                     });
                 });
             } catch (error) {
@@ -195,7 +194,7 @@ function Edit() {
     }
     //첫번째 이미지 찾기
     const findImg = (input) => {
-        console.log(input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1))
+        // console.log(input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1))
         return input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1)
     }
     const [newImgUrlArr, setNewImgUrlArr] = useState([])
@@ -205,17 +204,17 @@ function Edit() {
         let count = quillValue.split('http').length - 1;
         let newStartIndex = 0
         let startIndex = 0
-        console.log(count)
+        // console.log(count)
         for (let i = 0; i < count; i++) {
             if (quillValue.indexOf(`"></p>`) !== -1) {
                 startIndex = quillValue.indexOf("http", newStartIndex);
                 newStartIndex = quillValue.indexOf(`"></p>`, startIndex);
                 newImgUrlArr.push(quillValue.slice(startIndex, newStartIndex))
             }
-            console.log(newImgUrlArr)
+            // console.log(newImgUrlArr)
         }
         const deletImgs = imgUrl.filter(x => !newImgUrlArr.includes(x));
-        console.log(deletImgs)
+        // console.log(deletImgs)
         for (let i = 0; i < deletImgs.length; i++) {
             deleteObject(ref(storage, deletImgs[i]));
         }
@@ -235,10 +234,10 @@ function Edit() {
             boardId: params.boardId,
             boardName: values.boardName
         }
-        console.log(body)
+        // console.log(body)
         axios.patch(`${baseUrl}/board`, body
         ).then((response) => {
-            console.log(response.data);	//정상 통신 후 응답된 메시지 출력
+            // console.log(response.data);	//정상 통신 후 응답된 메시지 출력
             if (board === "자유 게시판") {
                 window.location.href = `/free-board/${userInfo.nickName}`
             } else if (board === "반려동물 자랑") {

@@ -105,28 +105,56 @@ width: 50px;
 
 // 네비바
 function NavVillage() {
-
+    //현재 주소
+    const pathname = window.location.pathname;
     // 소셜 로그인
+    const baseUrl = "http://localhost:8080";
     const nowUrl = document.location.href
-    if (nowUrl.indexOf("code=") !== -1) {
+    // console.log(nowUrl)
+    if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("kakao") !== -1) {
         const code = new URL(window.location.href).searchParams.get("code")
-        console.log(code)
-        axios.post(`https://kauth.kakao.com/oauth/token`,
-            {
-                code: code,
-            },
+        // console.log(window.location.href)
+        // console.log(code)
+        axios.get(`${baseUrl}/member/oauth/kakao?code=${code}`,
         ).then((response) => {
-            console.log(response);	//오류발생시 실행
+            console.log(response.data);	//오류발생시 실행
+            sessionStorage.setItem("logined", JSON.stringify(response.data))
+            sessionStorage.setItem("social", "true")
+            const nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
+            // console.log(sessionStorage.getItem("social"))
+            // console.log(pathname)
+            if (pathname === "/login/oauth2/code/kakao" && JSON.parse(sessionStorage.getItem("logined")).phoneNumber === null) {
+                window.location.href = `/my-info-change/${nickName}`
+            } else {
+                window.location.href = `/${nickName}`
+            }
         }).catch((error) => {
             console.log(error);	//오류발생시 실행
         })
+    } else if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("gooogle") !== -1) {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+        console.log(code)
+        // axios.get(`${baseUrl}/member/oauth/google?code=2F0AdLIrYcCquBe6EkgGYJ0QasCTBxzYjZGkiJq-yw4zd-0v4XCw_5PYDonG5gto5u994lbnw`,
+        // ).then((response) => {
+        //     console.log(response.data);	//오류발생시 실행
+        //     sessionStorage.setItem("logined", JSON.stringify(response.data))
+        //     sessionStorage.setItem("social", "true")
+        //     const nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
+        //     // console.log(sessionStorage.getItem("social"))
+        //     // console.log(pathname)
+        //     // if (pathname === "/login/oauth2/code/kakao" && JSON.parse(sessionStorage.getItem("logined")).phoneNumber === null) {
+        //     //     window.location.href = `/my-info-change/${nickName}`
+        //     // } else {
+        //     //     window.location.href = `/${nickName}`
+        //     // }
+        // }).catch((error) => {
+        //     console.log(error);	//오류발생시 실행
+        // })
     }
-    //현재 주소
-    const pathname = window.location.pathname;
 
     const params = useParams()
-    console.log(params)
-    const baseUrl = "http://localhost:8080";
+    // console.log(params)
     //다크모드
     const [isOn, setisOn] = useRecoilState(isDarkAtom)
     useEffect(() => {
@@ -177,8 +205,6 @@ function NavVillage() {
                     }
 
                 }
-                const cookies = document.cookie.split(';');
-                console.log(cookies)
             }).catch((error) => {
                 console.log(error);	//오류발생시 실행
                 setLogin(false)
@@ -228,9 +254,10 @@ function NavVillage() {
                         <Social>
                             <p>소셜 로그인</p>
                             <Logos>
-                                <NaverLogo className='socialLogo' src={naver} onClick={() => { alert("네이버~") }} />
+                                {/* 
+                                <NaverLogo className='socialLogo' src={naver} onClick={() => { window.location.href = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=fSYWQz2civYrneAweMd2&redirect_url=http://localhost:3000/member/oauth/naver&state=STATE_STRING" }} /> */}
                                 <KakaoLogo className='socialLogo' src={kakao} onClick={() => { window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=db0c282555cc32e78ecbce031761fc83&redirect_uri=http://localhost:3000/login/oauth2/code/kakao&response_type=code" }} />
-                                <GoogleLogo className='socialLogo' src={google} onClick={() => { alert("구글~") }} />
+                                <GoogleLogo className='socialLogo' src={google} onClick={() => { window.location.href = " https://accounts.google.com/o/oauth2/auth?client_id=784460278410-s4c177jq0a48vv26bldeivip5u0gl4ak.apps.googleusercontent.com&redirect_uri=http://localhost:3000/member/oauth/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile" }} />
                             </Logos>
                         </Social>
                     </ModalBodyFooter>
@@ -264,6 +291,7 @@ function NavVillage() {
     const [modalShow, setModalShow] = useState(false);
     const LogOut = () => {
         setUrl("/")
+        window.sessionStorage.removeItem("social")
         window.sessionStorage.removeItem("logined")
         window.location.href = "/"
     }

@@ -84,6 +84,7 @@ function MyInfoChange() {
     const baseUrl = "http://localhost:8080";
     // 이전 회원 정보
     let previousInfo = JSON.parse(sessionStorage.getItem("logined"))
+    console.log(previousInfo)
     const previousImg = `${previousInfo.profileImg}`
     //다음 주소 api
     const [fullAddress, setFullAddress] = useState(previousInfo.inputAddress)
@@ -126,32 +127,27 @@ function MyInfoChange() {
     const [dogCheck, setDogCheck] = useState()
     useEffect(() => {
         if (memberInfo.mypet !== null) {
-            console.log(memberInfo.mypet)
+            // console.log(memberInfo.mypet)
             memberInfo.mypet.indexOf("강아지") !== -1 ? setDogCheck(true) : setDogCheck(false)
             memberInfo.mypet.indexOf("강아지") !== -1 && checkArr.push("강아지")
             memberInfo.mypet.indexOf("고양이") !== -1 ? setCatCheck(true) : setCatCheck(false)
             memberInfo.mypet.indexOf("고양이") !== -1 && checkArr.push("고양이")
         }
     }, []);
-    console.log(checkArr)
     const getCheck = (e) => {
         if (e === "강아지") {
             setDogCheck(!dogCheck)
             if (!dogCheck) {
                 setCheckArr(prevList => [...prevList, e]); //배열 스테이트 값추가
-                console.log(checkArr)
             } else {
                 checkArr.splice(checkArr.indexOf(e), 1)
-                console.log(checkArr)
             }
         } else {
             setCatCheck(!catCheck)
             if (!catCheck) {
                 setCheckArr(prevList => [...prevList, e]); //배열 스테이트 값추가
-                console.log(checkArr)
             } else {
                 checkArr.splice(checkArr.indexOf(e), 1)
-                console.log(checkArr)
             }
         }
     }
@@ -161,7 +157,6 @@ function MyInfoChange() {
     //입력 받은 값 전송
     async function handleSubmit(e) {
         if (imageUrl === "") {
-            console.log("durl")
             setImageUrl(previousImg)
         }
         e.preventDefault();
@@ -169,7 +164,7 @@ function MyInfoChange() {
             nickName: memberInfo.nickName,
             memberNo: memberInfo.memberNo,
             profileImg: imageUrl === "" ? previousImg : imageUrl,
-            inputAddress: memberInfo.inputAddress,
+            inputAddress: memberInfo.inputAddress === null ? fullAddress : memberInfo.inputAddress,
             detailedAddress: memberInfo.detailedAddress,
             mypet: checkArr.join(", "),
             phoneNumber: memberInfo.phoneNumber,
@@ -177,7 +172,7 @@ function MyInfoChange() {
         }
         axios.patch(`${baseUrl}/member/update`, body
         ).then((response) => {
-            console.log(body);
+            // console.log(body);
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
@@ -192,7 +187,7 @@ function MyInfoChange() {
             inputZonecode: "",
             detailedAddress: ""
         })
-        window.location.href = `/my-info/${nickName}`
+        // window.location.href = `/my-info/${nickName}`
     }
 
 
@@ -226,14 +221,13 @@ function MyInfoChange() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log(file);
+        // console.log(file);
         setIsLoding(false)
         if (file) {
             const downloadUrl = await uploadImage(file);
-            console.log(downloadUrl);
+            // console.log(downloadUrl);
             setImageUrl(downloadUrl);
             setIsLoding(true)
-            console.log("받기완료");
         }
     };
 
@@ -242,13 +236,12 @@ function MyInfoChange() {
         if (!files) return null;
         setFile(files[0]);
         setClickUpload(true)
-        console.log("요기");
     };
 
 
     const imgReset = async () => {
         deleteObject(ref(storage, imageUrl));
-        console.log(file)
+        // console.log(file)
         setImageUrl("")
         setClickUpload(false)
         setIsLoding()
@@ -376,10 +369,11 @@ function MyInfoChange() {
                         />
                     </InputGroup>
                     {
-                        phoneNumber.length < 1 ?
+                        phoneNumber !== null &&
+                            phoneNumber.length < 1 ?
                             null
                             :
-                            numCheck ?
+                            numCheck && phoneNumber !== null && phoneNumber.length > 1 ?
                                 <p className="pass" >사용가능한 번호입니다.</p>
                                 :
                                 <p className="warning">숫자로 11자리를 입력해주세요.</p>

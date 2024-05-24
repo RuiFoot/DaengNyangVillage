@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import React, { useRef } from "react"
-import { MdOutlineReply } from "react-icons/md";
+import { GoReply } from "react-icons/go";
 import Modal from 'react-bootstrap/Modal';
 
 const ReviewsTitleBox = styled.div`
@@ -283,7 +283,7 @@ function Comments() {
     const [isOpen, setIsOpen] = useState()
     const [isClose, setIsClose] = useState(false)
     const openReview = (e) => {
-        console.log(e)
+        // console.log(e)
         setIsClose(!isClose)
         setIsOpen(e)
     }
@@ -297,7 +297,7 @@ function Comments() {
     }
 
     const upLoadReReview = (e) => {
-        console.log(e)
+        // console.log(e)
         let body = {
             boardReviewNum: e,
             boardId: params.boardId,
@@ -310,7 +310,7 @@ function Comments() {
         }
         axios.post(`${baseUrl}/board/review/review`, body
         ).then((response) => {
-            console.log("보냄");	//정상 통신 후 응답된 메시지 출력
+            // console.log("보냄");	//정상 통신 후 응답된 메시지 출력
             setOnReReview()
             setReReview()
             window.location.reload();
@@ -322,7 +322,7 @@ function Comments() {
     const [reEdit, setReEdit] = useState()
     const [reviewNum, setReviewNum] = useState()
     const editReReview = (e) => {
-        console.log(e)
+        // console.log(e)
         setReEdit(e.reviewId)
         setReReview(e.review)
         setReviewNum(e.boardReviewNum)
@@ -493,7 +493,7 @@ function Comments() {
                                                 e.boardReviewNum === k.boardReviewNum && isOpen === k.boardReviewNum && isClose &&
                                                 <ReReviewOutBox>
                                                     <Replyd>
-                                                        <MdOutlineReply style={{ fontSize: "50px" }} />
+                                                        <GoReply style={{ fontSize: "30px" }} />
                                                     </Replyd>
                                                     <ReReviewBox>
                                                         <CommentsItems key={j}>
