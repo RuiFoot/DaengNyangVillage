@@ -93,7 +93,7 @@ function TrainingMethod() {
         }}>
             <CommunityNav />
             <CommunityHeader />
-            <ListGroup style={{ margin: `10px 6vw` }}>
+            <ListGroup style={{ gap: "10px", margin: `10px 8vw` }}>
                 {
                     board.length > 0 &&
                     board.map((e, i) => (

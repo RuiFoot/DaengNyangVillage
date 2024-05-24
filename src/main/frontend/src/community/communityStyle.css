@@ -26,3 +26,18 @@
 .ql-container {
     min-height: 400px;
 }
+
+.arrowDown:hover {
+    transition-duration: 0.5s;
+    transform: rotate(180deg) scale(1.2);
+}
+
+.mdModeEdit:hover {
+    border-bottom: 1px solid #F2884B;
+    transform: scale(1.2);
+}
+
+.mdDelete:hover {
+    border-bottom: 1px solid #F2884B;
+    transform: scale(1.2);
+}
