@@ -22,6 +22,7 @@ import UsedMarketDetail from "./community/usedMarketDetail";
 import Edit from "./community/edit";
 import PetBoastDetail from "./community/petBoastDetail";
 import TrainingBoardDetail from "./community/trainingBoardDetail";
+import KakaoLoding from "./loding/kakaoLoding";
 
 function Router() {
     if (window.sessionStorage.key(0) !== "logined") {
@@ -50,6 +51,7 @@ function Router() {
                 <Route path="/used-market-detail/:boardId" element={<UsedMarketDetail />} />
                 <Route path="/pet-boast-detail/:boardId" element={<PetBoastDetail />} />
                 <Route path="/edit/:boardId" element={<Edit />} />
+                <Route path="/login/oauth2/code/kakao" element={<KakaoLoding />} />
             </Routes>
         )
     } else {

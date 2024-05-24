@@ -179,6 +179,7 @@ function RecommendDetail() {
         roadAddress: "",
         numberAddress: ""
     })
+    const [heart, setHeart] = useState()
     useEffect(() => {
         axios.get(`/api/animal/detail/${params.itemId}`)
             .then((res) => {
@@ -187,6 +188,11 @@ function RecommendDetail() {
         axios.get(`${baseUrl}/animal/review?animalNum=${params.itemId}`)
             .then((res) => {
                 setGetReview(res.data);
+            })
+        axios.get(`${baseUrl}/animal/favorite/${params.itemId}?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}`)
+            .then((res) => {
+                console.log(res.data);
+                setHeart(res.data)
             })
     }, []);
 
@@ -430,9 +436,8 @@ function RecommendDetail() {
     }
 
     //찜
-    const [checkHeart, setCheckHeart] = useState(false)
     const clickHeart = () => {
-        setCheckHeart(!checkHeart)
+        setHeart(!heart)
         let body = {
             animalNum: params.itemId,
             memberNo: userInfo.memberNo
@@ -456,7 +461,7 @@ function RecommendDetail() {
                     <LeftItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 10px 0 6vw"}` }}>
                         <Title>
                             {board.facilityName}
-                            <FaHeart style={{ cursor: "pointer", margin: "10px", color: `${checkHeart ? "red" : "#F2F2F2"}` }} onClick={clickHeart} />
+                            <FaHeart style={{ cursor: "pointer", margin: "10px", color: `${heart ? "red" : "#F2F2F2"}` }} onClick={clickHeart} />
                         </Title>
                         <Img style={{ backgroundImage: board.imgPath === null ? `url(${showImg(board.subClassification)})` : `url(${showImg(board.imgPath)})` }} />
                     </LeftItems>

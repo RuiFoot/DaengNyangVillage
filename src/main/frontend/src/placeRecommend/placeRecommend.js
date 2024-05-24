@@ -287,14 +287,28 @@ function PlaceRecommend() {
     //에리어 선택시 값 전달, 채크해제 시 중복값 입력방지
     const clickedArea = (e) => {
         console.log(e)
-        setCheckedArea(e)
+        const checkboxes = document.getElementsByName('cityOption')
+        console.log(checkboxes)
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] !== e) {
+                checkboxes[i].checked = false
+            }
+            setCheckedArea(e.value);
+        }
         console.log("상세주소 : " + checkedArea)
     }
 
     //카테고리 선택시 값 전달, 채크해제 시 중복값 입력방지
     const clickedCategory = (e) => {
         console.log(e)
-        setCheckedCategory(e)
+        const checkboxes = document.getElementsByName('categoryOption')
+        console.log(checkboxes)
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] !== e) {
+                checkboxes[i].checked = false
+            }
+            setCheckedCategory(e.value);
+        }
         console.log("카테고리 : " + checkedCategory)
     }
 
@@ -350,16 +364,11 @@ function PlaceRecommend() {
                                     backgroundColor: switchBgColor
                                 }} className="cardHeader">
                                     <InputGroup className="inputGroup mb-3" >
-                                        <Form.Control
-                                            placeholder="지역을 선택해주세요"
-                                            aria-label="Recipient's username"
-                                            aria-describedby="basic-addon2"
-                                        />
+                                        <div>{sido} {checkedArea} {checkedCategory}</div>
                                         <Button variant="outline-secondary" id="button-addon2" onClick={handleButtonClick}>
                                             검색
                                         </Button>
                                     </InputGroup>
-
                                 </Card.Header>
                                 <List>
                                     {
@@ -396,7 +405,8 @@ function PlaceRecommend() {
                                                         >
                                                             <CheckBox
                                                                 value={e}
-                                                                onChange={(e) => clickedArea(e.target.value)}
+                                                                name="cityOption"
+                                                                onChange={(e) => clickedArea(e.target)}
                                                                 id={i} type="checkbox"></CheckBox>
                                                             <CheckBoxLabel>{e}</CheckBoxLabel>
                                                         </ListGroup.Item>
@@ -412,7 +422,8 @@ function PlaceRecommend() {
                                             }}>
                                                 <CheckBox
                                                     value={e}
-                                                    onChange={(e) => clickedCategory(e.target.value)}
+                                                    name="categoryOption"
+                                                    onChange={(e) => clickedCategory(e.target)}
                                                     id={i} type="checkbox"></CheckBox>
                                                 <CheckBoxLabel>{e}</CheckBoxLabel>
                                             </ListGroup.Item>
@@ -434,11 +445,7 @@ function PlaceRecommend() {
                                     backgroundColor: switchBgColor
                                 }} className="cardHeader">
                                     <InputGroup className="inputGroup mb-3">
-                                        <Form.Control
-                                            placeholder="지역을 선택해주세요"
-                                            aria-label="Recipient's username"
-                                            aria-describedby="basic-addon2"
-                                        />
+                                        <div>{sido} {checkedArea} {checkedCategory}</div>
                                         <Button variant="outline-secondary" id="button-addon2" onClick={handleButtonClick}>
                                             검색
                                         </Button>
@@ -479,7 +486,8 @@ function PlaceRecommend() {
                                                         >
                                                             <CheckBox
                                                                 value={e}
-                                                                onChange={(e) => clickedArea(e.target.value)}
+                                                                name="cityOption"
+                                                                onChange={(e) => clickedArea(e.target)}
                                                                 id={i} type="checkbox"></CheckBox>
                                                             <CheckBoxLabel>{e}</CheckBoxLabel>
                                                         </ListGroup.Item>
@@ -495,7 +503,8 @@ function PlaceRecommend() {
                                             }}>
                                                 <CheckBox
                                                     value={e}
-                                                    onChange={(e) => clickedCategory(e.target.value)}
+                                                    name="categoryOption"
+                                                    onChange={(e) => clickedCategory(e.target)}
                                                     id={i} type="checkbox"></CheckBox>
                                                 <CheckBoxLabel>{e}</CheckBoxLabel>
                                             </ListGroup.Item>

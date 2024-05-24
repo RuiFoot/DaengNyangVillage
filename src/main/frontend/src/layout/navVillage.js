@@ -105,28 +105,27 @@ width: 50px;
 
 // 네비바
 function NavVillage() {
+    //현재 주소
+    const pathname = window.location.pathname;
+    const params = useParams()
+    console.log(params)
+    const baseUrl = "http://localhost:8080";
 
     // 소셜 로그인
     const nowUrl = document.location.href
     if (nowUrl.indexOf("code=") !== -1) {
         const code = new URL(window.location.href).searchParams.get("code")
         console.log(code)
-        axios.post(`https://kauth.kakao.com/oauth/token`,
-            {
-                code: code,
-            },
+        axios.get(`${baseUrl}/member/oauth/kakao?code=${code}`
         ).then((response) => {
             console.log(response);	//오류발생시 실행
+            sessionStorage.setItem("logined", JSON.stringify(response.data))
+            window.location.href = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
         }).catch((error) => {
             console.log(error);	//오류발생시 실행
         })
     }
-    //현재 주소
-    const pathname = window.location.pathname;
 
-    const params = useParams()
-    console.log(params)
-    const baseUrl = "http://localhost:8080";
     //다크모드
     const [isOn, setisOn] = useRecoilState(isDarkAtom)
     useEffect(() => {
@@ -228,7 +227,7 @@ function NavVillage() {
                         <Social>
                             <p>소셜 로그인</p>
                             <Logos>
-                                <NaverLogo className='socialLogo' src={naver} onClick={() => { alert("네이버~") }} />
+                                {/* <NaverLogo className='socialLogo' src={naver} onClick={() => { alert("네이버~") }} /> */}
                                 <KakaoLogo className='socialLogo' src={kakao} onClick={() => { window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=db0c282555cc32e78ecbce031761fc83&redirect_uri=http://localhost:3000/login/oauth2/code/kakao&response_type=code" }} />
                                 <GoogleLogo className='socialLogo' src={google} onClick={() => { alert("구글~") }} />
                             </Logos>

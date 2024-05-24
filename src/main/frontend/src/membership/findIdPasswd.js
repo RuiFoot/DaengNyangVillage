@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
 import './membershipStyle.css'
+import axios from "axios";
 
 const Container = styled.div`
 min-height: calc(100vh - 86px);
@@ -35,6 +36,9 @@ function FindIdPasswd() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    //스프링연동을 위한 url
+    const baseUrl = "http://localhost:8080";
+
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
     const [numCheck, setNumCheck] = useState()
@@ -56,11 +60,16 @@ function FindIdPasswd() {
     }
 
     const findId = () => {
-        if (memberInfo.phoneNumber === phoneNumber) {
-            setFindUserId(memberInfo.email)
-        } else {
-            alert("가입된 번호가 없습니다.")
+        axios.post(`${baseUrl}/member/findEmail`, {
+            phoneNumber: phoneNumber
         }
+        ).then((response) => {
+            console.log(response.data)
+            setFindUserId(response.data.email)
+        }).catch((error) => {
+            alert("가입된 번호가 없습니다.")
+            console.log(error);	//오류발생시 실행
+        })
         setPhoneNumber("")
     }
 
@@ -70,13 +79,17 @@ function FindIdPasswd() {
         setEmail(e.target.value)
     }
     const findEmail = () => {
-        if (memberInfo.email === email) {
+        axios.post(`${baseUrl}/member/findNickname`, {
+            email: email
+        }
+        ).then((response) => {
+            console.log(response.data)
             // 이메일 보내기
             // 여기서 정의해야하는 것은 위에서 만든 메일 템플릿에 지정한 변수({{ }})에 대한 값을 담아줘야한다.
             const templateParams = {
                 toEmail: email,
-                message: `http://localhost:3000/change-passwd-lick/${memberInfo.nickName}`,
-                toName: memberInfo.nickName
+                message: `http://localhost:3000/change-passwd-lick/${response.data.memberNo}`,
+                toName: response.data.nickname
             };
             emailjs
                 .send(
@@ -95,11 +108,11 @@ function FindIdPasswd() {
                     alert("이메일 전송에 실패했습니다 챗봇을 통해 문의 해주세요.")
                 });
             setEmail("")
-        } else {
+        }).catch((error) => {
+            // console.log(error);	//오류발생시 실행
             alert("가입된 이메일이 없습니다.")
-        }
+        })
     };
-
 
     return (
         <>

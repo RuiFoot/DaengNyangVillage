@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../../components/atoms';
 import themes from "../../components/theme";
+import axios from "axios";
 
 const Container = styled.div`
 min-height: calc(100vh - 184px);
@@ -38,38 +39,18 @@ function ChangePasswdLick() {
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const baseUrl = "http://localhost:8080";   //스프링부트 연동시
-    const previousInfo = JSON.parse(localStorage.getItem("member")) // 이전 회원 정보 받아오는 닉네임으로 db에서 찾아야함
+    // 파라미터 가져오기
+    const params = useParams()
+    console.log(params)
     //새 비밀번호
-    let userNickName = useParams();
-    console.log(userNickName.nickNameLink)
     const [newPasswd, setNewPasswd] = useState("")
+    const [passwordCheck, setPasswordCheck] = useState("")
     const onNewChange = (e) => {
         setNewPasswd(e.target.value)
     }
 
-    //저장될 맴버정보 
-    //스프링부트 연동시 userNickName.nickNameLink 값을 이용해서 특정맴버정보를 불러옴
-    const [memberInfo, setMemberInfo] = useState({
-        email: previousInfo.email,
-        password: "",
-        passwordCheck: "",
-        profileImg: "",
-        mypet: previousInfo.mypet,
-        nickName: previousInfo.nickName,
-        phoneNumber: previousInfo.phoneNumber,
-        inputAddress: previousInfo.inputAddress,
-        inputZonecode: previousInfo.inputZonecode,
-        detailedAddress: previousInfo.detailedAddress
-    })
-
-    const { email, password, passwordCheck, profileImg, mypet, nickName, phoneNumber, inputAddress, inputZonecode, detailedAddress } = memberInfo; // 비구조화 할당
-
     function onChange(e) {
-        const { value, name } = e.target;
-        setMemberInfo({
-            ...memberInfo,
-            [name]: value
-        });
+        setPasswordCheck(e.target.value)
     }
 
     // 유효성 검사
@@ -88,30 +69,17 @@ function ChangePasswdLick() {
         e.preventDefault();
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
-
-        // 회원가입에서 값 줄때 사용
-        // let body = {
-        //     nickname: memberInfo.nickName,
-        //     profileImg: memberInfo.profileImg,
-        //     address: memberInfo.inputAddress,
-        //     addressDetail: memberInfo.detailedAddress,
-        //     favoritePet: memberInfo.mypet,
-        //     phoneNumber: memberInfo.phoneNumber
-        // }
-        // axios.post(`${baseUrl}/member/signup`, body
-        // ).then((response) => {
-        //     alert("댕냥빌리지 가입을 환영합니다.")
-        //     console.log(response.data);		//정상 통신 후 응답된 메시지 출력
-        // }).catch((error) => {
-        //     console.log(error);				//오류발생시 실행
-        // })
-        delete memberInfo.passwordCheck; //저장될 필요없음
-        memberInfo.password = newPasswd //비밀번호를 새비밀번호로 교체
-        localStorage.setItem("member", JSON.stringify(memberInfo)); // 로컬스토리지 저장
-        setMemberInfo({
-            password: "",
-            passwordCheck: "",
-        }) //인풋 클리어
+        axios.patch(`${baseUrl}/member/password`, {
+            memberNo: params.nickNameLink,
+            email: "",
+            password: newPasswd
+        }
+        ).then((response) => {
+            console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+        }).catch((error) => {
+            console.log(error);				//오류발생시 실행
+        })
+        setPasswordCheck("")
         setNewPasswd("") //인풋 클리어
         window.location.href = "/" // 홈화면이동
     }
