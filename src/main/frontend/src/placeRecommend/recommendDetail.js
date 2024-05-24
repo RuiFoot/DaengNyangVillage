@@ -189,11 +189,13 @@ function RecommendDetail() {
             .then((res) => {
                 setGetReview(res.data);
             })
-        axios.get(`${baseUrl}/animal/favorite/${params.itemId}?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}`)
-            .then((res) => {
-                console.log(res.data);
-                setHeart(res.data)
-            })
+        if (userInfo) {
+            axios.get(`${baseUrl}/animal/favorite/${params.itemId}?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}`)
+                .then((res) => {
+                    console.log(res.data);
+                    setHeart(res.data)
+                })
+        }
     }, []);
 
     // 디폴트 이미지
@@ -461,7 +463,10 @@ function RecommendDetail() {
                     <LeftItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 10px 0 6vw"}` }}>
                         <Title>
                             {board.facilityName}
-                            <FaHeart style={{ cursor: "pointer", margin: "10px", color: `${heart ? "red" : "#F2F2F2"}` }} onClick={clickHeart} />
+                            {
+                                userInfo ? <FaHeart style={{ cursor: "pointer", margin: "10px", color: `${heart ? "red" : "#F2F2F2"}` }} onClick={clickHeart} /> : null
+                            }
+
                         </Title>
                         <Img style={{ backgroundImage: board.imgPath === null ? `url(${showImg(board.subClassification)})` : `url(${showImg(board.imgPath)})` }} />
                     </LeftItems>

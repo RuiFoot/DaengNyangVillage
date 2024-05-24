@@ -16,6 +16,7 @@ import themes from "../components/theme";
 import useUploadImage from "./useUploadImage";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../servers/firebase";
+import defaultImg from '../img/defaultImg.png';
 
 const Container = styled.div`
 display: flex;
@@ -114,12 +115,13 @@ function JoinMembership() {
 
     //입력받은 값 전송
     function handleSubmit(e) {
+        console.log(imageUrl)
         e.preventDefault();
         let body = {
             email: memberInfo.email,
             password: memberInfo.password,
             nickname: memberInfo.nickName,
-            profileImg: imageUrl,
+            profileImg: imageUrl === "" ? defaultImg : imageUrl,
             address: fullAddress,
             addressDetail: memberInfo.detailedAddress,
             favoritePet: checkArr.join(", "),
