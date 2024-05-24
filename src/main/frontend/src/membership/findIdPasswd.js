@@ -36,7 +36,9 @@ function FindIdPasswd() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    //스프링연동을 위한 url
     const baseUrl = "http://localhost:8080";
+
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
     const [numCheck, setNumCheck] = useState()
@@ -57,20 +59,16 @@ function FindIdPasswd() {
         setPhoneNumber(e.target.value)
     }
 
-    //memberInfo 백엔드에서 받아와야함
-    const [findedE, setFinedE] = useState()
-    console.log(findedE)
     const findId = () => {
-        // console.log(phoneNumber)
         axios.post(`${baseUrl}/member/findEmail`, {
             phoneNumber: phoneNumber
         }
         ).then((response) => {
-            console.log(response.data);		//정상 통신 후 응답된 메시지 출력
-            setFinedE(response.data.email)
+            console.log(response.data)
+            setFindUserId(response.data.email)
         }).catch((error) => {
             alert("가입된 번호가 없습니다.")
-            console.log(error);				//오류발생시 실행
+            console.log(error);	//오류발생시 실행
         })
         setPhoneNumber("")
     }
@@ -80,13 +78,12 @@ function FindIdPasswd() {
     const onChangeEmail = (e) => {
         setEmail(e.target.value)
     }
-    // 여기 백엔드에서 받아온값으로해야함 이메일 주소, 닉네임 수정 필요.
     const findEmail = () => {
         axios.post(`${baseUrl}/member/findNickname`, {
             email: email
         }
         ).then((response) => {
-            console.log(response);		//정상 통신 후 응답된 메시지 출력
+            console.log(response.data)
             // 이메일 보내기
             // 여기서 정의해야하는 것은 위에서 만든 메일 템플릿에 지정한 변수({{ }})에 대한 값을 담아줘야한다.
             const templateParams = {
@@ -102,7 +99,7 @@ function FindIdPasswd() {
                     'yHDYpSnWhBXnM4RDs', // public-key
                 )
                 .then((response) => {
-                    // console.log('이메일이 성공적으로 보내졌습니다:', response);
+                    console.log('이메일이 성공적으로 보내졌습니다:', response);
                     setIsEmailSent(true);
                     // 이메일 전송 성공 처리 로직 추가
                 })
@@ -112,8 +109,8 @@ function FindIdPasswd() {
                 });
             setEmail("")
         }).catch((error) => {
+            // console.log(error);	//오류발생시 실행
             alert("가입된 이메일이 없습니다.")
-            console.log(error);				//오류발생시 실행
         })
     };
 
@@ -153,10 +150,10 @@ function FindIdPasswd() {
 
                     }
                     {
-                        findedE === undefined ?
+                        findUserId === undefined ?
                             null
                             :
-                            <UserId>회원님의 아이디 : {findedE}</UserId>
+                            <UserId>회원님의 아이디 : {findUserId}</UserId>
                     }
                     <Title>내 계정 비밀번호 찾기</Title>
                     <Text>내 계정 비밀번호를 찾으려면 이메일을 입력하세요.</Text>

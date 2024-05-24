@@ -39,36 +39,9 @@ function ChangePasswdLick() {
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const baseUrl = "http://localhost:8080";   //스프링부트 연동시
-    // const previousInfo = JSON.parse(localStorage.getItem("member")) // 이전 회원 정보 받아오는 닉네임으로 db에서 찾아야함
-    // //새 비밀번호
-    let memberNo = useParams();
-    console.log(memberNo)
-
-    //저장될 맴버정보 
-    //스프링부트 연동시 userNickName.nickNameLink 값을 이용해서 특정맴버정보를 불러옴
-    // const [memberInfo, setMemberInfo] = useState({
-    //     email: previousInfo.email,
-    //     password: "",
-    //     passwordCheck: "",
-    //     profileImg: "",
-    //     mypet: previousInfo.mypet,
-    //     nickName: previousInfo.nickName,
-    //     phoneNumber: previousInfo.phoneNumber,
-    //     inputAddress: previousInfo.inputAddress,
-    //     inputZonecode: previousInfo.inputZonecode,
-    //     detailedAddress: previousInfo.detailedAddress
-    // })
-
-    // const { email, password, passwordCheck, profileImg, mypet, nickName, phoneNumber, inputAddress, inputZonecode, detailedAddress } = memberInfo; // 비구조화 할당
-
-    // function onChange(e) {
-    //     const { value, name } = e.target;
-    //     setMemberInfo({
-    //         ...memberInfo,
-    //         [name]: value
-    //     });
-    // }
-
+    // 파라미터 가져오기
+    const params = useParams()
+    console.log(params)
     //새 비밀번호
     const [newPasswd, setNewPasswd] = useState("")
     const [passwordCheck, setPasswordCheck] = useState("")
@@ -93,16 +66,14 @@ function ChangePasswdLick() {
 
     }
     async function handleSubmit(e) {
-        // console.log(previousInfo)
         e.preventDefault();
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
-        let body = {
-            memberNo: memberNo.memberNo,
+        axios.patch(`${baseUrl}/member/password`, {
+            memberNo: params.nickNameLink,
             email: "",
             password: newPasswd
         }
-        axios.patch(`${baseUrl}/member/password`, body
         ).then((response) => {
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {

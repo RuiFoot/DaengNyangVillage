@@ -7,8 +7,9 @@ import { isDarkAtom, presentPage } from '../../components/atoms';
 import themes from "../../components/theme";
 import Pagination from "../../components/pagination";
 import defaultImg from "../../components/defaultImgs";
+import hotPlaceArr from "../../components/imgDate";
 import axios from "axios";
-import { FaStar, FaHeart } from "react-icons/fa6";
+import { FaStar } from "react-icons/fa6";
 
 const Container = styled.div`
 display: flex;
@@ -55,28 +56,24 @@ function SelectedLocation() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-    const nowPage = useRecoilValue(presentPage);
-
-    // 화면 크기 
-    const [windowSize, setWindowSiz] = useState(window.innerWidth);
-    const handleResize = () => {
-        setWindowSiz(window.innerWidth)
-        // console.log(window.innerWidth)
+    //스프링연동을 위한 url
+    const baseUrl = "http://localhost:8080";
+    //로그인 확인
+    let url = ""
+    if (window.sessionStorage.key(0) === "logined") {
+        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
     }
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.addEventListener('resize', handleResize)
-        }
-    }, [])
 
-    //스프링 통신
+    //페이지네이션 현재 페이지
+    const nowPage = useRecoilValue(presentPage);
+    // 스프링 통신
     const [board, setBoard] = useState()
     const [page, setPage] = useState({})
     useEffect(() => {
-        axios.get(`/api/member/favorite?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}&page=0`)
+        axios.get(`${baseUrl}/member/favorite?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}&page=${nowPage - 1}`)
             .then((res) => {
-                setBoard(res.data.content);
+                setBoard(res.data.content)
+                console.log(res.data.content)
                 setPage({
                     empty: res.data.empty,
                     first: res.data.first,
@@ -90,16 +87,20 @@ function SelectedLocation() {
                     totalPages: res.data.totalPages
                 })
                 console.log(res.data)
-            }).catch((res) => {
-                console.log(res)
             })
-    }, [nowPage])
+    }, [nowPage]);
 
-    //로그인 확인
-    let url = ""
-    if (window.sessionStorage.key(0) === "logined") {
-        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+    const [windowSize, setWindowSiz] = useState(window.innerWidth);
+    const handleResize = () => {
+        setWindowSiz(window.innerWidth)
+        console.log(window.innerWidth)
     }
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.addEventListener('resize', handleResize)
+        }
+    }, [])
 
     // 디폴트 이미지
     const showImg = (e) => {
@@ -120,7 +121,6 @@ function SelectedLocation() {
         let starts = []
         let starRank = []
         let starRankAVGArr = Math.round(e)
-        // console.log(starRankAVGArr)
         for (let i = 0; i < starRankAVGArr; i++) {
             starts.push("#F2D64B")
         }
@@ -134,8 +134,6 @@ function SelectedLocation() {
         }
         return starRank
     }
-
-
 
     //페이지네이션
     const pageRange = page.size //pageRange :한페이지에 보여줄 아이템 수
@@ -152,20 +150,18 @@ function SelectedLocation() {
                         "repeat(auto-fit,250px)" : "repeat(auto-fit,350px)"
                 }} >
                     {
-                        board !== undefined &&
+                        board &&
                         board.map((e, i) => (
-                            <PlaceItem key={i} style={{
-                                color: switchColor,
-                                backgroundColor: switchBgColor
-                            }}
+                            <PlaceItem key={i}
+                                style={{
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
+                                }}
                                 href={`/recommend-place-detail/${e.animalNum}${url}`}
                             >
                                 <PlaceItemTitle>{e.facilityName}</PlaceItemTitle>
-                                <PlaceItemImg style={{
-                                    backgroundImage: e.imgPath === null ? `url(${showImg(e.subClassification)})` : `url(${e.imgPath})`
-                                }} />
+                                <PlaceItemImg style={{ backgroundImage: e.imgPath !== null ? `url(${e.imgPath})` : `url(${showImg(e.subClassification)})` }} />
                                 <PlaceItemInfo><GoDotFill />{starRankAVG(e.star)}</PlaceItemInfo>
-                                <PlaceItemInfo><GoDotFill />{e.subClassification}</PlaceItemInfo>
                                 <PlaceItemAddress><GoDotFill />{e.roadAddress}</PlaceItemAddress>
                             </PlaceItem>
                         ))}

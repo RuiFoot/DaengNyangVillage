@@ -94,6 +94,7 @@ function WrittenByMe() {
                 console.log(res.data)
             })
     }, [nowPage]);
+
     //페이지네이션
     const pageRange = page.size //pageRange :한페이지에 보여줄 아이템 수
     // console.log(board.category)

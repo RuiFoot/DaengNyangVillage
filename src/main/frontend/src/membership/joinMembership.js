@@ -16,7 +16,8 @@ import themes from "../components/theme";
 import useUploadImage from "./useUploadImage";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../servers/firebase";
-import defaultImg from "../img/defaultImg.png";
+import defaultImg from '../img/defaultImg.png';
+
 
 const Container = styled.div`
 display: flex;
@@ -115,6 +116,7 @@ function JoinMembership() {
 
     //입력받은 값 전송
     function handleSubmit(e) {
+        console.log(imageUrl)
         e.preventDefault();
         // console.log("이미지 널확인2");		//정상 통신 후 응답된 메시지 출력
         // console.log(imageUrl);		//정상 통신 후 응답된 메시지 출력

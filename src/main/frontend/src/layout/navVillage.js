@@ -105,56 +105,27 @@ width: 50px;
 
 // 네비바
 function NavVillage() {
-    //현재 주소
+     //현재 주소
     const pathname = window.location.pathname;
-    // 소셜 로그인
+    const params = useParams()
+    console.log(params)
     const baseUrl = "http://localhost:8080";
+
+    // 소셜 로그인
     const nowUrl = document.location.href
-    // console.log(nowUrl)
-    if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("kakao") !== -1) {
+    if (nowUrl.indexOf("code=") !== -1) {
         const code = new URL(window.location.href).searchParams.get("code")
-        // console.log(window.location.href)
-        // console.log(code)
-        axios.get(`${baseUrl}/member/oauth/kakao?code=${code}`,
+        console.log(code)
+        axios.get(`${baseUrl}/member/oauth/kakao?code=${code}`
         ).then((response) => {
-            console.log(response.data);	//오류발생시 실행
+            console.log(response);	//오류발생시 실행
             sessionStorage.setItem("logined", JSON.stringify(response.data))
-            sessionStorage.setItem("social", "true")
-            const nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
-            // console.log(sessionStorage.getItem("social"))
-            // console.log(pathname)
-            if (pathname === "/login/oauth2/code/kakao" && JSON.parse(sessionStorage.getItem("logined")).phoneNumber === null) {
-                window.location.href = `/my-info-change/${nickName}`
-            } else {
-                window.location.href = `/${nickName}`
-            }
+            window.location.href = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
         }).catch((error) => {
             console.log(error);	//오류발생시 실행
         })
-    } else if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("gooogle") !== -1) {
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get("code");
-        console.log(code)
-        // axios.get(`${baseUrl}/member/oauth/google?code=2F0AdLIrYcCquBe6EkgGYJ0QasCTBxzYjZGkiJq-yw4zd-0v4XCw_5PYDonG5gto5u994lbnw`,
-        // ).then((response) => {
-        //     console.log(response.data);	//오류발생시 실행
-        //     sessionStorage.setItem("logined", JSON.stringify(response.data))
-        //     sessionStorage.setItem("social", "true")
-        //     const nickName = JSON.parse(sessionStorage.getItem("logined")).nickName
-        //     // console.log(sessionStorage.getItem("social"))
-        //     // console.log(pathname)
-        //     // if (pathname === "/login/oauth2/code/kakao" && JSON.parse(sessionStorage.getItem("logined")).phoneNumber === null) {
-        //     //     window.location.href = `/my-info-change/${nickName}`
-        //     // } else {
-        //     //     window.location.href = `/${nickName}`
-        //     // }
-        // }).catch((error) => {
-        //     console.log(error);	//오류발생시 실행
-        // })
     }
-
-    const params = useParams()
-    // console.log(params)
+      
     //다크모드
     const [isOn, setisOn] = useRecoilState(isDarkAtom)
     useEffect(() => {

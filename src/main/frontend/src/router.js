@@ -22,7 +22,7 @@ import UsedMarketDetail from "./community/usedMarketDetail";
 import Edit from "./community/edit";
 import PetBoastDetail from "./community/petBoastDetail";
 import TrainingBoardDetail from "./community/trainingBoardDetail";
-import KakaoLoding from "./socialLoding/kakaoLoding";
+import KakaoLoding from "./loding/kakaoLoding";
 
 function Router() {
     if (window.sessionStorage.key(0) !== "logined") {

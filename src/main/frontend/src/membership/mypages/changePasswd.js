@@ -64,7 +64,7 @@ function ChangePasswd() {
 
     }
     async function handleSubmit(e) {
-        // console.log(previousInfo)
+        console.log(previousInfo)
         e.preventDefault();
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();

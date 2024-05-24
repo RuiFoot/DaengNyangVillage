@@ -179,7 +179,8 @@ function RecommendDetail() {
         roadAddress: "",
         numberAddress: ""
     })
-    useEffect(() => {
+    const [heart, setHeart] = useState()
+     useEffect(() => {
         axios.get(`/api/animal/detail/${params.itemId}`)
             .then((res) => {
                 setBoard(res.data);
@@ -188,13 +189,11 @@ function RecommendDetail() {
             .then((res) => {
                 setGetReview(res.data);
             })
-        if (JSON.parse(sessionStorage.getItem("logined"))) {
+        if (userInfo) {
             axios.get(`${baseUrl}/animal/favorite/${params.itemId}?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}`)
                 .then((res) => {
-                    console.log(res)
-                    setHeart(res.data);
-                }).catch((r) => {
-                    console.log(r)
+                    console.log(res.data);
+                    setHeart(res.data)
                 })
         }
     }, []);
