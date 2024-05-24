@@ -31,9 +31,6 @@ height: 40px;
 `
 const ContentField = styled.div`
 width: 88vw;
-display: flex;
-flex-direction: column;
-align-items: center;
 margin: 20px 0;
 `
 const ContentBtns = styled.div`

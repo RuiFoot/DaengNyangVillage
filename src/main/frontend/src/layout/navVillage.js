@@ -105,7 +105,7 @@ width: 50px;
 
 // 네비바
 function NavVillage() {
-     //현재 주소
+    //현재 주소
     const pathname = window.location.pathname;
     const params = useParams()
     console.log(params)
@@ -113,19 +113,39 @@ function NavVillage() {
 
     // 소셜 로그인
     const nowUrl = document.location.href
-    if (nowUrl.indexOf("code=") !== -1) {
+    if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("kakao") !== -1) {
         const code = new URL(window.location.href).searchParams.get("code")
         console.log(code)
         axios.get(`${baseUrl}/member/oauth/kakao?code=${code}`
         ).then((response) => {
             console.log(response);	//오류발생시 실행
             sessionStorage.setItem("logined", JSON.stringify(response.data))
-            window.location.href = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            if (JSON.parse(sessionStorage.getItem("logined")).phoneNumber) {
+                window.location.href = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            } else {
+                window.location.href = `/my-info-change/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            }
+
+        }).catch((error) => {
+            console.log(error);	//오류발생시 실행
+        })
+    } else if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("google") !== -1) {
+        const code = new URL(window.location.href).searchParams.get("code")
+        console.log(code)
+        axios.get(`${baseUrl}/member/oauth/google?code=${code}`
+        ).then((response) => {
+            console.log(response);	//오류발생시 실행
+            sessionStorage.setItem("logined", JSON.stringify(response.data))
+            if (JSON.parse(sessionStorage.getItem("logined")).phoneNumber) {
+                window.location.href = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            } else {
+                window.location.href = `/my-info-change/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            }
         }).catch((error) => {
             console.log(error);	//오류발생시 실행
         })
     }
-      
+
     //다크모드
     const [isOn, setisOn] = useRecoilState(isDarkAtom)
     useEffect(() => {
@@ -228,7 +248,7 @@ function NavVillage() {
                                 {/* 
                                 <NaverLogo className='socialLogo' src={naver} onClick={() => { window.location.href = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=fSYWQz2civYrneAweMd2&redirect_url=http://localhost:3000/member/oauth/naver&state=STATE_STRING" }} /> */}
                                 <KakaoLogo className='socialLogo' src={kakao} onClick={() => { window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=db0c282555cc32e78ecbce031761fc83&redirect_uri=http://localhost:3000/login/oauth2/code/kakao&response_type=code" }} />
-                                <GoogleLogo className='socialLogo' src={google} onClick={() => { window.location.href = " https://accounts.google.com/o/oauth2/auth?client_id=784460278410-s4c177jq0a48vv26bldeivip5u0gl4ak.apps.googleusercontent.com&redirect_uri=http://localhost:3000/member/oauth/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile" }} />
+                                <GoogleLogo className='socialLogo' src={google} onClick={() => { window.location.href = "https://accounts.google.com/o/oauth2/auth?client_id=784460278410-s4c177jq0a48vv26bldeivip5u0gl4ak.apps.googleusercontent.com&redirect_uri=http://localhost:3000/member/oauth/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile" }} />
                             </Logos>
                         </Social>
                     </ModalBodyFooter>
@@ -330,7 +350,6 @@ function NavVillage() {
                                     className={`toggle-circle ${isOn ? "toggle--checked" : null}`}>{isOn ? <CiDark /> : <CiBrightnessDown />}</SunMoon>
                             </ToggleContainer>
                             <Nav.Link className='navLink' style={{
-                                width: "170px",
                                 color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
                                     ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
                             }} href={login ? `/my-info/${nickName}` : `/join-membership`}>
@@ -339,7 +358,7 @@ function NavVillage() {
                                 }
                             </Nav.Link>
                             <Nav.Link >
-                                <Button style={{ width: "100px", backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => login ? LogOut() : setModalShow(true)}> {login ? "로그아웃" : "로그인"}
+                                <Button style={{ backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => login ? LogOut() : setModalShow(true)}> {login ? "로그아웃" : "로그인"}
                                 </Button>
                             </Nav.Link>
                             <LoginModal
