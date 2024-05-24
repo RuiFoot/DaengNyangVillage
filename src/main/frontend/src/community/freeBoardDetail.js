@@ -123,19 +123,19 @@ function FreeBoardDetail() {
 
   const deleteImgArr = []
   const deleteContentBtn = () => {
-    console.log(content)
+    // console.log(content)
     //내용안에서 이미지만 추출
     let count = content.field.split('http').length - 1;
     let newStartIndex = 0
     let startIndex = 0
-    console.log(count)
+    // console.log(count)
     for (let i = 0; i < count; i++) {
       if (content.field.indexOf(`"></p>`) !== -1) {
         startIndex = content.field.indexOf("http", newStartIndex);
         newStartIndex = content.field.indexOf(`"></p>`, startIndex);
         deleteImgArr.push(content.field.slice(startIndex, newStartIndex))
       }
-      console.log(deleteImgArr)
+      // console.log(deleteImgArr)
     }
     for (let i = 0; i < deleteImgArr.length; i++) {
       deleteObject(ref(storage, deleteImgArr[i]));

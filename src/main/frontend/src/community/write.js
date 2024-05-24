@@ -73,7 +73,7 @@ function Write() {
                         editor.insertEmbed(range.index, "image", url);
                         // URL 삽입 후 커서를 이미지 뒷 칸으로 이동
                         editor.setSelection(range.index + 1);
-                        console.log('url 확인', url);
+                        // console.log('url 확인', url);
                         imageUrl.push(url);
                     });
                 });
@@ -173,7 +173,8 @@ function Write() {
         }
         axios.post(`${baseUrl}/board`, body
         ).then((response) => {
-            console.log(response.data);	//정상 통신 후 응답된 메시지 출력
+            // console.log(preface);	//정상 통신 후 응답된 메시지 출력
+            // console.log(response.data);	//정상 통신 후 응답된 메시지 출력
             if (board === "자유 게시판") {
                 window.location.href = `/free-board/${userInfo.nickName}`
             } else if (board === "반려동물 자랑") {
@@ -222,7 +223,7 @@ function Write() {
     }
     const prefaceBtn = (input) => {
         setPreface(input)
-        console.log(preface)
+        // console.log(preface)
     }
 
     return (
@@ -394,7 +395,8 @@ function Write() {
                                 </span>
                             </OverlayTrigger>
                         </InputFooter>
-                        : quillValue.length > 0 && boardName.length > 0 && board.length > 0 ?
+                        :
+                        preface !== "머릿말을 선택해주세요" && quillValue.length > 0 && boardName.length > 0 && board.length > 0 ?
                             <InputFooter>
                                 <Button style={{
                                     margin: "10px 0",
@@ -408,7 +410,11 @@ function Write() {
                             : <InputFooter>
                                 <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 머릿말, 내용을 입력해주세요</Tooltip>}>
                                     <span className="d-inline-block">
-                                        <Button className='registerBtns' disabled style={{ margin: "10px 0", width: "120px", backgroundColor: switchBgColor, pointerEvents: 'none' }}>
+                                        <Button className='registerBtns' disabled style={{
+                                            margin: "10px 0", width: "120px", backgroundColor: switchBgColor,
+                                            color: switchColor,
+                                            pointerEvents: 'none'
+                                        }}>
                                             등록
                                         </Button>
                                     </span>
