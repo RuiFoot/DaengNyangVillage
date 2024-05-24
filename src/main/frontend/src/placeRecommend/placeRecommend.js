@@ -9,16 +9,17 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useRecoilValue } from 'recoil';
-import { isDarkAtom } from '../components/atoms';
+import { isDarkAtom, presentPage } from '../components/atoms';
 import themes from "../components/theme";
 import axios from "axios";
 import defaultImg from "../components/defaultImgs";
 import { FaStar } from "react-icons/fa6";
+import Pagination from "../components/pagination";
 
 const baseUrl = "http://localhost:8080";
 
 const Container = styled.div`
-min-height: calc(100vh - 86px);
+
   display: grid;
   gap: 15px;
 `;
@@ -108,6 +109,14 @@ display: flex;
 flex-direction: column;
 width: 400px;
 `
+const Selected = styled.div`
+gap : 10px;
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+`
+
 const { kakao } = window;
 
 
@@ -117,9 +126,9 @@ function PlaceRecommend() {
     const [categoryList, setCategoryList] = useState([]);
     const [areaList, setAreaList] = useState([]);
     const [address, setAddress] = useState([]);
-    const [sido, setSido] = useState()
-    const [checkedArea, setCheckedArea] = useState()
-    const [checkedCategory, setCheckedCategory] = useState()
+    const [sido, setSido] = useState("시,도")
+    const [checkedArea, setCheckedArea] = useState("시,군")
+    const [checkedCategory, setCheckedCategory] = useState("카테고리")
     //다크모드
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
@@ -232,24 +241,48 @@ function PlaceRecommend() {
         }
     }
 
-    // 맵에 띄울 마커 정보 받기 
+    const [page, setPage] = useState({})
+    const nowPage = useRecoilValue(presentPage);
     useEffect(() => {
-        axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=0`)
+        axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=${nowPage - 1}`)
             .then((res) => {
-                setAddress(res.data.content)
-                console.log(res)
+                setAddress(res.data.content);
+                kakaomapMarker(res.data.content)
+                setPage({
+                    empty: res.data.empty,
+                    first: res.data.first,
+                    last: res.data.last,
+                    number: res.data.number,
+                    numberOfElements: res.data.numberOfElements,
+                    pageable: res.data.pageable,
+                    size: res.data.size,
+                    sort: res.data.sort,
+                    totalElements: res.data.totalElements,
+                    totalPages: res.data.totalPages
+                })
                 console.log(res.data)
-            }).catch(error => {
-                console.error('Request failed : ', error);
             })
-    }, [checkedCategory])
+    }, [nowPage]);
 
-    const handleButtonClick = () => {
+    const handleButtonClick = (e) => {
+        e.preventDefault();
         axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=0`)
             .then((res) => {
                 setAddress(res.data.content)
                 console.log(res.data)
                 kakaomapMarker(res.data.content)
+                setPage({
+                    empty: res.data.empty,
+                    first: res.data.first,
+                    last: res.data.last,
+                    number: res.data.number,
+                    numberOfElements: res.data.numberOfElements,
+                    pageable: res.data.pageable,
+                    size: res.data.size,
+                    sort: res.data.sort,
+                    totalElements: res.data.totalElements,
+                    totalPages: res.data.totalPages
+                })
                 //getList(res.data.content)
             })
             .catch((error) => {
@@ -258,7 +291,10 @@ function PlaceRecommend() {
     };
 
     //시, 도 배열
-    const bigAreaList = ["경기도", "서울특별시", "인천광역시", "강원특별자치도", "충청남도", "대전광역시", "세종특별자치시", "충청북도", "전북특별자치도", "전라남도", "광주광역시", "경상북도", "대구광역시", "경상남도", "울산광역시", "부산광역시", "제주특별자치도"]
+    const bigAreaList = [
+        "서울특별시", "인천광역시", "대전광역시", "광주광역시", "대구광역시", "울산광역시", "부산광역시",
+        "경기도", "강원특별자치도", "충청남도", "세종특별자치시", "충청북도",
+        "전북특별자치도", "전라남도", "경상북도", "경상남도", "제주특별자치도"]
 
     //시도 선택시 상세 군,구 또는 시, 군 선택가능 하게
     const bigAreaClicked = (e) => {
@@ -346,6 +382,9 @@ function PlaceRecommend() {
         return starRank
     }
 
+    //페이지네이션
+    const pageRange = page.size //pageRange :한페이지에 보여줄 아이템 수
+
     return (
         <Container style={{
             color: switchColor,
@@ -364,10 +403,18 @@ function PlaceRecommend() {
                                     backgroundColor: switchBgColor
                                 }} className="cardHeader">
                                     <InputGroup className="inputGroup mb-3" >
-                                        <div>{sido} {checkedArea} {checkedCategory}</div>
-                                        <Button variant="outline-secondary" id="button-addon2" onClick={handleButtonClick}>
-                                            검색
-                                        </Button>
+                                        <Selected>
+                                            <InputGroup.Text id="basic-addon1">{sido}</InputGroup.Text>
+                                            <InputGroup.Text id="basic-addon1">{checkedArea}</InputGroup.Text>
+                                            <InputGroup.Text id="basic-addon1">{checkedCategory}</InputGroup.Text>
+                                            <Button style={{
+                                                color: switchColor,
+                                                backgroundColor: switchBgColor,
+                                                borderColor: switchColor
+                                            }} className="searchBtn" id="button-addon2" onClick={handleButtonClick}>
+                                                검색
+                                            </Button>
+                                        </Selected>
                                     </InputGroup>
                                 </Card.Header>
                                 <List>
@@ -444,11 +491,19 @@ function PlaceRecommend() {
                                     color: switchColor,
                                     backgroundColor: switchBgColor
                                 }} className="cardHeader">
-                                    <InputGroup className="inputGroup mb-3">
-                                        <div>{sido} {checkedArea} {checkedCategory}</div>
-                                        <Button variant="outline-secondary" id="button-addon2" onClick={handleButtonClick}>
-                                            검색
-                                        </Button>
+                                    <InputGroup className="inputGroup mb-3" >
+                                        <Selected>
+                                            <InputGroup.Text id="basic-addon1">{sido}</InputGroup.Text>
+                                            <InputGroup.Text id="basic-addon1">{checkedArea}</InputGroup.Text>
+                                            <InputGroup.Text id="basic-addon1">{checkedCategory}</InputGroup.Text>
+                                            <Button style={{
+                                                color: switchColor,
+                                                backgroundColor: switchBgColor,
+                                                borderColor: switchColor
+                                            }} className="searchBtn" id="button-addon2" onClick={handleButtonClick}>
+                                                검색
+                                            </Button>
+                                        </Selected>
                                     </InputGroup>
                                 </Card.Header>
                                 <List>
@@ -521,6 +576,11 @@ function PlaceRecommend() {
                         </Map>
                     </TopContants>
             }
+            <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+            {/*
+             totalPageNum : 총 페이지내이션 수
+             btnRange : 보여질 페이지 버튼의 개수
+            */}
             < PlaceItems style={{
                 gridTemplateColumns: windowSize > 1790 ?
                     "repeat(auto-fit,260px)" : "repeat(auto-fit,350px)"
@@ -541,6 +601,11 @@ function PlaceRecommend() {
                     ))
                 }
             </PlaceItems >
+            <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+            {/*
+             totalPageNum : 총 페이지내이션 수
+             btnRange : 보여질 페이지 버튼의 개수
+            */}
         </Container>
     );
 }
