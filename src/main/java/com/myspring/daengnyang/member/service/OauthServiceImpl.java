@@ -1,6 +1,5 @@
 package com.myspring.daengnyang.member.service;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -43,11 +42,11 @@ public class OauthServiceImpl implements OauthService {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
+            // POST 요청을 위해 기본값이 false인 setDoOutput을 true로
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
 
-            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+            // POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
@@ -58,11 +57,11 @@ public class OauthServiceImpl implements OauthService {
             bw.write(sb.toString());
             bw.flush();
 
-            //결과 코드가 200이라면 성공
+            // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             StringBuilder result = new StringBuilder();
@@ -72,7 +71,7 @@ public class OauthServiceImpl implements OauthService {
             }
             System.out.println("response body : " + result);
 
-            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
+            // Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result.toString());
 
@@ -98,20 +97,20 @@ public class OauthServiceImpl implements OauthService {
     public String getUserInfo(String accessToken) {
         String reqURL = "/v2/user/me";
         StringBuilder result = new StringBuilder();
-        //access_token을 이용하여 사용자 정보 조회
+        // access_token을 이용하여 사용자 정보 조회
         try {
             URL url = new URL(kakaoAPIURL + reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken); //전송할 header 작성, access_token전송
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken); // 전송할 header 작성, access_token전송
 
-            //결과 코드가 200이라면 성공
+            // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
 
@@ -137,7 +136,8 @@ public class OauthServiceImpl implements OauthService {
         log.info(element.toString());
 
         long id = element.getAsJsonObject().get("id").getAsLong();
-        String imgPath = element.getAsJsonObject().get("properties").getAsJsonObject().get("profile_image").getAsString();
+        String imgPath = element.getAsJsonObject().get("properties").getAsJsonObject().get("profile_image")
+                .getAsString();
         String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
         log.info("id : " + id + "/ nickname : " + nickname + "/ imgPath : " + imgPath);
 
@@ -166,7 +166,8 @@ public class OauthServiceImpl implements OauthService {
             userInfo.setInputZonecode("");
             log.info(userInfo.toString());
             memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber(),
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(),
+                    userInfo.getPhoneNumber(),
                     userInfo.getInputZonecode());
             log.info("카카오 계정으로 회원가입 완료");
             return memberNo;
@@ -186,8 +187,7 @@ public class OauthServiceImpl implements OauthService {
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setRequestProperty("Authorization", "KakaoAK " + appKey); //전송할 header 작성, access_token전송
-
+            conn.setRequestProperty("Authorization", "KakaoAK " + appKey); // 전송할 header 작성, access_token전송
 
             String data = "target_id_type=user_id&target_id=" + target_id;
             conn.setDoOutput(true);
@@ -196,11 +196,11 @@ public class OauthServiceImpl implements OauthService {
             os.flush();
             os.close();
 
-            //결과 코드가 200이라면 성공
+            // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
 
@@ -231,8 +231,7 @@ public class OauthServiceImpl implements OauthService {
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setRequestProperty("Authorization", "KakaoAK " + appKey); //전송할 header 작성, access_token전송
-
+            conn.setRequestProperty("Authorization", "KakaoAK " + appKey); // 전송할 header 작성, access_token전송
 
             String data = "target_id_type=user_id&target_id=" + target_id;
             conn.setDoOutput(true);
@@ -241,12 +240,11 @@ public class OauthServiceImpl implements OauthService {
             os.flush();
             os.close();
 
-
-            //결과 코드가 200이라면 성공
+            // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
 
@@ -265,28 +263,14 @@ public class OauthServiceImpl implements OauthService {
 
     @Override
     public MemberInfoVO googleLogin(String loginResult) {
-//        String accessToken = getGoogleAccessToken(code);
-//        JsonNode userResourceNode = getUserResource(accessToken);
-//        System.out.println("userResourceNode = " + userResourceNode);
-//
-//        String id = userResourceNode.get("id").asText();
-//        String email = userResourceNode.get("email").asText();
-//        String nickname = userResourceNode.get("name").asText();
-//        System.out.println("id = " + id);
-//        System.out.println("email = " + email);
-//        System.out.println("nickname = " + nickname);
-//
-//        return id;
-
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(loginResult);
 
         log.info(element.toString());
 
-        String id = element.getAsJsonObject().get("id").toString();
-
-        String imgPath = element.getAsJsonObject().get("picture").toString();
-        String nickname = element.getAsJsonObject().get("name").toString();
+        String id = element.getAsJsonObject().get("id").toString().replace("\"", "");
+        String imgPath = element.getAsJsonObject().get("picture").toString().replace("\"", "");
+        String nickname = element.getAsJsonObject().get("name").toString().replace("\"", "");
         log.info("id : " + id + "/ nickname : " + nickname + "/ imgPath : " + imgPath);
         String DuplicationE = memberMapper.getDuplicationEmail(id);
         if (DuplicationE != null) { // 중복 된 값이 있을 경우
@@ -313,12 +297,12 @@ public class OauthServiceImpl implements OauthService {
             userInfo.setPhoneNumber("");
             log.info(userInfo.toString());
             memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber(),"");
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(),
+                    userInfo.getPhoneNumber(), "");
             log.info("구글 계정으로 회원가입 완료");
             return userInfo;
         }
     }
-
 
     @Override
     public String getGoogleAccessToken(String authorizationCode) {
@@ -339,7 +323,8 @@ public class OauthServiceImpl implements OauthService {
 
         HttpEntity entity = new HttpEntity(params, headers);
 
-        ResponseEntity<JsonNode> responseNode = restTemplate.exchange(tokenUri, HttpMethod.POST, entity, JsonNode.class);
+        ResponseEntity<JsonNode> responseNode = restTemplate.exchange(tokenUri, HttpMethod.POST, entity,
+                JsonNode.class);
         JsonNode accessTokenNode = responseNode.getBody();
         return accessTokenNode.get("access_token").asText();
     }
@@ -365,11 +350,11 @@ public class OauthServiceImpl implements OauthService {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
+            // POST 요청을 위해 기본값이 false인 setDoOutput을 true로
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
 
-            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+            // POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
@@ -381,11 +366,11 @@ public class OauthServiceImpl implements OauthService {
             bw.write(sb.toString());
             bw.flush();
 
-            //결과 코드가 200이라면 성공
+            // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             StringBuilder result = new StringBuilder();
@@ -395,7 +380,7 @@ public class OauthServiceImpl implements OauthService {
             }
             System.out.println("response body : " + result);
 
-            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
+            // Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result.toString());
 
@@ -414,25 +399,24 @@ public class OauthServiceImpl implements OauthService {
         return access_Token;
     }
 
-
     @Override
     public String getNaverUserInfo(String accessToken) {
         String reqURL = "/v1/nid/me";
         StringBuilder result = new StringBuilder();
-        //access_token을 이용하여 사용자 정보 조회
+        // access_token을 이용하여 사용자 정보 조회
         try {
             URL url = new URL(naverAPIURL + reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken); //전송할 header 작성, access_token전송
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken); // 전송할 header 작성, access_token전송
 
-            //결과 코드가 200이라면 성공
+            // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
 
@@ -484,7 +468,8 @@ public class OauthServiceImpl implements OauthService {
             userInfo.setPhoneNumber(mobile);
             log.info(userInfo.toString());
             memberMapper.createMemberInfo(userInfo.getNickName(), userInfo.getMemberNo(), userInfo.getProfileImg(),
-                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(), userInfo.getPhoneNumber(),"");
+                    userInfo.getInputAddress(), userInfo.getDetailedAddress(), userInfo.getMypet(),
+                    userInfo.getPhoneNumber(), "");
             log.info("네이버 계정으로 회원가입 완료");
             return userInfo;
         }
@@ -497,6 +482,5 @@ public class OauthServiceImpl implements OauthService {
         log.info("멤버 정보 : " + memberInfoVO);
         return memberInfoVO;
     }
-
 
 }

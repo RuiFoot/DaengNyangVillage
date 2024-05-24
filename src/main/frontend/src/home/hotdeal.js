@@ -43,7 +43,6 @@ const HotdealItemImg = styled.div`
 `;
 
 const HotdealItemName = styled.span`
-  font-weight: bold;
   margin-bottom: 5px;
 `;
 
