@@ -373,7 +373,7 @@ function Write() {
                 </div>
                 {/* 폼길이 조정 */}
                 {
-                    board === "반려동물 자랑" ? quillValue.length > 0 && boardName.length > 0 ?
+                    board === "반려동물 자랑" ? preface !== "머릿말을 선택해주세요" && quillValue.length > 0 && boardName.length > 0 ?
                         <InputFooter>
                             <Button style={{
                                 margin: "10px 0",
@@ -394,7 +394,7 @@ function Write() {
                                 </span>
                             </OverlayTrigger>
                         </InputFooter>
-                        : quillValue.length > 0 && boardName.length > 0 && board.length > 0 ?
+                        : quillValue.length > 0 && preface !== "머릿말을 선택해주세요" && boardName.length > 0 && board.length > 0 ?
                             <InputFooter>
                                 <Button style={{
                                     margin: "10px 0",
