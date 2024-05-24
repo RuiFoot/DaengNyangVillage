@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Bumper from "../layout/bumper";
-import hotPlaceArr from "../components/imgDate";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from 'recoil';
@@ -160,6 +159,7 @@ function RecommendDetail() {
     }, [])
 
     //스프링 통신
+    const [heart, setHeart] = useState()
     const [board, setBoard] = useState({
         animalNum: 0,
         largeClassification: "",
@@ -180,7 +180,7 @@ function RecommendDetail() {
         numberAddress: ""
     })
     const [heart, setHeart] = useState()
-    useEffect(() => {
+     useEffect(() => {
         axios.get(`/api/animal/detail/${params.itemId}`)
             .then((res) => {
                 setBoard(res.data);

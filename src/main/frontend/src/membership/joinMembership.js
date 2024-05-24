@@ -18,6 +18,7 @@ import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../servers/firebase";
 import defaultImg from '../img/defaultImg.png';
 
+
 const Container = styled.div`
 display: flex;
 flex-direction: column;
@@ -26,7 +27,7 @@ align-items: center;
 const InputForm = styled.form`
 gap: 10px;
 margin: 15px;
-width: 432px;
+width: 350px;
 `
 const JoinTitle = styled.div`
 margin: 15px 0 0 0;
@@ -117,6 +118,8 @@ function JoinMembership() {
     function handleSubmit(e) {
         console.log(imageUrl)
         e.preventDefault();
+        // console.log("이미지 널확인2");		//정상 통신 후 응답된 메시지 출력
+        // console.log(imageUrl);		//정상 통신 후 응답된 메시지 출력
         let body = {
             email: memberInfo.email,
             password: memberInfo.password,
@@ -147,7 +150,7 @@ function JoinMembership() {
             inputZonecode: "",
             detailedAddress: ""
         })
-        console.log(body)
+        // console.log(body)
         window.location.href = '/'
     }
 
@@ -181,7 +184,7 @@ function JoinMembership() {
         axios.get(`${baseUrl}/member/duplicationE?email=${input}`)
             .then((res) => {
                 setIsDuplicationE(res.data);
-                console.log(isDuplicationE)
+                // console.log(isDuplicationE)
             })
     }
     const isNickName = (input) => {
@@ -208,14 +211,16 @@ function JoinMembership() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log(file);
+        // console.log(file);
         setIsLoding(false)
         if (file) {
             const downloadUrl = await uploadImage(file);
-            console.log(downloadUrl);
+            // console.log(downloadUrl);
             setImageUrl(downloadUrl);
+            // console.log("이미지가 널일때 확인");
+            // console.log(downloadUrl);
             setIsLoding(true)
-            console.log("받기완료");
+            // console.log("받기완료");
         }
     };
 
@@ -224,13 +229,12 @@ function JoinMembership() {
         if (!files) return null;
         setFile(files[0]);
         setClickUpload(true)
-        console.log("요기");
     };
 
 
     const imgReset = async () => {
         deleteObject(ref(storage, imageUrl));
-        console.log(file)
+        // console.log(file)
         setImageUrl("")
         setClickUpload(false)
         setIsLoding()

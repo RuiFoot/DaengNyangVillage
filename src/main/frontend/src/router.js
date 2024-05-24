@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import Home from "./home/home"
 import PlaceRecommend from "./placeRecommend/placeRecommend"
@@ -44,7 +44,7 @@ function Router() {
                 />
                 <Route path="/recommend-place-detail/:itemId" element={<RecommendDetail />}
                 />
-                <Route path="/change-passwd-lick/:nickNameLink" element={<ChangePasswdLick />} />
+                <Route path="/change-passwd-lick/:memberNo" element={<ChangePasswdLick />} />
                 <Route path="/free-board-detail/:boardId" element={<FreeBoardDetail />} />
 
                 <Route path="/training-method-detail/:boardId" element={<TrainingBoardDetail />} />
@@ -60,6 +60,8 @@ function Router() {
                 <Route path="/:nickName" element={<Home />} />
                 <Route path="/place-recommend/:nickName" element={<PlaceRecommend />} />
                 <Route path="/about-us/:nickName" element={<AboutUs />} />
+                <Route path="/find-id-passwd/:nickName" element={<FindIdPasswd />}
+                />
                 <Route path="/my-info/:nickName" element={<MyInfo />} />
                 <Route path="/my-info-change/:nickName" element={<MyInfoChange />} />
                 <Route path="/change-passwd/:nickName" element={<ChangePasswd />} />
@@ -82,6 +84,7 @@ function Router() {
                 <Route path="/used-market-detail/:boardId/:nickName" element={<UsedMarketDetail />} />
                 <Route path="/pet-boast-detail/:boardId/:nickName" element={<PetBoastDetail />} />
                 <Route path="/edit/:boardId/:nickName" element={<Edit />} />
+                <Route path="/login/oauth2/code/kakao" element={<KakaoLoding />} />
             </Routes>
         )
     }

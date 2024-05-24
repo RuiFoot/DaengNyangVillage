@@ -105,7 +105,7 @@ width: 50px;
 
 // 네비바
 function NavVillage() {
-    //현재 주소
+     //현재 주소
     const pathname = window.location.pathname;
     const params = useParams()
     console.log(params)
@@ -125,7 +125,7 @@ function NavVillage() {
             console.log(error);	//오류발생시 실행
         })
     }
-
+      
     //다크모드
     const [isOn, setisOn] = useRecoilState(isDarkAtom)
     useEffect(() => {
@@ -176,8 +176,6 @@ function NavVillage() {
                     }
 
                 }
-                const cookies = document.cookie.split(';');
-                console.log(cookies)
             }).catch((error) => {
                 console.log(error);	//오류발생시 실행
                 setLogin(false)
@@ -227,9 +225,10 @@ function NavVillage() {
                         <Social>
                             <p>소셜 로그인</p>
                             <Logos>
-                                {/* <NaverLogo className='socialLogo' src={naver} onClick={() => { alert("네이버~") }} /> */}
+                                {/* 
+                                <NaverLogo className='socialLogo' src={naver} onClick={() => { window.location.href = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=fSYWQz2civYrneAweMd2&redirect_url=http://localhost:3000/member/oauth/naver&state=STATE_STRING" }} /> */}
                                 <KakaoLogo className='socialLogo' src={kakao} onClick={() => { window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=db0c282555cc32e78ecbce031761fc83&redirect_uri=http://localhost:3000/login/oauth2/code/kakao&response_type=code" }} />
-                                <GoogleLogo className='socialLogo' src={google} onClick={() => { alert("구글~") }} />
+                                <GoogleLogo className='socialLogo' src={google} onClick={() => { window.location.href = " https://accounts.google.com/o/oauth2/auth?client_id=784460278410-s4c177jq0a48vv26bldeivip5u0gl4ak.apps.googleusercontent.com&redirect_uri=http://localhost:3000/member/oauth/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile" }} />
                             </Logos>
                         </Social>
                     </ModalBodyFooter>
@@ -263,6 +262,7 @@ function NavVillage() {
     const [modalShow, setModalShow] = useState(false);
     const LogOut = () => {
         setUrl("/")
+        window.sessionStorage.removeItem("social")
         window.sessionStorage.removeItem("logined")
         window.location.href = "/"
     }

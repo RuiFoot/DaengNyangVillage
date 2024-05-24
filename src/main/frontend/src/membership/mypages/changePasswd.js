@@ -69,7 +69,7 @@ function ChangePasswd() {
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
         let body = {
-            memberNo: previousInfo.memberNo !== null && previousInfo.memberNo,
+            memberNo: JSON.parse(sessionStorage.getItem("logined")).memberNo,
             email: "",
             password: newPasswd
         }
