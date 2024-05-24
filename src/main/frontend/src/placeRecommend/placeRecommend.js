@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom, presentPage } from '../components/atoms';
@@ -150,7 +149,18 @@ function PlaceRecommend() {
         url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
     }
 
-    // 카카오맵 초기화
+    const getRecommend = () => {
+        let recommendSido = "서울"
+        let recommendSigungu = "송파구"
+        axios.get(`${baseUrl}/animal/recommend?sido=${recommendSido}&sigungu=${recommendSigungu}`)
+        .then((res)=>{
+            console.log(res.data);
+            setAddress(res.data);
+            kakaomapMarker(res.data);
+        })
+    }
+
+    // 카카오맵 초기화. 카테고리 리스트 생성
     useEffect(() => {
         const container = document.getElementById('map');
         const options = {
@@ -159,12 +169,6 @@ function PlaceRecommend() {
         };
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
-    }, []);
-
-
-
-    //카테고리 리스트 받아오기
-    useEffect(() => {
         axios.get(`${baseUrl}/animal`)
             .then((res) => {
                 setCategoryList(res.data)
@@ -172,8 +176,9 @@ function PlaceRecommend() {
             }).catch(error => {
                 console.error('Request failed : ', error);
             })
-
     }, []);
+
+    
 
     // 마커 생성 및 범위 재설정
     const kakaomapMarker = (data) => {
@@ -294,10 +299,11 @@ function PlaceRecommend() {
     const bigAreaList = [
         "서울특별시", "인천광역시", "대전광역시", "광주광역시", "대구광역시", "울산광역시", "부산광역시",
         "경기도", "강원특별자치도", "충청남도", "세종특별자치시", "충청북도",
-        "전북특별자치도", "전라남도", "경상북도", "경상남도", "제주특별자치도"]
+        "전북특별자치도", "전라남도", "경상북도", "경상남도", "제주특별자치도","전체"]
 
     //시도 선택시 상세 군,구 또는 시, 군 선택가능 하게
     const bigAreaClicked = (e) => {
+        console.log(e)
         setSido(e)
         // console.log(e[e.length - 1]) //유저가 클릭한 채크박스의 마지막 글자(시, 도 구분)
         axios.get(`${baseUrl}/animal/area?sido=${e}`)
@@ -317,6 +323,7 @@ function PlaceRecommend() {
     }
     //상세 군, 구 또는 시, 군 선택에서 시, 도 선택으로 돌아갈때
     const goBack = () => {
+        setCheckedArea("시,군")
         setAreaList([])
     }
 
@@ -428,11 +435,15 @@ function PlaceRecommend() {
                                                             backgroundColor: switchBgColor
                                                         }}
                                                     >
-                                                        <CheckBox
+                                                        <Button
+                                                            style={{
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor,
+                                                                borderColor: switchColor
+                                                            }}
                                                             value={e}
-                                                            onChange={(e) => bigAreaClicked(e.target.value)}
-                                                            id={i} type="checkbox"></CheckBox>
-                                                        <CheckBoxLabel >{e}</CheckBoxLabel>
+                                                            onClick={(e) => bigAreaClicked(e.target.value)}
+                                                            id={i} type="button">{e}</Button>
                                                     </ListGroup.Item>
                                                 ))}
                                             </ListGroup>
@@ -450,12 +461,17 @@ function PlaceRecommend() {
                                                                 backgroundColor: switchBgColor
                                                             }}
                                                         >
-                                                            <CheckBox
+                                                            <Button
+                                                                style={{
+                                                                    color: switchColor,
+                                                                    backgroundColor: switchBgColor,
+                                                                    borderColor: switchColor
+                                                                }}
                                                                 value={e}
                                                                 name="cityOption"
-                                                                onChange={(e) => clickedArea(e.target)}
-                                                                id={i} type="checkbox"></CheckBox>
-                                                            <CheckBoxLabel>{e}</CheckBoxLabel>
+                                                                onClick={(e) => clickedArea(e.target)}
+                                                                id={i} type="button">{e}</Button>
+
                                                         </ListGroup.Item>
                                                     ))}
                                                 </ListGroup>
@@ -467,12 +483,16 @@ function PlaceRecommend() {
                                                 color: switchColor,
                                                 backgroundColor: switchBgColor
                                             }}>
-                                                <CheckBox
+                                                <Button
+                                                    style={{
+                                                        color: switchColor,
+                                                        backgroundColor: switchBgColor,
+                                                        borderColor: switchColor
+                                                    }}
                                                     value={e}
                                                     name="categoryOption"
-                                                    onChange={(e) => clickedCategory(e.target)}
-                                                    id={i} type="checkbox"></CheckBox>
-                                                <CheckBoxLabel>{e}</CheckBoxLabel>
+                                                    onClick={(e) => clickedCategory(e.target)}
+                                                    id={i} type="button">{e}</Button>
                                             </ListGroup.Item>
                                         ))}
                                     </ListGroup>
@@ -517,11 +537,10 @@ function PlaceRecommend() {
                                                             backgroundColor: switchBgColor
                                                         }}
                                                     >
-                                                        <CheckBox
+                                                        <Button
                                                             value={e}
-                                                            onChange={(e) => bigAreaClicked(e.target.value)}
-                                                            id={i} type="checkbox"></CheckBox>
-                                                        <CheckBoxLabel >{e}</CheckBoxLabel>
+                                                            onClick={(e) => bigAreaClicked(e.target.value)}
+                                                            id={i} type="button">{e}</Button>
                                                     </ListGroup.Item>
                                                 ))}
                                             </ListGroup>
@@ -539,12 +558,11 @@ function PlaceRecommend() {
                                                                 backgroundColor: switchBgColor
                                                             }}
                                                         >
-                                                            <CheckBox
+                                                            <Button
                                                                 value={e}
                                                                 name="cityOption"
-                                                                onChange={(e) => clickedArea(e.target)}
-                                                                id={i} type="checkbox"></CheckBox>
-                                                            <CheckBoxLabel>{e}</CheckBoxLabel>
+                                                                onClick={(e) => clickedArea(e.target)}
+                                                                id={i} type="button">{e}</Button>
                                                         </ListGroup.Item>
                                                     ))}
                                                 </ListGroup>
@@ -556,12 +574,11 @@ function PlaceRecommend() {
                                                 color: switchColor,
                                                 backgroundColor: switchBgColor
                                             }}>
-                                                <CheckBox
+                                                <Button
                                                     value={e}
                                                     name="categoryOption"
-                                                    onChange={(e) => clickedCategory(e.target)}
-                                                    id={i} type="checkbox"></CheckBox>
-                                                <CheckBoxLabel>{e}</CheckBoxLabel>
+                                                    onClick={(e) => clickedCategory(e.target)}
+                                                    id={i} type="button">{e}</Button>
                                             </ListGroup.Item>
                                         ))}
                                     </ListGroup>

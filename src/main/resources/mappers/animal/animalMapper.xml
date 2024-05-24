@@ -82,13 +82,13 @@
                 FROM "animalLocation"
         ]]>
                 <where>
-                    <if test="data.sido != null and data.sido != '전체'">
+                    <if test="data.sido != null and data.sido != '전체' and data.sido != '시,도' ">
                         AND INSTR("sido", #{data.sido}) > 0
                     </if>
-                    <if test="data.sigungu != null and data.sigungu != '전체'">
+                    <if test="data.sigungu != null and data.sigungu != '전체' and data.sigungu !='시,군'">
                         AND INSTR("sigungu", #{data.sigungu}) > 0
                     </if>
-                    <if test="data.classification != null and data.classification != '전체' and data.classification !=''">
+                    <if test="data.classification != null and data.classification != '전체' and data.classification !='카테고리'">
                         AND "subClassification" = #{data.classification}
                     </if>
                     AND "star" is not null
@@ -112,13 +112,13 @@
         SELECT COUNT(*) AS CNT
         FROM "animalLocation"]]>
         <where>
-            <if test="sido != null and sido !='전체'">
+            <if test="sido != null and sido !='전체' and sido !='시,도'">
                 AND INSTR("sido", #{sido}) > 0
             </if>
-            <if test="sigungu != null and sigungu != '전체'">
+            <if test="sigungu != null and sigungu != '전체'and sigungu !='시,군'">
                 AND INSTR("sigungu", #{sigungu}) > 0
             </if>
-            <if test="classification != null and classification != '전체' and classification !=''">
+            <if test="classification != null and classification != '전체' and classification !='카테고리'">
                 AND "subClassification" = #{classification}
             </if>
             AND "star" is not null
@@ -248,7 +248,7 @@
                 ORDER BY DBMS_RANDOM.RANDOM
             )
         <![CDATA[
-            WHERE ROWNUM <= 10
+            WHERE ROWNUM <= 12
         ]]>
     </select>
 </mapper>
