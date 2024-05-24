@@ -21,7 +21,7 @@ axios.defaults.withCredentials = true;
 //css
 const Logo = styled.img`
 position: fixed;
-top: 12px;
+top: 14px;
 left: 50%;
 width: 90px;
 transform: translate(-50%, -10%);
@@ -31,7 +31,6 @@ cursor: pointer;
 width: 100px;
 `
 const ToggleContainer = styled.div`
-margin-right: 10px;
 display: flex;
 align-items: center;
 position: relative;
@@ -340,15 +339,7 @@ function NavVillage() {
                                 About Us
                             </Nav.Link>
                         </Nav>
-                        <Nav className="d-flex">
-                            <ToggleContainer onClick={toggleHandler}>
-                                <div className={`toggle-container ${isOn ? "toggle--checked" : null}`}></div>
-                                <SunMoon style={{
-                                    color: switchColor,
-                                    backgroundColor: switchBgColor
-                                }}
-                                    className={`toggle-circle ${isOn ? "toggle--checked" : null}`}>{isOn ? <CiDark /> : <CiBrightnessDown />}</SunMoon>
-                            </ToggleContainer>
+                        <Nav style={{ margin: "5px 0" }} className="d-flex">
                             <Nav.Link className='navLink' style={{
                                 color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
                                     ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
@@ -357,14 +348,25 @@ function NavVillage() {
                                     login ? `${nickName}님의 마이페이지` : "회원가입"
                                 }
                             </Nav.Link>
-                            <Nav.Link >
-                                <Button style={{ backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => login ? LogOut() : setModalShow(true)}> {login ? "로그아웃" : "로그인"}
-                                </Button>
+                            <Nav.Link className='navLink' style={{
+                                margin: "0 15px",
+                                color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
+                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
+                            }} onClick={() => login ? LogOut() : setModalShow(true)}>
+                                {login ? "로그아웃" : "로그인"}
                             </Nav.Link>
                             <LoginModal
                                 show={modalShow}
                                 onHide={() => setModalShow(false)}
                             />
+                            <ToggleContainer onClick={toggleHandler}>
+                                <div className={`toggle-container ${isOn ? "toggle--checked" : null}`}></div>
+                                <SunMoon style={{
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
+                                }}
+                                    className={`toggle-circle ${isOn ? "toggle--checked" : null}`}>{isOn ? <CiDark /> : <CiBrightnessDown />}</SunMoon>
+                            </ToggleContainer>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

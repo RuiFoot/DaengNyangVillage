@@ -22,13 +22,15 @@ margin-top: 20px;
 `
 const Title = styled.div`
 font-size: 24px;
-margin-bottom: 20px;
-margin-top: 20px;
+margin-bottom: 15px;
+margin-top: 70px;
+border-bottom : 1px solid;
 `
 const Text = styled.div`
 margin-bottom: 10px;
 `
 const UserId = styled.div`
+margin-top: 10px;
 `
 
 function FindIdPasswd() {
@@ -44,8 +46,6 @@ function FindIdPasswd() {
     const [numCheck, setNumCheck] = useState()
     const [findUserId, setFindUserId] = useState()
     const [isEmailSent, setIsEmailSent] = useState(false);
-
-    let memberInfo = JSON.parse(window.localStorage.getItem("member")) // json 객체로 변환 
 
     // 아이디 찾기
     const isNum = (input) => {

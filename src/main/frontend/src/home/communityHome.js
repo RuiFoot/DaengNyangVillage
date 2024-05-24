@@ -14,6 +14,8 @@ display: grid;
 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 grid-auto-rows: minmax(100px, auto);
 gap: 15px;
+padding: 5px;
+box-shadow: 3px 5px 5px 1.5px #E8E8E8;
 `
 const Communitylist = styled.div`
 
@@ -26,7 +28,6 @@ font-weight: bold;
 margin-bottom: 5px;
 `
 const ArticleTitle = styled.div`
-font-weight: bold;
 margin-bottom: 10px;
 `
 const Content = styled.a`

@@ -9,6 +9,7 @@ import themes from "../components/theme";
 import Pagination from "../components/pagination";
 import "./communityStyle.css"
 import CommunityHeader from "./communityHeader";
+
 const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
@@ -94,7 +95,7 @@ function FreeBoard() {
         }}>
             <CommunityNav />
             <CommunityHeader />
-            <ListGroup style={{ gap: "10px", margin: `10px 6vw` }}>
+            <ListGroup style={{ gap: "10px", margin: `10px 8vw` }}>
                 {
                     board.length > 0 &&
                     board.map((e, i) => (
