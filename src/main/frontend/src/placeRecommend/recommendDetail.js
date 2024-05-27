@@ -14,6 +14,8 @@ import React, { useRef } from "react"
 import "./placeRecommendStyle.css"
 import defaultImg from "../components/defaultImgs";
 import axios from "axios";
+import { MdModeEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 const Container = styled.div`
 min-height: calc(100vh - 179px);
@@ -59,7 +61,7 @@ const Address = styled.div`
 font-size: clamp(100%, 2vw, 120%);
 `
 const ReviewsTitleBox = styled.div`
-width: 88vw;
+width: 80vw;
 margin: 20px 0 10px 0;
 display: flex;
 justify-content: start;
@@ -71,7 +73,7 @@ font-size: 20px;
 const Comments = styled.div`
 display: flex;
 flex-direction: column;
-width: 88vw;
+width: 80vw;
 margin: 0 0 10px 0;
 `
 const CommentsInputs = styled.div`
@@ -134,6 +136,15 @@ justify-content: end;
 const StarInput = styled.div`
 display: flex;
 align-items: center;
+`
+
+const RegistBtn = styled.div`
+height: 25px;
+margin-left: 10px;
+cursor: pointer;
+&:hover {
+    border-bottom: 1px solid #F288CD;
+}
 `
 
 function RecommendDetail() {
@@ -370,14 +381,14 @@ function RecommendDetail() {
                     />
                 </InputGroup>
                 <ButtonBox>
-                    <Button style={{
+                    <RegistBtn style={{
                         color: switchColor,
                         backgroundColor: switchBgColor
-                    }} className="recommendBtn" id="button-addon2"
+                    }} id="button-addon2"
                         onClick={reviewId !== undefined ? uploadEditReview : uploadReview}
                     >
                         평점 등록
-                    </Button>
+                    </RegistBtn>
                 </ButtonBox>
             </>
         )
@@ -460,7 +471,7 @@ function RecommendDetail() {
             }}>
                 <CategoryTitle>장소 추천</CategoryTitle>
                 <Items>
-                    <LeftItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 10px 0 6vw"}` }}>
+                    <LeftItems style={{ margin: `${windowSize < 800 ? "0 10vw" : "0 10px 0 10vw"}` }}>
                         <Title>
                             {board.facilityName}
                             {
@@ -470,7 +481,7 @@ function RecommendDetail() {
                         </Title>
                         <Img style={{ backgroundImage: board.imgPath === null ? `url(${showImg(board.subClassification)})` : `url(${showImg(board.imgPath)})` }} />
                     </LeftItems>
-                    <RightItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 6vw 0 10px"}` }}>
+                    <RightItems style={{ margin: `${windowSize < 800 ? "0 10vw" : "0 10vw 0 10px"}` }}>
                         <Title>{starRankAVG()}</Title>
                         <Address>주소 : {board.roadAddress}</Address>
                         <Precautions>가격 : {board.payInfo}</Precautions>
@@ -524,7 +535,7 @@ function RecommendDetail() {
                                             userInfo !== null &&
                                                 userInfo.memberNo === e.memberNo ?
                                                 <EditDeleteBox >
-                                                    <Button style={{
+                                                    {/* <Button style={{
                                                         margin: "0 5px",
                                                         color: switchColor,
                                                         backgroundColor: switchBgColor
@@ -536,7 +547,23 @@ function RecommendDetail() {
                                                         backgroundColor: switchBgColor
                                                     }} className="recommendBtn"
                                                         onClick={() => deleteReview(e.animalReviewNum)}
-                                                    >삭제</Button>
+                                                    >삭제</Button> */}
+                                                    <MdModeEdit className="mdModeEdit" style={{
+                                                        cursor: "pointer",
+                                                        fontSize: "20px"
+                                                        , margin: "0 5px",
+                                                        color: switchColor,
+                                                        backgroundColor: switchBgColor
+                                                    }}
+                                                        onClick={() => editReview(e)} />
+                                                    <MdDelete style={{
+                                                        marginLeft: "10PX",
+                                                        cursor: "pointer",
+                                                        fontSize: "20px",
+                                                        color: switchColor,
+                                                        backgroundColor: switchBgColor
+                                                    }} className="mdDelete"
+                                                        onClick={() => deleteReview(e.animalReviewNum)} />
 
                                                 </EditDeleteBox>
                                                 : null

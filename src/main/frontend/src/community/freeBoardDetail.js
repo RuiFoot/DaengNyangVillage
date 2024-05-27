@@ -13,6 +13,8 @@ import { deleteObject, ref } from "firebase/storage";
 import Comments from "./comments";
 import CommunityNav from "./communityNav";
 import Modal from 'react-bootstrap/Modal';
+import { MdModeEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 const Container = styled.div`
 min-height: calc(100vh - 179px);
@@ -20,31 +22,28 @@ display: flex;
 flex-direction: column;
 align-items: center;
 `
-const CategoryTitle = styled.div`
-font-size: 30px;
-margin: 10px;
-`
 const Title = styled.div`
-font-size: 35px;
-margin: 25px 0;
+font-size: 25px;
+margin: 25px 0 20px 0;
 height: 40px;
 `
 const BoarderLine = styled.div`
-width: 88vw;
-border-bottom: 1px solid;
+width: 80vw;
+border-bottom: 1px solid #D0D0D0;
 margin-bottom: 5px;
 `
 const ContentField = styled.div`
-width: 88vw;
+width: 80vw;
 margin: 20px 0;
 `
 const ContentBtns = styled.div`
+margin: 10px 0;
 display: flex;
 justify-content: end;
 `
 const ContentFooter = styled.div`
 gap: 10px;
-width: 88vw;
+width: 80vw;
 display: flex;
 flex-direction: column;
 align-items: end;
@@ -183,19 +182,22 @@ function FreeBoardDetail() {
                 null :
                 loginedNickName === content.nickname ?
                   <ContentBtns>
-                    <Button style={{
-                      margin: "0 5px",
+                    <MdModeEdit className="mdModeEdit" style={{
+                      cursor: "pointer",
+                      fontSize: "20px"
+                      , margin: "0 5px",
                       color: switchColor,
                       backgroundColor: switchBgColor
-                    }} className="recommendBtn"
-                      onClick={() => editContentBtn(content.boardId)}
-                    >수정</Button>
-                    <Button style={{
+                    }}
+                      onClick={() => editContentBtn(content.boardId)} />
+                    <MdDelete style={{
+                      marginLeft: "10PX",
+                      cursor: "pointer",
+                      fontSize: "20px",
                       color: switchColor,
                       backgroundColor: switchBgColor
-                    }} className="recommendBtn"
-                      onClick={() => handleShow(content.boardId)}
-                    >삭제</Button>
+                    }} className="mdDelete"
+                      onClick={() => handleShow(content.boardId)} />
                   </ContentBtns>
                   : null
             }

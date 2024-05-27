@@ -36,6 +36,14 @@ const InputFooter = styled.div`
 display: flex;
 justify-content: end;
 `
+const WriteBtn = styled.div`
+padding: 0 10px;
+text-align: center;
+cursor: pointer;
+&:hover {
+    border-bottom: 1px solid  #F288CD;
+}
+`
 //이미지 사이즈 변경
 Quill.register('modules/imageActions', ImageActions);
 Quill.register('modules/imageFormats', ImageFormats);
@@ -239,7 +247,7 @@ function Write() {
                             color: switchColor,
                             backgroundColor: switchBgColor
                         }} id="dropdown-basic"
-                            className='registerBtns'>
+                            className='headerBtn'>
                             {board}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
@@ -256,7 +264,7 @@ function Write() {
                                     color: switchColor,
                                     backgroundColor: switchBgColor
                                 }} id="dropdown-basic"
-                                    className='registerBtns'>
+                                    className='headerBtn'>
                                     {preface}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
@@ -271,7 +279,7 @@ function Write() {
                                         color: switchColor,
                                         backgroundColor: switchBgColor
                                     }} id="dropdown-basic"
-                                        className='registerBtns'>
+                                        className='headerBtn'>
                                         {preface}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
@@ -286,7 +294,7 @@ function Write() {
                                             color: switchColor,
                                             backgroundColor: switchBgColor
                                         }} id="dropdown-basic"
-                                            className='registerBtns'>
+                                            className='headerBtn'>
                                             {preface}
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
@@ -304,7 +312,7 @@ function Write() {
                                 color: switchColor,
                                 backgroundColor: switchBgColor
                             }} id="dropdown-basic"
-                                className='registerBtns'>
+                                className='headerBtn'>
                                 {area}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
@@ -374,48 +382,46 @@ function Write() {
                 </div>
                 {/* 폼길이 조정 */}
                 {
-                    board === "반려동물 자랑" ? preface !== "머릿말을 선택해주세요" && quillValue.length > 0 && boardName.length > 0 ?
+                    board === "반려동물 자랑" ? quillValue.length > 0 && boardName.length > 0 ?
                         <InputFooter>
-                            <Button style={{
+                            <WriteBtn style={{
                                 margin: "10px 0",
-                                width: "120px",
                                 color: switchColor,
                                 backgroundColor: switchBgColor
-                            }} className='registerBtns'
+                            }}
                                 onClick={handleSubmit}
-                            >등 록</Button>
+                            >등  록</WriteBtn>
                         </InputFooter>
                         :
                         <InputFooter>
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 내용을 입력해주세요</Tooltip>}>
                                 <span className="d-inline-block">
-                                    <Button className='registerBtns' disabled style={{ margin: "10px 0", width: "120px", backgroundColor: switchBgColor, pointerEvents: 'none' }}>
-                                        등록
-                                    </Button>
+                                    <WriteBtn disabled style={{ margin: "10px 0", backgroundColor: switchBgColor, pointerEvents: 'none' }}>
+                                        등  록
+                                    </WriteBtn>
                                 </span>
                             </OverlayTrigger>
                         </InputFooter>
                         : quillValue.length > 0 && preface !== "머릿말을 선택해주세요" && boardName.length > 0 && board.length > 0 ?
                             <InputFooter>
-                                <Button style={{
+                                <WriteBtn style={{
                                     margin: "10px 0",
-                                    width: "120px",
                                     color: switchColor,
                                     backgroundColor: switchBgColor
-                                }} className='registerBtns'
+                                }}
                                     onClick={handleSubmit}
-                                >등 록</Button>
+                                >등  록</WriteBtn>
                             </InputFooter>
                             : <InputFooter>
                                 <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">제목, 머릿말, 내용을 입력해주세요</Tooltip>}>
                                     <span className="d-inline-block">
-                                        <Button className='registerBtns' disabled style={{
-                                            margin: "10px 0", width: "120px", backgroundColor: switchBgColor,
+                                        <WriteBtn disabled style={{
+                                            margin: "10px 0", backgroundColor: switchBgColor,
                                             color: switchColor,
                                             pointerEvents: 'none'
                                         }}>
-                                            등록
-                                        </Button>
+                                            등  록
+                                        </WriteBtn>
                                     </span>
                                 </OverlayTrigger>
                             </InputFooter>

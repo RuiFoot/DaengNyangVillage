@@ -13,14 +13,16 @@ const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
 const PetBoastItems = styled.div`
-margin: 10px 6vw;
+margin: 10px 10vw;
 display: grid;
 justify-content: center;
 grid-template-columns: repeat(auto-fit, 300px);
 grid-auto-rows: minmax(100px, auto);
-gap: 15px;
+gap: 20px;
 `
 const PetBoastItem = styled.a`
+padding: 10px;
+border-radius: 5px;
 text-decoration: none;
 cursor: pointer;
 &:hover {
@@ -142,6 +144,7 @@ function PetBoast() {
                 {board.length > 0 &&
                     board.map((e, i) => (
                         <PetBoastItem style={{
+                            boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`,
                             color: switchColor
                         }}
                             key={i}
@@ -161,7 +164,10 @@ function PetBoast() {
                         </PetBoastItem>
                     ))}
             </PetBoastItems >
-            <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+            {
+                pageRange ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                    : null
+            }
             {/*
              totalPageNum : 총 페이지내이션 수
              btnRange : 보여질 페이지 버튼의 개수

@@ -24,7 +24,7 @@ align-items: center;
 `
 const InputForm = styled.form`
 margin: 15px;
-width: 350px;
+width: 380px;
 `
 const EditTitle = styled.div`
 margin: 20px 0 0 0;
@@ -427,12 +427,20 @@ function MyInfoChange() {
                     <InputFooter>
                         {
                             isValid ?
-                                <button id="joinBtn" type="submit" onClick={handleSubmit}>
+                                <Button style={{
+                                    marginTop: "20px",
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
+                                }} className="changBtn" type="submit" onClick={handleSubmit}>
                                     회원 정보 수정
-                                </button>
+                                </Button>
                                 : <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">회원 정보가 유효하지 않습니다.</Tooltip>}>
                                     <span className="d-inline-block">
-                                        <Button id="joinBtn" disabled style={{ marginTop: "30px", pointerEvents: 'none' }}>
+                                        <Button className="changBtn" disabled style={{
+                                            marginTop: "20px",
+                                            pointerEvents: 'none', color: switchColor,
+                                            backgroundColor: switchBgColor
+                                        }}>
                                             회원 정보 수정
                                         </Button>
                                     </span>

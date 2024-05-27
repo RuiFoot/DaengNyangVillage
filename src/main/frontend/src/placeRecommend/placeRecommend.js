@@ -18,50 +18,63 @@ import Pagination from "../components/pagination";
 const baseUrl = "http://localhost:8080";
 
 const Container = styled.div`
-
-  display: grid;
-  gap: 15px;
+min-height: calc(100vh - 86px);
 `;
+
+const Contents = styled.div`
+margin: 0 10vw;
+display: grid;
+justify-content: center;
+`;
+
 const ContantTitle = styled.div`
+margin: 20px 0 0 0;
 text-align: center;
 font-size: clamp(90%, 5vw, 160%);
-margin: 10px 6vw;
 `
+const ContantSubTitle = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 0 0 20px 0;
+`
+
 // 체크박스 css
 const TopContants = styled.div`
-margin: 10px 6vw;
 display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 3fr;
   grid-auto-rows: minmax(100px, auto);
-  gap: 15px;
+  gap: 40px;
 `
 const CheckBoxs = styled.div`
 display: flex;
 justify-content: center;
 height: 500px;
-width: 100%;
+width: 360px;
 `
 const List = styled.div`
 display: flex;
 flex-direction: row;
-height: 410px;
+height: 420px;
 justify-content: center;
 `
 
 const Map = styled.div`
 height: 500px;
+width: 100%;
 `
 
 const PlaceItems = styled.div`
 min-height: 130px;
 display: grid;
 justify-content: center;
-  grid-auto-rows: minmax(100px, auto);
-  gap: 15px;
-  margin: 10px 6vw;
+grid-auto-rows: minmax(100px, auto);
+gap: 20px;
 `
 
 const PlaceItem = styled.a`
+padding: 10px;
+border-radius: 5px;
 text-decoration: none;
 cursor: pointer;
 &:hover {
@@ -69,7 +82,7 @@ cursor: pointer;
 }
 `
 const PlaceItemTitle = styled.div`
-height: 60px;
+height: 50px;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -106,7 +119,7 @@ cursor: pointer;
 const SiGun = styled.div`
 display: flex;
 flex-direction: column;
-width: 400px;
+width: 100%;
 `
 const Selected = styled.div`
 gap : 10px;
@@ -115,6 +128,8 @@ display: flex;
 justify-content: center;
 align-items: center;
 `
+
+
 
 const { kakao } = window;
 
@@ -399,32 +414,47 @@ function PlaceRecommend() {
         }}>
             <Bumper />
             <ContantTitle>장소 추천</ContantTitle>
+            <ContantSubTitle>반려동물과 함께 할 수 있는 공간을 추천해드립니다!</ContantSubTitle>
             {
                 windowSize > 999
                     ?
                     <TopContants >
-                        <CheckBoxs>
-                            <Card className="card">
+                        <CheckBoxs style={{ boxShadow: isDark ? `0px 10px 20px 4px black` : `0px 10px 20px 4px #E8E8E8` }}>
+                           <Card style={{ width: "100%" }} className="card">
                                 <Card.Header style={{
                                     color: switchColor,
                                     backgroundColor: switchBgColor
                                 }} className="cardHeader">
                                     <InputGroup className="inputGroup mb-3" >
-                                        <Selected>
-                                            <InputGroup.Text id="basic-addon1">{sido}</InputGroup.Text>
-                                            <InputGroup.Text id="basic-addon1">{checkedArea}</InputGroup.Text>
-                                            <InputGroup.Text id="basic-addon1">{checkedCategory}</InputGroup.Text>
-                                            <Button style={{
-                                                color: switchColor,
-                                                backgroundColor: switchBgColor,
-                                                borderColor: switchColor
-                                            }} className="searchBtn" id="button-addon2" onClick={handleButtonClick}>
-                                                검색
-                                            </Button>
-                                        </Selected>
+                                            <Selected>
+                                                <InputGroup.Text style={{
+                                                    color: switchColor,
+                                                    backgroundColor: switchBgColor,
+                                                    borderColor: switchColor
+                                                }} id="basic-addon1">{sido}</InputGroup.Text>
+                                                <InputGroup.Text style={{
+                                                    color: switchColor,
+                                                    backgroundColor: switchBgColor,
+                                                    borderColor: switchColor
+                                                }} id="basic-addon1">{checkedArea}</InputGroup.Text>
+                                                <InputGroup.Text style={{
+                                                    color: switchColor,
+                                                    backgroundColor: switchBgColor,
+                                                    borderColor: switchColor
+                                                }} id="basic-addon1">{checkedCategory}</InputGroup.Text>
+                                                <Button style={{
+                                                    color: switchColor,
+                                                    backgroundColor: switchBgColor,
+                                                    borderColor: switchColor
+                                                }} className="searchBtn" id="button-addon2" onClick={handleButtonClick}>
+                                                    검 색
+                                                </Button>
+                                            </Selected>
                                     </InputGroup>
                                 </Card.Header>
-                                <List>
+                                <List style={{
+                                        color: switchColor, backgroundColor: switchBgColor
+                                    }}>
                                     {
                                         areaList.length < 1 ?
                                             <ListGroup className="areaListGroup" variant="flush">
@@ -453,8 +483,7 @@ function PlaceRecommend() {
                                                     color: switchColor, backgroundColor: switchBgColor
                                                 }} onClick={() => { goBack() }} >시, 도로 돌아가기</GoBack>
                                                 <ListGroup className="areaListGroup" variant="flush">
-
-                                                    {areaList.map((e, i) => (
+                                                    {bigAreaList.map((e, i) => (
                                                         <ListGroup.Item key={i}
                                                             style={{
                                                                 color: switchColor,
@@ -500,7 +529,7 @@ function PlaceRecommend() {
 
                             </Card>
                         </CheckBoxs>
-                        <Map id="map">
+                        <Map style={{ boxShadow: isDark ? `0px 10px 20px 4px black` : `0px 10px 20px 4px #E8E8E8` }} id="map">
                         </Map>
                     </TopContants>
                     :
@@ -548,10 +577,24 @@ function PlaceRecommend() {
                                             <SiGun>
                                                 <GoBack style={{
                                                     color: switchColor, backgroundColor: switchBgColor
-                                                }} onClick={() => { goBack() }} >시, 도로 돌아가기</GoBack>
+                                                }} id="basic-addon1">{checkedCategory}</InputGroup.Text>
+                                                <Button style={{
+                                                    color: switchColor,
+                                                    backgroundColor: switchBgColor,
+                                                    borderColor: switchColor
+                                                }} className="searchBtn" id="button-addon2" onClick={handleButtonClick}>
+                                                    검 색
+                                                </Button>
+                                            </Selected>
+                                        </InputGroup>
+                                    </Card.Header>
+                                    <List style={{
+                                        color: switchColor, backgroundColor: switchBgColor
+                                    }}>
+                                        {
+                                            areaList.length < 1 ?
                                                 <ListGroup className="areaListGroup" variant="flush">
-
-                                                    {areaList.map((e, i) => (
+                                                    {bigAreaList.map((e, i) => (
                                                         <ListGroup.Item key={i}
                                                             style={{
                                                                 color: switchColor,
@@ -598,31 +641,36 @@ function PlaceRecommend() {
              totalPageNum : 총 페이지내이션 수
              btnRange : 보여질 페이지 버튼의 개수
             */}
-            < PlaceItems style={{
-                gridTemplateColumns: windowSize > 1790 ?
-                    "repeat(auto-fit,260px)" : "repeat(auto-fit,350px)"
-            }}  >
+                < PlaceItems style={{
+                    gridTemplateColumns: windowSize > 1790 ?
+                        "repeat(auto-fit,230px)" : "repeat(auto-fit,350px)"
+                }}  >
+                    {
+                        address.map((e, i) => (
+                            <PlaceItem key={i}
+                                style={{
+                                    boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`,
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
+                                }}
+                                href={`/recommend-place-detail/${e.animalNum}${url}`}>
+                                <PlaceItemTitle>{e.facilityName}</PlaceItemTitle>
+                                <PlaceItemImg style={{ backgroundImage: e.imgPath === null ? `url(${showImg(e.subClassification)})` : `url(${showImg(e.imgPath)})` }} />
+                                <PlaceItemInfo><GoDotFill />평점 : {e.star === 0 ? "아직 평가가 없습니다." : starRankAVG(e.star)}</PlaceItemInfo>
+                                <PlaceItemAddress><GoDotFill />{e.roadAddress}</PlaceItemAddress>
+                            </PlaceItem>
+                        ))
+                    }
+                </PlaceItems >
                 {
-                    address.map((e, i) => (
-                        <PlaceItem key={i}
-                            style={{
-                                color: switchColor,
-                                backgroundColor: switchBgColor
-                            }}
-                            href={`/recommend-place-detail/${e.animalNum}${url}`}>
-                            <PlaceItemTitle>{e.facilityName}</PlaceItemTitle>
-                            <PlaceItemImg style={{ backgroundImage: e.imgPath === null ? `url(${showImg(e.subClassification)})` : `url(${showImg(e.imgPath)})` }} />
-                            <PlaceItemInfo><GoDotFill />평점 : {e.star === 0 ? "아직 평가가 없습니다." : starRankAVG(e.star)}</PlaceItemInfo>
-                            <PlaceItemAddress><GoDotFill />{e.roadAddress}</PlaceItemAddress>
-                        </PlaceItem>
-                    ))
+                    pageRange ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                        : null
                 }
-            </PlaceItems >
-            <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
-            {/*
+                {/*
              totalPageNum : 총 페이지내이션 수
              btnRange : 보여질 페이지 버튼의 개수
             */}
+            </Contents>
         </Container>
     );
 }

@@ -7,19 +7,29 @@ import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
 import defaultImg from "../components/defaultImgs";
 import axios from "axios";
+const Container = styled.div`
+`
 
 const PlaceItems = styled.div`
 display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-auto-rows: minmax(100px, auto);
-  gap: 15px;
+  gap: 20px;
   margin-bottom: 10px;
-  padding: 5px;
-  box-shadow: 3px 5px 5px 1.5px #E8E8E8;
+  padding: 10px;
 `
-
+const CategoryTitle = styled.div`
+text-align: center;
+font-size: 30px;
+font-weight: bold;
+margin-bottom: 5px;
+padding-top: 10px;
+`
 const PlaceItem = styled.a`
 text-decoration: none;
+border: 1px solid #D0D0D0;
+padding: 5px;
+border-radius: 5px;
 `
 const PlaceItemTitle = styled.div`
 display: flex;
@@ -107,26 +117,34 @@ function HotPlaceList() {
     }, []);
 
     return (
-        < PlaceItems >
-            {
-                board.length > 0 &&
-                board.slice(0, windowSize > 979
-                    ? 6 : 4).map((e, i) => (
-                        <PlaceItem key={i} style={{
-                            color: switchColor,
-                            backgroundColor: switchBgColor
-                        }}
-                            href={`/recommend-place-detail/${e.animalNum}${url}`}
-                        >
-                            <PlaceItemTitle>{e.facilityName}</PlaceItemTitle>
-                            <PlaceItemImg style={{ backgroundImage: e.imgPath === null ? `url(${showImg(e.subClassification)})` : `url(${showImg(e.imgPath)})` }} />
-                            <PlaceItemAddress><GoDotFill />{e.roadAddress} {e.houseNumber
-                            }</PlaceItemAddress>
-                            <PlaceItemInfo><GoDotFill />{e.largeClassification}</PlaceItemInfo>
-                        </PlaceItem>
-                    ))
-            }
-        </PlaceItems >
+        <Container style={{
+            boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`
+        }} >
+            <a href={`/place-recommend${url}`}>
+                <CategoryTitle style={{
+                    color: switchColor
+                }}>인기장소</CategoryTitle></a>
+            < PlaceItems >
+                {
+                    board.length > 0 &&
+                    board.slice(0, windowSize > 979
+                        ? 6 : 4).map((e, i) => (
+                            <PlaceItem key={i} style={{
+                                color: switchColor,
+                                backgroundColor: switchBgColor
+                            }}
+                                href={`/recommend-place-detail/${e.animalNum}${url}`}
+                            >
+                                <PlaceItemTitle>{e.facilityName}</PlaceItemTitle>
+                                <PlaceItemImg style={{ backgroundImage: e.imgPath === null ? `url(${showImg(e.subClassification)})` : `url(${showImg(e.imgPath)})` }} />
+                                <PlaceItemAddress><GoDotFill />{e.roadAddress} {e.houseNumber
+                                }</PlaceItemAddress>
+                                <PlaceItemInfo><GoDotFill />{e.largeClassification}</PlaceItemInfo>
+                            </PlaceItem>
+                        ))
+                }
+            </PlaceItems >
+        </Container>
     );
 }
 

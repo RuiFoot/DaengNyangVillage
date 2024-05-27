@@ -4,6 +4,7 @@ import { presentPage } from './atoms';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const Container = styled.div`
+margin: 30px 0 0 0;
 display: flex;
 justify-content: center;
 `

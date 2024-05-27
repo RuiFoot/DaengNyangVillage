@@ -21,7 +21,7 @@ axios.defaults.withCredentials = true;
 //css
 const Logo = styled.img`
 position: fixed;
-top: 14px;
+top: 12px;
 left: 50%;
 width: 90px;
 transform: translate(-50%, -10%);
@@ -88,6 +88,7 @@ justify-content: center;
 align-items: center;
 `
 const Logos = styled.div`
+margin-top: 5px;
 `
 const NaverLogo = styled.img`
 margin: 0 5px;
@@ -95,11 +96,11 @@ width: 50px;
 `
 const KakaoLogo = styled.img`
 margin: 0 5px;
-width: 50px;
+width: 40px;
 `
 const GoogleLogo = styled.img`
 margin: 0 5px;
-width: 50px;
+width: 40px;
 `
 
 // 네비바
@@ -242,7 +243,7 @@ function NavVillage() {
                     <ModalBodyFooter >
                         <FindIdPassward onClick={() => { window.location.href = "/find-id-passwd" }}>아이디 / 비밀번호가 기억나지 않아요</FindIdPassward>
                         <Social>
-                            <p>소셜 로그인</p>
+                            <div>소셜 로그인</div>
                             <Logos>
                                 {/* 
                                 <NaverLogo className='socialLogo' src={naver} onClick={() => { window.location.href = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=fSYWQz2civYrneAweMd2&redirect_url=http://localhost:3000/member/oauth/naver&state=STATE_STRING" }} /> */}
@@ -350,8 +351,7 @@ function NavVillage() {
                             </Nav.Link>
                             <Nav.Link className='navLink' style={{
                                 margin: "0 15px",
-                                color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
-                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
+                                color: `${isOn ? themes.dark.color : themes.light.color}`
                             }} onClick={() => login ? LogOut() : setModalShow(true)}>
                                 {login ? "로그아웃" : "로그인"}
                             </Nav.Link>

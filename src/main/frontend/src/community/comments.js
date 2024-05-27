@@ -16,7 +16,7 @@ import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 
 const ReviewsTitleBox = styled.div`
-width: 88vw;
+width: 80vw;
 margin: 20px 0 10px 0;
 display: flex;
 justify-content: start;
@@ -28,23 +28,23 @@ font-size: 20px;
 const CommentsBox = styled.div`
 display: flex;
 flex-direction: column;
-width: 88vw;
+width: 80vw;
 margin: 0 0 10px 0;
 `
 const CommentsInputs = styled.div`
 margin: 20px 10px 0px 10px;
 `
 const CommentsItems = styled.div`
-margin: 10px 10px;
+margin: 25px 10px;
 display: flex;
 justify-content: center;
 padding-bottom: 5px;
-border-bottom: 1px solid;
+border-bottom: 1px solid #D0D0D0;
 `
 const CommentsRightBox = styled.div`
 display: flex;
 flex-direction: column;
-justify-content: center;
+justify-content: space-between;
 width: 100%;
 `
 const CommentsImg = styled.div`
@@ -70,7 +70,7 @@ text-align: center;
 `
 const Date = styled.div`
 height: 28px;
-margin: 10px 0;
+margin: 3px 0;
 display: flex;
 justify-content: end;
 align-items: center;
@@ -87,7 +87,7 @@ display: flex;
 justify-content: space-between;
 `
 const ReReEditDeleteBox = styled.div`
-margin: 5px 0;
+margin: 3px 0;
 display: flex;
 justify-content: end;
 `
@@ -97,7 +97,7 @@ align-items: center;
 justify-content: end;
 `
 const ReReviewBox = styled.div`
-width: 90%;
+width: 95%;
 `
 const Replyd = styled.div`
 display: flex;
@@ -114,7 +114,7 @@ const WriteReRe = styled.div`
 cursor: pointer;
 margin-left: 20px;
 &:hover {
-    border-bottom: 1px solid #F2884B;
+    border-bottom: 1px solid #F288CD;
 }
 `
 const BoarderLine = styled.div`
@@ -123,11 +123,24 @@ border-bottom: 1px solid;
 margin-bottom: 5px;
 `
 const ReWriteEditBtn = styled.div`
+height: 25px;
 cursor: pointer;
 margin: 0 0 20px 0;
 &:hover {
-    border-bottom: 1px solid #F2884B;
+    border-bottom: 1px solid #F288CD;
 }
+`
+const ReReBtn = styled.div`
+height: 25px;
+margin-left: 10px;
+cursor: pointer;
+&:hover {
+    border-bottom: 1px solid #F288CD;
+}
+`
+const ReReFooter = styled.div`
+display: flex;
+justify-content: space-between;
 `
 
 function Comments() {
@@ -311,7 +324,7 @@ function Comments() {
                     </ReWriteEditBtn>
 
                 </ButtonBox>
-                <BoarderLine />
+                {/* <BoarderLine /> */}
             </>
         )
     }
@@ -501,23 +514,23 @@ function Comments() {
                                                     />
                                                 </InputGroup>
                                                 <ButtonBox>
-                                                    <Button style={{
+                                                    <ReReBtn style={{
                                                         margin: "0 5px",
                                                         color: switchColor,
                                                         backgroundColor: switchBgColor
-                                                    }} className="recommendBtn" id="button-addon2"
+                                                    }} id="button-addon2"
                                                         onClick={() => upLoadReReview(e.boardReviewNum)}
                                                     >
                                                         댓글 등록
-                                                    </Button>
-                                                    <Button style={{
+                                                    </ReReBtn>
+                                                    <ReReBtn style={{
                                                         color: switchColor,
                                                         backgroundColor: switchBgColor
-                                                    }} className="recommendBtn" id="button-addon2"
+                                                    }} id="button-addon2"
                                                         onClick={() => closeReReview(e.boardReviewNum)}
                                                     >
                                                         닫기
-                                                    </Button>
+                                                    </ReReBtn>
                                                 </ButtonBox>
 
                                             </>
@@ -561,55 +574,59 @@ function Comments() {
                                                                         :
                                                                         <CommentsText>{k.review}</CommentsText>
                                                                 }
-                                                                <Date>
+                                                                <ReReFooter>
+                                                                    <Date>
+                                                                        {
+                                                                            k.createDate !== undefined &&
+                                                                            <CommentsDate>{k.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
+                                                                        }
+                                                                    </Date>
                                                                     {
-                                                                        k.createDate !== undefined &&
-                                                                        <CommentsDate>{k.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
+                                                                        userInfo !== null &&
+                                                                            userInfo.memberNo === k.memberNo ?
+                                                                            <ReReEditDeleteBox >
+                                                                                {
+                                                                                    reEdit === k.reviewId ?
+                                                                                        <ReReBtn style={{
+                                                                                            margin: "0 5px",
+                                                                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                                                                            backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+                                                                                        }}
+                                                                                            onClick={() => uploadEditReReview(k)}
+                                                                                        >수정 완료</ReReBtn>
+                                                                                        :
+                                                                                        <MdModeEdit className="mdModeEdit" style={{
+                                                                                            cursor: "pointer",
+                                                                                            fontSize: "20px"
+                                                                                            , margin: "0 5px",
+                                                                                            color: switchColor,
+                                                                                            backgroundColor: switchBgColor
+                                                                                        }}
+                                                                                            onClick={() => editReReview(k)} />
+                                                                                }
+                                                                                {
+                                                                                    reEdit === k.reviewId ?
+                                                                                        <ReReBtn style={{
+                                                                                            color: `${isDark ? themes.dark.color : themes.light.color}`,
+                                                                                            backgroundColor: `${isDark ?
+                                                                                                themes.dark.bgColor : themes.light.bgColor}`
+                                                                                        }}
+                                                                                            onClick={() => cencelReEdit()}
+                                                                                        >수정 취소</ReReBtn>
+                                                                                        :
+                                                                                        <MdDelete style={{
+                                                                                            marginLeft: "10PX",
+                                                                                            cursor: "pointer",
+                                                                                            fontSize: "20px",
+                                                                                            color: switchColor,
+                                                                                            backgroundColor: switchBgColor
+                                                                                        }} className="mdDelete"
+                                                                                            onClick={() => handleShow(k, "대댓글")} />
+                                                                                }
+                                                                            </ReReEditDeleteBox>
+                                                                            : null
                                                                     }
-                                                                </Date>
-                                                                {
-                                                                    userInfo !== null &&
-                                                                        userInfo.memberNo === k.memberNo ?
-                                                                        <ReReEditDeleteBox >
-                                                                            {
-                                                                                reEdit === k.reviewId ?
-                                                                                    <Button style={{
-                                                                                        margin: "0 5px",
-                                                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                                                                    }} className="recommendBtn"
-                                                                                        onClick={() => uploadEditReReview(k)}
-                                                                                    >수정 완료</Button>
-                                                                                    :
-                                                                                    <Button style={{
-                                                                                        margin: "0 5px",
-                                                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                                                        backgroundColor: `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-                                                                                    }} className="recommendBtn"
-                                                                                        onClick={() => editReReview(k)}
-                                                                                    >수정</Button>
-                                                                            }
-                                                                            {
-                                                                                reEdit === k.reviewId ?
-                                                                                    <Button style={{
-                                                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                                                        backgroundColor: `${isDark ?
-                                                                                            themes.dark.bgColor : themes.light.bgColor}`
-                                                                                    }} className="recommendBtn"
-                                                                                        onClick={() => cencelReEdit()}
-                                                                                    >수정 취소</Button>
-                                                                                    :
-                                                                                    <Button style={{
-                                                                                        color: `${isDark ? themes.dark.color : themes.light.color}`,
-                                                                                        backgroundColor: `${isDark ?
-                                                                                            themes.dark.bgColor : themes.light.bgColor}`
-                                                                                    }} className="recommendBtn"
-                                                                                        onClick={() => handleShow(k, "대댓글")}
-                                                                                    >삭제</Button>
-                                                                            }
-                                                                        </ReReEditDeleteBox>
-                                                                        : null
-                                                                }
+                                                                </ReReFooter>
                                                             </CommentsRightBox>
                                                         </CommentsItems>
                                                     </ReReviewBox>
