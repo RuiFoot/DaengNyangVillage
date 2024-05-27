@@ -26,6 +26,7 @@ font-size: 30px;
 margin: 10px;
 `
 const Items = styled.div`
+margin-top: 20px;
 width: 100%;
  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -43,9 +44,14 @@ flex-direction: column;
 justify-content: space-between;
 `
 const Title = styled.div`
-font-size: 25px;
-margin: 10px 0;
+font-size: 35px;
+margin: 25px 0;
 height: 40px;
+`
+const BoarderLine = styled.div`
+width: 88vw;
+border-bottom: 1px solid;
+margin-bottom: 5px;
 `
 const Img = styled.div`
 height: 500px;
@@ -91,6 +97,7 @@ text-align: end;
 const CreateDate = styled.div`
 text-align: end;
 `
+
 function UsedMarketDetail() {
     //다크모드
     const isDark = useRecoilValue(isDarkAtom);
@@ -188,19 +195,19 @@ function UsedMarketDetail() {
     }
     const deleteImgArr = []
     const deleteContentBtn = () => {
-        console.log(content)
+        // console.log(content)
         //내용안에서 이미지만 추출
         let count = content.field.split('http').length - 1;
         let newStartIndex = 0
         let startIndex = 0
-        console.log(count)
+        // console.log(count)
         for (let i = 0; i < count; i++) {
             if (content.field.indexOf(`"></p>`) !== -1) {
                 startIndex = content.field.indexOf("http", newStartIndex);
                 newStartIndex = content.field.indexOf(`"></p>`, startIndex);
                 deleteImgArr.push(content.field.slice(startIndex, newStartIndex))
             }
-            console.log(deleteImgArr)
+            // console.log(deleteImgArr)
         }
         for (let i = 0; i < deleteImgArr.length; i++) {
             deleteObject(ref(storage, deleteImgArr[i]));
@@ -223,39 +230,16 @@ function UsedMarketDetail() {
                 color: switchColor,
                 backgroundColor: switchBgColor
             }}>
-                <CategoryTitle>{content.category}</CategoryTitle>
+                <Title>
+                    [{content.preface}] {content.boardName}
+                </Title>
+                <BoarderLine />
                 <Items>
                     <LeftItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 10px 0 6vw"}` }}>
-                        <Title>
-                            [{content.preface}] {content.boardName}
-                        </Title>
                         {representImg(content.imgPath)}
                     </LeftItems>
                     <RightItems style={{ margin: `${windowSize < 800 ? "0 6vw" : "0 6vw 0 10px"}` }}>
                         <div>
-                            <Title>
-                                {
-                                    window.sessionStorage.getItem("logined") === null ?
-                                        null :
-                                        loginedNickName === content.nickname ?
-                                            <ContentBtns>
-                                                <Button style={{
-                                                    margin: "0 5px",
-                                                    color: switchColor,
-                                                    backgroundColor: switchBgColor
-                                                }} className="recommendBtn"
-                                                    onClick={() => editContentBtn(content.boardId)}
-                                                >수정</Button>
-                                                <Button style={{
-                                                    color: switchColor,
-                                                    backgroundColor: switchBgColor
-                                                }} className="recommendBtn"
-                                                    onClick={() => handleShow(content.boardId)}
-                                                >삭제</Button>
-                                            </ContentBtns>
-                                            : null
-                                }
-                            </Title>
                             <Address>주소 : {content.area} {content.detailLocation}</Address>
                             <TradeTime>거래 가능 시간 : {content.tradeTime}</TradeTime>
                             <TradePrice>가격 : {content.price}</TradePrice>
@@ -264,8 +248,38 @@ function UsedMarketDetail() {
                             {
                                 content.createDate ?
                                     <ContentFooter>
-                                        <Writer>작성자 : {content.nickname} </Writer>
-                                        <CreateDate>작성 날짜 : {content.createDate.replace("T", ", ").slice(0, 17)}</CreateDate>
+                                        {
+                                            content.createDate ?
+                                                <>
+                                                    <Writer>작성자 : {content.nickname} </Writer>
+                                                    <CreateDate>{content.createDate.replace("T", ", ").slice(0, 17)}</CreateDate>
+                                                </>
+                                                :
+                                                null
+                                        }
+                                        <>
+                                            {
+                                                window.sessionStorage.getItem("logined") === null ?
+                                                    null :
+                                                    loginedNickName === content.nickname ?
+                                                        <ContentBtns>
+                                                            <Button style={{
+                                                                margin: "0 5px",
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor
+                                                            }} className="recommendBtn"
+                                                                onClick={() => editContentBtn(content.boardId)}
+                                                            >수정</Button>
+                                                            <Button style={{
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor
+                                                            }} className="recommendBtn"
+                                                                onClick={() => handleShow(content.boardId)}
+                                                            >삭제</Button>
+                                                        </ContentBtns>
+                                                        : null
+                                            }
+                                        </>
                                     </ContentFooter>
                                     :
                                     null

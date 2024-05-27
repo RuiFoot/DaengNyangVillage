@@ -25,15 +25,17 @@ font-size: 30px;
 margin: 10px;
 `
 const Title = styled.div`
-font-size: 25px;
-margin: 10px 0;
+font-size: 35px;
+margin: 25px 0;
 height: 40px;
+`
+const BoarderLine = styled.div`
+width: 88vw;
+border-bottom: 1px solid;
+margin-bottom: 5px;
 `
 const ContentField = styled.div`
 width: 88vw;
-display: flex;
-flex-direction: column;
-align-items: center;
 margin: 20px 0;
 `
 const ContentBtns = styled.div`
@@ -123,19 +125,19 @@ function FreeBoardDetail() {
 
   const deleteImgArr = []
   const deleteContentBtn = () => {
-    console.log(content)
+    // console.log(content)
     //내용안에서 이미지만 추출
     let count = content.field.split('http').length - 1;
     let newStartIndex = 0
     let startIndex = 0
-    console.log(count)
+    // console.log(count)
     for (let i = 0; i < count; i++) {
       if (content.field.indexOf(`"></p>`) !== -1) {
         startIndex = content.field.indexOf("http", newStartIndex);
         newStartIndex = content.field.indexOf(`"></p>`, startIndex);
         deleteImgArr.push(content.field.slice(startIndex, newStartIndex))
       }
-      console.log(deleteImgArr)
+      // console.log(deleteImgArr)
     }
     for (let i = 0; i < deleteImgArr.length; i++) {
       deleteObject(ref(storage, deleteImgArr[i]));
@@ -158,11 +160,10 @@ function FreeBoardDetail() {
         color: switchColor,
         backgroundColor: switchBgColor
       }}>
-        <CategoryTitle>{content.category}</CategoryTitle>
-
         <Title>
           {content.boardName}
         </Title>
+        <BoarderLine />
         <ContentField dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(content.field)
         }} />
@@ -171,7 +172,7 @@ function FreeBoardDetail() {
             content.createDate ?
               <>
                 <Writer>작성자 : {content.nickname} </Writer>
-                <CreateDate>작성 날짜 : {content.createDate.replace("T", ", ").slice(0, 17)}</CreateDate>
+                <CreateDate>{content.createDate.replace("T", ", ").slice(0, 17)}</CreateDate>
               </>
               :
               null

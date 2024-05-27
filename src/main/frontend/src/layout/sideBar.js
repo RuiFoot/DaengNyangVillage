@@ -11,7 +11,8 @@ import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-
+import axios from "axios";
+import { Prev } from "react-bootstrap/esm/PageItem";
 const SideContainer = styled.div`
 
 `
@@ -121,10 +122,9 @@ function SideBar() {
     const [valueX, setValueX] = useState(0)
     // 메시지 전송
     const sendMessage = () => {
-
+        setValueX(Prev => Prev + 1)
         userChatArr.push(["user", userChat])
         console.log(userChatArr)
-
         let body = {
             message: userChat
         }

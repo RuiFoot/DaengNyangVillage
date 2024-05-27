@@ -19,9 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  * 회원 정보 관련 컨트롤러
@@ -31,13 +31,12 @@ import java.util.Map;
 @RequestMapping("/member")
 public class MemberController {
 
-
-
     private final MemberServiceImpl memberService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public MemberController(MemberServiceImpl memberService, PasswordEncoder passwordEncoder, OauthServiceImpl oAuthService) {
+    public MemberController(MemberServiceImpl memberService, PasswordEncoder passwordEncoder,
+            OauthServiceImpl oAuthService) {
         this.memberService = memberService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -61,14 +60,13 @@ public class MemberController {
     /**
      * 일반 로그인
      *
-     * @param request     : 이메일, password 전송
+     * @param request : 이메일, password 전송
      * @return Response
      */
     @PostMapping("/login")
     public ResponseEntity<MemberInfoVO> login(
             @RequestBody Map<String, String> request,
-            HttpSession session
-    ) {
+            HttpSession session) {
         String email = request.get("email");
         String enteredPassword = request.get("password");
 
@@ -77,15 +75,13 @@ public class MemberController {
         Integer memberNo = storedMember.getMemberNo();
         String storedPasswordHash = storedMember.getPassword();
         MemberInfoVO memberInfoVO = memberService.getMemberInfo(memberNo);
-        boolean passwordMatches =
-                passwordEncoder.matches(enteredPassword, storedPasswordHash);
+        boolean passwordMatches = passwordEncoder.matches(enteredPassword, storedPasswordHash);
         log.info("비밀번호 매칭 : " + passwordMatches);
         if (passwordMatches) {
             storedMember.setPassword(null);
             session.setAttribute("memberNo", memberNo);
-            session.setAttribute("nickname",memberInfoVO.getNickName());
+            session.setAttribute("nickname", memberInfoVO.getNickName());
             System.out.println(session.getId());
-
 
             return ResponseEntity.ok(memberInfoVO);
 
@@ -125,7 +121,7 @@ public class MemberController {
 
     @GetMapping("/favorite")
     public ResponseEntity<?> getFavorite(@RequestParam("memberNo") Integer memberNo,
-    @PageableDefault(page = 0,size = 12, sort = "favDate", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(page = 0, size = 12, sort = "favDate", direction = Sort.Direction.DESC) Pageable pageable) {
         log.info("멤버 찜한 장소 정보 불러 오기 실행 / Param => memberNo : " + memberNo);
         Page<?> paging = memberService.getFavorite(memberNo, pageable);
         return ResponseEntity.ok(paging);
@@ -160,6 +156,27 @@ public class MemberController {
     public void updatePassword(@RequestBody MemberVO memberVO) {
         log.info("비밀번호 변경 컨트롤러 실행 : " + memberVO.getPassword());
         memberService.updatePassword(memberVO);
+    }
+
+    @PostMapping("/findEmail")
+    public Map<String, String> findEmail(@RequestBody Map<String, String> phoneNumberMap) {
+        log.info("이메일 찾기 컨트롤러 실행");
+
+        String phoneNumber = phoneNumberMap.get("phoneNumber");
+        Map<String, String> map = new HashMap<>();
+        map.put("email", memberService.findEmail(phoneNumber));
+        return map;
+    }
+
+    @PostMapping("/findNickname")
+    public Map<String, String> findNickname(@RequestBody Map<String, String> emailMap) {
+        log.info("닉네임 찾기 컨트롤러 실행");
+
+        String email = emailMap.get("email");
+        Map<String, String> map = new HashMap<>();
+        map.put("memberNo", String.valueOf(memberService.getMember(email).getMemberNo()));
+        map.put("nickname", memberService.findNickname(email));
+        return map;
     }
 
 }

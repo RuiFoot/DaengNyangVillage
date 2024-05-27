@@ -45,9 +45,7 @@
 }
 
 .navbar-nav {
-    min-height: 80px;
     max-height: 120px;
-    overflow: hidden;
     display: flex;
     align-items: center;
     gap: 5px;

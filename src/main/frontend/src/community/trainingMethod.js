@@ -82,10 +82,10 @@ function TrainingMethod() {
                 console.log(res.data)
             })
     }, [nowPage]);
-    console.log(board)
-    console.log("지금 여기" + nowPage)
+    // console.log(board)
+    // console.log("지금 여기" + nowPage)
     const pageRange = page.size //pageRange :한페이지에 보여줄 아이템 수
-    console.log(board.category)
+    // console.log(board.category)
     return (
         <Container style={{
             color: switchColor,
@@ -93,7 +93,7 @@ function TrainingMethod() {
         }}>
             <CommunityNav />
             <CommunityHeader />
-            <ListGroup style={{ margin: `10px 6vw` }}>
+            <ListGroup style={{ gap: "10px", margin: `10px 8vw` }}>
                 {
                     board.length > 0 &&
                     board.map((e, i) => (

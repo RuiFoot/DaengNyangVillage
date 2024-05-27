@@ -63,17 +63,17 @@ function ChangePasswd() {
         }
 
     }
-     async function handleSubmit(e) {
+    async function handleSubmit(e) {
         console.log(previousInfo)
         e.preventDefault();
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
         let body = {
-            memberNo: previousInfo.memberNo !== null && previousInfo.memberNo,
+            memberNo: JSON.parse(sessionStorage.getItem("logined")).memberNo,
             email: "",
             password: newPasswd
         }
-        axios.post(`${baseUrl}/member/password`, body
+        axios.patch(`${baseUrl}/member/password`, body
         ).then((response) => {
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {

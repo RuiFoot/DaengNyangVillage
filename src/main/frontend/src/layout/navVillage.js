@@ -21,7 +21,7 @@ axios.defaults.withCredentials = true;
 //css
 const Logo = styled.img`
 position: fixed;
-top: 12px;
+top: 14px;
 left: 50%;
 width: 90px;
 transform: translate(-50%, -10%);
@@ -31,7 +31,6 @@ cursor: pointer;
 width: 100px;
 `
 const ToggleContainer = styled.div`
-margin-right: 10px;
 display: flex;
 align-items: center;
 position: relative;
@@ -105,28 +104,47 @@ width: 50px;
 
 // 네비바
 function NavVillage() {
+    //현재 주소
+    const pathname = window.location.pathname;
+    const params = useParams()
+    console.log(params)
+    const baseUrl = "http://localhost:8080";
 
     // 소셜 로그인
     const nowUrl = document.location.href
-    if (nowUrl.indexOf("code=") !== -1) {
+    if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("kakao") !== -1) {
         const code = new URL(window.location.href).searchParams.get("code")
         console.log(code)
-        axios.post(`https://kauth.kakao.com/oauth/token`,
-            {
-                code: code,
-            },
+        axios.get(`${baseUrl}/member/oauth/kakao?code=${code}`
         ).then((response) => {
             console.log(response);	//오류발생시 실행
+            sessionStorage.setItem("logined", JSON.stringify(response.data))
+            if (JSON.parse(sessionStorage.getItem("logined")).phoneNumber) {
+                window.location.href = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            } else {
+                window.location.href = `/my-info-change/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            }
+
+        }).catch((error) => {
+            console.log(error);	//오류발생시 실행
+        })
+    } else if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("google") !== -1) {
+        const code = new URL(window.location.href).searchParams.get("code")
+        console.log(code)
+        axios.get(`${baseUrl}/member/oauth/google?code=${code}`
+        ).then((response) => {
+            console.log(response);	//오류발생시 실행
+            sessionStorage.setItem("logined", JSON.stringify(response.data))
+            if (JSON.parse(sessionStorage.getItem("logined")).phoneNumber) {
+                window.location.href = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            } else {
+                window.location.href = `/my-info-change/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+            }
         }).catch((error) => {
             console.log(error);	//오류발생시 실행
         })
     }
-    //현재 주소
-    const pathname = window.location.pathname;
 
-    const params = useParams()
-    console.log(params)
-    const baseUrl = "http://localhost:8080";
     //다크모드
     const [isOn, setisOn] = useRecoilState(isDarkAtom)
     useEffect(() => {
@@ -177,8 +195,6 @@ function NavVillage() {
                     }
 
                 }
-                const cookies = document.cookie.split(';');
-                console.log(cookies)
             }).catch((error) => {
                 console.log(error);	//오류발생시 실행
                 setLogin(false)
@@ -228,9 +244,10 @@ function NavVillage() {
                         <Social>
                             <p>소셜 로그인</p>
                             <Logos>
-                                <NaverLogo className='socialLogo' src={naver} onClick={() => { alert("네이버~") }} />
+                                {/* 
+                                <NaverLogo className='socialLogo' src={naver} onClick={() => { window.location.href = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=fSYWQz2civYrneAweMd2&redirect_url=http://localhost:3000/member/oauth/naver&state=STATE_STRING" }} /> */}
                                 <KakaoLogo className='socialLogo' src={kakao} onClick={() => { window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=db0c282555cc32e78ecbce031761fc83&redirect_uri=http://localhost:3000/login/oauth2/code/kakao&response_type=code" }} />
-                                <GoogleLogo className='socialLogo' src={google} onClick={() => { alert("구글~") }} />
+                                <GoogleLogo className='socialLogo' src={google} onClick={() => { window.location.href = "https://accounts.google.com/o/oauth2/auth?client_id=784460278410-s4c177jq0a48vv26bldeivip5u0gl4ak.apps.googleusercontent.com&redirect_uri=http://localhost:3000/member/oauth/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile" }} />
                             </Logos>
                         </Social>
                     </ModalBodyFooter>
@@ -264,6 +281,7 @@ function NavVillage() {
     const [modalShow, setModalShow] = useState(false);
     const LogOut = () => {
         setUrl("/")
+        window.sessionStorage.removeItem("social")
         window.sessionStorage.removeItem("logined")
         window.location.href = "/"
     }
@@ -321,7 +339,26 @@ function NavVillage() {
                                 About Us
                             </Nav.Link>
                         </Nav>
-                        <Nav className="d-flex">
+                        <Nav style={{ margin: "5px 0" }} className="d-flex">
+                            <Nav.Link className='navLink' style={{
+                                color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
+                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
+                            }} href={login ? `/my-info/${nickName}` : `/join-membership`}>
+                                {
+                                    login ? `${nickName}님의 마이페이지` : "회원가입"
+                                }
+                            </Nav.Link>
+                            <Nav.Link className='navLink' style={{
+                                margin: "0 15px",
+                                color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
+                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
+                            }} onClick={() => login ? LogOut() : setModalShow(true)}>
+                                {login ? "로그아웃" : "로그인"}
+                            </Nav.Link>
+                            <LoginModal
+                                show={modalShow}
+                                onHide={() => setModalShow(false)}
+                            />
                             <ToggleContainer onClick={toggleHandler}>
                                 <div className={`toggle-container ${isOn ? "toggle--checked" : null}`}></div>
                                 <SunMoon style={{
@@ -330,23 +367,6 @@ function NavVillage() {
                                 }}
                                     className={`toggle-circle ${isOn ? "toggle--checked" : null}`}>{isOn ? <CiDark /> : <CiBrightnessDown />}</SunMoon>
                             </ToggleContainer>
-                            <Nav.Link className='navLink' style={{
-                                width: "170px",
-                                color: login ? `${lightOn(pathname, mypages) ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}` : `${pathname === `/join-membership${url}`
-                                    ? '#F2884B' : `${isOn ? themes.dark.color : themes.light.color}`}`
-                            }} href={login ? `/my-info/${nickName}` : `/join-membership`}>
-                                {
-                                    login ? `${nickName}님의 마이페이지` : "회원가입"
-                                }
-                            </Nav.Link>
-                            <Nav.Link >
-                                <Button style={{ width: "100px", backgroundColor: `${isOn ? themes.dark.navFooterBgColor : themes.light.bgColor}`, color: `${isOn ? themes.dark.color : themes.light.color}` }} className='loginBtn' onClick={() => login ? LogOut() : setModalShow(true)}> {login ? "로그아웃" : "로그인"}
-                                </Button>
-                            </Nav.Link>
-                            <LoginModal
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
-                            />
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

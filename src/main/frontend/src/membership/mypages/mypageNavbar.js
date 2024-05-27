@@ -45,9 +45,15 @@ function Mypage() {
                 <NavItems style={{ color: `${pathname === `/my-info/${loginedNickName}` || pathname === `/my-info-change/${loginedNickName}` ? "#F2884B" : switchColor}` }} href={`/my-info/${loginedNickName}`}>
                     내 정보
                 </NavItems>
-                <NavItems style={{ color: `${pathname === `/change-passwd/${loginedNickName}` ? "#F2884B" : switchColor}` }} href={`/change-passwd/${loginedNickName}`} >
-                    비밀번호 변경
-                </NavItems>
+                {
+                    sessionStorage.getItem("social") === "true"
+                        ?
+                        null
+                        :
+                        <NavItems style={{ color: `${pathname === `/change-passwd/${loginedNickName}` ? "#F2884B" : switchColor}` }} href={`/change-passwd/${loginedNickName}`} >
+                            비밀번호 변경
+                        </NavItems>
+                }
                 <NavItems style={{ color: `${pathname === `/selected-location/${loginedNickName}` ? "#F2884B" : switchColor}` }} href={`/selected-location/${loginedNickName}`}>
                     찜한 장소
                 </NavItems>

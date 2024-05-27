@@ -8,7 +8,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
 const BoardHeader = styled.div`
-margin: 10px 6vw 0 6vw;
+margin: 10px 6vw 10px 6vw;
 display: flex;
 justify-content: flex-end;
 `
@@ -35,8 +35,8 @@ function CommunityHeader() {
                     정렬
                 </Dropdown.Toggle>
                 <Dropdown.Menu >
-                    <Dropdown.Item href="#/action-1">날짜 오름차순</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">날짜 내림차순</Dropdown.Item>
+                    <Dropdown.Item href="#/action-1">최신순</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">오래된순</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             {

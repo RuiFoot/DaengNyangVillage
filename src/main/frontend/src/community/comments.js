@@ -9,8 +9,11 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import React, { useRef } from "react"
-import { MdOutlineReply } from "react-icons/md";
+import { GoReply } from "react-icons/go";
 import Modal from 'react-bootstrap/Modal';
+import { IoIosArrowUp } from "react-icons/io";
+import { MdModeEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 const ReviewsTitleBox = styled.div`
 width: 88vw;
@@ -32,7 +35,7 @@ const CommentsInputs = styled.div`
 margin: 20px 10px 0px 10px;
 `
 const CommentsItems = styled.div`
-margin: 20px 10px;
+margin: 10px 10px;
 display: flex;
 justify-content: center;
 padding-bottom: 5px;
@@ -60,14 +63,17 @@ align-items: center;
 margin-right: 20px;
 `
 const CommentsText = styled.pre`
+margin: 0;
 `
 const CommentsNickName = styled.div`
 text-align: center;
 `
 const Date = styled.div`
+height: 28px;
 margin: 10px 0;
 display: flex;
 justify-content: end;
+align-items: center;
 `
 const CommentsDate = styled.div`
 `
@@ -76,7 +82,12 @@ display: flex;
 justify-content: end;
 `
 const EditDeleteBox = styled.div`
-margin: 10px 0;
+margin: 5px 0;
+display: flex;
+justify-content: space-between;
+`
+const ReReEditDeleteBox = styled.div`
+margin: 5px 0;
 display: flex;
 justify-content: end;
 `
@@ -92,6 +103,31 @@ const Replyd = styled.div`
 display: flex;
 transform: rotate( 180deg );
 margin-right: 10px;
+`
+const Buttons = styled.div`
+display: flex;
+align-items: center;
+margin-left: 10px;
+gap: 10px;
+`
+const WriteReRe = styled.div`
+cursor: pointer;
+margin-left: 20px;
+&:hover {
+    border-bottom: 1px solid #F2884B;
+}
+`
+const BoarderLine = styled.div`
+width: 100%;
+border-bottom: 1px solid;
+margin-bottom: 5px;
+`
+const ReWriteEditBtn = styled.div`
+cursor: pointer;
+margin: 0 0 20px 0;
+&:hover {
+    border-bottom: 1px solid #F2884B;
+}
 `
 
 function Comments() {
@@ -263,17 +299,19 @@ function Comments() {
                     />
                 </InputGroup>
                 <ButtonBox>
-                    <Button style={{
+                    <ReWriteEditBtn style={{
                         color: switchColor,
                         backgroundColor: switchBgColor
-                    }} className="recommendBtn" id="button-addon2"
+                    }} id="button-addon2"
                         onClick={edit ? uploadEditReview : uploadReview}
                     >
                         {
-                            edit ? "댓글 수정" : "댓글 달기"
+                            edit ? "댓글 수정" : "댓글 등록"
                         }
-                    </Button>
+                    </ReWriteEditBtn>
+
                 </ButtonBox>
+                <BoarderLine />
             </>
         )
     }
@@ -283,7 +321,7 @@ function Comments() {
     const [isOpen, setIsOpen] = useState()
     const [isClose, setIsClose] = useState(false)
     const openReview = (e) => {
-        console.log(e)
+        // console.log(e)
         setIsClose(!isClose)
         setIsOpen(e)
     }
@@ -297,7 +335,7 @@ function Comments() {
     }
 
     const upLoadReReview = (e) => {
-        console.log(e)
+        // console.log(e)
         let body = {
             boardReviewNum: e,
             boardId: params.boardId,
@@ -310,7 +348,7 @@ function Comments() {
         }
         axios.post(`${baseUrl}/board/review/review`, body
         ).then((response) => {
-            console.log("보냄");	//정상 통신 후 응답된 메시지 출력
+            // console.log("보냄");	//정상 통신 후 응답된 메시지 출력
             setOnReReview()
             setReReview()
             window.location.reload();
@@ -322,7 +360,7 @@ function Comments() {
     const [reEdit, setReEdit] = useState()
     const [reviewNum, setReviewNum] = useState()
     const editReReview = (e) => {
-        console.log(e)
+        // console.log(e)
         setReEdit(e.reviewId)
         setReReview(e.review)
         setReviewNum(e.boardReviewNum)
@@ -395,50 +433,53 @@ function Comments() {
                                     </CommentsLeftBox>
                                     <CommentsRightBox id={e.boardReviewNum}>
                                         <CommentsText>{e.review}</CommentsText>
-                                        <Date>
-                                            {
-                                                e.createDate !== undefined &&
-                                                <CommentsDate>{e.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
-                                            }
-                                        </Date>
-
                                         <EditDeleteBox >
-                                            <Button style={{
-                                                color: switchColor,
-                                                backgroundColor: switchBgColor
-                                            }} className="recommendBtn"
-                                                onClick={() => openReview(e.boardReviewNum)}
-                                            >댓글 보기</Button>
-                                            {
-                                                userInfo !== null &&
-                                                <Button style={{
-                                                    margin: "0 5px",
+                                            <Date>
+                                                {
+                                                    e.createDate !== undefined &&
+                                                    <CommentsDate>{e.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
+                                                }
+                                                {
+                                                    userInfo !== null &&
+                                                    <WriteReRe style={{
+                                                        color: switchColor,
+                                                        backgroundColor: switchBgColor
+                                                    }}
+                                                        onClick={() => addReview(e.boardReviewNum)}
+                                                    >답글 쓰기</WriteReRe>
+                                                }
+                                            </Date>
+                                            <Buttons>
+                                                <IoIosArrowUp className="arrowDown" style={{
+                                                    cursor: "pointer",
                                                     color: switchColor,
-                                                    backgroundColor: switchBgColor
-                                                }} className="recommendBtn"
-                                                    onClick={() => addReview(e.boardReviewNum)}
-                                                >댓글 달기</Button>
-                                            }
-                                            {
-                                                userInfo !== null &&
-                                                    userInfo.memberNo === e.memberNo ?
-                                                    <>
-                                                        <Button style={{
-                                                            margin: "0 5px",
-                                                            color: switchColor,
-                                                            backgroundColor: switchBgColor
-                                                        }} className="recommendBtn"
-                                                            onClick={() => editReview(e)}
-                                                        >수정</Button>
-                                                        <Button style={{
-                                                            color: switchColor,
-                                                            backgroundColor: switchBgColor
-                                                        }} className="recommendBtn"
-                                                            onClick={() => handleShow(e.boardReviewNum, "댓글")}
-                                                        >삭제</Button>
-                                                    </>
-                                                    : null
-                                            }
+                                                    backgroundColor: switchBgColor,
+                                                    fontSize: "30px"
+                                                }} onClick={() => openReview(e.boardReviewNum)} />
+
+                                                {
+                                                    userInfo !== null &&
+                                                        userInfo.memberNo === e.memberNo ?
+                                                        <>
+                                                            <MdModeEdit className="mdModeEdit" style={{
+                                                                cursor: "pointer",
+                                                                fontSize: "20px"
+                                                                , margin: "0 5px",
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor
+                                                            }}
+                                                                onClick={() => editReview(e)} />
+                                                            <MdDelete style={{
+                                                                cursor: "pointer",
+                                                                fontSize: "20px",
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor
+                                                            }} className="mdDelete"
+                                                                onClick={() => handleShow(e.boardReviewNum, "댓글")} />
+                                                        </>
+                                                        : null
+                                                }
+                                            </Buttons>
                                         </EditDeleteBox>
 
                                     </CommentsRightBox>
@@ -493,7 +534,7 @@ function Comments() {
                                                 e.boardReviewNum === k.boardReviewNum && isOpen === k.boardReviewNum && isClose &&
                                                 <ReReviewOutBox>
                                                     <Replyd>
-                                                        <MdOutlineReply style={{ fontSize: "50px" }} />
+                                                        <GoReply style={{ fontSize: "30px" }} />
                                                     </Replyd>
                                                     <ReReviewBox>
                                                         <CommentsItems key={j}>
@@ -529,7 +570,7 @@ function Comments() {
                                                                 {
                                                                     userInfo !== null &&
                                                                         userInfo.memberNo === k.memberNo ?
-                                                                        <EditDeleteBox >
+                                                                        <ReReEditDeleteBox >
                                                                             {
                                                                                 reEdit === k.reviewId ?
                                                                                     <Button style={{
@@ -566,7 +607,7 @@ function Comments() {
                                                                                         onClick={() => handleShow(k, "대댓글")}
                                                                                     >삭제</Button>
                                                                             }
-                                                                        </EditDeleteBox>
+                                                                        </ReReEditDeleteBox>
                                                                         : null
                                                                 }
                                                             </CommentsRightBox>

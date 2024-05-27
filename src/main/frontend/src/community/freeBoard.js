@@ -9,6 +9,7 @@ import themes from "../components/theme";
 import Pagination from "../components/pagination";
 import "./communityStyle.css"
 import CommunityHeader from "./communityHeader";
+
 const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
@@ -80,12 +81,12 @@ function FreeBoard() {
                 console.log(res.data)
             })
     }, [nowPage]);
-    console.log(board)
-    console.log("지금 여기" + nowPage)
+    // console.log(board)
+    // console.log("지금 여기" + nowPage)
     //페이지네이션
 
     const pageRange = page.size //pageRange :한페이지에 보여줄 아이템 수
-    console.log(board.category)
+    // console.log(board.category)
 
     return (
         <Container style={{
@@ -94,7 +95,7 @@ function FreeBoard() {
         }}>
             <CommunityNav />
             <CommunityHeader />
-            <ListGroup style={{ gap: "10px", margin: `10px 6vw` }}>
+            <ListGroup style={{ gap: "10px", margin: `10px 8vw` }}>
                 {
                     board.length > 0 &&
                     board.map((e, i) => (

@@ -5,7 +5,8 @@ import axios from "axios";
 import xmljs from 'xml-js';
 
 const Container = styled.div`
-  margin: 0 6vw;
+  margin: 10px 6vw 30px 6vw;
+  box-shadow: 3px 5px 5px 1px #E8E8E8;
 `;
 
 const HotdealTitle = styled.div`
@@ -43,7 +44,6 @@ const HotdealItemImg = styled.div`
 `;
 
 const HotdealItemName = styled.span`
-  font-weight: bold;
   margin-bottom: 5px;
 `;
 

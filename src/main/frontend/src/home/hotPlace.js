@@ -14,6 +14,8 @@ display: grid;
   grid-auto-rows: minmax(100px, auto);
   gap: 15px;
   margin-bottom: 10px;
+  padding: 5px;
+  box-shadow: 3px 5px 5px 1.5px #E8E8E8;
 `
 
 const PlaceItem = styled.a`

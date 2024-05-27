@@ -14,6 +14,8 @@ display: grid;
 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 grid-auto-rows: minmax(100px, auto);
 gap: 15px;
+padding: 5px;
+box-shadow: 3px 5px 5px 1.5px #E8E8E8;
 `
 const Communitylist = styled.div`
 
@@ -26,7 +28,6 @@ font-weight: bold;
 margin-bottom: 5px;
 `
 const ArticleTitle = styled.div`
-font-weight: bold;
 margin-bottom: 10px;
 `
 const Content = styled.a`
@@ -160,22 +161,22 @@ function CommunityHome() {
                 setFreeBoard(res.data.content);
                 console.log(res.data)
             })
-        console.log(freeBoard)
+        // console.log(freeBoard)
         axios.get('/api/board/훈련 방법 공유')
             .then((res) => {
                 setTrainingBoard(res.data.content);
             })
-        console.log(trainingBoard)
+        // console.log(trainingBoard)
         axios.get('/api/board/반려동물 자랑')
             .then((res) => {
                 setPetBoastBoard(res.data.content);
             })
-        console.log(petBoastBoard)
+        // console.log(petBoastBoard)
         axios.get('/api/board/댕냥 마켓')
             .then((res) => {
                 setMarketBoard(res.data.content);
             })
-        console.log(marketBoard)
+        // console.log(marketBoard)
     }, []);
 
     //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
