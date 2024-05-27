@@ -144,13 +144,25 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public boolean favoriteCheck(Integer memberNo, Integer animalNum) {
+        log.info(""+memberNo+animalNum);
         Integer checked = animalMapper.favoriteCheck(memberNo, animalNum);
-        return checked > 0;
+        if(checked == 0 || checked == null){
+            checked = 0;
+        }
+        return checked > 0 ;
     }
 
     @Override
     public boolean getFavorite(Integer animalNum, Integer memberNo) {
-        return animalMapper.getFavorite(animalNum, memberNo) > 0;
+        String checked = animalMapper.getFavorite(animalNum, memberNo);
+        Integer check = 0;
+        if(checked == null || checked.equals("0")){
+            check = 0;
+        }else {
+            check = 1;
+        }
+        log.info(check.toString());
+        return check > 0 ;
     }
 
     @Override

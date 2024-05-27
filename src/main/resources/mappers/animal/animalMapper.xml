@@ -155,7 +155,7 @@
         VALUES (#{memberNo}, #{animalNum}, SYSDATE, 1)
     </insert>
 
-    <select id="getFavorite" parameterType="Integer" resultType="int">
+    <select id="getFavorite" parameterType="Integer" resultType="String">
         <![CDATA[
             SELECT "Field"
             FROM "favorite"

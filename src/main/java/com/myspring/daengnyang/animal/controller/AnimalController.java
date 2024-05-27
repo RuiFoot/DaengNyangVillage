@@ -81,6 +81,7 @@ public class AnimalController {
 
     @GetMapping("/favorite/{animalNum}")
     public boolean favoriteNum(@PathVariable("animalNum") Integer animalNum, @RequestParam Integer memberNo) {
+        log.info("favorite 실행 ");
         return animalService.getFavorite(animalNum, memberNo);
     }
 
