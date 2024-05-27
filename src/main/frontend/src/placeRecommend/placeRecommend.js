@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom, presentPage } from '../components/atoms';
@@ -165,7 +164,18 @@ function PlaceRecommend() {
         url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
     }
 
-    // 카카오맵 초기화
+    const getRecommend = () => {
+        let recommendSido = "서울"
+        let recommendSigungu = "송파구"
+        axios.get(`${baseUrl}/animal/recommend?sido=${recommendSido}&sigungu=${recommendSigungu}`)
+        .then((res)=>{
+            console.log(res.data);
+            setAddress(res.data);
+            kakaomapMarker(res.data);
+        })
+    }
+
+    // 카카오맵 초기화. 카테고리 리스트 생성
     useEffect(() => {
         const container = document.getElementById('map');
         const options = {
@@ -174,12 +184,6 @@ function PlaceRecommend() {
         };
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
-    }, []);
-
-
-
-    //카테고리 리스트 받아오기
-    useEffect(() => {
         axios.get(`${baseUrl}/animal`)
             .then((res) => {
                 setCategoryList(res.data)
@@ -187,8 +191,9 @@ function PlaceRecommend() {
             }).catch(error => {
                 console.error('Request failed : ', error);
             })
-
     }, []);
+
+    
 
     // 마커 생성 및 범위 재설정
     const kakaomapMarker = (data) => {
@@ -309,10 +314,11 @@ function PlaceRecommend() {
     const bigAreaList = [
         "서울특별시", "인천광역시", "대전광역시", "광주광역시", "대구광역시", "울산광역시", "부산광역시",
         "경기도", "강원특별자치도", "충청남도", "세종특별자치시", "충청북도",
-        "전북특별자치도", "전라남도", "경상북도", "경상남도", "제주특별자치도"]
+        "전북특별자치도", "전라남도", "경상북도", "경상남도", "제주특별자치도","전체"]
 
     //시도 선택시 상세 군,구 또는 시, 군 선택가능 하게
     const bigAreaClicked = (e) => {
+        console.log(e)
         setSido(e)
         // console.log(e[e.length - 1]) //유저가 클릭한 채크박스의 마지막 글자(시, 도 구분)
         axios.get(`${baseUrl}/animal/area?sido=${e}`)
@@ -332,6 +338,7 @@ function PlaceRecommend() {
     }
     //상세 군, 구 또는 시, 군 선택에서 시, 도 선택으로 돌아갈때
     const goBack = () => {
+        setCheckedArea("시,군")
         setAreaList([])
     }
 
@@ -406,20 +413,19 @@ function PlaceRecommend() {
             backgroundColor: switchBgColor
         }}>
             <Bumper />
-            <Contents>
-                <ContantTitle>장소 추천</ContantTitle>
-                <ContantSubTitle>반려동물과 함께 할 수 있는 공간을 추천해드립니다!</ContantSubTitle>
-                {
-                    windowSize > 999
-                        ?
-                        <TopContants >
-                            <CheckBoxs style={{ boxShadow: isDark ? `0px 10px 20px 4px black` : `0px 10px 20px 4px #E8E8E8` }}>
-                                <Card style={{ width: "100%" }} className="card">
-                                    <Card.Header style={{
-                                        color: switchColor,
-                                        backgroundColor: switchBgColor
-                                    }} className="cardHeader">
-                                        <InputGroup className="inputGroup mb-3" >
+            <ContantTitle>장소 추천</ContantTitle>
+            <ContantSubTitle>반려동물과 함께 할 수 있는 공간을 추천해드립니다!</ContantSubTitle>
+            {
+                windowSize > 999
+                    ?
+                    <TopContants >
+                        <CheckBoxs style={{ boxShadow: isDark ? `0px 10px 20px 4px black` : `0px 10px 20px 4px #E8E8E8` }}>
+                           <Card style={{ width: "100%" }} className="card">
+                                <Card.Header style={{
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
+                                }} className="cardHeader">
+                                    <InputGroup className="inputGroup mb-3" >
                                             <Selected>
                                                 <InputGroup.Text style={{
                                                     color: switchColor,
@@ -444,13 +450,38 @@ function PlaceRecommend() {
                                                     검 색
                                                 </Button>
                                             </Selected>
-                                        </InputGroup>
-                                    </Card.Header>
-                                    <List style={{
+                                    </InputGroup>
+                                </Card.Header>
+                                <List style={{
                                         color: switchColor, backgroundColor: switchBgColor
                                     }}>
-                                        {
-                                            areaList.length < 1 ?
+                                    {
+                                        areaList.length < 1 ?
+                                            <ListGroup className="areaListGroup" variant="flush">
+                                                {bigAreaList.map((e, i) => (
+                                                    <ListGroup.Item key={i}
+                                                        style={{
+                                                            color: switchColor,
+                                                            backgroundColor: switchBgColor
+                                                        }}
+                                                    >
+                                                        <Button
+                                                            style={{
+                                                                color: switchColor,
+                                                                backgroundColor: switchBgColor,
+                                                                borderColor: switchColor
+                                                            }}
+                                                            value={e}
+                                                            onClick={(e) => bigAreaClicked(e.target.value)}
+                                                            id={i} type="button">{e}</Button>
+                                                    </ListGroup.Item>
+                                                ))}
+                                            </ListGroup>
+                                            :
+                                            <SiGun>
+                                                <GoBack style={{
+                                                    color: switchColor, backgroundColor: switchBgColor
+                                                }} onClick={() => { goBack() }} >시, 도로 돌아가기</GoBack>
                                                 <ListGroup className="areaListGroup" variant="flush">
                                                     {bigAreaList.map((e, i) => (
                                                         <ListGroup.Item key={i}
@@ -459,82 +490,92 @@ function PlaceRecommend() {
                                                                 backgroundColor: switchBgColor
                                                             }}
                                                         >
-                                                            <CheckBox
+                                                            <Button
+                                                                style={{
+                                                                    color: switchColor,
+                                                                    backgroundColor: switchBgColor,
+                                                                    borderColor: switchColor
+                                                                }}
                                                                 value={e}
-                                                                onChange={(e) => bigAreaClicked(e.target.value)}
-                                                                id={i} type="checkbox"></CheckBox>
-                                                            <CheckBoxLabel >{e}</CheckBoxLabel>
+                                                                name="cityOption"
+                                                                onClick={(e) => clickedArea(e.target)}
+                                                                id={i} type="button">{e}</Button>
+
                                                         </ListGroup.Item>
                                                     ))}
                                                 </ListGroup>
-                                                :
-                                                <SiGun style={{
-                                                    color: switchColor, backgroundColor: switchBgColor
-                                                }}>
-                                                    <GoBack style={{
-                                                        color: switchColor, backgroundColor: switchBgColor
-                                                    }} onClick={() => { goBack() }} >시, 도로 돌아가기</GoBack>
-                                                    <ListGroup className="areaListGroup" variant="flush">
+                                            </SiGun>
+                                    }
+                                    <ListGroup className="categoryListGroup" variant="flush">
+                                        {categoryList.map((e, i) => (
+                                            <ListGroup.Item key={i} style={{
+                                                color: switchColor,
+                                                backgroundColor: switchBgColor
+                                            }}>
+                                                <Button
+                                                    style={{
+                                                        color: switchColor,
+                                                        backgroundColor: switchBgColor,
+                                                        borderColor: switchColor
+                                                    }}
+                                                    value={e}
+                                                    name="categoryOption"
+                                                    onClick={(e) => clickedCategory(e.target)}
+                                                    id={i} type="button">{e}</Button>
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </List>
 
-                                                        {areaList.map((e, i) => (
-                                                            <ListGroup.Item key={i}
-                                                                style={{
-                                                                    color: switchColor,
-                                                                    backgroundColor: switchBgColor
-                                                                }}
-                                                            >
-                                                                <CheckBox
-                                                                    value={e}
-                                                                    name="cityOption"
-                                                                    onChange={(e) => clickedArea(e.target)}
-                                                                    id={i} type="checkbox"></CheckBox>
-                                                                <CheckBoxLabel>{e}</CheckBoxLabel>
-                                                            </ListGroup.Item>
-                                                        ))}
-                                                    </ListGroup>
-                                                </SiGun>
-                                        }
-                                        <ListGroup style={{
-                                            color: switchColor, backgroundColor: switchBgColor
-                                        }} className="categoryListGroup" variant="flush">
-                                            {categoryList.map((e, i) => (
-                                                <ListGroup.Item key={i} style={{
-                                                    color: switchColor,
-                                                    backgroundColor: switchBgColor
-                                                }}>
-                                                    <CheckBox
-                                                        value={e}
-                                                        name="categoryOption"
-                                                        onChange={(e) => clickedCategory(e.target)}
-                                                        id={i} type="checkbox"></CheckBox>
-                                                    <CheckBoxLabel>{e}</CheckBoxLabel>
-                                                </ListGroup.Item>
-                                            ))}
-                                        </ListGroup>
-                                    </List>
-
-                                </Card>
-                            </CheckBoxs>
-                            <Map style={{ boxShadow: isDark ? `0px 10px 20px 4px black` : `0px 10px 20px 4px #E8E8E8` }} id="map">
-                            </Map>
-                        </TopContants>
-                        :
-                        <TopContants style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))' }}>
-                            <CheckBoxs style={{ boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8` }} >
-                                <Card style={{ width: "100%" }} className="card" >
-                                    <Card.Header style={{
-                                        color: switchColor,
-                                        backgroundColor: switchBgColor
-                                    }} className="cardHeader">
-                                        <InputGroup className="inputGroup mb-3" >
-                                            <Selected>
-                                                <InputGroup.Text style={{
-                                                    color: switchColor, backgroundColor: switchBgColor
-                                                }} id="basic-addon1">{sido}</InputGroup.Text>
-                                                <InputGroup.Text style={{
-                                                    color: switchColor, backgroundColor: switchBgColor
-                                                }} id="basic-addon1">{checkedArea}</InputGroup.Text>
-                                                <InputGroup.Text style={{
+                            </Card>
+                        </CheckBoxs>
+                        <Map style={{ boxShadow: isDark ? `0px 10px 20px 4px black` : `0px 10px 20px 4px #E8E8E8` }} id="map">
+                        </Map>
+                    </TopContants>
+                    :
+                    <TopContants style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))' }}>
+                        <CheckBoxs >
+                            <Card className="card" >
+                                <Card.Header style={{
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor
+                                }} className="cardHeader">
+                                    <InputGroup className="inputGroup mb-3" >
+                                        <Selected>
+                                            <InputGroup.Text id="basic-addon1">{sido}</InputGroup.Text>
+                                            <InputGroup.Text id="basic-addon1">{checkedArea}</InputGroup.Text>
+                                            <InputGroup.Text id="basic-addon1">{checkedCategory}</InputGroup.Text>
+                                            <Button style={{
+                                                color: switchColor,
+                                                backgroundColor: switchBgColor,
+                                                borderColor: switchColor
+                                            }} className="searchBtn" id="button-addon2" onClick={handleButtonClick}>
+                                                검색
+                                            </Button>
+                                        </Selected>
+                                    </InputGroup>
+                                </Card.Header>
+                                <List>
+                                    {
+                                        areaList.length < 1 ?
+                                            <ListGroup className="areaListGroup" variant="flush">
+                                                {bigAreaList.map((e, i) => (
+                                                    <ListGroup.Item key={i}
+                                                        style={{
+                                                            color: switchColor,
+                                                            backgroundColor: switchBgColor
+                                                        }}
+                                                    >
+                                                        <Button
+                                                            value={e}
+                                                            onClick={(e) => bigAreaClicked(e.target.value)}
+                                                            id={i} type="button">{e}</Button>
+                                                    </ListGroup.Item>
+                                                ))}
+                                            </ListGroup>
+                                            :
+                                            <SiGun>
+                                                <GoBack style={{
                                                     color: switchColor, backgroundColor: switchBgColor
                                                 }} id="basic-addon1">{checkedCategory}</InputGroup.Text>
                                                 <Button style={{
@@ -560,74 +601,43 @@ function PlaceRecommend() {
                                                                 backgroundColor: switchBgColor
                                                             }}
                                                         >
-                                                            <CheckBox
+                                                            <Button
                                                                 value={e}
-                                                                onChange={(e) => bigAreaClicked(e.target.value)}
-                                                                id={i} type="checkbox"></CheckBox>
-                                                            <CheckBoxLabel >{e}</CheckBoxLabel>
+                                                                name="cityOption"
+                                                                onClick={(e) => clickedArea(e.target)}
+                                                                id={i} type="button">{e}</Button>
                                                         </ListGroup.Item>
                                                     ))}
                                                 </ListGroup>
-                                                :
-                                                <SiGun style={{
-                                                    color: switchColor, backgroundColor: switchBgColor
-                                                }}>
-                                                    <GoBack style={{
-                                                        color: switchColor, backgroundColor: switchBgColor
-                                                    }} onClick={() => { goBack() }} >시, 도로 돌아가기</GoBack>
-                                                    <ListGroup className="areaListGroup" variant="flush">
-
-                                                        {areaList.map((e, i) => (
-                                                            <ListGroup.Item key={i}
-                                                                style={{
-                                                                    color: switchColor,
-                                                                    backgroundColor: switchBgColor
-                                                                }}
-                                                            >
-                                                                <CheckBox
-                                                                    value={e}
-                                                                    name="cityOption"
-                                                                    onChange={(e) => clickedArea(e.target)}
-                                                                    id={i} type="checkbox"></CheckBox>
-                                                                <CheckBoxLabel>{e}</CheckBoxLabel>
-                                                            </ListGroup.Item>
-                                                        ))}
-                                                    </ListGroup>
-                                                </SiGun >
-                                        }
-                                        <ListGroup style={{
-                                            color: switchColor, backgroundColor: switchBgColor
-                                        }} className="categoryListGroup" variant="flush">
-                                            {categoryList.map((e, i) => (
-                                                <ListGroup.Item key={i} style={{
-                                                    color: switchColor,
-                                                    backgroundColor: switchBgColor
-                                                }}>
-                                                    <CheckBox
-                                                        value={e}
-                                                        name="categoryOption"
-                                                        onChange={(e) => clickedCategory(e.target)}
-                                                        id={i} type="checkbox"></CheckBox>
-                                                    <CheckBoxLabel>{e}</CheckBoxLabel>
-                                                </ListGroup.Item>
-                                            ))}
-                                        </ListGroup>
-                                    </List>
-                                </Card>
-                            </CheckBoxs>
-                            <Map style={{ boxShadow: isDark ? `0px 10px 20px 4px black` : `0px 10px 20px 4px #E8E8E8` }}>
-                                <div id="map" style={{
-                                    width: '100%',
-                                    height: '500px'
-                                }}></div>
-                            </Map>
-                        </TopContants>
-                }
-                {
-                    pageRange ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
-                        : null
-                }
-                {/*
+                                            </SiGun>
+                                    }
+                                    <ListGroup className="categoryListGroup" variant="flush">
+                                        {categoryList.map((e, i) => (
+                                            <ListGroup.Item key={i} style={{
+                                                color: switchColor,
+                                                backgroundColor: switchBgColor
+                                            }}>
+                                                <Button
+                                                    value={e}
+                                                    name="categoryOption"
+                                                    onClick={(e) => clickedCategory(e.target)}
+                                                    id={i} type="button">{e}</Button>
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </List>
+                            </Card>
+                        </CheckBoxs>
+                        <Map>
+                            <div id="map" style={{
+                                width: '100%',
+                                height: '500px'
+                            }}></div>
+                        </Map>
+                    </TopContants>
+            }
+            <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+            {/*
              totalPageNum : 총 페이지내이션 수
              btnRange : 보여질 페이지 버튼의 개수
             */}

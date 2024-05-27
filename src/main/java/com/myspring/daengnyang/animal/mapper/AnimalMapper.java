@@ -39,7 +39,7 @@ public interface AnimalMapper {
 
     Integer getAnimalNum(@Param("animalReviewNum") Integer animalReviewNum);
 
-    int getFavorite(@Param("animalNum") Integer animalNum, @Param("memberNo") Integer memberNo);
+    String getFavorite(@Param("animalNum") Integer animalNum, @Param("memberNo") Integer memberNo);
 
     List<AnimalLocationVO> getPopular();
     List<AnimalLocationVO> getRecommend(@Param("sido") String sido, @Param("sigungu") String sigungu);
