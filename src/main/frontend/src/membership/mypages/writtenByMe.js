@@ -15,17 +15,18 @@ flex-direction: column;
 justify-content: center;
 `
 const ListItem = styled.a`
+border-radius: 5px;
+padding: 10px;
 cursor: pointer;
 text-decoration: none;
 display: flex;
 justify-content: center;
-margin: 5px 0;
-border-bottom: 1px solid;
 flex-direction: column;
 &:hover {
-    border-bottom: 1px solid #F2884B ;
+    border-bottom: 1px solid #F2884B;
 }
 `
+
 const ListHeader = styled.div`
 display: flex;
 align-items: center;
@@ -53,20 +54,22 @@ function WrittenByMe() {
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     //현재 로그인한 유저 닉네임
-    const [loginedNickName, setLoginedNickName] = useState("")
+    let url = ""
+    if (window.sessionStorage.key(0) === "logined") {
+        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+    }
     const baseUrl = "http://localhost:8080";
     //스프링 통신
-
     //알맞은 상세페이지 이동
     const checkCategory = (input) => {
         if (input.category === "댕냥 마켓") {
-            window.location.href = `/used-market-detail/${input.boardId}${loginedNickName}`
+            window.location.href = `/used-market-detail/${input.boardId}${url}`
         } else if (input.category === "반려동물 자랑") {
-            window.location.href = `/pet-boast-detail/${input.boardId}${loginedNickName}`
+            window.location.href = `/pet-boast-detail/${input.boardId}${url}`
         } else if (input.category === "자유 게시판") {
-            window.location.href = `/free-board-detail/${input.boardId}${loginedNickName}`
+            window.location.href = `/free-board-detail/${input.boardId}${url}`
         } else if (input.category === "훈련 방법 공유") {
-            window.location.href = `/training-method-detail/${input.boardId}${loginedNickName}`
+            window.location.href = `/training-method-detail/${input.boardId}${url}`
         }
     }
 
@@ -106,15 +109,14 @@ function WrittenByMe() {
                 color: switchColor,
                 backgroundColor: switchBgColor
             }}>
-                <ListGroup style={{ margin: `10px 6vw` }}>
-                    <div style={{ margin: `20px 0` }}></div>
+                <ListGroup style={{ gap: "20px", margin: `30px 10vw 10px 10vw` }}>
                     {
                         board.length > 0 &&
                         board.map((e, i) => (
                             <ListItem
                                 key={i}
                                 onClick={() => { checkCategory(e) }}
-                                style={{ color: `${isDark ? themes.dark.color : themes.light.color}` }}
+                                style={{ boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`, color: `${isDark ? themes.dark.color : themes.light.color}` }}
                             >
                                 <ListHeader>
                                     <ListTitle className="fw-bold">{e.boardName}
@@ -131,7 +133,10 @@ function WrittenByMe() {
                         ))
                     }
                 </ListGroup>
-                <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                {
+                    pageRange ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                        : null
+                }
                 {/*
              totalPageNum : 총 페이지내이션 수
              btnRange : 보여질 페이지 버튼의 개수

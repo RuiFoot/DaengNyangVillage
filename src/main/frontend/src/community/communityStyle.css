@@ -1,9 +1,12 @@
 .headerBtn {
-    margin-left: 15px;
-    border: 1px solid;
+    border: 1px solid transparent;
 }
 
 .headerBtn:hover {
+    border: 1px solid #F288CD;
+}
+
+.headerBtn:visited {
     border: 1px solid #F288CD;
 }
 
@@ -33,11 +36,11 @@
 }
 
 .mdModeEdit:hover {
-    border-bottom: 1px solid #F2884B;
+    border-bottom: 1px solid #F288CD;
     transform: scale(1.2);
 }
 
 .mdDelete:hover {
-    border-bottom: 1px solid #F2884B;
+    border-bottom: 1px solid #F288CD;
     transform: scale(1.2);
 }

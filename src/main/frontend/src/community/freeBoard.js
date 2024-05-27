@@ -14,14 +14,15 @@ const Container = styled.div`
 min-height: calc(100vh - 86px);
 `
 const ListItem = styled.a`
+border-radius: 5px;
+padding: 10px;
 cursor: pointer;
 text-decoration: none;
 display: flex;
 justify-content: center;
-border-bottom: 1px solid;
 flex-direction: column;
 &:hover {
-    border-bottom: 1px solid #F288CD;
+    border-bottom: 1px solid #F2884B;
 }
 `
 const ListHeader = styled.div`
@@ -95,14 +96,14 @@ function FreeBoard() {
         }}>
             <CommunityNav />
             <CommunityHeader />
-            <ListGroup style={{ gap: "10px", margin: `10px 8vw` }}>
+            <ListGroup style={{ gap: "20px", margin: `10px 10vw` }}>
                 {
                     board.length > 0 &&
                     board.map((e, i) => (
                         <ListItem
                             key={i}
                             href={`/free-board-detail/${e.boardId}${url}`}
-                            style={{ color: switchColor, borderBottom: `${isDark ? "1px solid white" : "1px solid rgba(0, 0, 0, 0.234)"}` }}
+                            style={{ boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`, color: switchColor }}
                         >
                             <ListHeader>
                                 <ListTitle className="fw-bold">[{e.preface}] {e.boardName}
@@ -119,7 +120,10 @@ function FreeBoard() {
                     ))
                 }
             </ListGroup>
-            <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+            {
+                pageRange ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                    : null
+            }
             {/*
              totalPageNum : 총 페이지내이션 수
              btnRange : 보여질 페이지 버튼의 개수

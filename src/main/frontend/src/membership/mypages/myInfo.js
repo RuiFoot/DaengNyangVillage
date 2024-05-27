@@ -15,10 +15,11 @@ flex-direction: column;
 align-items: center;
 `
 const UserInfo = styled.div`
+width: 380px;
 `
 const Boxs = styled.div`
 margin: 20px;
-border-bottom: 1px solid #F2884B;
+border-bottom: 1px solid;
 padding: 10px 0;
 `
 const UserTitle = styled.div`
@@ -105,7 +106,7 @@ function MyInfo() {
                         ?
                         null
                         :
-                        <Button className="changBtn"
+                        <Button className="WithdrawalBtn"
                             style={{
                                 color: switchColor,
                                 backgroundColor: switchBgColor

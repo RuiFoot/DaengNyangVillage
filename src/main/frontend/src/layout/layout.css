@@ -3,7 +3,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    padding: 8px 6vw;
+    padding: 8px 10vw;
     background-color: white;
     border-bottom: 2px solid #F2884B;
 }
@@ -135,7 +135,6 @@
 .chatBotMobile {
     z-index: 500;
     cursor: pointer;
-    box-shadow: 5px 5px 3px #666;
     background-color: #F2884B;
     border-radius: 20px;
     color: white;
@@ -143,7 +142,7 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    margin-right: 1vw;
+    margin-right: 2.2vw;
     margin-bottom: 15px;
     height: 6vw;
     min-height: 25px;

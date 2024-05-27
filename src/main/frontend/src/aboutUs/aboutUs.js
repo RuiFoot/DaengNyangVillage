@@ -15,7 +15,7 @@ justify-content: center;
 `
 const Contents = styled.div`
 margin: 150px 0 50px 0;
-width: 88vw;
+width: 80vw;
 display: grid;
 place-items: center;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

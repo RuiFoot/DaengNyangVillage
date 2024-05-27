@@ -24,8 +24,8 @@ font-size: clamp(80%, 5vw, 120%);
 `
 
 const InputForm = styled.form`
-margin: 15px;
-width: 350px;
+margin: 10px 0 0 0;
+width: 380px;
 `
 
 const InputTitle = styled.div`
@@ -136,12 +136,19 @@ function ChangePasswd() {
                 </InputForm>
                 {
                     isValid ?
-                        <button className="changBtn" type="submit" onClick={handleSubmit}>
+                        <Button style={{
+                            color: switchColor,
+                            backgroundColor: switchBgColor
+                        }} className="changBtn" type="submit" onClick={handleSubmit}>
+
                             비밀번호 변경
-                        </button>
+                        </Button>
                         : <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">변경 정보가 유효하지 않습니다.</Tooltip>}>
                             <span className="d-inline-block">
-                                <Button id="joinBtn" disabled style={{ pointerEvents: 'none' }}>
+                                <Button className="changBtn" disabled style={{
+                                    color: switchColor,
+                                    backgroundColor: switchBgColor, pointerEvents: 'none'
+                                }}>
                                     비밀번호 변경
                                 </Button>
                             </span>

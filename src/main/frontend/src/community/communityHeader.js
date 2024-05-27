@@ -8,7 +8,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
 const BoardHeader = styled.div`
-margin: 10px 6vw 10px 6vw;
+margin: 20px 10vw 20px 10vw;
 display: flex;
 justify-content: flex-end;
 `
@@ -30,7 +30,8 @@ function CommunityHeader() {
             <Dropdown >
                 <Dropdown.Toggle className="headerBtn" id="dropdown-basic" style={{
                     color: switchColor,
-                    backgroundColor: switchBgColor
+                    backgroundColor: switchBgColor,
+                    marginRight: "10px"
                 }}>
                     정렬
                 </Dropdown.Toggle>
@@ -46,15 +47,16 @@ function CommunityHeader() {
                         backgroundColor: switchBgColor
                     }}
                         onClick={goWrite}
-                    >글쓰기</Button>
+                    >글 쓰기</Button>
                     :
                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">로그인 해주세요</Tooltip>}>
                         <span className="d-inline-block">
                             <Button className="headerBtn" disabled style={{
+                                borderColor: switchBgColor,
                                 pointerEvents: 'none', color: switchColor,
                                 backgroundColor: switchBgColor
                             }}>
-                                글쓰기
+                                글 쓰기
                             </Button>
                         </span>
                     </OverlayTrigger>

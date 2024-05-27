@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { Spinner } from "react-bootstrap";
 import axios from "axios";
 import xmljs from 'xml-js';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../components/atoms';
 
 const Container = styled.div`
-  margin: 10px 6vw 30px 6vw;
-  box-shadow: 3px 5px 5px 1px #E8E8E8;
+  margin: 10px 10vw 30px 10vw;
 `;
 
 const HotdealTitle = styled.div`
@@ -14,6 +15,7 @@ const HotdealTitle = styled.div`
   font-size: 30px;
   font-weight: bold;
   text-align: center;
+  padding-top: 10px;
 `;
 
 const HotdealItems = styled.div`
@@ -54,6 +56,7 @@ const HotdealItemPrice = styled.span`
   color: #f65151;
   font-weight: 800;
   font-size: 25px;
+  padding-bottom: 10px;
 `;
 
 const LoadingContainer = styled.div`
@@ -66,6 +69,8 @@ const LoadingContainer = styled.div`
 axios.defaults.withCredentials = true;
 
 function HotdealBar() {
+  //다크모드
+  const isDark = useRecoilValue(isDarkAtom);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -135,7 +140,9 @@ function HotdealBar() {
   };
 
   return (
-    <Container>
+    <Container style={{
+      boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`
+    }} >
       {isLoading ? (
         <LoadingContainer>
           <HotdealTitle>상품 정보 로딩중...</HotdealTitle>

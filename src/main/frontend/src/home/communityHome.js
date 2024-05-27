@@ -9,23 +9,35 @@ import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
 
+const Container = styled.div`
+
+`
 const Communitylists = styled.div`
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 grid-auto-rows: minmax(100px, auto);
-gap: 15px;
-padding: 5px;
-box-shadow: 3px 5px 5px 1.5px #E8E8E8;
+gap: 20px;
+padding: 10px;
 `
 const Communitylist = styled.div`
-
 `
-const CommunityTitle = styled.div`
-display: flex;
-align-items: center;
-font-size: clamp(100%, 1.2vw, 120%);
+const CategoryTitle = styled.div`
+text-align: center;
+font-size: 30px;
 font-weight: bold;
 margin-bottom: 5px;
+padding-top: 10px;
+`
+const CommunityTitle = styled.a`
+text-decoration: none;
+cursor: pointer;
+display: flex;
+align-items: center;
+font-size: clamp(100%, 1.5vw, 120%);
+font-weight: bold;
+margin-bottom: 5px;
+padding-bottom: 5px;
+border-bottom : 1px solid ;
 `
 const ArticleTitle = styled.div`
 margin-bottom: 10px;
@@ -33,8 +45,7 @@ margin-bottom: 10px;
 const Content = styled.a`
 text-decoration: none;
 cursor: pointer;
-border-top : 1px solid ;
-border-bottom : 1px solid ;
+border-bottom : 1px solid #D0D0D0 ;
 margin-bottom: 5px;
 padding: 5px;
 display: flex;
@@ -45,8 +56,7 @@ justify-content: space-between;
 const ImgContent = styled.a`
 text-decoration: none;
 cursor: pointer;
-border-top : 1px solid ;
-border-bottom : 1px solid ;
+border-bottom : 1px solid #D0D0D0;
 margin-bottom: 5px;
 padding: 5px;
 display: flex;
@@ -77,6 +87,11 @@ function CommunityHome() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    // 이동 위치
+    let url = ""
+    if (window.sessionStorage.key(0) === "logined") {
+        url = `/${JSON.parse(sessionStorage.getItem("logined")).nickName}`
+    }
     //현재 로그인한 유저 닉네임
     const [loginedNickName, setLoginedNickName] = useState("")
     useEffect(() => {
@@ -194,10 +209,14 @@ function CommunityHome() {
     }
     return (
         // 화면 크기에 따라 계시판의 width가 달라짐
-        <>
+        <Container style={{ boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8` }}>
+            <a href={`/free-board${url}`}>
+                <CategoryTitle style={{
+                    color: switchColor
+                }}>커뮤니티</CategoryTitle></a>
             <Communitylists style={{ gridTemplateColumns: `${windowSize > 943 ? 'repeat(auto-fit, minmax(300px, 1fr))' : 'repeat(auto-fit, minmax(195px, 1fr))'}` }}>
                 <Communitylist>
-                    <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 자유게시판</CommunityTitle>
+                    <CommunityTitle href={`/free-board${url}`}><BsCardText style={{ marginRight: '5px' }} /> 자유게시판</CommunityTitle>
                     {
                         freeBoard.length > 0 &&
                         freeBoard.slice(0, 3).map((e, i) => (
@@ -217,7 +236,7 @@ function CommunityHome() {
                     }
                 </Communitylist>
                 <Communitylist>
-                    <CommunityTitle><HiOutlinePhoto style={{ marginRight: '5px' }} />반려동물 자랑</CommunityTitle>
+                    <CommunityTitle href={`/pet-boast${url}`}><HiOutlinePhoto style={{ marginRight: '5px' }} />반려동물 자랑</CommunityTitle>
                     {
                         petBoastBoard.length > 0 &&
                         petBoastBoard.slice(0, 3).map((e, i) => (
@@ -242,7 +261,7 @@ function CommunityHome() {
                     }
                 </Communitylist>
                 <Communitylist>
-                    <CommunityTitle><BsCardText style={{ marginRight: '5px' }} /> 훈련 방법 공유</CommunityTitle>
+                    <CommunityTitle href={`/training-method${url}`}><BsCardText style={{ marginRight: '5px' }} /> 훈련 방법 공유</CommunityTitle>
                     {
                         trainingBoard.length > 0 &&
                         trainingBoard.slice(0, 3).map((e, i) => (
@@ -262,7 +281,7 @@ function CommunityHome() {
                     }
                 </Communitylist>
                 <Communitylist>
-                    <CommunityTitle><MdOutlineShoppingCart style={{ marginRight: '5px' }} /> 댕냥 마켓</CommunityTitle>
+                    <CommunityTitle href={`/used-market${url}`}><MdOutlineShoppingCart style={{ marginRight: '5px' }} /> 댕냥 마켓</CommunityTitle>
                     {
                         marketBoard.length > 0 &&
                         marketBoard.slice(0, 3).map((e, i) => (
@@ -287,7 +306,7 @@ function CommunityHome() {
                     }
                 </Communitylist>
             </Communitylists>
-        </>
+        </Container>
     );
 }
 

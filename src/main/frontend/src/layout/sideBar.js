@@ -14,7 +14,6 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import axios from "axios";
 import { Prev } from "react-bootstrap/esm/PageItem";
 const SideContainer = styled.div`
-
 `
 const FrequentQ = styled.div`
 width: 100%;
@@ -147,11 +146,13 @@ function SideBar() {
                     ?
                     <IoChatbubblesOutline style={{
                         transition: "transform 0.5s linear",
-                        transform: "translateY(-100px)"
+                        transform: "translateY(-100px)",
+                        boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`
                     }} className="chatBotMobile" onClick={handleShow} />
                     :
                     <IoChatbubblesOutline id="chatBotMobile" style={{
-                        transition: "transform 0.5s linear"
+                        transition: "transform 0.5s linear",
+                        boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`
                     }} className="chatBotMobile" onClick={handleShow} />
             }
             <Offcanvas style={{

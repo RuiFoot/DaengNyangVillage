@@ -11,19 +11,21 @@ import axios from "axios";
 import { FaStar } from "react-icons/fa6";
 
 const Container = styled.div`
+min-height: calc(100vh - 229px);
 display: flex;
 flex-direction: column;
 `
 const PlaceItems = styled.div`
-min-height: calc(100vh - 229px);
-margin: 10px 6vw;
+margin: 10px 10vw;
 display: grid;
 justify-content: center;
 grid-template-columns: repeat(auto-fit,250px);
 grid-auto-rows: minmax(100px, auto);
-gap: 15px;
+gap: 20px;
 `
 const PlaceItem = styled.a`
+padding: 10px;
+border-radius: 5px;
 text-decoration: none;
 cursor: pointer;
 &:hover {
@@ -145,6 +147,7 @@ function SelectedLocation() {
                 backgroundColor: switchBgColor
             }}>
                 < PlaceItems style={{
+
                     gridTemplateColumns: windowSize > 1790 ?
                         "repeat(auto-fit,250px)" : "repeat(auto-fit,350px)"
                 }} >
@@ -153,8 +156,10 @@ function SelectedLocation() {
                         board.map((e, i) => (
                             <PlaceItem key={i}
                                 style={{
+                                    boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8`,
                                     color: switchColor,
                                     backgroundColor: switchBgColor
+
                                 }}
                                 href={`/recommend-place-detail/${e.animalNum}${url}`}
                             >
@@ -165,7 +170,10 @@ function SelectedLocation() {
                             </PlaceItem>
                         ))}
                 </PlaceItems >
-                <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                {
+                    pageRange ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                        : null
+                }
                 {/*
              totalPageNum : 총 페이지내이션 수
              btnRange : 보여질 페이지 버튼의 개수

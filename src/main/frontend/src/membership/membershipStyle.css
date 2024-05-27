@@ -54,6 +54,19 @@
     border-color: #F288CD;
 }
 
+.WithdrawalBtn {
+    width: 200px;
+    margin: 0 0 15px 0;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    transition-duration: 0.3s;
+}
+
+.WithdrawalBtn:hover {
+    border: 1px solid #F288CD;
+}
+
 .postModal {
     height: 800px;
 }
