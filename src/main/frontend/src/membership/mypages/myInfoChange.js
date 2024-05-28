@@ -174,20 +174,20 @@ function MyInfoChange() {
         ).then((response) => {
             // console.log(body);
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+            setChecked(false)
+            setMemberInfo({
+                profileImg: "",
+                mypet: "",
+                nickName: "",
+                phoneNumber: "",
+                inputAddress: "",
+                inputZonecode: "",
+                detailedAddress: ""
+            })
+            window.location.href = `/my-info/${nickName}`
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
         })
-        setChecked(false)
-        setMemberInfo({
-            profileImg: "",
-            mypet: "",
-            nickName: "",
-            phoneNumber: "",
-            inputAddress: "",
-            inputZonecode: "",
-            detailedAddress: ""
-        })
-        window.location.href = `/my-info/${nickName}`
     }
 
 
