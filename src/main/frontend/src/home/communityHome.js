@@ -216,7 +216,9 @@ function CommunityHome() {
                 }}>커뮤니티</CategoryTitle></a>
             <Communitylists style={{ gridTemplateColumns: `${windowSize > 943 ? 'repeat(auto-fit, minmax(300px, 1fr))' : 'repeat(auto-fit, minmax(195px, 1fr))'}` }}>
                 <Communitylist>
-                    <CommunityTitle href={`/free-board${url}`}><BsCardText style={{ marginRight: '5px' }} /> 자유게시판</CommunityTitle>
+                    <CommunityTitle style={{
+                        color: switchColor
+                    }} href={`/free-board${url}`}><BsCardText style={{ color: switchColor, marginRight: '5px' }} /> 자유게시판</CommunityTitle>
                     {
                         freeBoard.length > 0 &&
                         freeBoard.slice(0, 3).map((e, i) => (
@@ -236,7 +238,9 @@ function CommunityHome() {
                     }
                 </Communitylist>
                 <Communitylist>
-                    <CommunityTitle href={`/pet-boast${url}`}><HiOutlinePhoto style={{ marginRight: '5px' }} />반려동물 자랑</CommunityTitle>
+                    <CommunityTitle style={{
+                        color: switchColor
+                    }} href={`/pet-boast${url}`}><HiOutlinePhoto style={{ color: switchColor, marginRight: '5px' }} />반려동물 자랑</CommunityTitle>
                     {
                         petBoastBoard.length > 0 &&
                         petBoastBoard.slice(0, 3).map((e, i) => (
@@ -261,7 +265,9 @@ function CommunityHome() {
                     }
                 </Communitylist>
                 <Communitylist>
-                    <CommunityTitle href={`/training-method${url}`}><BsCardText style={{ marginRight: '5px' }} /> 훈련 방법 공유</CommunityTitle>
+                    <CommunityTitle style={{
+                        color: switchColor
+                    }} href={`/training-method${url}`}><BsCardText style={{ color: switchColor, marginRight: '5px' }} /> 훈련 방법 공유</CommunityTitle>
                     {
                         trainingBoard.length > 0 &&
                         trainingBoard.slice(0, 3).map((e, i) => (
@@ -281,7 +287,9 @@ function CommunityHome() {
                     }
                 </Communitylist>
                 <Communitylist>
-                    <CommunityTitle href={`/used-market${url}`}><MdOutlineShoppingCart style={{ marginRight: '5px' }} /> 댕냥 마켓</CommunityTitle>
+                    <CommunityTitle style={{
+                        color: switchColor
+                    }} href={`/used-market${url}`}><MdOutlineShoppingCart style={{ color: switchColor, marginRight: '5px' }} /> 댕냥 마켓</CommunityTitle>
                     {
                         marketBoard.length > 0 &&
                         marketBoard.slice(0, 3).map((e, i) => (

@@ -13,7 +13,7 @@ justify-content: center;
 align-items: center;
 `;
 
-function KakaoLoding() {
+function GoogleLoding() {
     //다크모드
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
@@ -25,11 +25,11 @@ function KakaoLoding() {
                 color: switchColor,
                 backgroundColor: switchBgColor
             }}>
-                <div style={{ margin: "10px 0" }} >카카오 아이디로 로그인 중입니다.</div>
-                <Spinner animation="border" variant="warning" />
+                <div style={{ margin: "10px 0" }}>구글 아이디로 로그인 중입니다.</div>
+                <Spinner animation="border" />
             </Container>
         </div>
     );
 }
 
-export default KakaoLoding;
+export default GoogleLoding;

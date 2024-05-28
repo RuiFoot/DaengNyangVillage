@@ -3,8 +3,11 @@ import styled from "styled-components";
 import "./homeStyle.css"
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../components/atoms';
+import main1 from '../img/main1.jpg';
+import main2 from '../img/main2.jpg';
+import main3 from '../img/main3.jpg';
 
-let carouselItems = [["https://www.vietnamairlines.com/~/media/ContentImage/Buy-tickets-and-other-products/Vanchuyen_Thucung.jpg", "반려동물의 다양한 정보", " 반려인이이 쉽고 편리하게 정보를 얻고 소통할 수 있는 공간"], ["https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FATJ3E%2FbtrGE4tjB5k%2Fw1b3iR71kAg1oMFrOy1k20%2Fimg.jpg", "반려동물과 함께 할 수 있는 장소", "반려인과 반려동물이 즐거운 경험과 추억을 만들 수 있도록"], ["https://img1.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202110/27/holapet/20211027051857338hff8.jpeg", "반려동물에게 좋은 것만", "반려인과 반려동물의 행복한 삶을 위해 가장 좋은 상품 제공"]]
+let carouselItems = [[main1, "반려동물의 다양한 정보", " 반려인이이 쉽고 편리하게 정보를 얻고 소통할 수 있는 공간"], [main2, "반려동물과 함께 할 수 있는 장소", "반려인과 반려동물이 즐거운 경험과 추억을 만들 수 있도록"], [main3, "반려동물에게 좋은 것만", "반려인과 반려동물의 행복한 삶을 위해 가장 좋은 상품 제공"]]
 
 const CarouselImg = styled.div`
 height: 20vw;

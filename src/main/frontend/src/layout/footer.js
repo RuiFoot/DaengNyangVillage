@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import "../style.css"
-import { FaXTwitter, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa6";
+import { FaGithub } from "react-icons/fa6";
+import { RxNotionLogo } from "react-icons/rx";
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../components/atoms';
 import themes from "../components/theme";
@@ -32,10 +33,14 @@ function Footer() {
             backgroundColor: switchBgColor
         }}>
             <Icons>
-                <FaXTwitter className="footerIcon" />
-                <FaFacebookF className="footerIcon" />
-                <FaInstagram className="footerIcon" />
-                <FaGithub className="footerIcon" />
+                <a style={{
+                    color: switchColor,
+                    backgroundColor: switchBgColor
+                }} href="https://mysterious-airedale-6dc.notion.site/637c5c7ba79e43f5985d09125092b2b4?pvs=74"><RxNotionLogo className="footerIcon" /></a>
+                <a style={{
+                    color: switchColor,
+                    backgroundColor: switchBgColor
+                }} href="https://github.com/RuiFoot/DaengNyangVillage"><FaGithub className="footerIcon" /></a>
             </Icons>
             <Copyright>
                 © Copyright 2024, All Rights Reserved by 오루보

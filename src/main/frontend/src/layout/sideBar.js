@@ -12,7 +12,7 @@ import themes from "../components/theme";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import axios from "axios";
-import { Prev } from "react-bootstrap/esm/PageItem";
+
 const SideContainer = styled.div`
 `
 const FrequentQ = styled.div`
@@ -49,14 +49,14 @@ width: 367px;
 display: flex;
 justify-content: start;
 flex-direction: column;
-& p {
+`
+const Bot = styled.div`
 background-color: white;
 padding: 5px;
 margin: 5px 0;
 border-radius: 5px 5px 5px 0;
 width: fit-content;
-box-shadow: 1px 1px 1px 1px #666
-}
+box-shadow: 1px 1px 1px 1px #666;
 `
 const ManagerName = styled.div`
 font-size: 16px;
@@ -101,13 +101,6 @@ function SideBar() {
         }
     }, []);
     //챗봇 내부
-    //대답 자료
-    const answerList = {
-        로그인: "로그인 창에 아이디/비밀번호 찾기를 이용해주세요.",
-        소셜로그인비밀번호: "소셜로그인은 아이디/비밀번호 찾기가 불가능합니다.",
-        추천장소추가: "추천장소 페이지에 추천 장소 추가를 이용해주세요",
-        회원정보변경: "로그인후 마이페이지를 이용해주세요."
-    }
     const [userChat, setUserChat] = useState()
     const [userChatArr, setUserChatArr] = useState([])
     const [isChatOn, setIsChatOn] = useState(false)
@@ -129,11 +122,13 @@ function SideBar() {
         }
         axios.post(`${baseUrl}/chatbot`, body
         ).then((response) => {
-
+            setValueX(Prev => Prev + 1)
+            userChatArr.push(["bot", response.data])
             console.log(response.data);    //오류발생시 실행
+            console.log(response.data.result.replace(/\n/g, '<br/>'));    //오류발생시 실행
+            console.log(response.data.result.replaceAll("\n", '<br/>'));
         }).catch((error) => {
             console.log(error);    //오류발생시 실행
-
         })
         setUserChat("")
     }
@@ -192,7 +187,21 @@ function SideBar() {
                                                 :
                                                 <ManagerChat key={i}>
                                                     <ManagerName>댕냥빌리지</ManagerName>
-                                                    <p>{e[1]}</p>
+                                                    <Bot>
+                                                        {
+                                                            e[1].result.split("\\n").map((line) => {
+                                                                return (
+
+                                                                    <span>
+                                                                        {line}
+                                                                        <br />
+                                                                    </span>
+
+                                                                );
+                                                            })
+                                                        }
+                                                    </Bot>
+                                                    {/* <p style={{ whiteSpace: "pre-wrap" }}>{}</p> */}
                                                 </ManagerChat>
                                         ))
                                     }

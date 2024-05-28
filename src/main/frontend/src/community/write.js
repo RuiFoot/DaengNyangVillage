@@ -11,12 +11,11 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
 import './communityStyle.css'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { storage } from "../servers/firebase";
-import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
+import { uploadBytes, getDownloadURL, deleteObject, ref } from "firebase/storage";
 import axios from "axios";
 
 const Container = styled.div`
@@ -162,8 +161,31 @@ function Write() {
             [name]: value
         });
     }
-
+    //첫번째 이미지 찾기
+    const findImg = (input) => {
+        // console.log(input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1))
+        return input.slice(input.indexOf("http"), input.indexOf(">", input.indexOf("img")) - 1)
+    }
+    const [newImgUrlArr, setNewImgUrlArr] = useState([])
     const handleSubmit = (e) => {
+        //내용안에서 이미지만 추출
+        let count = quillValue.split('http').length - 1;
+        let newStartIndex = 0
+        let startIndex = 0
+        // console.log(count)
+        for (let i = 0; i < count; i++) {
+            if (quillValue.indexOf(`"></p>`) !== -1) {
+                startIndex = quillValue.indexOf("http", newStartIndex);
+                newStartIndex = quillValue.indexOf(`"></p>`, startIndex);
+                newImgUrlArr.push(quillValue.slice(startIndex, newStartIndex))
+            }
+            // console.log(newImgUrlArr)
+        }
+        const deletImgs = imageUrl.filter(x => newImgUrlArr.includes(x));
+        console.log(deletImgs)
+        for (let i = 0; i < deletImgs.length; i++) {
+            deleteObject(ref(storage, deletImgs[i]));
+        }
         e.preventDefault();
         let body = {
             tradeTime: tradeTime,
@@ -175,14 +197,15 @@ function Write() {
             memberNo: userInfo.memberNo,
             category: board,
             field: quillValue,
-            imgPath: imageUrl.join(", "),
+            imgPath: findImg(quillValue),
             boardId: 0,
             boardName: values.boardName
         }
         axios.post(`${baseUrl}/board`, body
         ).then((response) => {
-            // console.log(preface);	//정상 통신 후 응답된 메시지 출력
-            // console.log(response.data);	//정상 통신 후 응답된 메시지 출력
+            console.log(deletImgs)
+            console.log(body);	//정상 통신 후 응답된 메시지 출력
+            console.log(response.data);	//정상 통신 후 응답된 메시지 출력
             if (board === "자유 게시판") {
                 window.location.href = `/free-board/${userInfo.nickName}`
             } else if (board === "반려동물 자랑") {
