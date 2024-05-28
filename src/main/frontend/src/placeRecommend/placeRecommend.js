@@ -54,7 +54,7 @@ width: 360px;
 const List = styled.div`
 display: flex;
 flex-direction: row;
-height: 420px;
+height: 400px;
 justify-content: center;
 `
 
@@ -126,7 +126,7 @@ flex-direction: column;
 width: 100%;
 `
 const Selected = styled.div`
-gap : 10px;
+gap : 5px;
 width: 100%;
 display: flex;
 justify-content: center;
@@ -257,27 +257,32 @@ function PlaceRecommend() {
     }
     const [page, setPage] = useState({})
     const nowPage = useRecoilValue(presentPage);
+    const [isOn, setIsOn] = useState(false)
     useEffect(() => {
-        axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=${nowPage - 1}`)
-            .then((res) => {
-                setAddress(res.data.content);
-                kakaomapMarker(res.data.content)
-                setPage({
-                    empty: res.data.empty,
-                    first: res.data.first,
-                    last: res.data.last,
-                    number: res.data.number,
-                    numberOfElements: res.data.numberOfElements,
-                    pageable: res.data.pageable,
-                    size: res.data.size,
-                    sort: res.data.sort,
-                    totalElements: res.data.totalElements,
-                    totalPages: res.data.totalPages
+        console.log(isOn)
+        if (isOn) {
+            axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=${nowPage - 1}`)
+                .then((res) => {
+                    setAddress(res.data.content);
+                    kakaomapMarker(res.data.content)
+                    setPage({
+                        empty: res.data.empty,
+                        first: res.data.first,
+                        last: res.data.last,
+                        number: res.data.number,
+                        numberOfElements: res.data.numberOfElements,
+                        pageable: res.data.pageable,
+                        size: res.data.size,
+                        sort: res.data.sort,
+                        totalElements: res.data.totalElements,
+                        totalPages: res.data.totalPages
+                    })
+                    console.log(res.data)
                 })
-                console.log(res.data)
-            })
+        }
     }, [nowPage]);
     const handleButtonClick = (e) => {
+        setIsOn(true)
         e.preventDefault();
         axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=0`)
             .then((res) => {
@@ -296,12 +301,12 @@ function PlaceRecommend() {
                     totalElements: res.data.totalElements,
                     totalPages: res.data.totalPages
                 })
-                //getList(res.data.content)
             })
             .catch((error) => {
                 console.error('가져오기 실패', error);
             })
     };
+    console.log(address)
     //시, 도 배열
     const bigAreaList = [
         "서울특별시", "인천광역시", "대전광역시", "광주광역시", "대구광역시", "울산광역시", "부산광역시",
@@ -405,27 +410,31 @@ function PlaceRecommend() {
                             <CheckBoxs style={{ boxShadow: isDark ? `0px 10px 20px 4px black` : `0px 10px 20px 4px #E8E8E8` }}>
                                 <Card style={{ width: "100%" }} className="card">
                                     <Card.Header style={{
-                                        color: switchColor,
+                                        padding: "3px", color: switchColor,
                                         backgroundColor: switchBgColor
                                     }} className="cardHeader">
                                         <InputGroup className="inputGroup mb-3" >
                                             <Selected>
                                                 <InputGroup.Text style={{
+                                                    padding: "5px",
                                                     color: switchColor,
                                                     backgroundColor: switchBgColor,
                                                     borderColor: switchColor
                                                 }} id="basic-addon1">{sido}</InputGroup.Text>
                                                 <InputGroup.Text style={{
+                                                    padding: "5px",
                                                     color: switchColor,
                                                     backgroundColor: switchBgColor,
                                                     borderColor: switchColor
                                                 }} id="basic-addon1">{checkedArea}</InputGroup.Text>
                                                 <InputGroup.Text style={{
+                                                    padding: "5px",
                                                     color: switchColor,
                                                     backgroundColor: switchBgColor,
                                                     borderColor: switchColor
                                                 }} id="basic-addon1">{checkedCategory}</InputGroup.Text>
                                                 <Button style={{
+                                                    padding: "5px",
                                                     color: switchColor,
                                                     backgroundColor: switchBgColor,
                                                     borderColor: switchColor
@@ -509,22 +518,27 @@ function PlaceRecommend() {
                             <CheckBoxs style={{ boxShadow: isDark ? `0px 5px 10px 2px black` : `0px 5px 10px 2px #E8E8E8` }} >
                                 <Card style={{ width: "100%" }} className="card" >
                                     <Card.Header style={{
+                                        padding: "3px",
                                         color: switchColor,
                                         backgroundColor: switchBgColor
                                     }} className="cardHeader">
                                         <InputGroup className="inputGroup mb-3" >
                                             <Selected>
                                                 <InputGroup.Text style={{
+                                                    padding: "5px",
                                                     color: switchColor, backgroundColor: switchBgColor
                                                 }} id="basic-addon1">{sido}</InputGroup.Text>
                                                 <InputGroup.Text style={{
+                                                    padding: "5px",
                                                     color: switchColor, backgroundColor: switchBgColor
                                                 }} id="basic-addon1">{checkedArea}</InputGroup.Text>
                                                 <InputGroup.Text style={{
+                                                    padding: "5px",
                                                     color: switchColor, backgroundColor: switchBgColor
 
                                                 }} id="basic-addon1">{checkedCategory}</InputGroup.Text>
                                                 <Button style={{
+                                                    padding: "5px",
                                                     color: switchColor,
                                                     backgroundColor: switchBgColor,
                                                     borderColor: switchColor
@@ -608,7 +622,7 @@ function PlaceRecommend() {
                         </TopContants>
                 }
                 {
-                    pageRange ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                    isOn ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
                         : null
                 }
                 {/*
@@ -619,7 +633,7 @@ function PlaceRecommend() {
                     gridTemplateColumns: windowSize > 1790 ?
                         "repeat(auto-fit,230px)" : "repeat(auto-fit,350px)"
                 }}  >
-                    {
+                    {isOn &&
                         address.map((e, i) => (
                             <PlaceItem key={i}
                                 style={{
@@ -637,7 +651,7 @@ function PlaceRecommend() {
                     }
                 </PlaceItems >
                 {
-                    pageRange ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
+                    isOn ? <Pagination totalPost={page.totalElements} pageRange={pageRange} btnRange={5} totalPageNum={page.totalPages} />
                         : null
                 }
                 {/*

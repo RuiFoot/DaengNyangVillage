@@ -41,7 +41,7 @@ function Edit() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
-    const [imgUrl, setImageUrl] = useState([]); // 새로운 상태 추가
+    const [imgUrl, setImgUrl] = useState([]); // 새로운 상태 추가
     const baseUrl = "http://localhost:8080";
     // 배포용 URL
     const quillRef = useRef(null); // useRef로 ref 생성
@@ -211,10 +211,14 @@ function Edit() {
                 newStartIndex = quillValue.indexOf(`"></p>`, startIndex);
                 newImgUrlArr.push(quillValue.slice(startIndex, newStartIndex))
             }
-            // console.log(newImgUrlArr)
         }
-        const deletImgs = imgUrl.filter(x => !newImgUrlArr.includes(x));
-        // console.log(deletImgs)
+        for (let i = 0; i < newImgUrlArr.length; i++) {
+            console.log(newImgUrlArr[i])
+            newImgUrlArr[i] = newImgUrlArr[i].substring(0, newImgUrlArr[i].indexOf(`alt`))
+        }
+        console.log(imgUrl)
+        console.log(newImgUrlArr)
+        const deletImgs = imgUrl.filter(x => !newImgUrlArr.includes(x.substring(0, x.indexOf(`alt`))));
         for (let i = 0; i < deletImgs.length; i++) {
             deleteObject(ref(storage, deletImgs[i]));
         }
@@ -237,7 +241,8 @@ function Edit() {
         // console.log(body)
         axios.patch(`${baseUrl}/board`, body
         ).then((response) => {
-            // console.log(response.data);	//정상 통신 후 응답된 메시지 출력
+            console.log(deletImgs)
+            console.log(response.data);	//정상 통신 후 응답된 메시지 출력
             if (board === "자유 게시판") {
                 window.location.href = `/free-board/${userInfo.nickName}`
             } else if (board === "반려동물 자랑") {

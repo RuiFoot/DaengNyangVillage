@@ -187,7 +187,7 @@ function MyInfoChange() {
             inputZonecode: "",
             detailedAddress: ""
         })
-        // window.location.href = `/my-info/${nickName}`
+        window.location.href = `/my-info/${nickName}`
     }
 
 

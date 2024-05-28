@@ -33,7 +33,7 @@ const PetBoastTitle = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
-font-size: clamp(100%, 5vw, 120%);
+font-size: clamp(100%, 2vw, 120%);
 font-weight: bold;
 `
 const PetImg = styled.div`
@@ -120,10 +120,15 @@ function PetBoast() {
     //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
     const representImg = (e) => {
         if (e !== null) {
-            const index = e.indexOf(",")
-            return (
-                <PetImg style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
-            )
+            if (e.indexOf(`width`) !== -1) {
+                return (
+                    <PetImg style={{ backgroundImage: `url(${e.substring(0, e.indexOf(`width`) - 2)})` }} />
+                )
+            } else {
+                return (
+                    <PetImg style={{ backgroundImage: `url(${e})` }} />
+                )
+            }
         } else {
             return (
                 <PetImg style={{ backgroundImage: `url(${defaultImg})` }} />

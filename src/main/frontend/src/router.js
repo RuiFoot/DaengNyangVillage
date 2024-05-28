@@ -23,6 +23,7 @@ import Edit from "./community/edit";
 import PetBoastDetail from "./community/petBoastDetail";
 import TrainingBoardDetail from "./community/trainingBoardDetail";
 import KakaoLoding from "./loding/kakaoLoding";
+import GoogleLoding from "./loding/googleLoding";
 
 function Router() {
     if (window.sessionStorage.key(0) !== "logined") {
@@ -52,6 +53,7 @@ function Router() {
                 <Route path="/pet-boast-detail/:boardId" element={<PetBoastDetail />} />
                 <Route path="/edit/:boardId" element={<Edit />} />
                 <Route path="/login/oauth2/code/kakao" element={<KakaoLoding />} />
+                <Route path="/member/oauth/google" element={<GoogleLoding />} />
             </Routes>
         )
     } else {

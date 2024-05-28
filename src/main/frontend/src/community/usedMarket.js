@@ -134,8 +134,8 @@ function UsedMarket() {
                 <MarketItemImg style={{ backgroundImage: `url(${defaultImg})` }} />
             )
         }
-
     }
+
     return (
         <Container style={{
             color: switchColor,

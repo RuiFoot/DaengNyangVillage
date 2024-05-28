@@ -6,6 +6,8 @@ import themes from "../components/theme";
 import Card from 'react-bootstrap/Card';
 import usInfo from "./aboutUsInfo";
 import defaultImg from "../img/defaultImg.png";
+import { FaInstagram, FaGithub } from "react-icons/fa6";
+import { RxNotionLogo } from "react-icons/rx";
 
 const Container = styled.div`
 min-height: calc(100vh - 86px);
@@ -24,6 +26,7 @@ place-items: center;
 `
 const Content = styled.div`
 width: 250px;
+
 `
 const CardImg = styled.div`
 display: flex;
@@ -34,6 +37,7 @@ function AboutUs() {
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
+    console.log(usInfo)
     return (
         <Container style={{
             color: switchColor,
@@ -45,18 +49,35 @@ function AboutUs() {
                     <Content key={i}>
                         <Card style={{ width: "100%" }}>
                             <CardImg>
-                                <Card.Img variant="top" src={defaultImg} style={{ height: "150px", width: "150px" }} />
+                                <Card.Img variant="top" src={e.img ? e.img : defaultImg} style={{ height: "150px", width: "150px", borderRadius: "50%", margin: "10px" }} />
                             </CardImg>
                             <Card.Body>
                                 <Card.Title>{e.name}</Card.Title>
                                 <Card.Text>
-                                    {e.position}
+                                    MBTI : {e.mbti}
                                 </Card.Text>
                                 <Card.Text>
-                                    {e.aboutMe}
+                                    Position : {e.position}
                                 </Card.Text>
                                 <Card.Text>
-                                    {e.Contact}
+                                    TMI : {e.TMI}
+                                </Card.Text>
+                                <Card.Text>
+                                    Like : {e.취미}
+                                </Card.Text>
+                                <Card.Text>
+                                    {e.email}
+                                </Card.Text>
+                                <Card.Text style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <a style={{
+                                        color: "black"
+                                    }} href={e.insta} target="_blank" ><FaInstagram className="footerIcon" /></a>
+                                    <a style={{
+                                        color: "black"
+                                    }} href={e.git} target="_blank" ><FaGithub className="footerIcon" /></a>
+                                    <a style={{
+                                        color: "black"
+                                    }} href={e.notion} target="_blank" ><RxNotionLogo className="footerIcon" /></a>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
