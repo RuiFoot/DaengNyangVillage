@@ -1,0 +1,16 @@
+.carousel-indicators {
+    display: none;
+}
+
+.carousel-caption {
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(#00000000, #000000);
+    height: 180px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-bottom: 0;
+}

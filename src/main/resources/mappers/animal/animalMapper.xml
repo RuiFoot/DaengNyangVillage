@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myspring.daengnyang.animal.mapper.AnimalMapper">
+    <resultMap id="LocationResultmap" type="com.myspring.daengnyang.animal.vo.AnimalLocationVO">
+        <id property="animalNum" column="animalNum"/>
+        <result property="largeClassification" column="largeClassification"/>
+        <result property="facilityName" column="facilityName"/>
+        <result property="subClassification" column="subClassification"/>
+        <result property="sido" column="sido"/>
+        <result property="sigungu" column="sigungu"/>
+        <result property="eupmyeondong" column="eupmyeondong"/>
+        <result property="ri" column="ri"/>
+        <result property="houseNumber" column="houseNumber"/>
+        <result property="streetName" column="streetName"/>
+        <result property="buildingNumber" column="buildingNumber"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="star" column="star"/>
+        <result property="imgPath" column="imgPath"/>
+        <result property="roadAddress" column="roadAddress"/>
+        <result property="numberAddress" column="numberAddress"/>
+    </resultMap>
+
+    <resultMap id="DetailResultmap" type="com.myspring.daengnyang.animal.vo.AnimalDetailVO">
+        <id property="animalNum" column="animalNum"/>
+        <result property="largeClassification" column="largeClassification"/>
+        <result property="facilityName" column="facilityName"/>
+        <result property="subClassification" column="subClassification"/>
+        <result property="infomation" column="infomation"/>
+        <result property="postalCode" column="postalCode"/>
+        <result property="roadAddress" column="roadAddress"/>
+        <result property="numberAddress" column="numberAddress"/>
+        <result property="website" column="website"/>
+        <result property="holiday" column="holiday"/>
+        <result property="operationHours" column="operationHours"/>
+        <result property="carInfo" column="carInfo"/>
+        <result property="payInfo" column="payInfo"/>
+        <result property="animalInfo" column="animalInfo"/>
+        <result property="animalSize" column="animalSize"/>
+        <result property="precautions" column="precautions"/>
+        <result property="infield" column="infield"/>
+        <result property="outfield" column="outfield"/>
+        <result property="addPay" column="addPay"/>
+        <result property="star" column="star"/>
+        <result property="tel" column="tel"/>
+        <result property="imgPath" column="imgPath"/>
+    </resultMap>
+
+    <resultMap id="ReviewResultmap" type="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
+        <id property="animalReviewNum" column="animalReviewNum"/>
+        <result property="nickname" column="nickname"/>
+        <result property="memberNo" column="memberNo"/>
+        <result property="review" column="review"/>
+        <result property="star" column="star"/>
+        <result property="createDate" column="createDate"/>
+    </resultMap>
+
+    <select id="getClassification" parameterType="String" resultType="String">
+        <![CDATA[
+            SELECT *
+            FROM "animalClassification"
+        ]]>
+    </select>
+
+    <select id="getSigungu" parameterType="String" resultType="String">
+        <![CDATA[
+            SELECT "SIGUNGU"
+            FROM "animalArea"
+            WHERE "SIDO" = #{sido}
+        ]]>
+    </select>
+    <select id="getLocation" parameterType="com.myspring.daengnyang.common.vo.Paging" resultMap="LocationResultmap">
+        <![CDATA[
+        SELECT *
+        FROM (
+            SELECT A.*, ROWNUM rn
+            FROM (
+                SELECT *
+                FROM "animalLocation"
+        ]]>
+                <where>
+                    <if test="data.sido != null and data.sido != '전체' and data.sido != '시,도' ">
+                        AND INSTR("sido", #{data.sido}) > 0
+                    </if>
+                    <if test="data.sigungu != null and data.sigungu != '전체' and data.sigungu !='시,군'">
+                        AND INSTR("sigungu", #{data.sigungu}) > 0
+                    </if>
+                    <if test="data.classification != null and data.classification != '전체' and data.classification !='카테고리'">
+                        AND "subClassification" = #{data.classification}
+                    </if>
+                    AND "star" is not null
+                </where>
+                <if test="pageable.sort != null and !pageable.sort.isEmpty()">
+                    ORDER BY
+                    <foreach collection="pageable.sort" item="order" separator=",">
+                        "${order.property}" ${order.direction}
+                    </foreach>
+                </if>
+        <![CDATA[
+            ) A
+            WHERE ROWNUM <= #{pageable.offset}+#{pageable.pageSize}
+        )
+        WHERE rn > #{pageable.offset}
+    ]]>
+    </select>
+
+    <select id="getLocationCount" parameterType="Map" resultType="Integer">
+        <![CDATA[
+        SELECT COUNT(*) AS CNT
+        FROM "animalLocation"]]>
+        <where>
+            <if test="sido != null and sido !='전체' and sido !='시,도'">
+                AND INSTR("sido", #{sido}) > 0
+            </if>
+            <if test="sigungu != null and sigungu != '전체'and sigungu !='시,군'">
+                AND INSTR("sigungu", #{sigungu}) > 0
+            </if>
+            <if test="classification != null and classification != '전체' and classification !='카테고리'">
+                AND "subClassification" = #{classification}
+            </if>
+            AND "star" is not null
+        </where>
+    </select>
+
+    <select id="getDetail" parameterType="Integer" resultMap="DetailResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "animalInfomation"
+            where #{animalNum} = "animalNum"
+        ]]>
+    </select>
+    <select id="getReview" parameterType="Integer" resultMap="ReviewResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "animalReview"
+            where #{animalNum} = "animalNum"
+        ]]>
+    </select>
+
+    <insert id="favoriteCheck" parameterType="Integer">
+        <!-- Oracle에서의 삽입 또는 업데이트 쿼리 예시 -->
+        MERGE INTO "favorite"
+        USING dual ON ("memberNo" = #{memberNo} AND "animalNum" = #{animalNum})
+        WHEN MATCHED THEN
+        UPDATE SET "Field" = CASE "Field"
+        WHEN 1 THEN 0
+        ELSE 1
+        END,
+        "favDate" = SYSDATE
+        WHEN NOT MATCHED THEN
+        INSERT ("memberNo", "animalNum", "favDate", "Field")
+        VALUES (#{memberNo}, #{animalNum}, SYSDATE, 1)
+    </insert>
+
+    <select id="getFavorite" parameterType="Integer" resultType="String">
+        <![CDATA[
+            SELECT "Field"
+            FROM "favorite"
+            WHERE #{animalNum} = "animalNum" AND #{memberNo} = "memberNo"
+        ]]>
+    </select>
+
+
+
+    <insert id="animalReviewPost" parameterType="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
+        <selectKey keyProperty="animalReviewNum" resultType="java.lang.Integer" order="BEFORE">
+            SELECT animal_review_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO "animalReview" ("animalReviewNum", "animalNum", "nickname", "memberNo", "review", "star",
+        "createDate", "PROFILEIMG")
+        VALUES (#{animalReviewNum}, #{animalPost.animalNum}, #{animalPost.nickname}, #{animalPost.memberNo},
+        #{animalPost.review}, #{animalPost.star}, SYSDATE, #{animalPost.profileImg})
+    </insert>
+
+    <update id="updateAnimalReview" parameterType="com.myspring.daengnyang.animal.vo.AnimalReviewVO">
+        UPDATE "animalReview"
+        SET "animalNum" = #{animalPost.animalNum},
+        "review" = #{animalPost.review},
+        "star" = #{animalPost.star},
+        "createDate" = SYSDATE,
+        "PROFILEIMG" = #{animalPost.profileImg}
+        WHERE "animalReviewNum" = #{animalPost.animalReviewNum}
+    </update>
+
+    <delete id="deleteAnimalReview" parameterType="Integer">
+        DELETE FROM "animalReview"
+        WHERE "animalReviewNum"= #{animalReviewNum}
+    </delete>
+
+    <update id="updateAnimalStar1" parameterType="Integer">
+        UPDATE "animalLocation"
+        SET "star" = (
+            SELECT AVG("star")
+            FROM "animalReview"
+            WHERE "animalNum" = #{animalNum}
+        )
+        WHERE "animalNum" = #{animalNum}
+    </update>
+
+    <update id="updateAnimalStar2" parameterType="Integer">
+        UPDATE "animalInfomation"
+        SET "star" = (
+            SELECT AVG("star")
+            FROM "animalReview"
+            WHERE "animalNum" = #{animalNum}
+        )
+        WHERE "animalNum" = #{animalNum}
+    </update>
+
+    <select id="getAnimalNum" resultType="Integer">
+        <![CDATA[
+        SELECT "animalNum"
+        FROM "animalReview"
+        WHERE "animalReviewNum" = #{animalReviewNum}
+        ]]>
+    </select>
+
+    <select id="getPopular" resultMap="LocationResultmap">
+        <![CDATA[
+            SELECT A.*
+            FROM (SELECT *
+                FROM "animalLocation"
+                WHERE "star" is not null
+                ORDER BY "star" DESC
+                ) A
+            WHERE ROWNUM <= 6
+        ]]>
+    </select>
+    <select id="getRecommend" resultMap="LocationResultmap">
+        <![CDATA[
+            SELECT *
+            FROM (
+                SELECT *
+                FROM "animalLocation"
+        ]]>
+                <where>
+                    <if test="sido != null and sido != ''">
+                        AND INSTR("sido", #{sido}) > 0
+                    </if>
+                    <if test="sigungu != null and sigungu != '' and sigungu != '전체'">
+                        AND INSTR("sigungu", #{sigungu}) > 0
+                    </if>
+
+                </where>
+                ORDER BY DBMS_RANDOM.RANDOM
+            )
+        <![CDATA[
+            WHERE ROWNUM <= 12
+        ]]>
+    </select>
+</mapper>

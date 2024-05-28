@@ -1,0 +1,46 @@
+.headerBtn {
+    border: 1px solid transparent;
+}
+
+.headerBtn:hover {
+    border: 1px solid #F288CD;
+}
+
+.headerBtn:visited {
+    border: 1px solid #F288CD;
+}
+
+.registerBtns {
+    border: 1px solid;
+}
+
+.registerBtns:hover {
+    border: 1px solid #F288CD;
+}
+
+.btn.show {
+    border: 1px solid #F288CD;
+}
+
+.btn:disabled {
+    border: 1px solid;
+}
+
+.ql-container {
+    min-height: 400px;
+}
+
+.arrowDown:hover {
+    transition-duration: 0.5s;
+    transform: rotate(180deg) scale(1.2);
+}
+
+.mdModeEdit:hover {
+    border-bottom: 1px solid #F288CD;
+    transform: scale(1.2);
+}
+
+.mdDelete:hover {
+    border-bottom: 1px solid #F288CD;
+    transform: scale(1.2);
+}

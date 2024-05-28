@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myspring.daengnyang.member.mapper.MemberMapper">
+    <resultMap id="memberInfoResultmap" type="com.myspring.daengnyang.member.vo.MemberInfoVO">
+        <id property="memberNo" column="memberNo"/>
+        <result property="nickName" column="nickname"/>
+        <result property="profileImg" column="profileImg"/>
+        <result property="inputAddress" column="address"/>
+        <result property="detailedAddress" column="addressDetail"/>
+        <result property="mypet" column="favoritePet"/>
+        <result property="phoneNumber" column="phoneNumber"/>
+        <result property="inputZonecode" column="inputZonecode"/>
+
+
+    </resultMap>
+
+    <insert id="createMember" useGeneratedKeys="true" keyProperty="memberNo">
+        <selectKey keyProperty="memberNo" resultType="int" order="BEFORE">
+            SELECT member_seq.NEXTVAL FROM dual
+        </selectKey>
+        <![CDATA[
+            INSERT INTO "member" ("memberNo","email","password")
+            VALUES (TO_CHAR(SYSDATE, 'YYYY') || LPAD(#{memberNo}, 5, '0'), #{email}, #{password})
+        ]]>
+    </insert>
+
+    <select id="getMemberNo" resultType="int">
+        <![CDATA[
+            SELECT "memberNo"
+            FROM "member"
+            WHERE "email" = #{email}
+        ]]>
+    </select>
+
+    <select id="getMemberNoByPN" resultType="Integer">
+        <![CDATA[
+            SELECT "memberNo"
+            FROM "memberInfo"
+            WHERE "phoneNumber" = #{phoneNumber}
+        ]]>
+    </select>
+
+    <select id="getMemberInfo" resultMap="memberInfoResultmap">
+        <![CDATA[
+            SELECT *
+            FROM "memberInfo"
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </select>
+
+    <select id="getFavorite" parameterType="com.myspring.daengnyang.common.vo.Paging" resultType="com.myspring.daengnyang.animal.vo.AnimalLocationVO">
+        <![CDATA[
+            SELECT *
+            FROM (
+                SELECT X.*, ROWNUM rn
+                FROM(
+                    SELECT AL.*
+                    FROM "animalLocation" AL, (SELECT FV."animalNum",FV."favDate" FROM "favorite" FV WHERE FV."memberNo" = #{data} AND FV."Field" = 1) F
+                    WHERE F."animalNum" = AL."animalNum"
+                    ]]>
+                    <if test="pageable.sort != null and !pageable.sort.isEmpty()">
+                        ORDER BY
+                        <foreach collection="pageable.sort" item="order" separator=",">
+                            F."${order.property}" ${order.direction}
+                        </foreach>
+                    </if>
+        <![CDATA[
+                    ) X
+                WHERE ROWNUM <= #{pageable.offset}+#{pageable.pageSize}
+                )
+            WHERE rn > #{pageable.offset}
+    ]]>
+    </select>
+
+    <select id="getFavoriteCount" parameterType="Integer" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) as CNT
+        FROM (
+            SELECT AL.*
+            FROM "animalLocation" AL, (SELECT FV."animalNum",FV."favDate" FROM "favorite" FV WHERE FV."memberNo" = #{memberNo} AND FV."Field" = 1) F
+            WHERE F."animalNum" = AL."animalNum" )
+            ]]>
+    </select>
+
+    <select id="getMemberPost" parameterType="com.myspring.daengnyang.common.vo.Paging" resultType="com.myspring.daengnyang.board.vo.BoardVO">
+        <![CDATA[
+            SELECT
+                *
+            FROM (
+                SELECT A.*, ROWNUM rn
+                FROM (
+                    SELECT *
+                    FROM "Board"
+        ]]>
+                    <where>
+                        <if test="data != null and data != ''">
+                            AND "memberNo" = #{data}
+                        </if>
+                    </where>
+                    <if test="pageable.sort != null and !pageable.sort.isEmpty()">
+                        ORDER BY
+                        <foreach collection="pageable.sort" item="order" separator=",">
+                            "${order.property}" ${order.direction}
+                        </foreach>
+                    </if>
+            <![CDATA[
+                ) A
+                WHERE ROWNUM <= #{pageable.offset} + #{pageable.pageSize}
+            )
+            WHERE rn > #{pageable.offset}
+            ]]>
+    </select>
+
+    <select id="memberPostCnt" parameterType="int" resultType="int">
+        <![CDATA[
+            SELECT count(*) AS count
+            FROM "Board"
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </select>
+
+    <insert id="createMemberInfo">
+        <![CDATA[
+            INSERT INTO "memberInfo" ("nickname","memberNo","profileImg","address", "addressDetail","favoritePet","phoneNumber","inputZonecode")
+            VALUES (#{nickname}, #{memberNo}, #{profileImg}, #{address}, #{addressDetail}, #{favoritePet}, #{phoneNumber}, #{inputZonecode})
+        ]]>
+    </insert>
+
+
+    <select id="getMember" parameterType="String" resultType="com.myspring.daengnyang.member.vo.MemberVO">
+        <![CDATA[
+            SELECT *
+            from "member"
+            where "email" = #{email}
+        ]]>
+    </select>
+
+    <select id="getDuplicationEmail" parameterType="String" resultType="String">
+        <![CDATA[
+            SELECT "email"
+            from "member"
+            where "email" = #{email}
+        ]]>
+    </select>
+
+    <select id="duplicationNickname" parameterType="String" resultType="Integer">
+        <![CDATA[
+            SELECT count(*)
+            FROM "memberInfo"
+            WHERE "nickname" = #{nickname}
+        ]]>
+    </select>
+
+    <update id="updateProfile">
+        <![CDATA[
+            UPDATE "memberInfo"
+            SET "nickname" = #{nickname},
+                "profileImg" = #{profileImg},
+                "address" = #{address},
+                "addressDetail" = #{addressDetail},
+                "favoritePet" = #{favoritePet},
+                "phoneNumber" = #{phoneNumber},
+                "inputZonecode" = #{inputZonecode}
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </update>
+    
+    <update id="updatePassword">
+        <![CDATA[
+            UPDATE "member"
+            SET "password" = #{newPassword}
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </update>
+
+    <select id="findEmail" parameterType="int" resultType="String">
+        <![CDATA[
+            SELECT "email"
+            FROM "member"
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </select>
+
+    <select id="findNickname" parameterType="int" resultType="String">
+        <![CDATA[
+            SELECT "nickname"
+            FROM "memberInfo"
+            WHERE "memberNo" = #{memberNo}
+        ]]>
+    </select>
+
+
+</mapper>
