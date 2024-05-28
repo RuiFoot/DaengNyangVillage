@@ -163,7 +163,7 @@ function SideBar() {
                             :
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">로그인 해주세요.</Tooltip>}>
                                 <span className="d-inline-block">
-                                    <Button disabled style={{ pointerEvents: 'none' }}>
+                                    <Button disabled style={{ backgroundColor: "transparent", color: "black", pointerEvents: 'none' }}>
                                         챗봇에게 질문하기
                                     </Button>
                                 </span>

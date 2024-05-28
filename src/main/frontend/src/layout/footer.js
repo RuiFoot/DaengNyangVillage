@@ -36,11 +36,11 @@ function Footer() {
                 <a style={{
                     color: switchColor,
                     backgroundColor: switchBgColor
-                }} href="https://mysterious-airedale-6dc.notion.site/637c5c7ba79e43f5985d09125092b2b4?pvs=74"><RxNotionLogo className="footerIcon" /></a>
+                }} href="https://mysterious-airedale-6dc.notion.site/637c5c7ba79e43f5985d09125092b2b4?pvs=74" target="\_blank"><RxNotionLogo className="footerIcon" /></a>
                 <a style={{
                     color: switchColor,
                     backgroundColor: switchBgColor
-                }} href="https://github.com/RuiFoot/DaengNyangVillage"><FaGithub className="footerIcon" /></a>
+                }} href="https://github.com/RuiFoot/DaengNyangVillage" target="\_blank"><FaGithub className="footerIcon" /></a>
             </Icons>
             <Copyright>
                 © Copyright 2024, All Rights Reserved by 오루보

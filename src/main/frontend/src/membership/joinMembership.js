@@ -292,7 +292,7 @@ function JoinMembership() {
                                     <>
                                         {
                                             isDuplicationE ?
-                                                <p className="pass" >이미 사용중인 이메일입니다</p>
+                                                <p className="warning" >이미 사용중인 이메일입니다</p>
                                                 :
                                                 <p className="pass" >중복 확인 완료 사용가능한 이메일입니다</p>
                                         }
