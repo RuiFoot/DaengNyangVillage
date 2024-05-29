@@ -14,7 +14,7 @@ const PlaceItems = styled.div`
 display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-auto-rows: minmax(100px, auto);
-  gap: 20px;
+  gap: 10px;
   margin-bottom: 10px;
   padding: 10px;
 `
@@ -32,6 +32,7 @@ padding: 5px;
 border-radius: 5px;
 `
 const PlaceItemTitle = styled.div`
+height: 70px;
 display: flex;
 justify-content: center;
 align-items: center;

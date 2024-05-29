@@ -27,7 +27,7 @@ function CommunityHeader() {
     }
     return (
         <BoardHeader>
-            <Dropdown >
+            {/* <Dropdown >
                 <Dropdown.Toggle className="headerBtn" id="dropdown-basic" style={{
                     color: switchColor,
                     backgroundColor: switchBgColor,
@@ -39,7 +39,7 @@ function CommunityHeader() {
                     <Dropdown.Item href="#/action-1">최신순</Dropdown.Item>
                     <Dropdown.Item href="#/action-2">오래된순</Dropdown.Item>
                 </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
             {
                 window.sessionStorage.key(0) === "logined" ?
                     <Button className="headerBtn" style={{

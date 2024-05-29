@@ -81,7 +81,7 @@ cursor: pointer;
 }
 `
 const PlaceItemTitle = styled.div`
-height: 50px;
+height: 70px;
 display: flex;
 justify-content: center;
 align-items: center;
