@@ -339,6 +339,14 @@ function Write() {
                                 {area}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => areaBtn("서울특별시")}>서울특별시</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("부산광역시")}>부산광역시</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("대구광역시")}>대구광역시</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("인천광역시")}>인천광역시</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("광주광역시")}>광주광역시</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("대전광역시")}>대전광역시</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("울산광역시")}>울산광역시</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("세종특별자치시")}>세종특별자치시</Dropdown.Item>
                                 <Dropdown.Item onClick={() => areaBtn("경기도")}>경기도</Dropdown.Item>
                                 <Dropdown.Item onClick={() => areaBtn("강원도")}>강원도</Dropdown.Item>
                                 <Dropdown.Item onClick={() => areaBtn("충청북도")}>충청북도</Dropdown.Item>
@@ -347,7 +355,7 @@ function Write() {
                                 <Dropdown.Item onClick={() => areaBtn("전라남도")}>전라남도</Dropdown.Item>
                                 <Dropdown.Item onClick={() => areaBtn("경상북도")}>경상북도</Dropdown.Item>
                                 <Dropdown.Item onClick={() => areaBtn("경상남도")}>경상남도</Dropdown.Item>
-                                <Dropdown.Item onClick={() => areaBtn("제주도")}>제주도</Dropdown.Item>
+                                <Dropdown.Item onClick={() => areaBtn("제주특별자치도")}>제주특별자치도</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     }
