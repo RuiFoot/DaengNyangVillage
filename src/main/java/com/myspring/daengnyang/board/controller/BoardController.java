@@ -52,6 +52,7 @@ public class BoardController {
     public List<ReviewVO> boardReviewList(@RequestParam int boardId) throws Exception {
         log.info("댓글 목록 조회 컨트롤러 실행 => boardId : " + boardId);
         List<ReviewVO> list = boardService.selectBoardReviewList(boardId);
+        log.info(list.toString());
         return list;
     }
 
