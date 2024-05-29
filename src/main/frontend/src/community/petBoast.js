@@ -30,6 +30,7 @@ cursor: pointer;
 }
 `
 const PetBoastTitle = styled.div`
+height: 70px;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -144,7 +145,7 @@ function PetBoast() {
             <CommunityHeader />
             < PetBoastItems style={{
                 gridTemplateColumns: windowSize > 1790 ?
-                    "repeat(auto-fit,250px)" : "repeat(auto-fit,350px)"
+                    "repeat(auto-fit,220px)" : "repeat(auto-fit,350px)"
             }} >
                 {board.length > 0 &&
                     board.map((e, i) => (

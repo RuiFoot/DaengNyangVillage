@@ -101,7 +101,7 @@ function MyInfo() {
                     }}
                     onClick={() => window.location.href = `/my-info-change/${userData.nickName}`}
                 >회원 정보 수정</Button>
-                {
+                {/* {
                     sessionStorage.getItem("social") === "true"
                         ?
                         null
@@ -113,7 +113,7 @@ function MyInfo() {
                             }}
                             onClick={() => alert("정말 탈퇴 하시겠습니까?")}
                         >회원 탈퇴</Button>
-                }
+                } */}
             </Container>
         </>
     )

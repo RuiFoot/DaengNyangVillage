@@ -34,6 +34,9 @@ margin-bottom: 5px;
 `
 const ContentField = styled.div`
 width: 80vw;
+display: flex;
+flex-direction: column;
+align-items: center;
 margin: 20px 0;
 `
 const ContentBtns = styled.div`
