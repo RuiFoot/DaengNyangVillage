@@ -193,14 +193,18 @@ function CommunityHome() {
             })
         // console.log(marketBoard)
     }, []);
-
     //글에 이미지가 여러게 일경우 대표 이미지 가장 앞에 하나만 보여줌
     const representImg = (e) => {
         if (e !== null) {
-            const index = e.indexOf(",")
-            return (
-                <Img style={{ backgroundImage: `url(${e.slice(0, index)})` }} />
-            )
+            if (e.indexOf(`width`) !== -1) {
+                return (
+                    <Img style={{ backgroundImage: `url(${e.substring(0, e.indexOf(`width`) - 2)})` }} />
+                )
+            } else {
+                return (
+                    <Img style={{ backgroundImage: `url(${e})` }} />
+                )
+            }
         } else {
             return (
                 <Img style={{ backgroundImage: `url(${defaultImg})` }} />

@@ -104,11 +104,11 @@ function UsedMarketDetail() {
     const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
     const params = useParams()// 파라메터 가져오기
     const userInfo = JSON.parse(sessionStorage.getItem("logined"))
-    //현재 로그인한 유저 닉네임
-    const [loginedNickName, setLoginedNickName] = useState("")
+    //현재 로그인한 유저 넘버
+    const [loginedMemberNo, setLoginedMemberNo] = useState("")
     useEffect(() => {
         if (sessionStorage.getItem("logined") !== null) {
-            setLoginedNickName(JSON.parse(sessionStorage.getItem("logined")).nickName)
+            setLoginedMemberNo(JSON.parse(sessionStorage.getItem("logined")).memberNo)
         }
     });
     // 윈도우 가로 사이즈에 따른 변화 적용
@@ -264,7 +264,7 @@ function UsedMarketDetail() {
                                             {
                                                 window.sessionStorage.getItem("logined") === null ?
                                                     null :
-                                                    loginedNickName === content.nickname ?
+                                                    loginedMemberNo === content.memberNo ?
                                                         <ContentBtns>
                                                             <MdModeEdit className="mdModeEdit" style={{
                                                                 cursor: "pointer",
