@@ -127,7 +127,7 @@ function WrittenByMe() {
                                 </ListHeader>
                                 <ListFooter>
                                     <div>{e.category}</div>
-                                    {e.nickname}, {e.createDate.replace("T", ", ").slice(0, 17)}
+                                    {e.nickname}, {e.createDate.replace("T", " ").slice(0, 11)}
                                 </ListFooter>
                             </ListItem>
                         ))

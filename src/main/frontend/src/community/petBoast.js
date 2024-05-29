@@ -165,7 +165,7 @@ function PetBoast() {
                             {representImg(e.imgPath)}
                             <ListFooter>
                                 <ListItemWriter>작성자 : {e.nickname}</ListItemWriter>
-                                <ListItemDate>{e.createDate.replace("T", ", ").slice(0, 17)}</ListItemDate>
+                                <ListItemDate>{e.createDate.replace("T", " ").slice(0, 11)}</ListItemDate>
                             </ListFooter>
                         </PetBoastItem>
                     ))}

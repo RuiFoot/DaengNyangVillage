@@ -529,7 +529,7 @@ function RecommendDetail() {
                                         </CommentsRank>
                                         <CommentsText>{e.review}</CommentsText>
                                         <Date>
-                                            <CommentsDate>{e.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
+                                            <CommentsDate>{e.createDate.replace("T", " ").slice(0, 11)}</CommentsDate>
                                         </Date>
                                         {
                                             userInfo !== null &&

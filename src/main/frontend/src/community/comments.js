@@ -450,7 +450,7 @@ function Comments() {
                                             <Date>
                                                 {
                                                     e.createDate !== undefined &&
-                                                    <CommentsDate>{e.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
+                                                    <CommentsDate>{e.createDate.replace("T", " ").slice(0, 11)}</CommentsDate>
                                                 }
                                                 {
                                                     userInfo !== null &&
@@ -578,7 +578,7 @@ function Comments() {
                                                                     <Date>
                                                                         {
                                                                             k.createDate !== undefined &&
-                                                                            <CommentsDate>{k.createDate.replace("T", ", ").slice(0, 17)}</CommentsDate>
+                                                                            <CommentsDate>{k.createDate.replace("T", " ").slice(0, 11)}</CommentsDate>
                                                                         }
                                                                     </Date>
                                                                     {
