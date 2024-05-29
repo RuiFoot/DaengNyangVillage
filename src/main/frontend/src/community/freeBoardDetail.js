@@ -66,11 +66,11 @@ function FreeBoardDetail() {
   const switchBgColor = `${isDark ? themes.dark.bgColor : themes.light.bgColor}`
   const params = useParams()
   const userInfo = JSON.parse(sessionStorage.getItem("logined"))
-  //현재 로그인한 유저 닉네임
-  const [loginedNickName, setLoginedNickName] = useState("")
+  //현재 로그인한 유저 넘버
+  const [loginedMemberNo, setLoginedMemberNo] = useState("")
   useEffect(() => {
     if (sessionStorage.getItem("logined") !== null) {
-      setLoginedNickName(JSON.parse(sessionStorage.getItem("logined")).nickName)
+      setLoginedMemberNo(JSON.parse(sessionStorage.getItem("logined")).memberNo)
     }
   });
   //스프링 부트 통신
@@ -183,7 +183,7 @@ function FreeBoardDetail() {
             {
               window.sessionStorage.getItem("logined") === null ?
                 null :
-                loginedNickName === content.nickname ?
+                loginedMemberNo === content.memberNo ?
                   <ContentBtns>
                     <MdModeEdit className="mdModeEdit" style={{
                       cursor: "pointer",
