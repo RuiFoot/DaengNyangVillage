@@ -22,7 +22,7 @@ const Container = styled.div`
 `
 const InputForm = styled.div`
 min-height: calc(100vh - 159px);
-margin: 0 6vw;
+margin: 0 10vw;
 `
 const Dropdowns = styled.div`
 display: flex;
