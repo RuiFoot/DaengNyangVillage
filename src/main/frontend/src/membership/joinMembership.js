@@ -134,24 +134,24 @@ function JoinMembership() {
         axios.post(`${baseUrl}/member/signup`, body
         ).then((response) => {
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
+            setChecked(false)
+            setMemberInfo({
+                email: "",
+                password: "",
+                passwordCheck: "",
+                profileImg: "",
+                mypet: "",
+                nickName: "",
+                phoneNumber: "",
+                inputAddress: "",
+                inputZonecode: "",
+                detailedAddress: ""
+            })
+            // console.log(body)
+            window.location.href = '/'
         }).catch((error) => {
             console.log(error);				//오류발생시 실행
         })
-        setChecked(false)
-        setMemberInfo({
-            email: "",
-            password: "",
-            passwordCheck: "",
-            profileImg: "",
-            mypet: "",
-            nickName: "",
-            phoneNumber: "",
-            inputAddress: "",
-            inputZonecode: "",
-            detailedAddress: ""
-        })
-        // console.log(body)
-        window.location.href = '/'
     }
 
 

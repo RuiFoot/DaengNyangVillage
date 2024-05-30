@@ -266,6 +266,10 @@ function RecommendDetail() {
         axios.delete(`/api/animal/review?animalReviewNum=${e}`)
             .then((res) => {
                 setGetReview(res.data);
+                axios.get(`${baseUrl}/animal/review?animalNum=${params.itemId}`)
+                    .then((res) => {
+                        setGetReview(res.data);
+                    })
             })
     }
 
