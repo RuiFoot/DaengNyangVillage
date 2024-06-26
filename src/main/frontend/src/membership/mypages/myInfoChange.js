@@ -170,7 +170,7 @@ function MyInfoChange() {
             phoneNumber: memberInfo.phoneNumber,
             inputZonecode: zonecode
         }
-        axios.patch(`${baseUrl}/member/update`, body
+        axios.patch(`/api/member/update`, body
         ).then((response) => {
             // console.log(body);
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력

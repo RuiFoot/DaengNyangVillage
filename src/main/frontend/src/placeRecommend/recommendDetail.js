@@ -196,12 +196,12 @@ function RecommendDetail() {
             .then((res) => {
                 setBoard(res.data);
             })
-        axios.get(`${baseUrl}/animal/review?animalNum=${params.itemId}`)
+        axios.get(`/api/animal/review?animalNum=${params.itemId}`)
             .then((res) => {
                 setGetReview(res.data);
             })
         if (userInfo) {
-            axios.get(`${baseUrl}/animal/favorite/${params.itemId}?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}`)
+            axios.get(`/api/animal/favorite/${params.itemId}?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}`)
                 .then((res) => {
                     console.log(res.data);
                     setHeart(res.data)

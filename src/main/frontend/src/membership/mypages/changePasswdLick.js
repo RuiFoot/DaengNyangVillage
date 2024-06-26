@@ -69,7 +69,7 @@ function ChangePasswdLick() {
         e.preventDefault();
         // 비밀번호 보안 해시
         // memberInfo.password = SHA256(password).toString();
-        axios.patch(`${baseUrl}/member/password`, {
+        axios.patch(`/api/member/password`, {
             memberNo: params.nickNameLink,
             email: "",
             password: newPasswd

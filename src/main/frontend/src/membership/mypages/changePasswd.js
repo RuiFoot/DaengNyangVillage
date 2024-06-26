@@ -73,7 +73,7 @@ function ChangePasswd() {
             email: "",
             password: newPasswd
         }
-        axios.patch(`${baseUrl}/member/password`, body
+        axios.patch(`/api/member/password`, body
         ).then((response) => {
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {

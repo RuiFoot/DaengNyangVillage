@@ -116,7 +116,7 @@ function NavVillage() {
     if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("kakao") !== -1) {
         const code = new URL(window.location.href).searchParams.get("code")
         console.log(code)
-        axios.get(`${baseUrl}/member/oauth/kakao?code=${code}`
+        axios.get(`/api/member/oauth/kakao?code=${code}`
         ).then((response) => {
             console.log(response);	//오류발생시 실행
             sessionStorage.setItem("logined", JSON.stringify(response.data))
@@ -132,7 +132,7 @@ function NavVillage() {
     } else if (nowUrl.indexOf("code=") !== -1 && nowUrl.indexOf("google") !== -1) {
         const code = new URL(window.location.href).searchParams.get("code")
         console.log(code)
-        axios.get(`${baseUrl}/member/oauth/google?code=${code}`
+        axios.get(`/api/member/oauth/google?code=${code}`
         ).then((response) => {
             console.log(response);	//오류발생시 실행
             sessionStorage.setItem("logined", JSON.stringify(response.data))
@@ -177,7 +177,7 @@ function NavVillage() {
                 email: userId,
                 password: userPassword
             }
-            axios.post(`${baseUrl}/member/login`, body
+            axios.post(`/api/member/login`, body
             ).then((response) => {
                 console.log(response.data);		//정상 통신 후 응답된 메시지 출력
                 sessionStorage.setItem("logined", JSON.stringify(response.data))

@@ -131,7 +131,7 @@ function JoinMembership() {
             phoneNumber: memberInfo.phoneNumber,
             inputZonecode: zonecode
         }
-        axios.post(`${baseUrl}/member/signup`, body
+        axios.post(`/api/member/signup`, body
         ).then((response) => {
             console.log(response.data);		//정상 통신 후 응답된 메시지 출력
         }).catch((error) => {
@@ -181,14 +181,14 @@ function JoinMembership() {
 
     }
     const emailDuplicationCheck = (input) => {
-        axios.get(`${baseUrl}/member/duplicationE?email=${input}`)
+        axios.get(`/api/member/duplicationE?email=${input}`)
             .then((res) => {
                 setIsDuplicationE(res.data);
                 // console.log(isDuplicationE)
             })
     }
     const isNickName = (input) => {
-        axios.get(`${baseUrl}/member/duplicationN?nickname=${input}`)
+        axios.get(`/api/member/duplicationN?nickname=${input}`)
             .then((res) => {
                 setIsDuplicationN(res.data);
             })

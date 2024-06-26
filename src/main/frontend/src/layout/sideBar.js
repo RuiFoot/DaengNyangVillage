@@ -120,7 +120,7 @@ function SideBar() {
         let body = {
             message: userChat
         }
-        axios.post(`${baseUrl}/chatbot`, body
+        axios.post(`/api/chatbot`, body
         ).then((response) => {
             setValueX(Prev => Prev + 1)
             userChatArr.push(["bot", response.data])

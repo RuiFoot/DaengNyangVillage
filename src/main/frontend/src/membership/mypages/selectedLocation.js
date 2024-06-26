@@ -71,7 +71,7 @@ function SelectedLocation() {
     const [board, setBoard] = useState()
     const [page, setPage] = useState({})
     useEffect(() => {
-        axios.get(`${baseUrl}/member/favorite?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}&page=${nowPage - 1}`)
+        axios.get(`/api/member/favorite?memberNo=${JSON.parse(sessionStorage.getItem("logined")).memberNo}&page=${nowPage - 1}`)
             .then((res) => {
                 setBoard(res.data.content)
                 console.log(res.data.content)

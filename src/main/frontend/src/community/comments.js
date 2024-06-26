@@ -157,12 +157,12 @@ function Comments() {
     const [getReview, setGetReview] = useState([{}])
     const [getReReview, setGetReReview] = useState([])
     useEffect(() => {
-        axios.get(`${baseUrl}/board/review?boardId=${params.boardId}`)
+        axios.get(`/api/board/review?boardId=${params.boardId}`)
             .then((res) => {
                 setGetReview(res.data);
                 console.log(res.data)
                 for (let i = 0; i < res.data.length; i++) {
-                    axios.get(`${baseUrl}/board/review/review?boardReviewNum=${res.data[i].boardReviewNum}`)
+                    axios.get(`/api/board/review/review?boardReviewNum=${res.data[i].boardReviewNum}`)
                         .then((response) => {
                             getReReview.push(...response.data);
                             console.log(response.data)
@@ -233,9 +233,9 @@ function Comments() {
     }
 
     const deleteReview = () => {
-        axios.delete(`${baseUrl}/board/review/${taget}`
+        axios.delete(`/api/board/review/${taget}`
         ).then(() => {
-            axios.get(`${baseUrl}/board/review?boardId=${params.boardId}`)
+            axios.get(`/api/board/review?boardId=${params.boardId}`)
                 .then((res) => {
                     setGetReview(res.data);
                     setTaget()
@@ -273,10 +273,10 @@ function Comments() {
                 review: review,
                 createDate: ""
             }
-            axios.patch(`${baseUrl}/board/review`, body
+            axios.patch(`/api/board/review`, body
             ).then((response) => {
                 // console.log(response)
-                axios.get(`${baseUrl}/board/review?boardId=${params.boardId}`)
+                axios.get(`/api/board/review?boardId=${params.boardId}`)
                     .then((res) => {
                         setGetReview(res.data);
                         // console.log(res.data)

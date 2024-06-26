@@ -201,7 +201,7 @@ function Write() {
             boardId: 0,
             boardName: values.boardName
         }
-        axios.post(`${baseUrl}/board`, body
+        axios.post(`/api/board`, body
         ).then((response) => {
             console.log(deletImgs)
             console.log(body);	//정상 통신 후 응답된 메시지 출력

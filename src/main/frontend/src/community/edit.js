@@ -56,7 +56,6 @@ function Edit() {
         tradeTime: "",
         boardId: 0,
         memberNo: 0,
-        preface: "",
         nickname: "",
         category: "",
         boardName: "",

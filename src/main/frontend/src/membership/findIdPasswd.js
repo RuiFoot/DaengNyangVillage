@@ -60,7 +60,7 @@ function FindIdPasswd() {
     }
 
     const findId = () => {
-        axios.post(`${baseUrl}/member/findEmail`, {
+        axios.post(`/api/member/findEmail`, {
             phoneNumber: phoneNumber
         }
         ).then((response) => {
@@ -79,7 +79,7 @@ function FindIdPasswd() {
         setEmail(e.target.value)
     }
     const findEmail = () => {
-        axios.post(`${baseUrl}/member/findNickname`, {
+        axios.post(`/api/member/findNickname`, {
             email: email
         }
         ).then((response) => {

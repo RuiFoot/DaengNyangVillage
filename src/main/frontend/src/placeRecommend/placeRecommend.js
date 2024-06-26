@@ -182,7 +182,7 @@ function PlaceRecommend() {
     }, []);
     //카테고리 리스트 받아오기
     useEffect(() => {
-        axios.get(`${baseUrl}/animal`)
+        axios.get(`/api/animal`)
             .then((res) => {
                 setCategoryList(res.data)
                 // console.log(res.data)
@@ -261,7 +261,7 @@ function PlaceRecommend() {
     useEffect(() => {
         console.log(isOn)
         if (isOn) {
-            axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=${nowPage - 1}`)
+            axios.get(`/api/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=${nowPage - 1}`)
                 .then((res) => {
                     setAddress(res.data.content);
                     kakaomapMarker(res.data.content)
@@ -284,7 +284,7 @@ function PlaceRecommend() {
     const handleButtonClick = (e) => {
         setIsOn(true)
         e.preventDefault();
-        axios.get(`${baseUrl}/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=0`)
+        axios.get(`/api/animal/location/${sido}?sigungu=${checkedArea}&classification=${checkedCategory}&page=0`)
             .then((res) => {
                 setAddress(res.data.content)
                 console.log(res.data)
