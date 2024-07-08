@@ -145,7 +145,6 @@ justify-content: space-between;
 
 function Comments() {
     //스프링연동을 위한 url
-    const baseUrl = "http://localhost:8080";
     // 다크모드
     const isDark = useRecoilValue(isDarkAtom);
     const switchColor = `${isDark ? themes.dark.color : themes.light.color}`
@@ -185,11 +184,11 @@ function Comments() {
                 review: review,
                 createDate: ""
             }
-            axios.post(`${baseUrl}/board/review`, body
+            axios.post(`/api/board/review`, body
             ).then((response) => {
                 setReview("")
                 // console.log(response.data);	//정상 통신 후 응답된 메시지 출력
-                axios.get(`${baseUrl}/board/review?boardId=${params.boardId}`)
+                axios.get(`/api/board/review?boardId=${params.boardId}`)
                     .then((res) => {
                         setGetReview(res.data);
                         // console.log(res.data)
@@ -359,7 +358,7 @@ function Comments() {
             profileImg: userInfo.profileImg,
             reviewId: 0
         }
-        axios.post(`${baseUrl}/board/review/review`, body
+        axios.post(`/api/board/review/review`, body
         ).then((response) => {
             // console.log("보냄");	//정상 통신 후 응답된 메시지 출력
             setOnReReview()
@@ -394,7 +393,7 @@ function Comments() {
                 createDate: "",
                 reviewId: reEdit
             }
-            axios.patch(`${baseUrl}/board/review/review`, body
+            axios.patch(`/api/board/review/review`, body
             ).then((response) => {
                 // console.log(response)
                 window.location.reload();
@@ -412,7 +411,7 @@ function Comments() {
     //대댓글 삭제
     const deleteReReview = () => {
         // console.log(e)
-        axios.delete(`${baseUrl}/board/review/review?reviewId=${taget.reviewId}&boardReviewNum=${taget.boardReviewNum}`
+        axios.delete(`/api/board/review/review?reviewId=${taget.reviewId}&boardReviewNum=${taget.boardReviewNum}`
         ).then((res) => {
             window.location.reload();
         }).catch((error) => {
