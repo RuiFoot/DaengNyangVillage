@@ -1,7 +1,7 @@
 package com.myspring.daengnyang.animal.controller;
 
 
-import com.myspring.daengnyang.animal.service.AnimalServiceImpl;
+import com.myspring.daengnyang.animal.service.AnimalService;
 import com.myspring.daengnyang.animal.vo.AnimalDetailVO;
 import com.myspring.daengnyang.animal.vo.AnimalLocationVO;
 import com.myspring.daengnyang.animal.vo.AnimalReviewVO;
@@ -26,10 +26,10 @@ import java.util.List;
 @RequestMapping("/animal")
 public class AnimalController {
 
-    private final AnimalServiceImpl animalService;
+    private final AnimalService animalService;
 
     @Autowired
-    public AnimalController(AnimalServiceImpl animalService) {
+    public AnimalController(AnimalService animalService) {
         this.animalService = animalService;
     }
 
